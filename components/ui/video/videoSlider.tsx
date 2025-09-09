@@ -1,4 +1,6 @@
+import { Colors } from '@/constants/Colors';
 import { Video } from 'expo-av';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useRef, useState } from 'react';
 import { Dimensions, FlatList, View } from 'react-native';
 import { styles } from './video.slider.styles';
@@ -33,6 +35,7 @@ export default function VideoSlider() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
+        <View>
           <Video
             source={item.source}
             style={{ width: screenWidth, height: 250 }}
@@ -42,6 +45,17 @@ export default function VideoSlider() {
               if (status.isLoaded && status.didJustFinish) handleVideoEnd(index);
             }}
           />
+           <LinearGradient
+              colors={['transparent', Colors.background]} 
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: 80,
+              }}
+            />
+        </View>
         )}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={{ viewAreaCoveragePercentThreshold: 50 }}
