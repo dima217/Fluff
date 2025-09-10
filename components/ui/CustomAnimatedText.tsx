@@ -4,14 +4,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withRepeat,
-    withTiming,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
 } from 'react-native-reanimated';
 
 interface AnimatedTextProps {
-    text: string;
+  text: string;
 }
 
 const AnimatedText = ({ text } : AnimatedTextProps) => {
@@ -36,7 +36,7 @@ const AnimatedText = ({ text } : AnimatedTextProps) => {
       <View style={styles.gradientContainer}>
         <Animated.View style={animatedStyle}>
           <LinearGradient
-            colors={[Colors.text, Colors.textSecondary]}
+            colors={[Colors.text, Colors.secondary]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.gradient}

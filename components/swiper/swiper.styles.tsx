@@ -6,7 +6,7 @@ const PADDING = 5;
 export const styles = StyleSheet.create({
     container: {
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'flex-end',
       padding: 20,
     },
     swiperBar: {

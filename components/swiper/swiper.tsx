@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Animated, Dimensions, View } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
 import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
-import AnimatedText from '../ui/animatedText';
+import AnimatedText from '../ui/CustomAnimatedText';
 import Circle from "../ui/circle";
 import { styles } from './swiper.styles';
 
