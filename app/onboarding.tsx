@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/ui/ThemedText";
-import VideoSlider from "@/components/ui/video/videoSlider";
+import VideoSlider from "@/components/video/videoSlider";
 import React from "react";
 import { View } from "react-native";
 import Cutlery from '../assets/images/Cutlery.svg';
