@@ -1392,6 +1392,10 @@
   dependencies:
     "@radix-ui/react-compose-refs" "1.1.2"
 
+"@react-native-masked-view/masked-view@react-native-masked-view/masked-view":
+  version "0.3.2"
+  resolved "https://codeload.github.com/react-native-masked-view/masked-view/tar.gz/14df52650be2441fbf6f2a0308cc54a62e68820c"
+
 "@react-native/assets-registry@0.79.6":
   version "0.79.6"
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.79.6.tgz#cecc2a1140a9584d590000b951a08a0611ec30c3"

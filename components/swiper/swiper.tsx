@@ -1,7 +1,10 @@
 import ArrowRight from '@/assets/images/ArrowRight.svg';
-import { Animated, Dimensions, Text, View } from "react-native";
+import { Colors } from '@/constants/Colors';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Animated, Dimensions, View } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
-import { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
+import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import AnimatedText from '../ui/animatedText';
 import Circle from "../ui/circle";
 import { styles } from './swiper.styles';
 
@@ -11,7 +14,7 @@ export interface SwiperProps {
 }
 
 const SWIPER_WIDTH = Dimensions.get('window').width * 0.8; 
-const CIRCLE_SIZE = 60;
+const CIRCLE_SIZE = 45;
 const PADDING = 5;
 const THRESHOLD = SWIPER_WIDTH - CIRCLE_SIZE - PADDING * 2
 
@@ -31,7 +34,6 @@ const Swiper = ( { label, onSwipeEnd }: SwiperProps) => {
     .onEnd(() => {
       if (translateX.value > THRESHOLD) {
         onSwipeEnd();
-        translateX.value = withTiming(0);
       } else {
         translateX.value = withSpring(0);
       }
@@ -44,7 +46,7 @@ const Swiper = ( { label, onSwipeEnd }: SwiperProps) => {
     });
 
     const animatedLabelStyle = useAnimatedStyle(() => {
-        const opacity = 1 - translateX.value / THRESHOLD;
+        const opacity = translateX.value ? 1 : 0;
         return {
             opacity: opacity,
         };
@@ -53,15 +55,25 @@ const Swiper = ( { label, onSwipeEnd }: SwiperProps) => {
     return (
         <View style={styles.container}>
             <View style={styles.swiperBar}>
+                
+                <LinearGradient
+                    colors={['transparent', Colors.background]} 
+                    style={styles.background}
+                />
+
                 <Animated.View style={animatedCircleStyle}>
                     <Circle
                         svg={<ArrowRight/>}
                         gesture={panGesture}
                     />
                 </Animated.View>
+
                 <Animated.View style={[styles.labelContainer, animatedLabelStyle]}>
-                    <Text style={styles.labelText}>{label}</Text>
+                    <AnimatedText 
+                        text='Swipe to Start'
+                    />
                 </Animated.View>
+
             </View>
         </View>
     )
