@@ -2,16 +2,17 @@ import { Colors } from '@/constants/Colors';
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
 export type ThemedTextProps = TextProps & {
-  lightColor?: string;
-  darkColor?: string;
+  titleSize?: number;
+  highlightLastWord?: boolean;
   type?: 'title' | 'subtitle' | 'default';
 };
 
 export function ThemedText({
   style,
-  lightColor,
-  darkColor,
   type = 'default',
+  highlightLastWord = false,
+  titleSize,
+  children,
   ...rest
 }: ThemedTextProps) {
     
@@ -25,12 +26,36 @@ export function ThemedText({
 
   const color = Colors.text;
 
+  if (type === 'title' && typeof children === 'string' && highlightLastWord) {
+    const words = children.trim().split(' ');
+    const lastWord = words.pop();
+    const textWithoutLast = words.join(' ');
+
+    return (
+      <Text
+        style={[
+          { color },
+          styles.title,
+          titleSize ? { fontSize: titleSize, lineHeight: titleSize + 2 } : null,
+          style,
+        ]}
+        {...rest}
+      >
+        {textWithoutLast}{' '}
+        <Text style={{ color: Colors.primary }}>{lastWord}</Text>
+      </Text>
+    );
+  }
+
   return (
     <Text
       style={[
         { color },
         type === 'default' && styles.default,
-        type === 'title' && styles.title,
+        type === 'title' && [
+          styles.title,
+          titleSize ? {fontSize: titleSize} : null,
+        ],
         type === 'subtitle' && styles.subtitle,
         style,
       ]}
