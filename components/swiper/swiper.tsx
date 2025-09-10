@@ -9,7 +9,6 @@ import Circle from "../ui/circle";
 import { styles } from './swiper.styles';
 
 export interface SwiperProps {
-    label: string;
     onSwipeEnd: () => void;
 }
 
@@ -18,7 +17,7 @@ const CIRCLE_SIZE = 45;
 const PADDING = 5;
 const THRESHOLD = SWIPER_WIDTH - CIRCLE_SIZE - PADDING * 2
 
-const Swiper = ( { label, onSwipeEnd }: SwiperProps) => {
+const Swiper = ( { onSwipeEnd }: SwiperProps) => {
    const isPressed = useSharedValue(false);
 
    const translateX = useSharedValue(0);
@@ -52,10 +51,17 @@ const Swiper = ( { label, onSwipeEnd }: SwiperProps) => {
         };
     });
 
+    const animatedSwiperStyle = useAnimatedStyle(() => {
+        const width = SWIPER_WIDTH - translateX.value;
+        return {
+            width: width,
+        };
+    });
+
     return (
         <View style={styles.container}>
-            <View style={styles.swiperBar}>
-                
+            <Animated.View style={[styles.swiperBar, animatedSwiperStyle]}>
+
                 <LinearGradient
                     colors={['transparent', Colors.background]} 
                     style={styles.background}
@@ -74,7 +80,7 @@ const Swiper = ( { label, onSwipeEnd }: SwiperProps) => {
                     />
                 </Animated.View>
 
-            </View>
+            </Animated.View>
         </View>
     )
 }
