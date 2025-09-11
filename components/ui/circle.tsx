@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { BlurView } from "expo-blur";
 import { ReactNode } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -8,7 +9,8 @@ interface CircleProps {
     color?: string;
     onPress?: () => void;
     gesture?: any;
-    svg: ReactNode
+    svg: ReactNode;
+    frostedGlass?: boolean;
 }
 
 const Circle = ({ 
@@ -17,6 +19,7 @@ const Circle = ({
     gesture,
     onPress,
     svg,
+    frostedGlass = false,
 }: CircleProps) => {
 
     const circleStyle = {
@@ -27,6 +30,15 @@ const Circle = ({
     }
 
     if (onPress) {
+        if (frostedGlass) {
+            return (
+                <BlurView intensity={50} tint="light" style={styles.circle}>
+                    <View>
+                        {svg}
+                    </View>
+                </BlurView>
+            )
+        }
         return (
             <TouchableOpacity onPress={onPress} style={[circleStyle, styles.circle]}>
                 <View>
@@ -45,7 +57,6 @@ const Circle = ({
             </GestureDetector>
         )
     }
-
     return <View style={[circleStyle, styles.circle]}>{svg}</View>;
 }
 
