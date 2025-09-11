@@ -45,7 +45,7 @@ const ToggleButtons = ({ options, selected, onSelect, style }: Props) => {
             <Text
               style={[
                 styles.text,
-                { color: '#fff'},
+                { color: Colors.text},
               ]}
             >
               {option}
