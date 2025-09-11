@@ -1,12 +1,12 @@
 import { Colors } from '@/constants/Colors';
 import React, { memo } from 'react';
 import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    ViewStyle,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
+import { styles } from './toggle.buttons.styles';
 
 type Props = {
   options: string[];
@@ -59,21 +59,3 @@ const ToggleButtons = ({ options, selected, onSelect, style }: Props) => {
 
 export default memo(ToggleButtons);
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderRadius: 25,
-    overflow: 'hidden',
-    height: 50,
-  },
-  button: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
-  },
-});
