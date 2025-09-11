@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
       width: 9,
       height: 9,
       borderRadius: 4.5,
-      backgroundColor: Colors.dot,
+      backgroundColor: Colors.inactive,
       marginHorizontal: 5,
     },
     activeDot: { 
