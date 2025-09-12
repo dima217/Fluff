@@ -2,7 +2,7 @@
 import { Colors } from '@/constants/Colors';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -19,7 +19,7 @@ const AnimatedText = ({ text } : AnimatedTextProps) => {
   
   const sharedValue = useSharedValue(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     sharedValue.value = withRepeat(withTiming(1, { duration: 1500 }), -1, true);
   }, []);
   

@@ -7,9 +7,11 @@ import styles from "./input.styles";
 interface InputProps extends UseControllerProps<any>, TextInputProps {
   onlyNumbers?: boolean;
   defaultValue?: string;
+  label?: string;
 }
 
 const CustomInput = ({
+  label,
   name,
   control,
   onlyNumbers,
