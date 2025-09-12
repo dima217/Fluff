@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Colors } from '@/constants/Colors';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,11 +16,12 @@ interface AnimatedTextProps {
 }
 
 const AnimatedText = ({ text } : AnimatedTextProps) => {
+  
   const sharedValue = useSharedValue(0);
 
   React.useEffect(() => {
     sharedValue.value = withRepeat(withTiming(1, { duration: 1500 }), -1, true);
-  }, [sharedValue]);
+  }, []);
   
   const animatedStyle = useAnimatedStyle(() => {
     const translateX = sharedValue.value * 250;

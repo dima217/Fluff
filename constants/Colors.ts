@@ -3,5 +3,6 @@ export const Colors = {
   text: '#E4E4E4',
   secondary: '#8B868F',
   inactive: '#1A1A1A',
-  background: '#0F0F0F'
+  background: '#0F0F0F',
+  tab: '#232323'
 };

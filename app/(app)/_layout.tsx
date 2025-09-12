@@ -1,9 +1,15 @@
+ 
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
 
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
+import Add from '@/assets/images/Add.svg';
+import BookTab from '@/assets/images/BookTab.svg';
+import HomeTab from '@/assets/images/HomeTab.svg';
+import HealthTab from '@/assets/images/PillTab.svg';
+import UserTab from '@/assets/images/UserTab.svg';
+import Circle from '@/components/ui/circle';
+import { Colors } from '@/constants/Colors';
+import { View } from 'react-native';
 
 export default function TabLayout() {
 
@@ -11,28 +17,56 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        // tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
+        tabBarActiveTintColor: Colors.primary,
+        tabBarInactiveBackgroundColor: Colors.inactive,
+        tabBarStyle: {
+          backgroundColor: Colors.tab,
+          borderTopWidth: 0,
+          elevation: 0,
+          height: 59,
+        },
       }}>
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <HomeTab width={28} height={28} fill={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="health"
+        options={{
+          title: 'Health',
+          tabBarIcon: ({ color }) => <HealthTab width={28} height={28} fill={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="Plus"
+        options={{
+          title: 'Health',
+          tabBarIcon: ({ color }) => <HealthTab width={28} height={28} fill={color} />,
+          tabBarButton: (props) => (
+            <View style={{ top: -20}}>
+              <Circle
+                size={53}
+                svg={<Add/>}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="library"
+        options={{
+          title: 'Library',
+          tabBarIcon: ({ color }) => <BookTab width={28} height={28} fill={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
         options={{
           title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ color }) => <UserTab width={28} height={28} fill={color} />,
         }}
       />
     </Tabs>

@@ -13,6 +13,7 @@ const CustomInput = ({
   name,
   control,
   onlyNumbers,
+  ...textInputProps
 }: InputProps) => {
   const { field, fieldState } = useController({
     name,
@@ -61,6 +62,7 @@ const CustomInput = ({
           }}
           placeholder={name}
           keyboardType={onlyNumbers ? "numeric" : "default"}
+          {...textInputProps}
         />
       </View>
     </View>

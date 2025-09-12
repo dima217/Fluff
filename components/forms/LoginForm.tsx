@@ -22,18 +22,18 @@ const LoginForm = () => {
       <CustomInput
         name="login"
         control={control}
-        placeholder="Логин"
+        placeholder="Login"
       />
 
       <CustomInput
         name="password"
         control={control}
-        placeholder="Пароль"
+        placeholder="Password"
         secureTextEntry
       />
 
       <View style={{ marginTop: 20 }}>
-        <Button title="Войти" onPress={handleSubmit(onSubmit)} />
+        <Button title="Login" onPress={handleSubmit(onSubmit)} />
       </View>
     </View>
   );
