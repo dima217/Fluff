@@ -4,5 +4,6 @@ export const Colors = {
   secondary: '#8B868F',
   inactive: '#1A1A1A',
   background: '#0F0F0F',
-  tab: '#232323'
+  tab: '#232323',
+  gradient: ['#1A1A1A', '#242424'] as const,
 };
