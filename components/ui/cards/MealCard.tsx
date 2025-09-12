@@ -6,7 +6,7 @@ import ExpandRight from '@/assets/images/Expand_right.svg';
 import Heart from '@/assets/images/Heart.svg';
 import Check from '@/assets/images/Сheck.svg';
 import { Colors } from '@/constants/Colors';
-import { styles } from './recipe.card.style';
+import { styles } from './meal.card.style';
 
 interface RecipeCardProps {
     title: string;
@@ -18,7 +18,7 @@ interface RecipeCardProps {
     isLiked?: boolean;
 }
 
-const RecipeCard = ({
+const MealCard = ({
     title,
     calories,
     imageUrl,
@@ -70,4 +70,4 @@ const RecipeCard = ({
     );
 };
 
-export default RecipeCard;
+export default MealCard;
