@@ -1,7 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import ProgressBar from '../ui/progressBar/ProgressLine';
+import ProgressBar from '../ui/animated/progressBar/ProgressLine';
 import { styles } from './styles/progress.styles';
 
 interface CalorieProgressProps {
