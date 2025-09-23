@@ -1,7 +1,7 @@
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import FilterTags from '../FilterTags';
+import FilterTags from '../filterTags/FilterTags';
 
 interface SearchInputProps {
   isFiltering: boolean;
