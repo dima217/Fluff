@@ -27,7 +27,8 @@
         "resizeMode": "contain",
         "backgroundColor": "#0F0F0F"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.fluff.fluffMobile"
     },
     "web": {
       "bundler": "metro",
