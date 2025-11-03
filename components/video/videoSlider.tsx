@@ -1,14 +1,14 @@
 import { Colors } from '@/constants/Colors';
 import { Video } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Dimensions, FlatList, View } from 'react-native';
 import { styles } from './video.slider.styles';
 
 const videos = [
-  { id: '1', source: require('../../../assets/videos/landing-1.mp4') },
-  { id: '2', source: require('../../../assets/videos/landing-2.mp4') },
-  { id: '3', source: require('../../../assets/videos/landing-3.mp4') },
+  { id: '1', source: require('../../assets/videos/landing-2.mp4') },
+  { id: '2', source: require('../../assets/videos/landing-2.mp4') },
+  { id: '3', source: require('../../assets/videos/landing-3.mp4') },
 ];
 
 export default function VideoSlider() {
