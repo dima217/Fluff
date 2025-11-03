@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { MMKV } from 'react-native-mmkv';
 import 'react-native-reanimated';
 
+
 const storage = new MMKV();
 
 export default function RootLayout() {
