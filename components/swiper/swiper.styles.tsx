@@ -40,4 +40,14 @@ export const styles = StyleSheet.create({
     height: "100%",
     borderRadius: (CIRCLE_SIZE + PADDING * 2) / 2, // Наследование скругления
   },
+  blinkingArrowsContainer: {
+    position: "absolute",
+    right: CIRCLE_SIZE + PADDING,
+    top: 0,
+    bottom: 0,
+    width: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    zIndex: 5,
+  },
 });
