@@ -19,11 +19,10 @@ export const styles = StyleSheet.create({
   },
   labelContainer: {
     position: "absolute",
-    left: 0,
+    left: CIRCLE_SIZE + PADDING * 4,
     right: 0,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
   },
   animatedCircleStyle: {
     marginLeft: 8,

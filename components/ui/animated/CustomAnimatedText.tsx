@@ -19,7 +19,7 @@ const AnimatedText = ({ text }: AnimatedTextProps) => {
   const sharedValue = useSharedValue(0);
 
   useEffect(() => {
-    sharedValue.value = withRepeat(withTiming(1, { duration: 1500 }), -1, true);
+    sharedValue.value = withRepeat(withTiming(1, { duration: 2000 }), -1, true);
   }, []);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -51,11 +51,11 @@ const AnimatedText = ({ text }: AnimatedTextProps) => {
 const styles = StyleSheet.create({
   maskedView: {
     height: 20,
-    width: 200,
+    width: 100,
   },
   maskText: {
     color: "#000",
-    fontWeight: "200",
+    fontWeight: "400",
     fontSize: 14,
     textAlign: "center",
   },

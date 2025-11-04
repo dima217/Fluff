@@ -3,6 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions, View } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -18,7 +19,7 @@ export interface SwiperProps {
 const SWIPER_WIDTH = Dimensions.get("window").width * 0.9;
 const CIRCLE_SIZE = 45;
 const PADDING = 5;
-const THRESHOLD = SWIPER_WIDTH - CIRCLE_SIZE - PADDING * 2;
+const THRESHOLD = SWIPER_WIDTH - CIRCLE_SIZE - PADDING * 4;
 
 const Swiper = ({ onSwipeEnd }: SwiperProps) => {
   const isPressed = useSharedValue(false);
@@ -34,8 +35,8 @@ const Swiper = ({ onSwipeEnd }: SwiperProps) => {
       translateX.value = Math.min(Math.max(0, newTranslateX), THRESHOLD);
     })
     .onEnd(() => {
-      if (translateX.value > THRESHOLD) {
-        onSwipeEnd();
+      if (translateX.value === THRESHOLD) {
+        runOnJS(onSwipeEnd)();
       } else {
         translateX.value = withSpring(0);
       }
