@@ -1,12 +1,12 @@
 import { Colors } from '@/constants/Colors';
-import { Video } from 'expo-av';
+import { ResizeMode, Video } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRef, useState } from 'react';
 import { Dimensions, FlatList, View } from 'react-native';
 import { styles } from './video.slider.styles';
 
 const videos = [
-  { id: '1', source: require('../../assets/videos/landing-2.mp4') },
+  { id: '1', source: require('../../assets/videos/landing-1.mp4') },
   { id: '2', source: require('../../assets/videos/landing-2.mp4') },
   { id: '3', source: require('../../assets/videos/landing-3.mp4') },
 ];
@@ -28,6 +28,7 @@ export default function VideoSlider() {
   return (
     <View style={styles.container}>
       <FlatList
+        style={{ flex: 1 }}
         ref={flatListRef}
         data={videos}
         keyExtractor={(item) => item.id}
@@ -35,10 +36,11 @@ export default function VideoSlider() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
-        <View>
+        <View style={{ width: screenWidth, height: '100%' }}>
           <Video
             source={item.source}
-            style={{ width: screenWidth, height: 250 }}
+            style={{ width: '100%', height: '100%' }}
+            resizeMode={ResizeMode.COVER}
             isMuted
             shouldPlay={index === activeIndex} 
             onPlaybackStatusUpdate={(status) => {
@@ -52,7 +54,7 @@ export default function VideoSlider() {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                height: 80,
+                height: 450,
               }}
             />
         </View>

@@ -25,18 +25,13 @@
       "edgeToEdgeEnabled": true,
       "package": "com.fluff.fluffMobile"
     },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash.png",
-          "imageWidth": 200,
+          "imageWidth": 50,
           "resizeMode": "contain",
           "backgroundColor": "#0F0F0F"
         }

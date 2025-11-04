@@ -1,21 +1,34 @@
-import { Colors } from '@/constants/Colors';
-import { StyleSheet, Text, type TextProps } from 'react-native';
+import { Colors } from "@/constants/Colors";
+import { StyleSheet, Text, type TextProps } from "react-native";
 
 export type ThemedTextProps = TextProps & {
   titleSize?: number;
   highlightLastWord?: boolean;
-  type?: 'title' | 'subtitle' | 'default';
+  type?: "title" | "subtitle" | "default" | "mini" | "notion";
+};
+
+const getStylesByType = (type: ThemedTextProps["type"]) => {
+  switch (type) {
+    case "title":
+      return styles.title;
+    case "subtitle":
+      return styles.subtitle;
+    case "mini":
+      return styles.mini;
+    case "default":
+    default:
+      return styles.default;
+  }
 };
 
 export function ThemedText({
   style,
-  type = 'default',
+  type = "default",
   highlightLastWord = false,
   titleSize,
   children,
   ...rest
 }: ThemedTextProps) {
-    
   /* const [fontsLoaded] = useFonts({
     'SFProText-Medium': require('../../assets/fonts/SFProText-Medium.ttf'),
   }); 
@@ -26,57 +39,63 @@ export function ThemedText({
 
   const color = Colors.text;
 
-  if (type === 'title' && typeof children === 'string' && highlightLastWord) {
-    const words = children.trim().split(' ');
-    const lastWord = words.pop();
-    const textWithoutLast = words.join(' ');
+  if (typeof children === "string") {
+    const words = children.trim().split(" ");
+    const text = words.join(" ");
+    const baseStyle = getStylesByType(type);
+
+    if (highlightLastWord) {
+      const lastWord = words.pop();
+      const textWithoutLast = words.join(" ");
+
+      return (
+        <Text
+          style={[
+            { color },
+            baseStyle,
+            titleSize
+              ? { fontSize: titleSize, lineHeight: titleSize + 2 }
+              : null,
+            style,
+          ]}
+          {...rest}
+        >
+          {textWithoutLast}{" "}
+          <Text style={{ color: Colors.primary }}>{lastWord}</Text>
+        </Text>
+      );
+    }
 
     return (
-      <Text
-        style={[
-          { color },
-          styles.title,
-          titleSize ? { fontSize: titleSize, lineHeight: titleSize + 2 } : null,
-          style,
-        ]}
-        {...rest}
-      >
-        {textWithoutLast}{' '}
-        <Text style={{ color: Colors.primary }}>{lastWord}</Text>
+      <Text style={[{ color }, baseStyle, style]} {...rest}>
+        {text}
       </Text>
     );
   }
-
-  return (
-    <Text
-      style={[
-        { color },
-        type === 'default' && styles.default,
-        type === 'title' && [
-          styles.title,
-          titleSize ? {fontSize: titleSize} : null,
-        ],
-        type === 'subtitle' && styles.subtitle,
-        style,
-      ]}
-      {...rest}
-    />
-  );
 }
 
 const styles = StyleSheet.create({
   default: {
     fontSize: 16,
     lineHeight: 24,
-    color: '#8B868F',
+    color: "#8B868F",
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: "400",
     lineHeight: 32,
   },
   subtitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+  },
+  mini: {
+    fontSize: 14,
+  },
+  notion: {
+    fontSize: 14,
+    color: "#8B868F",
+    fontWeight: "100",
+    opacity: 50,
   },
 });

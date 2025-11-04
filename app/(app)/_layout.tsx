@@ -1,6 +1,5 @@
  
 import { Tabs } from 'expo-router';
-import React from 'react';
 
 import Add from '@/assets/images/Add.svg';
 import BookTab from '@/assets/images/BookTab.svg';
