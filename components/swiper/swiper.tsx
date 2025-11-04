@@ -1,28 +1,31 @@
-import ArrowRight from '@/assets/images/ArrowRight.svg';
-import { Colors } from '@/constants/Colors';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Animated, Dimensions, View } from "react-native";
+import ArrowRight from "@/assets/images/ArrowRight.svg";
+import { LinearGradient } from "expo-linear-gradient";
+import { Dimensions, View } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
-import { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
-import AnimatedText from '../ui/CustomAnimatedText';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+import AnimatedText from "../ui/animated/CustomAnimatedText";
 import Circle from "../ui/circle";
-import { styles } from './swiper.styles';
+import { styles } from "./swiper.styles";
 
 export interface SwiperProps {
-    onSwipeEnd: () => void;
+  onSwipeEnd: () => void;
 }
 
-const SWIPER_WIDTH = Dimensions.get('window').width * 0.8; 
+const SWIPER_WIDTH = Dimensions.get("window").width * 0.9;
 const CIRCLE_SIZE = 45;
 const PADDING = 5;
-const THRESHOLD = SWIPER_WIDTH - CIRCLE_SIZE - PADDING * 2
+const THRESHOLD = SWIPER_WIDTH - CIRCLE_SIZE - PADDING * 2;
 
-const Swiper = ( { onSwipeEnd }: SwiperProps) => {
-   const isPressed = useSharedValue(false);
+const Swiper = ({ onSwipeEnd }: SwiperProps) => {
+  const isPressed = useSharedValue(false);
 
-   const translateX = useSharedValue(0);
-   
-   const panGesture = Gesture.Pan()
+  const translateX = useSharedValue(0);
+
+  const panGesture = Gesture.Pan()
     .onBegin(() => {
       isPressed.value = true;
     })
@@ -36,54 +39,41 @@ const Swiper = ( { onSwipeEnd }: SwiperProps) => {
       } else {
         translateX.value = withSpring(0);
       }
-    })
-    
-    const animatedCircleStyle = useAnimatedStyle(() => {
-        return {
-            transform: [{ translateX: translateX.value }],
-        }
     });
 
-    const animatedLabelStyle = useAnimatedStyle(() => {
-        const opacity = translateX.value ? 1 : 0;
-        return {
-            opacity: opacity,
-        };
-    });
+  const animatedLabelStyle = useAnimatedStyle(() => {
+    const opacity = translateX.value ? 0 : 1;
+    return {
+      opacity: opacity,
+    };
+  });
 
-    const animatedSwiperStyle = useAnimatedStyle(() => {
-        const width = SWIPER_WIDTH - translateX.value;
-        return {
-            width: width,
-        };
-    });
+  const animatedSwiperStyle = useAnimatedStyle(() => {
+    const width = SWIPER_WIDTH - translateX.value;
+    return {
+      width: width,
+    };
+  });
 
-    return (
-        <View style={styles.container}>
-            <Animated.View style={[styles.swiperBar, animatedSwiperStyle]}>
+  return (
+    <View style={styles.container}>
+      <Animated.View style={[styles.swiperBar, animatedSwiperStyle]}>
+        <LinearGradient
+          colors={["#242424", "#1A1A1A"]}
+          start={[0.5, 0]}
+          end={[0.5, 1]}
+          style={styles.background}
+        />
+        <Animated.View style={styles.animatedCircleStyle}>
+          <Circle svg={<ArrowRight />} gesture={panGesture} />
+        </Animated.View>
 
-                <LinearGradient
-                    colors={['transparent', Colors.background]} 
-                    style={styles.background}
-                />
-
-                <Animated.View style={animatedCircleStyle}>
-                    <Circle
-                        svg={<ArrowRight/>}
-                        gesture={panGesture}
-                    />
-                </Animated.View>
-
-                <Animated.View style={[styles.labelContainer, animatedLabelStyle]}>
-                    <AnimatedText 
-                        text='Swipe to Start'
-                    />
-                </Animated.View>
-
-            </Animated.View>
-        </View>
-    )
-}
+        <Animated.View style={[styles.labelContainer, animatedLabelStyle]}>
+          <AnimatedText text="Swipe to Start" />
+        </Animated.View>
+      </Animated.View>
+    </View>
+  );
+};
 
 export default Swiper;
-

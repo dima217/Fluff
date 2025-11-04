@@ -1,3 +1,4 @@
+import Swiper from "@/components/swiper/swiper";
 import { ThemedText } from "@/components/ui/ThemedText";
 import VideoSlider from "@/components/video/videoSlider";
 import { Colors } from "@/constants/Colors";
@@ -38,6 +39,12 @@ export default function OnboardingScreen() {
         <ThemedText type="notion" style={styles.notionText}>
           Track your daily dietary norms without much effort.
         </ThemedText>
+
+        <Swiper
+          onSwipeEnd={() => {
+            console.log("hi");
+          }}
+        />
       </View>
     </View>
   );
