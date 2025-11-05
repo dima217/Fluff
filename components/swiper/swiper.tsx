@@ -1,18 +1,15 @@
 import ArrowRight from "@/assets/images/ArrowRight.svg";
-import { Ionicons } from "@expo/vector-icons";
+import { CircleSizes } from "@/constants/components/CIrcle";
 import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions, View } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
 import Animated, {
-  interpolateColor,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
-  withRepeat,
-  withSequence,
   withSpring,
-  withTiming,
 } from "react-native-reanimated";
+import AnimatedArrows from "../ui/animated/AnimatedArrows";
 import AnimatedText from "../ui/animated/CustomAnimatedText";
 import Circle from "../ui/circle";
 import { styles } from "./swiper.styles";
@@ -22,24 +19,12 @@ export interface SwiperProps {
 }
 
 const SWIPER_WIDTH = Dimensions.get("window").width * 0.9;
-const CIRCLE_SIZE = 45;
 const PADDING = 5;
-const THRESHOLD = SWIPER_WIDTH - CIRCLE_SIZE - PADDING * 4;
+const THRESHOLD = SWIPER_WIDTH - CircleSizes.SMALL - PADDING * 4;
 
 const Swiper = ({ onSwipeEnd }: SwiperProps) => {
   const isPressed = useSharedValue(false);
   const translateX = useSharedValue(0);
-
-  const arrowPhase = useSharedValue(0);
-
-  arrowPhase.value = withRepeat(
-    withSequence(
-      withTiming(0, { duration: 300 }),
-      withTiming(1, { duration: 500 })
-    ),
-    -1,
-    false
-  );
 
   const panGesture = Gesture.Pan()
     .onBegin(() => {
@@ -71,22 +56,11 @@ const Swiper = ({ onSwipeEnd }: SwiperProps) => {
     };
   });
 
-  const animatedArrowStyleLeft = useAnimatedStyle(() => {
-    const color = interpolateColor(
-      arrowPhase.value,
-      [0, 1],
-      ["#FFFFFF", "#494242"]
-    );
-    return { color };
-  });
-
-  const animatedArrowStyleRight = useAnimatedStyle(() => {
-    const color = interpolateColor(
-      arrowPhase.value,
-      [0, 1],
-      ["#494242", "#FFFFFF"]
-    );
-    return { color };
+  const animatedArrowsStyle = useAnimatedStyle(() => {
+    const opacity = translateX.value ? 0 : 1;
+    return {
+      opacity: opacity,
+    };
   });
 
   return (
@@ -106,15 +80,7 @@ const Swiper = ({ onSwipeEnd }: SwiperProps) => {
           <AnimatedText text="Swipe to Start" />
         </Animated.View>
 
-        <View style={styles.blinkingArrowsContainer}>
-          <Animated.Text style={animatedArrowStyleLeft}>
-            <Ionicons name="chevron-forward" size={24} />
-          </Animated.Text>
-
-          <Animated.Text style={animatedArrowStyleRight}>
-            <Ionicons name="chevron-forward" size={24} />
-          </Animated.Text>
-        </View>
+        <AnimatedArrows style={animatedArrowsStyle} />
       </Animated.View>
     </View>
   );
