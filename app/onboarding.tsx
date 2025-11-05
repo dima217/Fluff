@@ -2,12 +2,14 @@ import Swiper from "@/components/swiper/swiper";
 import { ThemedText } from "@/components/ui/ThemedText";
 import VideoSlider from "@/components/video/videoSlider";
 import { Colors } from "@/constants/Colors";
+import { useRouter } from "expo-router";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Cutlery from "../assets/images/Cutlery.svg";
 
 const { height } = Dimensions.get("window");
 
 export default function OnboardingScreen() {
+  const router = useRouter();
   return (
     <View style={styles.container}>
       {/* --- Top Video Section --- */}
@@ -40,11 +42,7 @@ export default function OnboardingScreen() {
           Track your daily dietary norms without much effort.
         </ThemedText>
 
-        <Swiper
-          onSwipeEnd={() => {
-            console.log("hi");
-          }}
-        />
+        <Swiper onSwipeEnd={() => router.navigate("/(auth)/login")} />
       </View>
     </View>
   );

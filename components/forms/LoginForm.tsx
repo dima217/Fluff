@@ -1,6 +1,6 @@
-import React from "react";
 import { useForm } from "react-hook-form";
-import { Button, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import CustomButton from "../ui/common/button/CustomButtom";
 import CustomInput from "../ui/common/input/CustomInput";
 
 interface LoginData {
@@ -11,32 +11,27 @@ interface LoginData {
 const LoginForm = () => {
   const { control, handleSubmit } = useForm<LoginData>();
 
-  const onSubmit = (data: LoginData) => {
-  };
+  const onSubmit = (data: LoginData) => {};
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 22, fontWeight: "600", marginBottom: 10 }}>
-      </Text>
+    <View style={styles.container}>
+      <Text
+        style={{ fontSize: 22, fontWeight: "600", marginBottom: 10 }}
+      ></Text>
 
-      <CustomInput
-        name="login"
-        control={control}
-        placeholder="Login"
-      />
-
-      <CustomInput
-        name="password"
-        control={control}
-        placeholder="Password"
-        secureTextEntry
-      />
-
-      <View style={{ marginTop: 20 }}>
-        <Button title="Login" onPress={handleSubmit(onSubmit)} />
-      </View>
+      <CustomInput name="login" control={control} placeholder="Enter" />
+      <CustomButton title="Login" onPress={handleSubmit(onSubmit)} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default LoginForm;
