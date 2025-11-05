@@ -4,12 +4,11 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    gap: 10,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
     paddingVertical: 20,
-    paddingHorizontal: 30,
+    width: "85%",
   },
   inputContainer: {
     width: "100%",
@@ -21,20 +20,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.inactive,
   },
-  input: {
+  label: {
     fontSize: 16,
     color: "#E5E5E5",
     paddingTop: 10,
-    height: "100%",
   },
-  button: {
-    borderWidth: 2,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: 8,
+  disabledInputContainer: {
+    backgroundColor: Colors.inactive,
+    borderBottomColor: Colors.inactive,
   },
   errorText: {
     color: "#FF3B30",
@@ -51,6 +44,28 @@ const styles = StyleSheet.create({
   textContainer: {
     display: "flex",
     flexDirection: "column",
+  },
+  labelContainer: {
+    paddingHorizontal: 8,
+  },
+  leftContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  rightContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  errorInputContainer: {
+    borderBottomColor: Colors.reject,
+  },
+  errorContainer: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  error: {
+    fontSize: 10,
+    color: Colors.reject,
   },
 });
 

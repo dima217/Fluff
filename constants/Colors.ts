@@ -7,4 +7,5 @@ export const Colors = {
   tab: "#232323",
   border: "#5B5B5B",
   gradient: ["#1A1A1A", "#242424"] as const,
+  reject: "#ff4a75",
 };

@@ -12,7 +12,7 @@ import Animated, {
 import AnimatedArrows from "../ui/Animated/AnimatedArrows";
 import AnimatedText from "../ui/Animated/CustomAnimatedText";
 import Circle from "../ui/circle";
-import { styles } from "./swiper.styles";
+import { styles } from "./styles";
 
 export interface SwiperProps {
   onSwipeEnd: () => void;

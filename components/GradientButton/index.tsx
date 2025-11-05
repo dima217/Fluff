@@ -16,7 +16,6 @@ interface GradientButtonProps {
   onPress?: () => void;
   loading?: boolean;
   disabled?: boolean;
-  buttonColors?: (string | number)[];
   textColor?: string;
   style?: StyleProp<ViewStyle>;
   gradientStyle?: StyleProp<ViewStyle>;
@@ -28,7 +27,6 @@ const GradientButton = ({
   onPress,
   loading,
   disabled,
-  buttonColors,
   textColor,
   style,
   gradientStyle,
@@ -47,8 +45,8 @@ const GradientButton = ({
       <LinearGradient
         colors={gradientColors}
         style={[styles.gradientContainer, gradientStyle]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
+        start={{ x: 0.5, y: 0.5 }}
+        end={{ x: 0.5, y: 1 }}
       >
         {loading ? (
           <ActivityIndicator size="small" color={Colors.inactive} />
@@ -58,7 +56,7 @@ const GradientButton = ({
               styles.buttonText,
               {
                 color:
-                  textColor ?? (isDisabled ? Colors.text : Colors.inactive),
+                  textColor ?? (isDisabled ? Colors.inactive : Colors.text),
               },
               textStyle,
             ]}

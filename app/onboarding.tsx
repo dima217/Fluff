@@ -1,6 +1,6 @@
-import Swiper from "@/components/swiper/swiper";
+import Swiper from "@/components/Swiper";
 import { ThemedText } from "@/components/ui/ThemedText";
-import VideoSlider from "@/components/video/videoSlider";
+import VideoSlider from "@/components/Video/videoSlider";
 import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
 import { Dimensions, StyleSheet, View } from "react-native";

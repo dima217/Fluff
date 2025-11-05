@@ -1,12 +1,7 @@
-import { Colors } from '@/constants/Colors';
-import React, { memo } from 'react';
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
-import { styles } from './toggle.buttons.styles';
+import { Colors } from "@/constants/Colors";
+import { memo } from "react";
+import { Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import { styles } from "./styles";
 
 type Props = {
   options: string[];
@@ -16,7 +11,6 @@ type Props = {
 };
 
 const ToggleButtons = ({ options, selected, onSelect, style }: Props) => {
-
   return (
     <View style={[styles.container]}>
       {options.map((option, index) => {
@@ -36,26 +30,18 @@ const ToggleButtons = ({ options, selected, onSelect, style }: Props) => {
                 borderTopRightRadius: isLast ? 25 : 0,
                 borderBottomRightRadius: isLast ? 25 : 0,
               },
-              
+
               style,
             ]}
             onPress={() => onSelect(option)}
             activeOpacity={0.8}
           >
-            <Text
-              style={[
-                styles.text,
-                { color: Colors.text},
-              ]}
-            >
-              {option}
-            </Text>
+            <Text style={[styles.text, { color: Colors.text }]}>{option}</Text>
           </TouchableOpacity>
         );
       })}
     </View>
   );
-}
+};
 
 export default memo(ToggleButtons);
-

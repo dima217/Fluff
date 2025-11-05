@@ -5,7 +5,7 @@ import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 import ActivityIndicator from "../ui/ActivityIndicator";
 
 import { Colors } from "@/constants/Colors";
-import { styles } from "./button.styles";
+import { styles } from "./styles";
 
 interface ButtonProps {
   title: string;
