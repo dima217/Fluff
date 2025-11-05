@@ -1,8 +1,8 @@
-import { AntDesign } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import ProgressBar from '../ui/animated/progressBar/ProgressLine';
-import { styles } from './styles/progress.styles';
+import { AntDesign } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import ProgressBar from "../ui/Animated/progressBar/ProgressLine";
+import { styles } from "./styles/progress.styles";
 
 interface CalorieProgressProps {
   currentCalories: number;
@@ -37,7 +37,9 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
 
       <View style={styles.progressContainer}>
         <Text style={styles.progressLabel}>Progress</Text>
-        <Text style={styles.progressText}>{Math.round(progress)}% Complete</Text>
+        <Text style={styles.progressText}>
+          {Math.round(progress)}% Complete
+        </Text>
       </View>
       <ProgressBar progress={progress} />
 

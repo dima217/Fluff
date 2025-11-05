@@ -9,8 +9,8 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import AnimatedArrows from "../ui/animated/AnimatedArrows";
-import AnimatedText from "../ui/animated/CustomAnimatedText";
+import AnimatedArrows from "../ui/Animated/AnimatedArrows";
+import AnimatedText from "../ui/Animated/CustomAnimatedText";
 import Circle from "../ui/circle";
 import { styles } from "./swiper.styles";
 

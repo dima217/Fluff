@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  button: {
+  container: {
     width: "85%",
     paddingVertical: 12,
     paddingHorizontal: 24,
@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     marginVertical: 8,
     height: 56,
   },
-  text: {
+  buttonText: {
     fontSize: 16,
     fontFamily: "Inter-SemiBold",
   },

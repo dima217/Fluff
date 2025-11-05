@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
-import CustomButton from "../ui/common/button/CustomButtom";
-import CustomInput from "../ui/common/input/CustomInput";
+import Button from "../Button";
+import CustomInput from "../Common/Input/CustomInput";
 
 interface LoginData {
   login: string;
@@ -20,7 +20,7 @@ const LoginForm = () => {
       ></Text>
 
       <CustomInput name="login" control={control} placeholder="Enter" />
-      <CustomButton title="Login" onPress={handleSubmit(onSubmit)} />
+      <Button title="Login" onPress={handleSubmit(onSubmit)} />
     </View>
   );
 };

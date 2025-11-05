@@ -1,5 +1,5 @@
-import LoginForm from "@/components/forms/LoginForm";
-import CustomButton from "@/components/ui/common/button/CustomButtom";
+import CustomButton from "@/components/Button";
+import LoginForm from "@/components/Forms/LoginForm";
 import { Colors } from "@/constants/Colors";
 import { StyleSheet, View } from "react-native";
 import Fluff from "../../assets/images/Fluff.svg";
