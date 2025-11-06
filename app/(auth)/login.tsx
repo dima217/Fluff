@@ -3,8 +3,11 @@ import GradientButton from "@/components/GradientButton";
 import SignUpPrompt from "@/components/ui/SignUpPrompt";
 import { ThemedText } from "@/components/ui/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import Fluff from "../../assets/images/Fluff.svg";
+
+const router = useRouter();
 
 const Login = () => {
   return (
@@ -19,7 +22,11 @@ const Login = () => {
       <View style={styles.innerContainer}>
         <GradientButton title="Continue with" onPress={() => {}} />
         <GradientButton title="Continue with" onPress={() => {}} />
-        <SignUpPrompt onPressSignUp={() => {}} />
+        <SignUpPrompt
+          onPressSignUp={() => {
+            router.navigate("/(auth)/register");
+          }}
+        />
       </View>
     </View>
   );

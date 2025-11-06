@@ -1,5 +1,5 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import Circle from "../circle";
+import Circle from "../Circle";
 
 import ExpandRight from "@/assets/images/Expand_right.svg";
 import Heart from "@/assets/images/Heart.svg";

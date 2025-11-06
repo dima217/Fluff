@@ -11,7 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 import AnimatedArrows from "../ui/Animated/AnimatedArrows";
 import AnimatedText from "../ui/Animated/CustomAnimatedText";
-import Circle from "../ui/circle";
+import Circle from "../ui/Circle";
 import { styles } from "./styles";
 
 export interface SwiperProps {

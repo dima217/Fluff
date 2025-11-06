@@ -1,5 +1,6 @@
-import { Button, StyleSheet, Text, View } from "react-native";
-import StepContainer from "../StepContainer";
+import { Button, StyleSheet, View } from "react-native";
+import StepContainer from "../../components/StepContainer";
+import { ThemedText } from "../../components/ui/ThemedText";
 
 interface StepProps {
   onNext: () => void;
@@ -12,8 +13,7 @@ export const Age: React.FC<Pick<StepProps, "onFinish" | "onPrev">> = ({
   onPrev,
 }) => (
   <StepContainer>
-    <Text style={stepStyles.title}>Шаг 1: Введение</Text>
-    <Text style={stepStyles.body}>Подготовьтесь к речи.</Text>
+    <ThemedText>I am...</ThemedText>
     <View style={stepStyles.buttonGroup}>
       <Button title="Назад" color="#444" onPress={onPrev} />
       <Button title="Завершить" color="#ff6b9a" onPress={onFinish} />
