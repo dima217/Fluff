@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: 8,
+
     height: 56,
   },
   buttonText: {

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Button from "../Button";
-import TextInput from "../TextInput";
+import EmailInput from "../EmailInput";
 
 interface LoginData {
   login: string;
@@ -15,11 +15,7 @@ const LoginForm = () => {
 
   return (
     <View style={styles.container}>
-      <Text
-        style={{ fontSize: 22, fontWeight: "600", marginBottom: 10 }}
-      ></Text>
-
-      <TextInput placeholder="Enter" />
+      <EmailInput placeholder="Enter" />
       <Button title="Login" onPress={handleSubmit(onSubmit)} />
     </View>
   );
