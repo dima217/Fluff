@@ -16,7 +16,7 @@ export const Sex = ({ onNext }: StepProps) => {
   const [sex, setSex] = useState<Gender>(null);
   return (
     <View style={styles.stepContainer}>
-      <ThemedText> I am...</ThemedText>
+      <ThemedText type="subtitle"> I am...</ThemedText>
       <SexPicker selectedSex={sex} onSelect={setSex} />
       <Button title="Continue" onPress={onNext} style={styles.button} />
     </View>
