@@ -15,12 +15,11 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: Colors.primary,
-        tabBarInactiveBackgroundColor: Colors.inactive,
         tabBarStyle: {
           backgroundColor: Colors.tab,
           borderTopWidth: 0,
           elevation: 0,
-          height: 59,
+          height: 70,
         },
       }}
     >
@@ -43,15 +42,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Plus"
+        name="plus"
         options={{
-          title: "Health",
-          tabBarIcon: ({ color }) => (
-            <HealthTab width={28} height={28} fill={color} />
-          ),
           tabBarButton: (props) => (
-            <View style={{ top: -20 }}>
-              <Circle size={53} svg={<Add />} />
+            <View
+              style={{
+                top: -20,
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+              }}
+            >
+              <Circle size={56} svg={<Add />} />
             </View>
           ),
         }}
@@ -68,7 +70,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Explore",
+          title: "Profile",
           tabBarIcon: ({ color }) => (
             <UserTab width={28} height={28} fill={color} />
           ),

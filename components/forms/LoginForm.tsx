@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import Button from "../Button";
@@ -9,9 +10,12 @@ interface LoginData {
 }
 
 const LoginForm = () => {
-  const { control, handleSubmit } = useForm<LoginData>();
+  const { handleSubmit } = useForm<LoginData>();
+  const router = useRouter();
 
-  const onSubmit = (data: LoginData) => {};
+  const onSubmit = (data: LoginData) => {
+    router.navigate("/(app)/library");
+  };
 
   return (
     <View style={styles.container}>
