@@ -17,7 +17,7 @@ interface AnimatedWheelPickerProps {
 
 export function AnimatedWheelPicker({
   data,
-  itemHeight = 48,
+  itemHeight = 56,
   visibleCount = 3,
   onValueChange,
   initialIndex = 0,
@@ -89,7 +89,7 @@ export function AnimatedWheelPicker({
 
 const styles = StyleSheet.create({
   container: {
-    width: "90%",
+    width: "70%",
     position: "relative",
     overflow: "hidden",
   },
@@ -107,8 +107,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     borderWidth: 1,
-    borderRadius: 25,
-    borderColor: "rgba(255,255,255,0.4)",
+    borderRadius: 30,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
   gradient: {
     position: "absolute",

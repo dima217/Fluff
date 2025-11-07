@@ -54,6 +54,7 @@ export const WheelItem = memo(function WheelItem({
 
 const styles = StyleSheet.create({
   itemContainer: {
+    zIndex: 5,
     justifyContent: "center",
     alignItems: "center",
   },
