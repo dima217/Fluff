@@ -19,7 +19,7 @@ const SignUpPrompt: React.FC<SignUpPromptProps> = ({ onPressSignUp }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 20,
+    paddingTop: 10,
     backgroundColor: "transparent",
     display: "flex",
     flexDirection: "row",

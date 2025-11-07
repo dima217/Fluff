@@ -1,41 +1,31 @@
-import { Colors } from "@/constants/Colors";
-import { MaterialIcons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { View } from "react-native";
-import { ThemedText } from "../ThemedText";
+import SexOption from "./SexOption";
 import { styles } from "./styles";
 
-const gradientColors = Colors.gradient;
+type Gender = "male" | "female" | null;
 
-const SexPicker = () => {
+interface SexPickerProps {
+  selectedSex: Gender;
+  onSelect: (sex: Gender) => void;
+}
+
+const SexPicker = ({ selectedSex, onSelect }: SexPickerProps) => {
   return (
     <View style={styles.container}>
-      <View style={styles.pickerContainer}>
-        <View style={styles.picker}>
-          <LinearGradient
-            colors={gradientColors}
-            style={[styles.gradientContainer]}
-            start={{ x: 0.5, y: 0.5 }}
-            end={{ x: 0.5, y: 1 }}
-          >
-            <MaterialIcons name="male" size={90} color={Colors.primary} />
-          </LinearGradient>
-        </View>
-        <ThemedText>Male</ThemedText>
-      </View>
-      <View style={styles.pickerContainer}>
-        <View style={styles.picker}>
-          <LinearGradient
-            colors={gradientColors}
-            style={[styles.gradientContainer]}
-            start={{ x: 0.5, y: 0.5 }}
-            end={{ x: 0.5, y: 1 }}
-          >
-            <MaterialIcons name="female" size={90} color={Colors.primary} />
-          </LinearGradient>
-        </View>
-        <ThemedText>M</ThemedText>
-      </View>
+      <SexOption
+        label="Male"
+        iconName="male"
+        value="male"
+        isSelected={selectedSex === "male"}
+        onPress={onSelect}
+      />
+      <SexOption
+        label="Female"
+        iconName="female"
+        value="female"
+        isSelected={selectedSex === "female"}
+        onPress={onSelect}
+      />
     </View>
   );
 };

@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     flexDirection: "column",
     gap: 4,
-    width: "85%",
+    width: "90%",
   },
   inputContainer: {
     width: "100%",

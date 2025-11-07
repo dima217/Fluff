@@ -1,6 +1,4 @@
-import Button from "@/components/Button";
 import ProgressDots from "@/components/ui/ProgressDots";
-import { ThemedText } from "@/components/ui/ThemedText";
 import Age from "@/widgets/AgeScreen";
 import Sex from "@/widgets/SexScreen";
 import React, { useState } from "react";
@@ -42,12 +40,7 @@ const SpeechScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <ProgressDots totalSteps={totalSteps} activeIndex={currentStep} />
-      <ThemedText> I am...</ThemedText>
       {renderStepComponent()}
-      <Button
-        title="Continue"
-        style={{ position: "absolute", bottom: "10%" }}
-      />
     </View>
   );
 };

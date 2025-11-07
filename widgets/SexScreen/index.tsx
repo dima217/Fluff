@@ -1,5 +1,10 @@
+import Button from "@/components/Button";
+import { ThemedText } from "@/components/ui/ThemedText";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import SexPicker from "../../components/ui/SexPicker";
+
+type Gender = "male" | "female" | null;
 
 interface StepProps {
   onNext: () => void;
@@ -7,20 +12,28 @@ interface StepProps {
   onFinish?: () => void;
 }
 
-export const Sex: React.FC<Pick<StepProps, "onNext" | "onPrev">> = ({
-  onNext,
-  onPrev,
-}) => (
-  <View style={stepStyles.stepContainer}>
-    <SexPicker />
-  </View>
-);
+export const Sex = ({ onNext }: StepProps) => {
+  const [sex, setSex] = useState<Gender>(null);
+  return (
+    <View style={styles.stepContainer}>
+      <ThemedText> I am...</ThemedText>
+      <SexPicker selectedSex={sex} onSelect={setSex} />
+      <Button title="Continue" onPress={onNext} style={styles.button} />
+    </View>
+  );
+};
 
-const stepStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   stepContainer: {
-    justifyContent: "center",
+    flex: 1,
+    gap: "8%",
+    justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "black",
+  },
+  button: {
+    position: "absolute",
+    bottom: "15%",
   },
 });
 

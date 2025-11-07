@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Colors";
 import { Dimensions, StyleSheet } from "react-native";
 
 const { width: screenWidth } = Dimensions.get("window");
-const calculatedWidth = screenWidth * 0.45;
+const calculatedWidth = screenWidth * 0.425;
 
 export const styles = StyleSheet.create({
   container: {
@@ -10,10 +10,10 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     borderRadius: 15,
-    gap: 10,
+    gap: "5%",
   },
   pickerContainer: {
-    width: "45%",
+    width: "42.5%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
