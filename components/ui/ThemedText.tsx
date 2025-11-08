@@ -4,7 +4,7 @@ import { StyleSheet, Text, type TextProps } from "react-native";
 export type ThemedTextProps = TextProps & {
   titleSize?: number;
   highlightLastWord?: boolean;
-  type?: "title" | "subtitle" | "default" | "mini" | "notion";
+  type?: "title" | "subtitle" | "default" | "mini" | "notion" | "s" | "xs";
 };
 
 const getStylesByType = (type: ThemedTextProps["type"]) => {
@@ -15,6 +15,10 @@ const getStylesByType = (type: ThemedTextProps["type"]) => {
       return styles.subtitle;
     case "mini":
       return styles.mini;
+    case "s":
+      return styles.s;
+    case "xs":
+      return styles.xs;
     case "default":
     default:
       return styles.default;
@@ -91,6 +95,13 @@ const styles = StyleSheet.create({
   },
   mini: {
     fontSize: 14,
+  },
+  s: {
+    fontSize: 16,
+  },
+  xs: {
+    fontSize: 12,
+    color: "#8B868F",
   },
   notion: {
     fontSize: 14,

@@ -1,7 +1,14 @@
-import { AntDesign, Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import FilterTags from '../filterTags/FilterTags';
+import { Colors } from "@/constants/Colors";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
+import React from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import FilterTags from "../filterTags/FilterTags";
 
 interface SearchInputProps {
   isFiltering: boolean;
@@ -29,7 +36,12 @@ const SearchInput: React.FC<SearchInputProps> = ({
           </ScrollView>
         ) : (
           <>
-            <AntDesign name="search1" size={18} color="gray" style={styles.searchIcon} />
+            <AntDesign
+              name="search"
+              size={18}
+              color="gray"
+              style={styles.searchIcon}
+            />
             <TextInput
               style={styles.input}
               placeholder="Search"
@@ -49,26 +61,26 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
 const styles = StyleSheet.create({
   searchBarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    height: 58,
+    flexDirection: "row",
+    backgroundColor: Colors.inactive,
+    borderRadius: 34,
+    alignItems: "center",
     marginBottom: 20,
     marginTop: 20,
+    paddingHorizontal: 15,
   },
   inputWrapper: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#333333',
-    borderRadius: 10,
-    padding: 10,
-    marginRight: 10,
+    flexDirection: "row",
+    alignItems: "center",
   },
   searchIcon: {
     marginRight: 10,
   },
   input: {
     flex: 1,
-    color: 'white',
+    color: "white",
     fontSize: 16,
   },
 });

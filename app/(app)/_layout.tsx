@@ -7,6 +7,7 @@ import HealthTab from "@/assets/images/PillTab.svg";
 import UserTab from "@/assets/images/UserTab.svg";
 import Circle from "@/components/ui/Circle";
 import { Colors } from "@/constants/Colors";
+import { CircleSizes } from "@/constants/components/CIrcle";
 import { View } from "react-native";
 
 export default function TabLayout() {
@@ -47,7 +48,7 @@ export default function TabLayout() {
           tabBarButton: (props) => (
             <View
               style={{
-                top: -20,
+                top: -CircleSizes.MEDIUM / 2,
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "center",
