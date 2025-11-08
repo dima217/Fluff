@@ -1,9 +1,13 @@
 import AccountDetails from "@/components/AccountDetails";
+import MediaCarouselItem from "@/components/MediaCarouselItem";
 import SearchInput from "@/components/Search/ui/searchInput/SearchInput";
+import Toogle from "@/components/Toogle";
 import { Colors } from "@/constants/Colors";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 const Home = () => {
+  const [toogle, setToogle] = useState<string>("All");
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
@@ -16,6 +20,12 @@ const Home = () => {
           onToggleFilter={() => {}}
           onFilterRemove={() => {}}
         />
+        <Toogle
+          options={["All", "Videos", "Recipes", "Calories Base"]}
+          selected={toogle}
+          onSelect={setToogle}
+        />
+        <MediaCarouselItem title="Hi" author="Katarina" onPress={() => {}} />
       </View>
     </View>
   );

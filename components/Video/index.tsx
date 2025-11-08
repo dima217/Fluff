@@ -3,7 +3,7 @@ import { ResizeMode, Video } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
 import { Dimensions, FlatList, View } from "react-native";
-import { styles } from "./video.slider.styles";
+import { styles } from "./styles";
 
 const videos = [
   { id: "1", source: require("../../assets/videos/landing-1.mp4") },
