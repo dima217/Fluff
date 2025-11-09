@@ -1,3 +1,5 @@
+import Circle from "@/components/ui/Circle";
+import { ThemedText } from "@/components/ui/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { memo } from "react";
@@ -5,13 +7,12 @@ import {
   Dimensions,
   ImageBackground,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
 
-const CARD_WIDTH = Dimensions.get("window").width * 0.75;
+const CARD_WIDTH = Dimensions.get("window").width * 0.7;
 const CARD_HEIGHT = CARD_WIDTH * 0.6;
 const REAL_IMAGE_URL =
   "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop";
@@ -53,14 +54,15 @@ const MediaCarouselItem = ({
           style={styles.gradientOverlay}
         >
           <View style={styles.playButtonContainer}>
-            <View style={styles.playButton}>
-              <Ionicons name="play" size={24} color="#FFF" />
-            </View>
+            <Circle
+              svg={<Ionicons name="play" size={24} color="#FFF" />}
+              frostedGlass
+              onPress={() => {}}
+            />
           </View>
-
           <View style={styles.textContainer}>
-            <Text style={styles.titleText}>{title}</Text>
-            <Text style={styles.authorText}>{author}</Text>
+            <ThemedText type="s">{title}</ThemedText>
+            <ThemedText type="xs">{author}</ThemedText>
           </View>
         </LinearGradient>
       </ImageBackground>
@@ -72,7 +74,6 @@ export default memo(MediaCarouselItem);
 
 const styles = StyleSheet.create({
   cardContainer: {
-    marginHorizontal: 10,
     borderRadius: 16,
     overflow: "hidden",
     elevation: 5,
@@ -83,21 +84,21 @@ const styles = StyleSheet.create({
   },
   imageBackground: {
     flex: 1,
-    justifyContent: "flex-end",
   },
   image: {
     borderRadius: 16,
   },
   gradientOverlay: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
     padding: 15,
   },
   playButtonContainer: {
-    flex: 1,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 1,
   },
   playButton: {
     width: 60,
@@ -110,8 +111,9 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 0.5)",
   },
   textContainer: {
+    flexDirection: "column",
     alignSelf: "flex-start",
-    marginBottom: 5,
+    gap: 4,
   },
   titleText: {
     fontSize: 20,

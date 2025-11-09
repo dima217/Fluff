@@ -31,7 +31,18 @@ const Circle = ({
   if (onPress) {
     if (frostedGlass) {
       return (
-        <BlurView intensity={50} tint="light" style={styles.circle}>
+        <BlurView
+          intensity={20}
+          tint="light"
+          style={[
+            styles.glassCircle,
+            {
+              width: circleStyle.width,
+              height: circleStyle.height,
+              borderRadius: circleStyle.borderRadius,
+            },
+          ]}
+        >
           <View>{svg}</View>
         </BlurView>
       );
@@ -58,6 +69,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
+  },
+  glassCircle: {
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.5)",
   },
 });
 

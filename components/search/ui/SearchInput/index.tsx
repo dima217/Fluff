@@ -1,13 +1,9 @@
+import Filter from "@/assets/images/Filter.svg";
+import Search from "@/assets/images/Search.svg";
+import Circle from "@/components/ui/Circle";
 import { Colors } from "@/constants/Colors";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
 import React from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, TextInput, View } from "react-native";
 import FilterTags from "../filterTags/FilterTags";
 
 interface SearchInputProps {
@@ -36,12 +32,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           </ScrollView>
         ) : (
           <>
-            <AntDesign
-              name="search"
-              size={18}
-              color="gray"
-              style={styles.searchIcon}
-            />
+            <Search />
             <TextInput
               style={styles.input}
               placeholder="Search"
@@ -52,9 +43,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           </>
         )}
       </View>
-      <TouchableOpacity onPress={onToggleFilter}>
-        <Ionicons name="options-outline" size={24} color="white" />
-      </TouchableOpacity>
+      <Circle onPress={onToggleFilter} frostedGlass svg={<Filter />} />
     </View>
   );
 };
@@ -69,6 +58,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
     paddingHorizontal: 15,
+    paddingRight: 4,
   },
   inputWrapper: {
     flex: 1,
@@ -79,6 +69,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   input: {
+    paddingLeft: 10,
     flex: 1,
     color: "white",
     fontSize: 16,

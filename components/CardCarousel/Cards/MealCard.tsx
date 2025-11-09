@@ -1,9 +1,9 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import Circle from "../Circle";
 
 import ExpandRight from "@/assets/images/Expand_right.svg";
 import Heart from "@/assets/images/Heart.svg";
 import Check from "@/assets/images/Сheck.svg";
+import Circle from "@/components/ui/Circle";
 import { Colors } from "@/constants/Colors";
 import { styles } from "./meal.card.style";
 

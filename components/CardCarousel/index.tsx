@@ -1,5 +1,5 @@
 import { FlatList, SafeAreaView, StyleSheet, Text } from "react-native";
-import MealCard from "../ui/Cards/MealCard";
+import MealCard from "./Cards/MealCard";
 
 interface Meal {
   id: string;
