@@ -86,7 +86,6 @@ const VideoCarousel = ({ data, onCardPress, style }: VideoCarouselProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
     alignSelf: "stretch",
   },
 });

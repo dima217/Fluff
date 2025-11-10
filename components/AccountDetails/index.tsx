@@ -24,6 +24,7 @@ export default AccountDetails;
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 55,
     display: "flex",
     flexDirection: "row",
     alignSelf: "stretch",

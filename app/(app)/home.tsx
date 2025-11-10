@@ -1,10 +1,8 @@
 import AccountDetails from "@/components/AccountDetails";
-import CardsCarousel from "@/components/CardCarousel";
-import MediaCarousel from "@/components/MediaCarousel";
 import SearchInput from "@/components/Search/ui/SearchInput";
 import Toogle from "@/components/Toogle";
-import { ThemedText } from "@/components/ui/ThemedText";
 import { Colors } from "@/constants/Colors";
+import HomeContent from "@/widgets/HomeContent";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -12,7 +10,7 @@ const Home = () => {
   const [toogle, setToogle] = useState<string>("All");
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.container}>
+      <View style={[styles.container]}>
         <AccountDetails />
         <SearchInput
           isFiltering={false}
@@ -27,14 +25,9 @@ const Home = () => {
           selected={toogle}
           onSelect={setToogle}
         />
-        <View style={styles.popularContainer}>
-          <ThemedText type="s">Popular recipes</ThemedText>
-          <MediaCarousel onCardPress={() => {}} />
-        </View>
-        <View style={styles.myRecipesContainer}>
-          <ThemedText type="s">My recipes</ThemedText>
-          <CardsCarousel variant={"mealsToday"} />
-        </View>
+      </View>
+      <View style={styles.container}>
+        <HomeContent selected={toogle} />
       </View>
     </View>
   );
@@ -47,11 +40,9 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: Colors.background,
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
   },
   container: {
-    flex: 1,
     width: "90%",
     justifyContent: "center",
     alignItems: "center",

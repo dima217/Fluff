@@ -37,7 +37,32 @@ const featuredRecipes: Meal[] = [
     id: "3",
     title: "Vegan Burger",
     calories: "550",
-    imageUrl: "...",
+    imageUrl:
+      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    isLiked: true,
+  },
+  {
+    id: "4",
+    title: "Grilled Salmon with Asparagus",
+    calories: "450",
+    imageUrl:
+      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    isLiked: true,
+  },
+  {
+    id: "5",
+    title: "Chicken Caesar Salad",
+    calories: "320",
+    imageUrl:
+      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    isLiked: false,
+  },
+  {
+    id: "6",
+    title: "Vegan Burger",
+    calories: "550",
+    imageUrl:
+      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     isLiked: true,
   },
 ];
@@ -61,7 +86,7 @@ const mealsToday: Meal[] = [
     status: "Completed",
   },
   {
-    id: "4",
+    id: "6",
     title: "Breakfast Smoothie",
     calories: "250",
     imageUrl:
@@ -88,7 +113,6 @@ const renderFeaturedList = () => {
         data={featuredRecipes}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.carouselList}
       />
@@ -109,7 +133,7 @@ const renderMealsTodayList = () => {
   );
 
   return (
-    <View style={{}}>
+    <View>
       <FlatList
         data={mealsToday}
         bounces={false}
@@ -125,7 +149,7 @@ const renderMealsTodayList = () => {
 
 const CardsCarousel = ({ variant, ...rest }: CardsScrollProps) => {
   const content = (
-    <View style={rest.style}>
+    <View>
       {variant === "featured" && renderFeaturedList()}
       {variant === "mealsToday" && renderMealsTodayList()}
     </View>
