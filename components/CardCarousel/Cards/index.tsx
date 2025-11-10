@@ -1,19 +1,18 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 
-import ExpandRight from "@/assets/images/Expand_right.svg";
 import Heart from "@/assets/images/Heart.svg";
 import Check from "@/assets/images/Сheck.svg";
-import Circle from "@/components/ui/Circle";
+import { ThemedText } from "@/components/ui/ThemedText";
 import { Colors } from "@/constants/Colors";
-import { styles } from "./meal.card.style";
+import { styles } from "./styles";
 
 interface RecipeCardProps {
   title: string;
   calories: string;
   imageUrl: string;
   status?: string;
+  variant: "carousel" | "list";
   onPress: () => void;
-  isCarouselItem?: boolean;
   isLiked?: boolean;
 }
 
@@ -23,9 +22,11 @@ const MealCard = ({
   imageUrl,
   status,
   onPress,
-  isCarouselItem = false,
+  variant,
   isLiked = false,
 }: RecipeCardProps) => {
+  const isCarouselItem = variant === "carousel";
+
   const renderActionIcon = () => {
     if (isCarouselItem) {
       return (
@@ -36,13 +37,7 @@ const MealCard = ({
         />
       );
     } else {
-      return (
-        <Circle
-          size={48}
-          svg={<ExpandRight width={24} height={24} />}
-          onPress={onPress}
-        />
-      );
+      return null;
     }
   };
 
@@ -50,7 +45,7 @@ const MealCard = ({
     <TouchableOpacity
       style={[
         styles.cardContainer,
-        isCarouselItem ? styles.carouselContainer : styles.fullWidthContainer,
+        isCarouselItem ? styles.carouselContainer : "",
       ]}
       onPress={onPress}
     >
@@ -71,22 +66,16 @@ const MealCard = ({
         ]}
       >
         <View style={styles.textDetails}>
-          <Text style={[styles.title, isCarouselItem && styles.carouselTitle]}>
-            {title}
-          </Text>
-          <Text
-            style={[styles.calories, isCarouselItem && styles.carouselCalories]}
-          >
-            {calories} KK
-          </Text>
+          <ThemedText type="xs">{title}</ThemedText>
+          <ThemedText type="xs">{calories}</ThemedText>
           {status && (
             <View style={styles.statusContainer}>
-              <Text style={styles.statusText}>{status}</Text>
+              <ThemedText type="xs">{status}</ThemedText>
               <Check width={14} height={14} />
             </View>
           )}
         </View>
-        <View style={styles.actionIconWrapper}>{renderActionIcon()}</View>
+        {renderActionIcon()}
       </View>
     </TouchableOpacity>
   );

@@ -1,4 +1,5 @@
 import AccountDetails from "@/components/AccountDetails";
+import CardsCarousel from "@/components/CardCarousel";
 import MediaCarousel from "@/components/MediaCarousel";
 import SearchInput from "@/components/Search/ui/SearchInput";
 import Toogle from "@/components/Toogle";
@@ -30,6 +31,10 @@ const Home = () => {
           <ThemedText type="s">Popular recipes</ThemedText>
           <MediaCarousel onCardPress={() => {}} />
         </View>
+        <View style={styles.myRecipesContainer}>
+          <ThemedText type="s">My recipes</ThemedText>
+          <CardsCarousel variant={"mealsToday"} />
+        </View>
       </View>
     </View>
   );
@@ -52,6 +57,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   popularContainer: {
+    marginTop: "10%",
+    alignSelf: "stretch",
+  },
+  myRecipesContainer: {
     marginTop: "10%",
     alignSelf: "stretch",
   },
