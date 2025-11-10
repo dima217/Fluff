@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
   },
   textDetails: {
     flexDirection: "column",
-    marginRight: 10,
+    gap: 8,
   },
   title: {
     fontWeight: "bold",
@@ -45,6 +45,7 @@ export const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: "row",
     alignItems: "center",
+    gap: 5,
   },
   statusText: {
     fontSize: 14,
@@ -58,7 +59,7 @@ export const styles = StyleSheet.create({
   fullWidthImageWrapper: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    height: "65%",
+    height: "60%",
     backgroundColor: "#FFFFFF",
     overflow: "hidden",
     borderBottomLeftRadius: 40,

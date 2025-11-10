@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   myRecipesContainer: {
+    gap: 10,
     marginTop: "10%",
     alignSelf: "stretch",
   },

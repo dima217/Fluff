@@ -66,14 +66,20 @@ const MealCard = ({
         ]}
       >
         <View style={styles.textDetails}>
-          <ThemedText type="xs">{title}</ThemedText>
-          <ThemedText type="xs">{calories}</ThemedText>
-          {status && (
-            <View style={styles.statusContainer}>
-              <ThemedText type="xs">{status}</ThemedText>
-              <Check width={14} height={14} />
-            </View>
-          )}
+          <ThemedText type="xs" style={{ color: "#FFFFFF", fontSize: 12 }}>
+            {title}
+          </ThemedText>
+          <View>
+            <ThemedText type="xs">{calories}</ThemedText>
+            {status && (
+              <View style={styles.statusContainer}>
+                <ThemedText style={{ color: Colors.text }} type="xs">
+                  Fluff
+                </ThemedText>
+                <Check width={14} height={14} />
+              </View>
+            )}
+          </View>
         </View>
         {renderActionIcon()}
       </View>

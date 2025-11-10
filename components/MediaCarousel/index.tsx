@@ -75,6 +75,7 @@ const VideoCarousel = ({ data, onCardPress, style }: VideoCarouselProps) => {
         data={data || MOCK_VIDEO_DATA}
         renderItem={(props) => renderItem(props, onCardPress)}
         keyExtractor={(item) => item.id}
+        bounces={false}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 15 }}
