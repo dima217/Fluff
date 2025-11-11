@@ -1,5 +1,7 @@
+import Avatar from "@/components/ui/Avatar";
 import Circle from "@/components/ui/Circle";
 import { ThemedText } from "@/components/ui/ThemedText";
+import { CircleSizes } from "@/constants/components/CIrcle";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { memo } from "react";
@@ -12,8 +14,12 @@ import {
   ViewStyle,
 } from "react-native";
 
-const CARD_WIDTH = Dimensions.get("window").width * 0.7;
-const CARD_HEIGHT = CARD_WIDTH * 0.6;
+const SHORT_CARD_WIDTH = Dimensions.get("window").width * 0.7;
+const SHORT_CARD_HEIGHT = SHORT_CARD_WIDTH * 0.6;
+
+const LONG_CARD_WIDTH = Dimensions.get("window").width * 0.9;
+const LONG_CARD_HEIGHT = LONG_CARD_WIDTH * 0.6;
+
 const REAL_IMAGE_URL =
   "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop";
 
@@ -23,6 +29,7 @@ type MediaCarouselItemProps = {
   imageUrl?: string;
   onPress: () => void;
   style?: ViewStyle;
+  variant?: "short" | "long";
 };
 
 const MediaCarouselItem = ({
@@ -31,41 +38,70 @@ const MediaCarouselItem = ({
   imageUrl,
   onPress,
   style,
+  variant = "short",
 }: MediaCarouselItemProps) => {
+  const isLongVariant = variant === "long";
+
+  const cardWidth = isLongVariant ? LONG_CARD_WIDTH : SHORT_CARD_WIDTH;
+  const cardHeight = isLongVariant ? LONG_CARD_HEIGHT : SHORT_CARD_HEIGHT;
+
   return (
     <TouchableOpacity
       style={[
         styles.cardContainer,
         style,
-        { width: CARD_WIDTH, height: CARD_HEIGHT },
+        { width: cardWidth, height: isLongVariant ? "auto" : cardHeight },
       ]}
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <ImageBackground
-        source={{ uri: imageUrl || REAL_IMAGE_URL }}
-        style={styles.imageBackground}
-        imageStyle={styles.image}
-        resizeMode="cover"
+      <View
+        style={[
+          styles.imageWrapper,
+          { height: isLongVariant ? cardHeight : "100%", width: "100%" },
+        ]}
       >
-        <LinearGradient
-          colors={["transparent", "rgba(0,0,0,0.8)"]}
-          locations={[0.5, 1]}
-          style={styles.gradientOverlay}
+        <ImageBackground
+          source={{ uri: imageUrl || REAL_IMAGE_URL }}
+          style={styles.imageBackground}
+          imageStyle={styles.image}
+          resizeMode="cover"
         >
-          <View style={styles.playButtonContainer}>
-            <Circle
-              svg={<Ionicons name="play" size={24} color="#FFF" />}
-              frostedGlass
-              onPress={() => {}}
-            />
+          <LinearGradient
+            colors={["transparent", "rgba(0,0,0,0.8)"]}
+            locations={[0.5, 1]}
+            style={styles.gradientOverlay}
+          >
+            <View style={styles.playButtonContainer}>
+              <Circle
+                svg={<Ionicons name="play" size={24} color="#FFF" />}
+                frostedGlass
+                onPress={() => {}}
+              />
+            </View>
+            {/* Text for short variant */}
+            {!isLongVariant && (
+              <View style={styles.textContainerShort}>
+                <ThemedText type="s">{title}</ThemedText>
+                <ThemedText type="xs">{author}</ThemedText>
+              </View>
+            )}
+          </LinearGradient>
+        </ImageBackground>
+      </View>
+
+      {/* Text for long variant */}
+      {isLongVariant && (
+        <View style={styles.longContainer}>
+          <Avatar size={CircleSizes.MINI} title="K" />
+          <View style={styles.textContainerLong}>
+            <ThemedText type="mini">{title}</ThemedText>
+            <ThemedText type="xs" style={{ fontSize: 8 }}>
+              {author}
+            </ThemedText>
           </View>
-          <View style={styles.textContainer}>
-            <ThemedText type="s">{title}</ThemedText>
-            <ThemedText type="xs">{author}</ThemedText>
-          </View>
-        </LinearGradient>
-      </ImageBackground>
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
@@ -81,6 +117,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+  },
+  imageWrapper: {
+    overflow: "hidden",
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
   },
   imageBackground: {
     flex: 1,
@@ -100,28 +141,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     zIndex: 1,
   },
-  playButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.5)",
-  },
-  textContainer: {
+  textContainerShort: {
     flexDirection: "column",
     alignSelf: "flex-start",
     gap: 4,
   },
-  titleText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#FFF",
+  longContainer: {
+    paddingLeft: 10,
+    flexDirection: "row",
+    alignItems: "center",
   },
-  authorText: {
-    fontSize: 14,
-    color: "rgba(255, 255, 255, 0.7)",
+  textContainerLong: {
+    flexDirection: "column",
+    alignSelf: "flex-start",
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
   },
 });

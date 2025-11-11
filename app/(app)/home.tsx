@@ -4,12 +4,16 @@ import Toogle from "@/components/Toogle";
 import { Colors } from "@/constants/Colors";
 import HomeContent from "@/widgets/HomeContent";
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 const Home = () => {
   const [toogle, setToogle] = useState<string>("All");
   return (
-    <View style={styles.mainContainer}>
+    <ScrollView
+      style={styles.mainContainer}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
       <View style={[styles.container]}>
         <AccountDetails />
         <SearchInput
@@ -29,7 +33,7 @@ const Home = () => {
       <View style={styles.container}>
         <HomeContent selected={toogle} />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -37,10 +41,12 @@ export default Home;
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flexDirection: "column",
     backgroundColor: Colors.background,
     flex: 1,
+  },
+  scrollContent: {
     alignItems: "center",
+    paddingBottom: 40,
   },
   container: {
     width: "90%",

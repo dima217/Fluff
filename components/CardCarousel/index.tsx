@@ -1,7 +1,14 @@
-import { FlatList, StyleSheet, View, ViewProps } from "react-native";
+import {
+  FlatList,
+  ListRenderItemInfo,
+  StyleSheet,
+  View,
+  ViewProps,
+} from "react-native";
 import MealCard from "./Cards";
+import { featuredRecipes, mealsToday } from "./mock";
 
-interface Meal {
+export interface MealData {
   id: string;
   title: string;
   calories: string;
@@ -14,130 +21,53 @@ type CardsScrollVariant = "featured" | "mealsToday";
 
 interface CardsScrollProps extends ViewProps {
   variant: CardsScrollVariant;
+  onCardPress: () => void;
 }
 
-const featuredRecipes: Meal[] = [
-  {
-    id: "1",
-    title: "Grilled Salmon with Asparagus",
-    calories: "450",
-    imageUrl:
-      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    isLiked: true,
-  },
-  {
-    id: "2",
-    title: "Chicken Caesar Salad",
-    calories: "320",
-    imageUrl:
-      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    isLiked: false,
-  },
-  {
-    id: "3",
-    title: "Vegan Burger",
-    calories: "550",
-    imageUrl:
-      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    isLiked: true,
-  },
-  {
-    id: "4",
-    title: "Grilled Salmon with Asparagus",
-    calories: "450",
-    imageUrl:
-      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    isLiked: true,
-  },
-  {
-    id: "5",
-    title: "Chicken Caesar Salad",
-    calories: "320",
-    imageUrl:
-      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    isLiked: false,
-  },
-  {
-    id: "6",
-    title: "Vegan Burger",
-    calories: "550",
-    imageUrl:
-      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    isLiked: true,
-  },
-];
+const renderListItem = (
+  { item }: ListRenderItemInfo<MealData>,
+  onCardPress: () => void
+) => (
+  <MealCard
+    title={item.title}
+    calories={item.calories}
+    imageUrl={item.imageUrl}
+    onPress={onCardPress}
+    variant={"list"}
+    status={item.status}
+  />
+);
 
-const mealsToday: Meal[] = [
-  {
-    id: "4",
-    title: "Breakfast Smoothie",
-    calories: "250",
-    imageUrl:
-      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    status: "Completed",
-  },
-  {
-    id: "5",
-    title: "Grilled Chicken",
-    calories: "350",
-    imageUrl:
-      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+const renderCarouselItem = (item: MealData, onCardPress: () => void) => (
+  <MealCard
+    title={item.title}
+    calories={item.calories}
+    imageUrl={item.imageUrl}
+    onPress={onCardPress}
+    variant={"carousel"}
+    status={item.status}
+  />
+);
 
-    status: "Completed",
-  },
-  {
-    id: "6",
-    title: "Breakfast Smoothie",
-    calories: "250",
-    imageUrl:
-      "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    status: "Completed",
-  },
-];
+const CardsCarousel = ({ variant, onCardPress }: CardsScrollProps) => {
+  const isCarouselVariant = variant === "featured";
+  const getRenderItem = (props: ListRenderItemInfo<MealData>) => {
+    return renderListItem(props, onCardPress);
+  };
 
-const renderFeaturedList = () => {
-  const renderItem = ({ item }: { item: Meal }) => (
-    <MealCard
-      title={item.title}
-      calories={item.calories}
-      imageUrl={item.imageUrl}
-      onPress={() => console.log(`Выбрано блюдо (Карусель): ${item.title}`)}
-      variant={"carousel"}
-      isLiked={item.isLiked}
-    />
-  );
-
+  if (isCarouselVariant) {
+    return (
+      <View style={[styles.container, styles.verticalList]}>
+        {featuredRecipes.map((item) => renderCarouselItem(item, onCardPress))}
+      </View>
+    );
+  }
   return (
-    <View>
-      <FlatList
-        data={featuredRecipes}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.carouselList}
-      />
-    </View>
-  );
-};
-
-const renderMealsTodayList = () => {
-  const renderItem = ({ item }: { item: Meal }) => (
-    <MealCard
-      title={item.title}
-      calories={item.calories}
-      imageUrl={item.imageUrl}
-      onPress={() => console.log(`Выбрано блюдо (Список): ${item.title}`)}
-      variant={"list"}
-      status={item.status}
-    />
-  );
-
-  return (
-    <View>
+    <View style={[styles.container]}>
       <FlatList
         data={mealsToday}
         bounces={false}
-        renderItem={renderItem}
+        renderItem={getRenderItem}
         horizontal={true}
         keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
@@ -145,17 +75,6 @@ const renderMealsTodayList = () => {
       />
     </View>
   );
-};
-
-const CardsCarousel = ({ variant, ...rest }: CardsScrollProps) => {
-  const content = (
-    <View>
-      {variant === "featured" && renderFeaturedList()}
-      {variant === "mealsToday" && renderMealsTodayList()}
-    </View>
-  );
-
-  return <View style={styles.container}>{content}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -173,7 +92,7 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   verticalList: {
-    paddingHorizontal: 15,
+    gap: 10,
     paddingBottom: 20,
   },
 });
