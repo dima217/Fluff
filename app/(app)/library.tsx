@@ -24,9 +24,12 @@ const Home = () => {
           onToggleFilter={() => {}}
           onFilterRemove={() => {}}
         />
-        <View style={{ flex: 1, alignSelf: "stretch", gap: 20 }}>
+        <View
+          style={{ flex: 1, alignSelf: "stretch", gap: 20, marginBottom: 20 }}
+        >
           <ThemedText type="s">Library</ThemedText>
           <Library />
+          <ThemedText type="s">Favourities</ThemedText>
         </View>
         <Toogle
           options={["Recipes", "Products"]}

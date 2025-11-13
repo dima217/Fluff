@@ -1,8 +1,22 @@
+import AccountDetails from "@/components/AccountDetails";
 import { Colors } from "@/constants/Colors";
-import { StyleSheet, View } from "react-native";
+import { useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 const Home = () => {
-  return <View style={styles.mainContainer}></View>;
+  const [toogle, setToogle] = useState<string>("All");
+  return (
+    <ScrollView
+      style={styles.mainContainer}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={[styles.container]}>
+        <AccountDetails />
+      </View>
+      <View style={styles.container}></View>
+    </ScrollView>
+  );
 };
 
 export default Home;
@@ -12,10 +26,23 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     flex: 1,
   },
+  scrollContent: {
+    alignItems: "center",
+    paddingBottom: 40,
+  },
   container: {
-    flex: 1,
+    width: "90%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  popularContainer: {
+    marginTop: "10%",
+    alignSelf: "stretch",
+  },
+  myRecipesContainer: {
+    gap: 10,
+    marginTop: "10%",
+    alignSelf: "stretch",
   },
   iconContainer: {
     display: "flex",

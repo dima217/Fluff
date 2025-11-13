@@ -13,22 +13,27 @@ import {
 export interface FoodUploadCardProps extends TouchableOpacityProps {
   title: string;
   imageSource: ImageSourcePropType;
+  backgroundImage: ImageSourcePropType;
   style?: StyleProp<ViewStyle>;
 }
 
 const FoodUploadCard = ({
   title,
   imageSource,
+  backgroundImage,
   onPress,
   style,
 }: FoodUploadCardProps) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.card, style]}>
+      <View style={styles.backgroundImage}>
+        <Image source={backgroundImage} resizeMode="cover" />
+      </View>
       <ThemedText type="s" style={{ fontSize: 12 }}>
         {title}
       </ThemedText>
       <View style={styles.imageContainer}>
-        <Image source={imageSource} style={styles.image} resizeMode="cover" />
+        <Image source={imageSource} resizeMode="cover" />
       </View>
     </TouchableOpacity>
   );
@@ -51,13 +56,17 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   imageContainer: {
-    ...StyleSheet.absoluteFillObject,
+    width: 126,
+    height: 146,
     paddingTop: 60,
     zIndex: 5,
   },
-  image: {
-    width: "100%",
-    height: "100%",
+  backgroundImage: {
+    height: 133,
+    width: 130,
+    position: "absolute",
+    left: 0,
+    bottom: 0,
   },
 });
 

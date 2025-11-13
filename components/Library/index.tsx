@@ -2,9 +2,10 @@ import { StyleSheet, View } from "react-native";
 import CheatMealCard from "./MealSection";
 import FoodUploadCard from "./UploadSection";
 
-const saladImage = require("../../assets/images/Burger.png");
+const saladImage = require("../../assets/images/Salad.png");
 const burgerImage = require("../../assets/images/Burger.png");
 const burgerBackgroundImage = require("../../assets/images/OpacityBurger.png");
+const saladBackgroundImage = require("../../assets/images/OpacitySalad.png");
 
 const Library = () => {
   return (
@@ -14,6 +15,7 @@ const Library = () => {
           title="My Uploads"
           imageSource={saladImage}
           onPress={() => console.log("Tapped My Uploads")}
+          backgroundImage={saladBackgroundImage}
         />
       </View>
 
@@ -43,7 +45,7 @@ const Library = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 25,
+    marginBottom: 15,
     flexDirection: "row",
   },
   leftColumn: {
