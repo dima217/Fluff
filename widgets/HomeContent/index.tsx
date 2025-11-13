@@ -40,11 +40,11 @@ const HomeContent = ({ selected }: HomeContentProps) => {
                 See All
               </ThemedText>
             </View>
-            <CardsCarousel variant="mealsToday" />
+            <CardsCarousel onCardPress={() => {}} variant="mealsToday" />
           </View>
           <View style={styles.section}>
             <ThemedText type="s">Meals today</ThemedText>
-            <CardsCarousel variant="featured" />
+            <CardsCarousel onCardPress={() => {}} variant="featured" />
           </View>
         </>
       );
@@ -53,7 +53,7 @@ const HomeContent = ({ selected }: HomeContentProps) => {
       return (
         <View style={styles.section}>
           <ThemedText type="s">Meals today</ThemedText>
-          <CardsCarousel variant="featured" />
+          <CardsCarousel onCardPress={() => {}} variant="featured" />
         </View>
       );
 
@@ -68,7 +68,7 @@ const HomeContent = ({ selected }: HomeContentProps) => {
 
           <View style={styles.section}>
             <ThemedText type="s">My recipes</ThemedText>
-            <CardsCarousel variant="mealsToday" />
+            <CardsCarousel onCardPress={() => {}} variant="mealsToday" />
           </View>
         </>
       );

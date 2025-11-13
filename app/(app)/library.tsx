@@ -1,8 +1,43 @@
+import Library from "@/components/Library";
+import SearchInput from "@/components/Search/ui/SearchInput";
+import Toogle from "@/components/Toogle";
+import { ThemedText } from "@/components/ui/ThemedText";
 import { Colors } from "@/constants/Colors";
-import { StyleSheet, View } from "react-native";
+import LibraryContent from "@/widgets/ LibraryContent";
+import { useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 const Home = () => {
-  return <View style={styles.mainContainer}></View>;
+  const [toogle, setToogle] = useState<string>("All");
+  return (
+    <ScrollView
+      style={styles.mainContainer}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={[styles.container]}>
+        <SearchInput
+          isFiltering={false}
+          searchText={""}
+          selectedFilters={[]}
+          onSearchChange={() => {}}
+          onToggleFilter={() => {}}
+          onFilterRemove={() => {}}
+        />
+        <View style={{ flex: 1, alignSelf: "stretch", gap: 20 }}>
+          <ThemedText type="s">Library</ThemedText>
+          <Library />
+        </View>
+        <Toogle
+          options={["Recipes", "Products"]}
+          selected={toogle}
+          onSelect={setToogle}
+          containerStyle={styles.toogleContainer}
+        />
+        <LibraryContent selected={toogle} />
+      </View>
+    </ScrollView>
+  );
 };
 
 export default Home;
@@ -12,10 +47,28 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     flex: 1,
   },
+  toogleContainer: {
+    justifyContent: "flex-start",
+    gap: 10,
+  },
+  scrollContent: {
+    alignItems: "center",
+    paddingBottom: 40,
+  },
   container: {
-    flex: 1,
+    paddingTop: 40,
+    width: "90%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  popularContainer: {
+    marginTop: "10%",
+    alignSelf: "stretch",
+  },
+  myRecipesContainer: {
+    gap: 10,
+    marginTop: "10%",
+    alignSelf: "stretch",
   },
   iconContainer: {
     display: "flex",

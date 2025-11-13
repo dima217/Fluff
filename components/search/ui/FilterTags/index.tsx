@@ -1,6 +1,7 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { styles } from "./styles";
 
 interface FilterTagsProps {
   filters: string[];
@@ -25,30 +26,5 @@ const FilterTags: React.FC<FilterTagsProps> = ({ filters, onRemove }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  filtersContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  filterPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'darkgray',
-    borderRadius: 15,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    marginRight: 5,
-    marginBottom: 5,
-  },
-  filterPillText: {
-    color: 'white',
-    marginRight: 5,
-  },
-  placeholderText: {
-    color: 'gray',
-    marginLeft: 10,
-  },
-});
 
 export default FilterTags;

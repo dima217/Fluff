@@ -8,12 +8,19 @@ type Props = {
   options: string[];
   selected: string;
   onSelect: (value: string) => void;
+  containerStyle?: ViewStyle;
   style?: ViewStyle;
 };
 
-const ToggleButtons = ({ options, selected, onSelect, style }: Props) => {
+const ToggleButtons = ({
+  options,
+  selected,
+  onSelect,
+  style,
+  containerStyle,
+}: Props) => {
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, containerStyle]}>
       {options.map((option, index) => {
         const isActive = selected === option;
 

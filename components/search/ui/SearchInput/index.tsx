@@ -1,10 +1,10 @@
 import Filter from "@/assets/images/Filter.svg";
 import Search from "@/assets/images/Search.svg";
 import Circle from "@/components/ui/Circle";
-import { Colors } from "@/constants/Colors";
 import React from "react";
-import { ScrollView, StyleSheet, TextInput, View } from "react-native";
-import FilterTags from "../filterTags/FilterTags";
+import { ScrollView, TextInput, View } from "react-native";
+import FilterTags from "../FilterTags";
+import { styles } from "./styles";
 
 interface SearchInputProps {
   isFiltering: boolean;
@@ -47,33 +47,5 @@ const SearchInput: React.FC<SearchInputProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  searchBarContainer: {
-    height: 58,
-    flexDirection: "row",
-    backgroundColor: Colors.inactive,
-    borderRadius: 34,
-    alignItems: "center",
-    marginBottom: 20,
-    marginTop: 20,
-    paddingHorizontal: 15,
-    paddingRight: 4,
-  },
-  inputWrapper: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  searchIcon: {
-    marginRight: 10,
-  },
-  input: {
-    paddingLeft: 10,
-    flex: 1,
-    color: "white",
-    fontSize: 16,
-  },
-});
 
 export default SearchInput;
