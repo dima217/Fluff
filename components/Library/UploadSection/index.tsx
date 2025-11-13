@@ -1,9 +1,9 @@
+import { ThemedText } from "@/components/ui/ThemedText";
 import {
   Image,
   ImageSourcePropType,
   StyleProp,
   StyleSheet,
-  Text,
   TouchableOpacity,
   TouchableOpacityProps,
   View,
@@ -24,7 +24,9 @@ const FoodUploadCard = ({
 }: FoodUploadCardProps) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.card, style]}>
-      <Text style={styles.title}>{title}</Text>
+      <ThemedText type="s" style={{ fontSize: 12 }}>
+        {title}
+      </ThemedText>
       <View style={styles.imageContainer}>
         <Image source={imageSource} style={styles.image} resizeMode="cover" />
       </View>

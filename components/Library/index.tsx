@@ -4,6 +4,7 @@ import FoodUploadCard from "./UploadSection";
 
 const saladImage = require("../../assets/images/Burger.png");
 const burgerImage = require("../../assets/images/Burger.png");
+const burgerBackgroundImage = require("../../assets/images/OpacityBurger.png");
 
 const Library = () => {
   return (
@@ -21,6 +22,7 @@ const Library = () => {
           title="Cheat Meal"
           textHint="Drag a favorite item here, open it in cheat meal day"
           overlayImage={burgerImage}
+          backgroundImage={burgerBackgroundImage}
           onPress={() => console.log("Tapped Cheat Meal")}
           style={styles.bottomRightCard}
         />
@@ -29,6 +31,7 @@ const Library = () => {
           title="Cheat Meal"
           textHint="Drag a favorite item here, open it in cheat meal day"
           overlayImage={burgerImage}
+          backgroundImage={burgerBackgroundImage}
           onPress={() => console.log("Tapped Cheat Meal")}
           style={styles.bottomRightCard}
         />

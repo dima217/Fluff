@@ -14,6 +14,7 @@ export interface CheatMealCardProps extends TouchableOpacityProps {
   title: string;
   textHint: string;
   overlayImage: ImageSourcePropType;
+  backgroundImage: ImageSourcePropType;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -21,15 +22,23 @@ const CheatMealCard = ({
   title,
   textHint,
   overlayImage,
+  backgroundImage,
   onPress,
   style,
 }: CheatMealCardProps) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.card, style]}>
+      <View style={styles.backgroundImage}>
+        <Image source={backgroundImage} resizeMode="cover" />
+      </View>
       <View style={{ flexDirection: "row" }}>
         <View style={styles.content}>
-          <ThemedText type="s">{title}</ThemedText>
-          <ThemedText type="xs">{textHint}</ThemedText>
+          <ThemedText type="s" style={{ fontSize: 12 }}>
+            {title}
+          </ThemedText>
+          <ThemedText type="xs" style={{ fontSize: 10 }}>
+            {textHint}
+          </ThemedText>
         </View>
         <View style={styles.overlayImageContainer}>
           <Image source={overlayImage} resizeMode="cover" />
@@ -69,6 +78,13 @@ const styles = StyleSheet.create({
     width: 92,
     height: 65,
     zIndex: 5,
+  },
+  backgroundImage: {
+    height: 98,
+    width: 140,
+    position: "absolute",
+    right: 0,
+    bottom: 0,
   },
   overlayImage: {
     opacity: 0.2,
