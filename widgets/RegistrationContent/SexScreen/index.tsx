@@ -1,8 +1,8 @@
 import Button from "@/components/Button";
+import SexPicker from "@/components/ui/SexPicker";
 import { ThemedText } from "@/components/ui/ThemedText";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import SexPicker from "../../components/ui/SexPicker";
 
 type Gender = "male" | "female" | null;
 

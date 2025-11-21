@@ -1,6 +1,6 @@
 import ProgressDots from "@/components/ui/ProgressDots";
-import Age from "@/widgets/AgeScreen";
-import Sex from "@/widgets/SexScreen";
+import Age from "@/widgets/RegistrationContent/AgeScreen";
+import Sex from "@/widgets/RegistrationContent/SexScreen";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 

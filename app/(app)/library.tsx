@@ -8,7 +8,7 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 const Home = () => {
-  const [toogle, setToogle] = useState<string>("All");
+  const [toogle, setToogle] = useState<string>("Recipes");
   return (
     <ScrollView
       style={styles.mainContainer}
