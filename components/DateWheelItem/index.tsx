@@ -1,3 +1,5 @@
+import { Colors } from "@/constants/Colors";
+import { CircleSizes } from "@/constants/components/CIrcle";
 import { StyleSheet, Text, View } from "react-native";
 import Circle from "../ui/Circle";
 
@@ -15,6 +17,7 @@ interface DateWheelItemContentProps {
   date?: Date;
   data?: DateItemData;
   size?: number;
+  isSelected?: boolean;
 }
 export function DateWheelItem({ date, data, size }: DateWheelItemContentProps) {
   if (!date || !data) return null;
@@ -40,7 +43,7 @@ export function DateWheelItem({ date, data, size }: DateWheelItemContentProps) {
 
       <View style={styles.toggleContainer}>
         <View style={toggleStyle}>
-          {isToday && <View style={styles.greenCircle} />}
+          {isToday && <Circle size={CircleSizes.XS} color={Colors.green} />}
         </View>
       </View>
     </View>
@@ -65,8 +68,9 @@ const styles = StyleSheet.create({
   },
   toggleContainer: {
     width: "80%",
-    backgroundColor: "#E4E4E4",
-    justifyContent: "center",
+    paddingVertical: 10,
+    backgroundColor: "#242424",
+    justifyContent: "flex-start",
     borderRadius: 30,
     height: 100,
     alignItems: "center",
@@ -83,11 +87,5 @@ const styles = StyleSheet.create({
   },
   toggleActive: {
     backgroundColor: "#FFFFFF",
-  },
-  greenCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#34C759",
   },
 });

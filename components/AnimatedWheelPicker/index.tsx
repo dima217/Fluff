@@ -28,8 +28,6 @@ interface FlexibleWheelPickerProps<T = string | number | Date> {
   selectStyle?: StyleProp<ViewStyle>;
   orientation?: "vertical" | "horizontal";
   animationType?: "fixed" | "lens";
-
-  /** Новый проп — отключает фон и градиенты */
   noBackground?: boolean;
 }
 

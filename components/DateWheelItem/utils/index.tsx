@@ -34,7 +34,6 @@ export function useDayPickerData(size: number) {
         date: date,
         dayOfMonth: dateNumber,
         data: {
-          isMarked: isMarkedFlag,
           isToday: isTodayFlag,
         },
       },
