@@ -3,11 +3,40 @@ import SearchInput from "@/components/Search/ui/SearchInput";
 import Toogle from "@/components/Toogle";
 import { Colors } from "@/constants/Colors";
 import HomeContent from "@/widgets/HomeContent";
-import { useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import SearchOverlayContent from "@/widgets/SearchOverlayContent";
+import { useNavigation } from "expo-router";
+import { useEffect, useState } from "react";
+import { BackHandler, ScrollView, StyleSheet, View } from "react-native";
 
 const Home = () => {
   const [toogle, setToogle] = useState<string>("All");
+  const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
+
+  const navigation = useNavigation();
+  const handleFocus = () => setIsSearchFocused(true);
+  const handleBlur = () => {};
+
+  useEffect(() => {
+    if (!isSearchFocused) return;
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        setIsSearchFocused(false);
+        return true;
+      }
+    );
+    const unsub = navigation.addListener("beforeRemove", (e) => {
+      e.preventDefault();
+      setIsSearchFocused(false);
+    });
+
+    return () => {
+      backHandler.remove();
+      unsub();
+    };
+  }, [isSearchFocused]);
+
   return (
     <ScrollView
       style={styles.mainContainer}
@@ -23,15 +52,22 @@ const Home = () => {
           onSearchChange={() => {}}
           onToggleFilter={() => {}}
           onFilterRemove={() => {}}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
-        <Toogle
-          options={["All", "Videos", "Recipes", "Calories Base"]}
-          selected={toogle}
-          onSelect={setToogle}
-        />
-      </View>
-      <View style={styles.container}>
-        <HomeContent selected={toogle} />
+        {isSearchFocused ? (
+          <SearchOverlayContent />
+        ) : (
+          <>
+            <Toogle
+              options={["All", "Videos", "Recipes", "Calories Base"]}
+              selected={toogle}
+              onSelect={setToogle}
+            />
+
+            <HomeContent selected={toogle} />
+          </>
+        )}
       </View>
     </ScrollView>
   );

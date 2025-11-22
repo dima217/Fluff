@@ -42,7 +42,7 @@ export default function OnboardingScreen() {
           Track your daily dietary norms without much effort.
         </ThemedText>
 
-        <Swiper onSwipeEnd={() => router.navigate("/(auth)/login")} />
+        <Swiper onSwipeEnd={() => router.replace("/(auth)/login")} />
       </View>
     </View>
   );

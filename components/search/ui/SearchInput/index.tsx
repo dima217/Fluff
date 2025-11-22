@@ -2,13 +2,7 @@ import Filter from "@/assets/images/Filter.svg";
 import Search from "@/assets/images/Search.svg";
 import Circle from "@/components/ui/Circle";
 import React from "react";
-import {
-  ScrollView,
-  StyleProp,
-  TextInput,
-  View,
-  ViewStyle,
-} from "react-native";
+import { StyleProp, TextInput, View, ViewStyle } from "react-native";
 import FilterTags from "../FilterTags";
 import { styles } from "./styles";
 
@@ -20,6 +14,8 @@ interface SearchInputProps {
   onSearchChange: (text: string) => void;
   onToggleFilter: () => void;
   onFilterRemove: (filter: string) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
@@ -30,14 +26,14 @@ const SearchInput: React.FC<SearchInputProps> = ({
   onSearchChange,
   onToggleFilter,
   onFilterRemove,
+  onFocus,
+  onBlur,
 }) => {
   return (
     <View style={[styles.searchBarContainer, style]}>
       <View style={styles.inputWrapper}>
         {isFiltering ? (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <FilterTags filters={selectedFilters} onRemove={onFilterRemove} />
-          </ScrollView>
+          <FilterTags filters={selectedFilters} onRemove={onFilterRemove} />
         ) : (
           <>
             <Search />
@@ -47,6 +43,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
               placeholderTextColor="gray"
               value={searchText}
               onChangeText={onSearchChange}
+              onFocus={onFocus}
+              onBlur={onBlur}
             />
           </>
         )}

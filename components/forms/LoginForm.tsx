@@ -14,7 +14,7 @@ const LoginForm = () => {
   const router = useRouter();
 
   const onSubmit = (data: LoginData) => {
-    router.navigate("/(app)/library");
+    router.replace("/(app)/home");
   };
 
   return (
