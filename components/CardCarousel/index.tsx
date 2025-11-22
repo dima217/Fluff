@@ -29,6 +29,7 @@ const renderListItem = (
   onCardPress: () => void
 ) => (
   <MealCard
+    key={item.id}
     title={item.title}
     calories={item.calories}
     imageUrl={item.imageUrl}
@@ -40,6 +41,7 @@ const renderListItem = (
 
 const renderCarouselItem = (item: MealData, onCardPress: () => void) => (
   <MealCard
+    key={item.id}
     title={item.title}
     calories={item.calories}
     imageUrl={item.imageUrl}

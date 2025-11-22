@@ -1,15 +1,16 @@
 import { Colors } from "@/constants/Colors";
 import { LinearGradient, LinearGradientProps } from "expo-linear-gradient";
-import { StyleSheet, ViewStyle } from "react-native";
+import { StyleSheet, ViewProps, ViewStyle } from "react-native";
 
-interface GradientViewProps {
+type GradientViewProps = ViewProps & {
   colors?: LinearGradientProps["colors"];
   style?: ViewStyle;
-}
+};
 
 const GradientView = ({
   colors = Colors.gradient,
   style,
+  children,
 }: GradientViewProps) => {
   return (
     <LinearGradient
@@ -17,7 +18,9 @@ const GradientView = ({
       style={[styles.container, style]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
-    ></LinearGradient>
+    >
+      {children}
+    </LinearGradient>
   );
 };
 

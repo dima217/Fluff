@@ -1,5 +1,6 @@
 import AccountDetails from "@/components/AccountDetails";
 import { AnimatedWheelPicker } from "@/components/AnimatedWheelPicker";
+import CalorieProgress from "@/components/Colories/components/CaloriesProgress";
 import { useDayPickerData } from "@/components/DateWheelItem/utils";
 import { ThemedText } from "@/components/ui/ThemedText";
 import { Colors } from "@/constants/Colors";
@@ -37,6 +38,11 @@ const Health = () => {
           noBackground
           onValueChange={handleValueChange}
         />
+        <CalorieProgress
+          currentCalories={456}
+          dailyGoal={2137}
+          onEditPress={() => {}}
+        />
       </View>
     </ScrollView>
   );
@@ -60,7 +66,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   animatedWheelPicker: {
-    height: "60%",
+    height: 200,
   },
   selectContainer: {
     backgroundColor: "transparent",

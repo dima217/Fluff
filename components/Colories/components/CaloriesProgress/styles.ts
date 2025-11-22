@@ -3,22 +3,22 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
+    width: "100%",
     backgroundColor: Colors.background,
     borderRadius: 15,
     padding: 20,
     marginHorizontal: 15,
-    marginTop: 20,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 20,
   },
   headerText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   editButton: {
     backgroundColor: Colors.primary,
@@ -26,12 +26,12 @@ export const styles = StyleSheet.create({
     padding: 8,
   },
   progressContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 8,
   },
   progressLabel: {
-    color: 'white',
+    color: "white",
     fontSize: 14,
   },
   progressText: {
@@ -39,17 +39,17 @@ export const styles = StyleSheet.create({
     fontSize: 14,
   },
   calorieCountContainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
+    flexDirection: "row",
+    alignItems: "baseline",
     marginTop: 20,
   },
   calorieCountText: {
-    color: 'white',
+    color: "white",
     fontSize: 48,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   calorieGoalText: {
-    color: 'gray',
+    color: "gray",
     fontSize: 24,
   },
 });

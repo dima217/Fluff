@@ -53,7 +53,7 @@ export const featuredRecipes: MealData[] = [
 
 export const mealsToday: MealData[] = [
   {
-    id: "4",
+    id: "7",
     title: "Breakfast Smoothie",
     calories: "250",
     imageUrl:
@@ -61,7 +61,7 @@ export const mealsToday: MealData[] = [
     status: "Completed",
   },
   {
-    id: "5",
+    id: "8",
     title: "Grilled Chicken",
     calories: "350",
     imageUrl:
@@ -70,7 +70,7 @@ export const mealsToday: MealData[] = [
     status: "Completed",
   },
   {
-    id: "6",
+    id: "9",
     title: "Breakfast Smoothie",
     calories: "250",
     imageUrl:

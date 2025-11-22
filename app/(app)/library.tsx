@@ -7,7 +7,7 @@ import LibraryContent from "@/widgets/ LibraryContent";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
-const Home = () => {
+const LibraryScreen = () => {
   const [toogle, setToogle] = useState<string>("Recipes");
   return (
     <ScrollView
@@ -43,7 +43,7 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default LibraryScreen;
 
 const styles = StyleSheet.create({
   mainContainer: {

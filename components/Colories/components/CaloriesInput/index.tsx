@@ -1,45 +1,48 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { styles } from './styles/calories.input.styles';
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { styles } from "./styles";
 
-type InputMode = 'manual' | 'search';
+type InputMode = "manual" | "search";
 
 interface CalorieInputProps {
   onAdd: (foodName: string, calories: number) => void;
 }
 
 const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
-  const [mode, setMode] = useState<InputMode>('manual');
-  const [foodName, setFoodName] = useState<string>('');
-  const [calories, setCalories] = useState<string>('');
+  const [mode, setMode] = useState<InputMode>("manual");
+  const [foodName, setFoodName] = useState<string>("");
+  const [calories, setCalories] = useState<string>("");
 
   const handleAdd = () => {
-    if (mode === 'manual' && foodName && calories) {
+    if (mode === "manual" && foodName && calories) {
       onAdd(foodName, parseInt(calories));
-      setFoodName('');
-      setCalories('');
+      setFoodName("");
+      setCalories("");
     }
   };
 
   const handleToggleMode = () => {
-    setMode(mode === 'manual' ? 'search' : 'manual');
+    setMode(mode === "manual" ? "search" : "manual");
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Daily calorie intake</Text>
-        <TouchableOpacity onPress={handleToggleMode} style={styles.toggleButton}>
+        <TouchableOpacity
+          onPress={handleToggleMode}
+          style={styles.toggleButton}
+        >
           <Ionicons name="repeat" size={16} color="#E75480" />
           <Text style={styles.toggleText}>
-            {mode === 'manual' ? 'Recipe from Fluff' : 'Your own recipe'}
+            {mode === "manual" ? "Recipe from Fluff" : "Your own recipe"}
           </Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.inputSection}>
-        {mode === 'manual' ? (
+        {mode === "manual" ? (
           <>
             <Text style={styles.inputLabel}>Food Name</Text>
             <TextInput

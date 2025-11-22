@@ -1,8 +1,11 @@
-import { AntDesign } from "@expo/vector-icons";
+import Edit from "@/assets/images/Edit_fill.svg";
+import Circle from "@/components/ui/Circle";
+import GradientView from "@/components/ui/Gradient";
+import { CircleSizes } from "@/constants/components/CIrcle";
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import ProgressBar from "../ui/Animated/progressBar/ProgressLine";
-import { styles } from "./styles/progress.styles";
+import { Text, View } from "react-native";
+import ProgressBar from "../../../ui/Animated/progressBar/ProgressLine";
+import { styles } from "./styles";
 
 interface CalorieProgressProps {
   currentCalories: number;
@@ -27,12 +30,10 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
   }, [currentCalories, dailyGoal]);
 
   return (
-    <View style={styles.container}>
+    <GradientView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Daily calorie intake</Text>
-        <TouchableOpacity style={styles.editButton} onPress={onEditPress}>
-          <AntDesign name="edit" size={20} color="white" />
-        </TouchableOpacity>
+        <Circle size={CircleSizes.MINI} svg={<Edit />} onPress={() => {}} />
       </View>
 
       <View style={styles.progressContainer}>
@@ -47,7 +48,7 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
         <Text style={styles.calorieCountText}>{currentCalories}</Text>
         <Text style={styles.calorieGoalText}> / {dailyGoal}</Text>
       </View>
-    </View>
+    </GradientView>
   );
 };
 
