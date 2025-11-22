@@ -7,9 +7,8 @@ import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import Fluff from "../../assets/images/Fluff.svg";
 
-const router = useRouter();
-
 const Login = () => {
+  const router = useRouter();
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
@@ -38,8 +37,10 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: Colors.background,
     flex: 1,
+    alignItems: "center",
   },
   container: {
+    width: "90%",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -49,13 +50,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     gap: 15,
+    marginBottom: 80,
   },
   innerContainer: {
     display: "flex",
     flexDirection: "column",
     gap: 10,
     marginBottom: "15%",
-    width: "100%",
+    width: "90%",
     alignItems: "center",
   },
 });

@@ -32,11 +32,10 @@ export const styles = StyleSheet.create({
   },
   progressLabel: {
     color: "white",
-    fontSize: 14,
   },
   progressText: {
     color: Colors.primary,
-    fontSize: 14,
+    fontSize: 12,
   },
   calorieCountContainer: {
     flexDirection: "row",
@@ -45,8 +44,7 @@ export const styles = StyleSheet.create({
   },
   calorieCountText: {
     color: "white",
-    fontSize: 48,
-    fontWeight: "bold",
+    fontSize: 40,
   },
   calorieGoalText: {
     color: "gray",

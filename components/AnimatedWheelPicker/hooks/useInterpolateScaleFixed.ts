@@ -24,7 +24,7 @@ export const useInterpolateScaleFixed = ({
     const scale = interpolate(
       offset,
       [-centerTolerance, 0, centerTolerance],
-      [0.75, 1.1, 0.75],
+      [0.8, 1.1, 0.8],
       Extrapolate.CLAMP
     );
 

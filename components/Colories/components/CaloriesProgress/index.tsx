@@ -1,6 +1,7 @@
 import Edit from "@/assets/images/Edit_fill.svg";
 import Circle from "@/components/ui/Circle";
 import GradientView from "@/components/ui/Gradient";
+import { ThemedText } from "@/components/ui/ThemedText";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
@@ -32,12 +33,14 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
   return (
     <GradientView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Daily calorie intake</Text>
+        <ThemedText type="xs" style={styles.progressLabel}>
+          Daily calorie intake
+        </ThemedText>
         <Circle size={CircleSizes.MINI} svg={<Edit />} onPress={() => {}} />
       </View>
 
       <View style={styles.progressContainer}>
-        <Text style={styles.progressLabel}>Progress</Text>
+        <ThemedText type="xs">Progress</ThemedText>
         <Text style={styles.progressText}>
           {Math.round(progress)}% Complete
         </Text>

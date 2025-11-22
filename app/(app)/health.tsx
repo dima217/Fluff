@@ -1,5 +1,6 @@
 import AccountDetails from "@/components/AccountDetails";
 import { AnimatedWheelPicker } from "@/components/AnimatedWheelPicker";
+import CalorieInput from "@/components/Colories/components/CaloriesInput";
 import CalorieProgress from "@/components/Colories/components/CaloriesProgress";
 import { useDayPickerData } from "@/components/DateWheelItem/utils";
 import { ThemedText } from "@/components/ui/ThemedText";
@@ -18,6 +19,11 @@ const Health = () => {
     setSelectedDateIndex(index);
   };
 
+  const label =
+    new Date().toLocaleString("en-US", { month: "long" }) +
+    " " +
+    (selectedDateIndex + 1).toString();
+
   return (
     <ScrollView
       style={styles.mainContainer}
@@ -26,8 +32,8 @@ const Health = () => {
     >
       <View style={[styles.container]}>
         <AccountDetails />
-        <ThemedText style={{ paddingTop: 30 }}>
-          {(selectedDateIndex + 1).toString()}
+        <ThemedText type="s" style={{ paddingTop: 30 }}>
+          {label}
         </ThemedText>
         <AnimatedWheelPicker
           containerStyle={styles.animatedWheelPicker}
@@ -43,6 +49,7 @@ const Health = () => {
           dailyGoal={2137}
           onEditPress={() => {}}
         />
+        <CalorieInput onAdd={(foodName: string, calories: number) => {}} />
       </View>
     </ScrollView>
   );
@@ -66,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   animatedWheelPicker: {
-    height: 200,
+    height: 210,
   },
   selectContainer: {
     backgroundColor: "transparent",

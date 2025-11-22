@@ -4,12 +4,11 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    marginTop: "15%",
     justifyContent: "center",
     alignItems: "flex-start",
     flexDirection: "column",
     gap: 4,
-    width: "90%",
+    width: "100%",
   },
   inputContainer: {
     width: "100%",

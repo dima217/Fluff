@@ -1,6 +1,12 @@
+import Button from "@/components/Button";
+import SearchInput from "@/components/Search/ui/SearchInput";
+import TextInput from "@/components/TextInput";
+import GradientView from "@/components/ui/Gradient";
+import { ThemedText } from "@/components/ui/ThemedText";
+import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
 type InputMode = "manual" | "search";
@@ -27,35 +33,31 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <GradientView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Daily calorie intake</Text>
+        <ThemedText type="xs">Daily calorie intake</ThemedText>
         <TouchableOpacity
           onPress={handleToggleMode}
           style={styles.toggleButton}
         >
-          <Ionicons name="repeat" size={16} color="#E75480" />
-          <Text style={styles.toggleText}>
+          <Ionicons name="repeat" size={16} color={Colors.primary} />
+          <ThemedText type="xs" style={{ color: Colors.primary }}>
             {mode === "manual" ? "Recipe from Fluff" : "Your own recipe"}
-          </Text>
+          </ThemedText>
         </TouchableOpacity>
       </View>
 
       <View style={styles.inputSection}>
         {mode === "manual" ? (
           <>
-            <Text style={styles.inputLabel}>Food Name</Text>
             <TextInput
-              style={styles.textInput}
+              label="Food Name"
               placeholder="Example: Banana, Chicken Breast"
-              placeholderTextColor="#888"
               value={foodName}
               onChangeText={setFoodName}
             />
-
-            <Text style={styles.inputLabel}>Calories</Text>
             <TextInput
-              style={styles.textInput}
+              label="Calories"
               placeholder="Example: 95"
               placeholderTextColor="#888"
               keyboardType="numeric"
@@ -65,24 +67,21 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
           </>
         ) : (
           <>
-            <Text style={styles.inputLabel}>Food Name</Text>
-            <View style={styles.searchInputContainer}>
-              <Ionicons name="search" size={18} color="#888" />
-              <TextInput
-                style={styles.searchInput}
-                placeholder="Search"
-                placeholderTextColor="#888"
-                // Somewhere there will be search logic yup
-              />
-            </View>
+            <SearchInput
+              style={styles.searchInput}
+              isFiltering={false}
+              searchText={""}
+              selectedFilters={[]}
+              onSearchChange={function (text: string): void {}}
+              onToggleFilter={function (): void {}}
+              onFilterRemove={function (filter: string): void {}}
+            />
           </>
         )}
       </View>
 
-      <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
-        <Text style={styles.addButtonText}>Add</Text>
-      </TouchableOpacity>
-    </View>
+      <Button onPress={handleAdd} title={"Add"} />
+    </GradientView>
   );
 };
 

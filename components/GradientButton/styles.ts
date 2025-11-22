@@ -4,7 +4,7 @@ import { Colors } from "@/constants/Colors";
 
 const styles = StyleSheet.create({
   touchableContainer: {
-    width: "90%",
+    width: "100%",
     height: 56,
     borderRadius: 30,
     overflow: "hidden",

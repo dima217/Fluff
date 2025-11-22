@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native";
 import Animated, { SharedValue } from "react-native-reanimated";
 import { WheelItemData } from "../..";
 import { useInterpolateScaleFixed } from "../../hooks/useInterpolateScaleFixed";
@@ -49,11 +49,9 @@ export const WheelItem = memo(function FlexibleWheelItem({
       : String(item.value);
 
   return (
-    <Animated.View
-      style={[styles.itemContainer, sizeStyle, animatedStyle, style]}
-    >
+    <Animated.View style={[styles.itemContainer, sizeStyle, style]}>
       {item.content ? (
-        <View style={styles.customContentWrapper}>
+        <Animated.View style={[styles.customContentWrapper, animatedStyle]}>
           {React.cloneElement(
             item.content as React.ReactElement<ContentProps>,
             {
@@ -61,7 +59,7 @@ export const WheelItem = memo(function FlexibleWheelItem({
               date: item.dataForContent.date,
             }
           )}
-        </View>
+        </Animated.View>
       ) : (
         <Text style={styles.itemText}>{displayValue}</Text>
       )}
