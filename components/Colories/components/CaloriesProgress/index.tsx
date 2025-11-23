@@ -5,7 +5,7 @@ import { ThemedText } from "@/components/ui/ThemedText";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
-import ProgressBar from "../../../ui/Animated/progressBar/ProgressLine";
+import ProgressBar from "../../../ui/Animated/ProgressBar";
 import { styles } from "./styles";
 
 interface CalorieProgressProps {

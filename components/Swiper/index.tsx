@@ -10,7 +10,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import AnimatedArrows from "../ui/Animated/AnimatedArrows";
-import AnimatedText from "../ui/Animated/CustomAnimatedText";
+import AnimatedText from "../ui/Animated/AnimatedText";
 import Circle from "../ui/Circle";
 import { styles } from "./styles";
 

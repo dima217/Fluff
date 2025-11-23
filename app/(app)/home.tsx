@@ -4,76 +4,102 @@ import Toogle from "@/components/Toogle";
 import { Colors } from "@/constants/Colors";
 import HomeContent from "@/widgets/HomeContent";
 import SearchOverlayContent from "@/widgets/SearchOverlayContent";
-import { useNavigation } from "expo-router";
+
 import { useEffect, useState } from "react";
 import { BackHandler, ScrollView, StyleSheet, View } from "react-native";
 
-const Home = () => {
-  const [toogle, setToogle] = useState<string>("All");
-  const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
+// Gesture Handler + Reanimated
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
-  const navigation = useNavigation();
-  const handleFocus = () => setIsSearchFocused(true);
-  const handleBlur = () => {};
+export default function Home() {
+  const [toogle, setToogle] = useState("All");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
-  useEffect(() => {
-    if (!isSearchFocused) return;
+  const translateX = useSharedValue(0);
 
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        setIsSearchFocused(false);
-        return true;
+  const swipeGesture = Gesture.Pan()
+    .onUpdate((e) => {
+      if (e.translationX > 0) {
+        translateX.value = e.translationX;
       }
-    );
-    const unsub = navigation.addListener("beforeRemove", (e) => {
-      e.preventDefault();
-      setIsSearchFocused(false);
+    })
+    .onEnd((e) => {
+      if (e.translationX > 80 && e.velocityX > 200) {
+        runOnJS(setIsSearchFocused)(false);
+      } else {
+        translateX.value = withTiming(0, { duration: 200 });
+      }
     });
 
-    return () => {
-      backHandler.remove();
-      unsub();
-    };
+  const overlayAnimStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
+
+  useEffect(() => {
+    if (isSearchFocused) {
+      translateX.value = withTiming(0, { duration: 200 });
+
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        () => {
+          setIsSearchFocused(false);
+          return true;
+        }
+      );
+
+      return () => backHandler.remove();
+    }
   }, [isSearchFocused]);
 
   return (
-    <ScrollView
-      style={styles.mainContainer}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={[styles.container]}>
-        <AccountDetails />
-        <SearchInput
-          isFiltering={false}
-          searchText={""}
-          selectedFilters={[]}
-          onSearchChange={() => {}}
-          onToggleFilter={() => {}}
-          onFilterRemove={() => {}}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-        />
-        {isSearchFocused ? (
-          <SearchOverlayContent />
-        ) : (
-          <>
-            <Toogle
-              options={["All", "Videos", "Recipes", "Calories Base"]}
-              selected={toogle}
-              onSelect={setToogle}
-            />
+    <>
+      <ScrollView
+        style={styles.mainContainer}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.container}>
+          <AccountDetails />
 
-            <HomeContent selected={toogle} />
-          </>
+          <SearchInput
+            isFiltering={false}
+            searchText=""
+            selectedFilters={[]}
+            onSearchChange={() => {}}
+            onToggleFilter={() => {}}
+            onFilterRemove={() => {}}
+            onFocus={() => setIsSearchFocused(true)}
+            onBlur={() => {}}
+          />
+
+          {!isSearchFocused && (
+            <>
+              <Toogle
+                options={["All", "Videos", "Recipes", "Calories Base"]}
+                selected={toogle}
+                onSelect={setToogle}
+              />
+              <HomeContent selected={toogle} />
+            </>
+          )}
+        </View>
+        {isSearchFocused && (
+          <GestureDetector gesture={swipeGesture}>
+            <Animated.View style={[styles.overlay, overlayAnimStyle]}>
+              <SearchOverlayContent />
+            </Animated.View>
+          </GestureDetector>
         )}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
-};
-
-export default Home;
+}
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -89,27 +115,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  popularContainer: {
-    marginTop: "10%",
-    alignSelf: "stretch",
-  },
-  myRecipesContainer: {
-    gap: 10,
-    marginTop: "10%",
-    alignSelf: "stretch",
-  },
-  iconContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 15,
-  },
-  innerContainer: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 10,
-    marginBottom: "15%",
-    width: "100%",
+  overlay: {
+    backgroundColor: Colors.background,
+    width: "90%",
+    justifyContent: "center",
     alignItems: "center",
   },
 });

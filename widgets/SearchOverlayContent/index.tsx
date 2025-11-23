@@ -1,13 +1,7 @@
 import CardsCarousel from "@/components/CardCarousel";
 import { Colors } from "@/constants/Colors";
 import React from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const Tag = ({ text }: { text: string }) => (
   <View style={overlayStyles.tag}>
@@ -38,10 +32,7 @@ const SearchOverlayContent: React.FC = () => {
   ];
 
   return (
-    <ScrollView
-      contentContainerStyle={overlayStyles.contentContainer}
-      showsVerticalScrollIndicator={false}
-    >
+    <>
       <Text style={overlayStyles.sectionTitle}>Search History</Text>
       <View style={overlayStyles.historyContainer}>
         {searchHistory.map((item, index) => (
@@ -65,24 +56,22 @@ const SearchOverlayContent: React.FC = () => {
 
       <Text style={overlayStyles.sectionTitle}>Last Visited</Text>
       <CardsCarousel onCardPress={() => {}} variant="mealsToday" />
-    </ScrollView>
+    </>
   );
 };
 
-// --- Стили для SearchOverlayContent ---
 const overlayStyles = StyleSheet.create({
-  contentContainer: {
-    paddingHorizontal: 15,
-    paddingBottom: 20,
+  container: {
+    gap: 10,
   },
   sectionTitle: {
+    alignSelf: "flex-start",
     fontSize: 18,
     fontWeight: "bold",
     color: "white",
     marginTop: 30,
     marginBottom: 15,
   },
-  // История поиска
   historyContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -99,7 +88,6 @@ const overlayStyles = StyleSheet.create({
     backgroundColor: Colors.primary || "#FF6B6B",
     alignSelf: "center",
   },
-  // Популярные теги
   popularTagsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
