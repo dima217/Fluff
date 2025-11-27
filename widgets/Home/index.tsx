@@ -3,6 +3,7 @@ import { Colors } from "@/constants/Colors";
 import CardsCarousel from "@/shared/CardCarousel";
 import MediaCarousel from "@/shared/MediaCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 
 interface HomeContentProps {
@@ -10,6 +11,7 @@ interface HomeContentProps {
 }
 
 const HomeContent = ({ selected }: HomeContentProps) => {
+  const router = useRouter();
   switch (selected) {
     case "Videos":
       return (
@@ -25,7 +27,12 @@ const HomeContent = ({ selected }: HomeContentProps) => {
           </View>
           <View style={styles.section}>
             <ThemedText type="s">My recipes</ThemedText>
-            <MediaCarousel variant="long" onCardPress={() => {}} />
+            <MediaCarousel
+              variant="long"
+              onCardPress={() => {
+                router.push("/(recipe)/recipe");
+              }}
+            />
           </View>
         </>
       );
@@ -68,7 +75,12 @@ const HomeContent = ({ selected }: HomeContentProps) => {
 
           <View style={styles.section}>
             <ThemedText type="s">My recipes</ThemedText>
-            <CardsCarousel onCardPress={() => {}} variant="mealsToday" />
+            <CardsCarousel
+              onCardPress={() => {
+                router.push("/(recipe)/recipe");
+              }}
+              variant="mealsToday"
+            />
           </View>
         </>
       );
