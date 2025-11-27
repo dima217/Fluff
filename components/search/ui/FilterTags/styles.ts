@@ -20,6 +20,11 @@ export const styles = StyleSheet.create({
     color: "white",
     marginRight: 5,
   },
+  remove: {
+    color: "red",
+    fontSize: 16,
+    marginLeft: 4,
+  },
   placeholderText: {
     color: "gray",
     marginLeft: 10,

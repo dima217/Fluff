@@ -1,41 +1,60 @@
 import SearchOverlayContent from "@/components/Search";
 import SearchInput from "@/components/Search/ui/SearchInput";
-import { Colors } from "@/constants/Colors";
-import { useRouter } from "expo-router";
+import { useState } from "react";
 
-import { StyleSheet, View } from "react-native";
+const SearchScreen = () => {
+  const [searchText, setSearchText] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
-export default function SearchScreen() {
-  const router = useRouter();
+  const availableFilters = [
+    "Pancakes",
+    "Recipes",
+    "Eggs",
+    "Milk",
+    "White Bread",
+    "Calories Base",
+  ];
 
-  const goBack = () => {
-    router.back();
+  const addFilter = (filter: string) => {
+    if (!selectedFilters.includes(filter)) {
+      setSelectedFilters([...selectedFilters, filter]);
+    }
+  };
+
+  const removeFilter = (filter: string) => {
+    setSelectedFilters(selectedFilters.filter((f) => f !== filter));
+  };
+
+  const handleSearchChange = (text: string) => {
+    setSearchText(text);
+
+    const match = availableFilters.find(
+      (f) => f.toLowerCase() === text.toLowerCase()
+    );
+
+    if (match) {
+      addFilter(match);
+      setSearchText("");
+    }
   };
 
   return (
-    <View style={styles.container}>
+    <>
       <SearchInput
-        isFiltering={false}
-        searchText=""
-        selectedFilters={[]}
-        onSearchChange={() => {}}
+        isFiltering={selectedFilters.length > 0}
+        searchText={searchText}
+        selectedFilters={selectedFilters}
+        onSearchChange={handleSearchChange}
         onToggleFilter={() => {}}
-        onFilterRemove={() => {}}
-        onFocus={() => {}}
-        onBlur={goBack}
+        onFilterRemove={removeFilter}
       />
 
-      <SearchOverlayContent />
-    </View>
+      <SearchOverlayContent
+        onSelectTag={addFilter}
+        selectedFilters={selectedFilters}
+      />
+    </>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-    alignItems: "center",
-    paddingTop: 10,
-    paddingHorizontal: "5%",
-  },
-});
+export default SearchScreen;

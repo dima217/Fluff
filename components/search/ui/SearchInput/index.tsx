@@ -32,7 +32,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   return (
     <View style={[styles.searchBarContainer, style]}>
       <View style={styles.inputWrapper}>
-        {isFiltering ? (
+        {selectedFilters.length > 0 ? (
           <FilterTags filters={selectedFilters} onRemove={onFilterRemove} />
         ) : (
           <>
@@ -49,6 +49,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           </>
         )}
       </View>
+
       <Circle onPress={onToggleFilter} frostedGlass svg={<Filter />} />
     </View>
   );

@@ -10,27 +10,24 @@ import {
 } from "react-native";
 import FilterTags from "./ui/FilterTags";
 
-const SearchOverlayContent: React.FC = () => {
+interface SearchOverlayContentProps {
+  onSelectTag: (tag: string) => void;
+  selectedFilters: string[];
+}
+
+const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
+  onSelectTag,
+}) => {
   const searchHistory = [
     "Pancakes",
     "Recipes",
-    "Recipes",
-    "Recipes",
-    "Recipes",
-    "Recipes",
-    "Recipes",
-    "Recipes",
-    "Recipes",
-    "Recipes",
-  ];
-  const popularRecipes = [
     "Eggs",
     "Milk",
     "White Bread",
     "Calories Base",
-    "Calories Base",
-    "Calories Base",
   ];
+
+  const popularRecipes = ["Eggs", "Milk", "White Bread", "Calories Base"];
 
   return (
     <ScrollView
@@ -41,19 +38,18 @@ const SearchOverlayContent: React.FC = () => {
       <Text style={overlayStyles.sectionTitle}>Search History</Text>
       <View style={overlayStyles.historyContainer}>
         {searchHistory.map((item, index) => (
-          <React.Fragment key={index}>
-            <TouchableOpacity>
-              <Text style={overlayStyles.historyText}>{item}</Text>
-            </TouchableOpacity>
-            {index < searchHistory.length - 1 && (
-              <View style={overlayStyles.dot} />
-            )}
-          </React.Fragment>
+          <TouchableOpacity key={index} onPress={() => onSelectTag(item)}>
+            <Text style={overlayStyles.historyText}>{item}</Text>
+          </TouchableOpacity>
         ))}
       </View>
 
       <Text style={overlayStyles.sectionTitle}>Popular recipes</Text>
-      <FilterTags filters={popularRecipes} onRemove={() => {}} />
+      <FilterTags
+        filters={popularRecipes}
+        onRemove={() => {}}
+        onTagPress={onSelectTag}
+      />
 
       <Text style={overlayStyles.sectionTitle}>Last Visited</Text>
       <CardsCarousel onCardPress={() => {}} variant="mealsToday" />
@@ -81,19 +77,14 @@ const overlayStyles = StyleSheet.create({
   historyContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
+    gap: 12,
     alignSelf: "flex-start",
   },
   historyText: {
     color: "white",
-    fontSize: 14,
-  },
-  dot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: Colors.primary || "#FF6B6B",
-    alignSelf: "center",
+    fontSize: 16,
+    marginRight: 10,
+    marginBottom: 10,
   },
 });
 
