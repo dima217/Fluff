@@ -1,9 +1,9 @@
 import AccountDetails from "@/components/AccountDetails";
+import SearchOverlayContent from "@/components/Search";
 import SearchInput from "@/components/Search/ui/SearchInput";
 import Toogle from "@/components/Toogle";
 import { Colors } from "@/constants/Colors";
 import HomeContent from "@/widgets/HomeContent";
-import SearchOverlayContent from "@/widgets/SearchOverlayContent";
 
 import { useEffect, useState } from "react";
 import { BackHandler, ScrollView, StyleSheet, View } from "react-native";

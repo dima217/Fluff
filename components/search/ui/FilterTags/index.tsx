@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { ThemedText } from "@/components/ui/ThemedText";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
@@ -17,10 +17,8 @@ const FilterTags: React.FC<FilterTagsProps> = ({ filters, onRemove }) => {
     <View style={styles.filtersContainer}>
       {filters.map((filter, index) => (
         <View key={index} style={styles.filterPill}>
-          <Text style={styles.filterPillText}>{filter}</Text>
-          <TouchableOpacity onPress={() => onRemove(filter)}>
-            <Ionicons name="close" size={14} color="white" />
-          </TouchableOpacity>
+          <ThemedText type="xs">{filter}</ThemedText>
+          <TouchableOpacity onPress={() => onRemove(filter)}></TouchableOpacity>
         </View>
       ))}
     </View>

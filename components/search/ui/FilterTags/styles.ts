@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -8,7 +9,7 @@ export const styles = StyleSheet.create({
   filterPill: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "darkgray",
+    backgroundColor: Colors.inactive,
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingVertical: 5,

@@ -1,13 +1,14 @@
 import CardsCarousel from "@/components/CardCarousel";
 import { Colors } from "@/constants/Colors";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-const Tag = ({ text }: { text: string }) => (
-  <View style={overlayStyles.tag}>
-    <Text style={overlayStyles.tagText}>{text}</Text>
-  </View>
-);
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import FilterTags from "./ui/FilterTags";
 
 const SearchOverlayContent: React.FC = () => {
   const searchHistory = [
@@ -32,7 +33,11 @@ const SearchOverlayContent: React.FC = () => {
   ];
 
   return (
-    <>
+    <ScrollView
+      style={overlayStyles.scrollContainer}
+      contentContainerStyle={overlayStyles.contentContainer}
+      showsVerticalScrollIndicator={false}
+    >
       <Text style={overlayStyles.sectionTitle}>Search History</Text>
       <View style={overlayStyles.historyContainer}>
         {searchHistory.map((item, index) => (
@@ -48,21 +53,23 @@ const SearchOverlayContent: React.FC = () => {
       </View>
 
       <Text style={overlayStyles.sectionTitle}>Popular recipes</Text>
-      <View style={overlayStyles.popularTagsContainer}>
-        {popularRecipes.map((item, index) => (
-          <Tag key={index} text={item} />
-        ))}
-      </View>
+      <FilterTags filters={popularRecipes} onRemove={() => {}} />
 
       <Text style={overlayStyles.sectionTitle}>Last Visited</Text>
       <CardsCarousel onCardPress={() => {}} variant="mealsToday" />
-    </>
+    </ScrollView>
   );
 };
 
 const overlayStyles = StyleSheet.create({
-  container: {
-    gap: 10,
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  contentContainer: {
+    alignItems: "center",
+    paddingHorizontal: "5%",
+    paddingBottom: 40,
   },
   sectionTitle: {
     alignSelf: "flex-start",
@@ -76,6 +83,7 @@ const overlayStyles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
+    alignSelf: "flex-start",
   },
   historyText: {
     color: "white",
@@ -87,47 +95,6 @@ const overlayStyles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: Colors.primary || "#FF6B6B",
     alignSelf: "center",
-  },
-  popularTagsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-  },
-  tag: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    backgroundColor: "#333",
-  },
-  tagText: {
-    color: "white",
-    fontSize: 14,
-  },
-  lastVisitedScroll: {
-    marginTop: 10,
-  },
-  card: {
-    width: 150,
-    marginRight: 15,
-    borderRadius: 10,
-    overflow: "hidden",
-    backgroundColor: "#333",
-  },
-  cardImage: {
-    width: "100%",
-    height: 120,
-  },
-  cardTitle: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-    padding: 8,
-  },
-  cardSubtitle: {
-    color: Colors.secondary,
-    fontSize: 12,
-    paddingHorizontal: 8,
-    paddingBottom: 8,
   },
 });
 
