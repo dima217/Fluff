@@ -1,9 +1,9 @@
-import Library from "@/components/Library";
-import SearchInput from "@/components/Search/ui/SearchInput";
-import Toogle from "@/components/Toogle";
-import { ThemedText } from "@/components/ui/ThemedText";
 import { Colors } from "@/constants/Colors";
-import LibraryContent from "@/widgets/ LibraryContent";
+import Toogle from "@/shared/Toogle";
+import { ThemedText } from "@/shared/ui/ThemedText";
+import SearchInput from "@/widgets/Search/components/SearchInput";
+import Library from "@/widgets/ Library";
+import LibraryContent from "@/widgets/ Library/components/LibraryContent";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 

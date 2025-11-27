@@ -1,7 +1,7 @@
-import VideoSlider from "@/components/LandingVideo";
-import Swiper from "@/components/Swiper";
-import { ThemedText } from "@/components/ui/ThemedText";
 import { Colors } from "@/constants/Colors";
+import VideoSlider from "@/shared/LandingVideo";
+import Swiper from "@/shared/Swiper";
+import { ThemedText } from "@/shared/ui/ThemedText";
 import { useRouter } from "expo-router";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Cutlery from "../assets/images/Cutlery.svg";

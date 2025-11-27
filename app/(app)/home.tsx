@@ -1,8 +1,8 @@
-import AccountDetails from "@/components/AccountDetails";
-import SearchInput from "@/components/Search/ui/SearchInput";
-import Toogle from "@/components/Toogle";
 import { Colors } from "@/constants/Colors";
-import HomeContent from "@/widgets/HomeContent";
+import AccountDetails from "@/shared/AccountDetails";
+import Toogle from "@/shared/Toogle";
+import HomeContent from "@/widgets/Home";
+import SearchInput from "@/widgets/Search/components/SearchInput";
 import { useRouter } from "expo-router";
 
 import { useState } from "react";

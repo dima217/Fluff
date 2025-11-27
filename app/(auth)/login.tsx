@@ -1,8 +1,8 @@
-import LoginForm from "@/components/Forms/LoginForm";
-import GradientButton from "@/components/GradientButton";
-import SignUpPrompt from "@/components/ui/SignUpPrompt";
-import { ThemedText } from "@/components/ui/ThemedText";
 import { Colors } from "@/constants/Colors";
+import LoginForm from "@/shared/Forms/LoginForm";
+import GradientButton from "@/shared/GradientButton";
+import SignUpPrompt from "@/shared/ui/SignUpPrompt";
+import { ThemedText } from "@/shared/ui/ThemedText";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import Fluff from "../../assets/images/Fluff.svg";

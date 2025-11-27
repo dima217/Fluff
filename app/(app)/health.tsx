@@ -1,10 +1,10 @@
-import AccountDetails from "@/components/AccountDetails";
-import { AnimatedWheelPicker } from "@/components/AnimatedWheelPicker";
-import CalorieInput from "@/components/Colories/components/CaloriesInput";
-import CalorieProgress from "@/components/Colories/components/CaloriesProgress";
-import { useDayPickerData } from "@/components/DateWheelItem/utils";
-import { ThemedText } from "@/components/ui/ThemedText";
 import { Colors } from "@/constants/Colors";
+import AccountDetails from "@/shared/AccountDetails";
+import { AnimatedWheelPicker } from "@/shared/AnimatedWheelPicker";
+import CalorieInput from "@/shared/Colories/components/CaloriesInput";
+import CalorieProgress from "@/shared/Colories/components/CaloriesProgress";
+import { useDayPickerData } from "@/shared/DateWheelItem/utils";
+import { ThemedText } from "@/shared/ui/ThemedText";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 

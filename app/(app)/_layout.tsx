@@ -5,9 +5,9 @@ import BookTab from "@/assets/images/BookTab.svg";
 import HomeTab from "@/assets/images/HomeTab.svg";
 import HealthTab from "@/assets/images/PillTab.svg";
 import UserTab from "@/assets/images/UserTab.svg";
-import Circle from "@/components/ui/Circle";
 import { Colors } from "@/constants/Colors";
 import { CircleSizes } from "@/constants/components/CIrcle";
+import Circle from "@/shared/ui/Circle";
 import { View } from "react-native";
 
 export default function TabLayout() {

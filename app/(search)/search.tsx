@@ -1,6 +1,6 @@
-import SearchOverlayContent from "@/components/Search";
-import SearchInput from "@/components/Search/ui/SearchInput";
-import View from "@/components/View";
+import View from "@/shared/View";
+import SearchOverlayContent from "@/widgets/Search";
+import SearchInput from "@/widgets/Search/components/SearchInput";
 import { useState } from "react";
 
 const SearchScreen = () => {
