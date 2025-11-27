@@ -6,6 +6,8 @@ const saladImage = require("../../assets/images/Salad.png");
 const burgerImage = require("../../assets/images/Burger.png");
 const burgerBackgroundImage = require("../../assets/images/OpacityBurger.png");
 const saladBackgroundImage = require("../../assets/images/OpacitySalad.png");
+const phoneImage = require("../../assets/images/Phone.png");
+const qrImage = require("../../assets/images/Qr.png");
 
 const Library = () => {
   return (
@@ -30,10 +32,10 @@ const Library = () => {
         />
 
         <CheatMealCard
-          title="Cheat Meal"
-          textHint="Drag a favorite item here, open it in cheat meal day"
-          overlayImage={burgerImage}
-          backgroundImage={burgerBackgroundImage}
+          title="Scanner"
+          textHint="Scan a product that is not in the database"
+          overlayImage={phoneImage}
+          backgroundImage={qrImage}
           onPress={() => console.log("Tapped Cheat Meal")}
           style={styles.bottomRightCard}
         />
