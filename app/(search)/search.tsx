@@ -1,7 +1,7 @@
 import SearchOverlayContent from "@/components/Search";
 import SearchInput from "@/components/Search/ui/SearchInput";
+import View from "@/components/View";
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState("");
@@ -57,9 +57,5 @@ const SearchScreen = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-});
 
 export default SearchScreen;

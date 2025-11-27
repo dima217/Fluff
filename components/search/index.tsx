@@ -1,13 +1,10 @@
 import CardsCarousel from "@/components/CardCarousel";
 import { Colors } from "@/constants/Colors";
+import { CircleSizes } from "@/constants/components/CIrcle";
 import React from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import Circle from "../ui/Circle";
+import { ThemedText } from "../ui/ThemedText";
 import FilterTags from "./ui/FilterTags";
 
 interface SearchOverlayContentProps {
@@ -27,7 +24,15 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
     "Calories Base",
   ];
 
-  const popularRecipes = ["Eggs", "Milk", "White Bread", "Calories Base"];
+  const popularRecipes = [
+    "Eggs",
+    "Milk",
+    "White Bread",
+    "Calories Base",
+    "Calories Base",
+    "Calories Base",
+    "Calories Base",
+  ];
 
   return (
     <ScrollView
@@ -36,15 +41,22 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
       showsVerticalScrollIndicator={false}
     >
       <Text style={overlayStyles.sectionTitle}>Search History</Text>
+
       <View style={overlayStyles.historyContainer}>
         {searchHistory.map((item, index) => (
-          <TouchableOpacity key={index} onPress={() => onSelectTag(item)}>
-            <Text style={overlayStyles.historyText}>{item}</Text>
-          </TouchableOpacity>
+          <React.Fragment key={index}>
+            <ThemedText type="xs" key={index}>
+              {item}
+            </ThemedText>
+            {index < searchHistory.length - 1 && (
+              <Circle size={CircleSizes.DOT} />
+            )}
+          </React.Fragment>
         ))}
       </View>
 
       <Text style={overlayStyles.sectionTitle}>Popular recipes</Text>
+
       <FilterTags
         filters={popularRecipes}
         onRemove={() => {}}
@@ -66,6 +78,11 @@ const overlayStyles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: 40,
   },
+  historySection: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
   sectionTitle: {
     alignSelf: "flex-start",
     fontSize: 18,
@@ -77,7 +94,8 @@ const overlayStyles = StyleSheet.create({
   historyContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 12,
+    gap: 8,
+    alignItems: "center",
     alignSelf: "flex-start",
   },
   historyText: {

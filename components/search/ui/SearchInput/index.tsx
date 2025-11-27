@@ -1,8 +1,13 @@
 import Filter from "@/assets/images/Filter.svg";
-import Search from "@/assets/images/Search.svg";
 import Circle from "@/components/ui/Circle";
 import React from "react";
-import { StyleProp, TextInput, View, ViewStyle } from "react-native";
+import {
+  ScrollView,
+  StyleProp,
+  TextInput,
+  View,
+  ViewStyle,
+} from "react-native";
 import FilterTags from "../FilterTags";
 import { styles } from "./styles";
 
@@ -19,7 +24,6 @@ interface SearchInputProps {
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
-  isFiltering,
   searchText,
   style,
   selectedFilters,
@@ -31,24 +35,30 @@ const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   return (
     <View style={[styles.searchBarContainer, style]}>
-      <View style={styles.inputWrapper}>
-        {selectedFilters.length > 0 ? (
-          <FilterTags filters={selectedFilters} onRemove={onFilterRemove} />
-        ) : (
-          <>
-            <Search />
-            <TextInput
-              style={styles.input}
-              placeholder="Search"
-              placeholderTextColor="gray"
-              value={searchText}
-              onChangeText={onSearchChange}
-              onFocus={onFocus}
-              onBlur={onBlur}
-            />
-          </>
-        )}
-      </View>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ alignItems: "center" }}
+      >
+        <View style={styles.row}>
+          <FilterTags
+            filters={selectedFilters}
+            onRemove={onFilterRemove}
+            variant="input"
+          />
+
+          <TextInput
+            style={[styles.input, { minWidth: 80 }]}
+            placeholder="Search"
+            placeholderTextColor="gray"
+            value={searchText}
+            onChangeText={onSearchChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          />
+        </View>
+      </ScrollView>
 
       <Circle onPress={onToggleFilter} frostedGlass svg={<Filter />} />
     </View>
