@@ -68,7 +68,6 @@ const overlayStyles = StyleSheet.create({
   },
   contentContainer: {
     alignItems: "center",
-    paddingHorizontal: "5%",
     paddingBottom: 40,
   },
   sectionTitle: {

@@ -36,7 +36,7 @@ const Circle = ({
       return (
         <BlurView
           intensity={20}
-          tint="light"
+          tint="dark"
           style={[
             styles.glassCircle,
             {
