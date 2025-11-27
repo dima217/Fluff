@@ -10,45 +10,46 @@ import { StyleSheet, View } from "react-native";
 
 interface StepProps {
   onNext: () => void;
-  onPrev: () => void;
+  onPrev?: () => void;
   onFinish?: () => void;
 }
 
-const agesData: WheelItemData<string>[] = Array.from(
-  { length: 100 },
+// Диапазон роста от 100 до 220 см
+const heightsData: WheelItemData<string>[] = Array.from(
+  { length: 121 },
   (_, i) => {
-    const ageValue = (i + 1).toString();
+    const heightValue = (i + 100).toString();
     return {
-      key: ageValue,
-      value: ageValue,
+      key: heightValue,
+      value: heightValue,
       content: "",
       dataForContent: {},
     };
   }
 );
 
-export const Age = ({ onPrev, onNext }: StepProps) => {
-  const [selectedAge, setSelectedAge] = useState<string>("18");
+export const Height = ({ onPrev, onNext }: StepProps) => {
+  const [selectedHeight, setSelectedHeight] = useState<string>("170");
 
-  const handleAgeChange = (value: WheelItemValue<string>) => {
-    setSelectedAge(String(value));
+  const handleHeightChange = (value: WheelItemValue<string>) => {
+    setSelectedHeight(String(value));
   };
 
   return (
     <View style={styles.stepContainer}>
       <ThemedText type="subtitle" style={styles.title}>
-        How old are you?
+        What's your height?
       </ThemedText>
-      <ThemedText style={styles.currentAgeText}>
-        Selected: {selectedAge}
+      <ThemedText style={styles.currentValueText}>
+        Selected: {selectedHeight} cm
       </ThemedText>
       <AnimatedWheelPicker
-        data={agesData}
+        data={heightsData}
         itemSize={56}
         visibleCount={3}
         orientation="vertical"
-        initialIndex={17}
-        onValueChange={handleAgeChange}
+        initialIndex={70} // 170 см
+        onValueChange={handleHeightChange}
         containerStyle={styles.animatedWheelPicker}
         animationType="lens"
         selectStyle={styles.selectorContainer}
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 20,
   },
-  currentAgeText: {
+  currentValueText: {
     fontSize: 16,
     color: "#aaa",
   },
@@ -87,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Age;
+export default Height;

@@ -1,12 +1,14 @@
 import ProgressDots from "@/shared/ui/ProgressDots";
 import Age from "@/widgets/SignUp/AgeScreen";
+import Height from "@/widgets/SignUp/HeightScreen";
 import Sex from "@/widgets/SignUp/SexScreen";
+import Weight from "@/widgets/SignUp/WeightScreen";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 const SpeechScreen: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const totalSteps = 2;
+  const totalSteps = 4;
 
   const goToNextStep = () => {
     if (currentStep < totalSteps - 1) {
@@ -27,7 +29,11 @@ const SpeechScreen: React.FC = () => {
       case 0:
         return <Sex onNext={goToNextStep} />;
       case 1:
-        return <Age onFinish={goToNextStep} onPrev={goToPrevStep} />;
+        return <Age onNext={goToNextStep} onPrev={goToPrevStep} />;
+      case 2:
+        return <Height onNext={goToNextStep} onPrev={goToPrevStep} />;
+      case 3:
+        return <Weight onFinish={goToNextStep} onPrev={goToPrevStep} />;
       default:
         return (
           <View style={styles.finalView}>

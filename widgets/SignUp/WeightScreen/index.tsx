@@ -9,51 +9,52 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 interface StepProps {
-  onNext: () => void;
-  onPrev: () => void;
-  onFinish?: () => void;
+  onNext?: () => void;
+  onPrev?: () => void;
+  onFinish: () => void;
 }
 
-const agesData: WheelItemData<string>[] = Array.from(
-  { length: 100 },
+// Диапазон веса от 30 до 150 кг
+const weightsData: WheelItemData<string>[] = Array.from(
+  { length: 121 },
   (_, i) => {
-    const ageValue = (i + 1).toString();
+    const weightValue = (i + 30).toString();
     return {
-      key: ageValue,
-      value: ageValue,
+      key: weightValue,
+      value: weightValue,
       content: "",
       dataForContent: {},
     };
   }
 );
 
-export const Age = ({ onPrev, onNext }: StepProps) => {
-  const [selectedAge, setSelectedAge] = useState<string>("18");
+export const Weight = ({ onPrev, onFinish }: StepProps) => {
+  const [selectedWeight, setSelectedWeight] = useState<string>("70");
 
-  const handleAgeChange = (value: WheelItemValue<string>) => {
-    setSelectedAge(String(value));
+  const handleWeightChange = (value: WheelItemValue<string>) => {
+    setSelectedWeight(String(value));
   };
 
   return (
     <View style={styles.stepContainer}>
       <ThemedText type="subtitle" style={styles.title}>
-        How old are you?
+        What's your weight?
       </ThemedText>
-      <ThemedText style={styles.currentAgeText}>
-        Selected: {selectedAge}
+      <ThemedText style={styles.currentValueText}>
+        Selected: {selectedWeight} kg
       </ThemedText>
       <AnimatedWheelPicker
-        data={agesData}
+        data={weightsData}
         itemSize={56}
         visibleCount={3}
         orientation="vertical"
-        initialIndex={17}
-        onValueChange={handleAgeChange}
+        initialIndex={40} // 70 кг
+        onValueChange={handleWeightChange}
         containerStyle={styles.animatedWheelPicker}
         animationType="lens"
         selectStyle={styles.selectorContainer}
       />
-      <Button title="Continue" onPress={onNext} style={styles.button} />
+      <Button title="Continue" onPress={onFinish} style={styles.button} />
     </View>
   );
 };
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 20,
   },
-  currentAgeText: {
+  currentValueText: {
     fontSize: 16,
     color: "#aaa",
   },
@@ -87,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Age;
+export default Weight;
