@@ -1,8 +1,8 @@
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
-import Button from "../Button";
-import EmailInput from "../EmailInput";
+import Button from "../Buttons/Button";
+import EmailInput from "../Inputs/EmailInput";
 
 interface LoginData {
   login: string;

@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
-import Button from "@/shared/Button";
-import TextInput from "@/shared/TextInput";
+import Button from "@/shared/Buttons/Button";
+import TextInput from "@/shared/Inputs/TextInput";
 import GradientView from "@/shared/ui/Gradient";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import SearchInput from "@/widgets/Search/components/SearchInput";

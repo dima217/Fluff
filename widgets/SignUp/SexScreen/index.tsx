@@ -1,4 +1,4 @@
-import Button from "@/shared/Button";
+import Button from "@/shared/Buttons/Button";
 import SexPicker from "@/shared/ui/SexPicker";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useState } from "react";

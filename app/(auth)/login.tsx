@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
+import GradientButton from "@/shared/Buttons/GradientButton";
 import LoginForm from "@/shared/Forms/LoginForm";
-import GradientButton from "@/shared/GradientButton";
 import SignUpPrompt from "@/shared/ui/SignUpPrompt";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useRouter } from "expo-router";

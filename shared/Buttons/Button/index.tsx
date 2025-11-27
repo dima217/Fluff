@@ -2,7 +2,7 @@ import { Text, TouchableOpacity } from "react-native";
 
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 
-import ActivityIndicator from "../ui/ActivityIndicator";
+import ActivityIndicator from "../../ui/ActivityIndicator";
 
 import { Colors } from "@/constants/Colors";
 import { styles } from "./styles";
