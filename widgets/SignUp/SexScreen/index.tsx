@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
   stepContainer: {
     flex: 1,
     gap: "8%",
+    width: "90%",
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "black",

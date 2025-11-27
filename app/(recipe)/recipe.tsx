@@ -1,9 +1,9 @@
 import { Colors } from "@/constants/Colors";
+import { RecipeData } from "@/constants/types";
 import Button from "@/shared/Buttons/Button";
-import { ThemedText } from "@/shared/ui/ThemedText";
 import View from "@/shared/View";
+import IngredientsSection from "@/widgets/Recipe/components/IngredientsSection";
 import RecipeCard from "@/widgets/Recipe/components/RecipeCard";
-import FilterTags from "@/widgets/Search/components/FilterTags";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 
@@ -12,14 +12,30 @@ import { ImageBackground, ScrollView, StyleSheet } from "react-native";
 export default function RecipeScreen() {
   const router = useRouter();
 
-  const ingredients = [
-    "Dark Chocolate (100g)",
-    "Butter (180g)",
-    "Wheat flour (100g)",
-    "Brown Sugar (200g)",
-    "Eggs (4)",
-    "Walnuts (100g)",
-  ];
+  const recipeData: RecipeData = {
+    title: "Brownie",
+    steps: [
+      {
+        id: 1,
+        title: "Step 1",
+        description:
+          "Break the chocolate into pieces and melt it with the butter in a double boiler, stirring constantly with a spatula or wooden spoon. Remove the resulting thick chocolate sauce from the boiler and let it cool.",
+      },
+      {
+        id: 2,
+        title: "Step 2",
+        description:
+          "Meanwhile, mix the eggs with 100 grams of brown sugar. Crack the eggs into a separate bowl and beat, gradually adding the sugar. You can beat with a mixer or by hand — whichever you prefer — but for at least two and a half to three minutes.",
+      },
+      {
+        id: 3,
+        title: "Step 3",
+        description:
+          "Using a sharp knife, chop the walnuts on a cutting board. You can toast them in a dry frying pan beforehand until fragrant, but this is optional.",
+        image: require("@/assets/images/step.png"),
+      },
+    ],
+  };
 
   return (
     <ScrollView
@@ -36,16 +52,11 @@ export default function RecipeScreen() {
       >
         <LinearGradient
           colors={["transparent", Colors.background]}
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: 200,
-          }}
+          style={styles.gradient}
         />
       </ImageBackground>
-      <View>
+
+      <View style={styles.innerContainer}>
         <RecipeCard
           title="Brownie"
           category="Dessert"
@@ -57,9 +68,18 @@ export default function RecipeScreen() {
           onLike={() => console.log("Liked!")}
           onMenu={() => console.log("Menu pressed")}
         />
-        <ThemedText>Ingredients</ThemedText>
-        <FilterTags filters={ingredients} />
-        <Button title={"Cook it"} onPress={function (): void {}} />
+
+        <IngredientsSection />
+
+        <Button
+          title={"Cook it"}
+          onPress={() => {
+            router.push({
+              pathname: "/(recipe)/recipe-steps",
+              params: { data: JSON.stringify(recipeData) },
+            });
+          }}
+        />
       </View>
     </ScrollView>
   );
@@ -70,17 +90,26 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     flex: 1,
   },
-  innerContainer: {},
+  innerContainer: {
+    width: "100%",
+    display: "flex",
+    flex: 1,
+    flexDirection: "column",
+    gap: 40,
+  },
   background: {
     width: "100%",
     height: 500,
   },
-  pressableContainer: {
-    width: "100%",
-    alignItems: "center",
-  },
   scrollContent: {
     alignItems: "center",
-    paddingBottom: 40,
+    paddingBottom: 30,
+  },
+  gradient: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 200,
   },
 });
