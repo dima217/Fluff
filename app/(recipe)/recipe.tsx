@@ -2,8 +2,8 @@ import { Colors } from "@/constants/Colors";
 import { RecipeData } from "@/constants/types";
 import Button from "@/shared/Buttons/Button";
 import View from "@/shared/View";
-import IngredientsSection from "@/widgets/Recipe/components/IngredientsSection";
-import RecipeCard from "@/widgets/Recipe/components/RecipeCard";
+import IngredientsSection from "@/widgets/Recipe/RecipeInfo/components/IngredientsSection";
+import RecipeCard from "@/widgets/Recipe/RecipeInfo/components/RecipeCard";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 

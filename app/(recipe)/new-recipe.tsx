@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-export default function RecipeStepsScreen() {
+export default function RecipeNewScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
 
