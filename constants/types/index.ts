@@ -10,10 +10,14 @@ export interface RecipeData {
   steps: RecipeStep[];
 }
 
+export interface CreationStep {
+  title: string;
+  description: string;
+}
+
 export interface Recipe {
   name: string;
   ccal: number;
   ingridients: string[];
-  title: string;
-  description: string;
+  steps: CreationStep[];
 }

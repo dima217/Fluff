@@ -1,5 +1,3 @@
-import { Redirect } from "expo-router";
-
-export default function HomeScreen() {
-  return <Redirect href="/(recipe)/new-recipe" />;
+export default function Plus() {
+  return null;
 }

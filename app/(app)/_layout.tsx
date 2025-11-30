@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 
 import Add from "@/assets/images/Add.svg";
 import BookTab from "@/assets/images/BookTab.svg";
@@ -11,6 +11,7 @@ import Circle from "@/shared/ui/Circle";
 import { TouchableOpacity } from "react-native";
 
 export default function TabLayout() {
+  const router = useRouter();
   return (
     <Tabs
       screenOptions={{
@@ -45,11 +46,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="plus"
         options={{
-          tabBarButton: (props) => {
-            const { onPress } = props;
+          tabBarButton: () => {
             return (
               <TouchableOpacity
-                onPress={onPress}
+                onPress={() => router.push("/(recipe)/new-recipe")}
                 style={{
                   top: -CircleSizes.MEDIUM / 2,
                   display: "flex",
