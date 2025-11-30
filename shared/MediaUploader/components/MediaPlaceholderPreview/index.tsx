@@ -1,6 +1,8 @@
+import { Colors } from "@/constants/Colors";
+import { ThemedText } from "@/shared/ui/ThemedText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 const MediaPlaceholder: React.FC = () => {
   return (
@@ -13,10 +15,10 @@ const MediaPlaceholder: React.FC = () => {
       />
 
       <View style={styles.button}>
-        <Text style={styles.buttonText}>Добавить медиа</Text>
+        <ThemedText type="mini">Add a Photo</ThemedText>
       </View>
 
-      <Text style={styles.infoText}>Фото или видео до 100MB</Text>
+      <ThemedText type="xs">PNG, JPG up to 100MB</ThemedText>
     </View>
   );
 };
@@ -32,9 +34,9 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   button: {
-    backgroundColor: "#e91e63",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
+    backgroundColor: Colors.primary,
+    paddingVertical: 2,
+    paddingHorizontal: 4,
     borderRadius: 25,
     marginBottom: 10,
   },

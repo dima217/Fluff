@@ -9,3 +9,11 @@ export interface RecipeData {
   title: string;
   steps: RecipeStep[];
 }
+
+export interface Recipe {
+  name: string;
+  ccal: number;
+  ingridients: string[];
+  title: string;
+  description: string;
+}

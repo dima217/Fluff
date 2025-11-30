@@ -1,26 +1,17 @@
+import { Colors } from "@/constants/Colors";
 import React from "react";
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useMediaPicker } from "../../hooks/useMediaPicker";
 import MediaPlaceholder from "../MediaPlaceholderPreview";
 import MediaPreview from "../MediaPreview";
-
-const screenWidth = Dimensions.get("window").width;
 
 const MediaUploader: React.FC = () => {
   const { media, pickMedia, clearMedia, labelByType } = useMediaPicker();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{labelByType}</Text>
-
+    <View>
       <TouchableOpacity
-        style={styles.uploadArea}
+        style={[styles.uploadArea, media ? styles.uploadAreaWithMedia : null]}
         activeOpacity={media ? 1 : 0.85}
         onPress={!media ? pickMedia : undefined}
       >
@@ -37,11 +28,6 @@ const MediaUploader: React.FC = () => {
 export default MediaUploader;
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: "#1c1c1c",
-    minHeight: Dimensions.get("window").height,
-  },
   label: {
     color: "#fff",
     marginBottom: 10,
@@ -49,15 +35,18 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   uploadArea: {
-    width: screenWidth - 40,
-    height: 300,
+    width: "100%",
+    height: 250,
     borderRadius: 15,
-    borderWidth: 2,
-    borderColor: "#9333ea",
+    borderWidth: 1,
+    borderColor: Colors.purple,
     borderStyle: "dashed",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#000",
     overflow: "hidden",
+  },
+  uploadAreaWithMedia: {
+    borderWidth: 0,
   },
 });

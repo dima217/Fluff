@@ -1,71 +1,88 @@
-import ArrowLeft from "@/assets/images/ArrowLeft.svg";
-import { RecipeData } from "@/constants/types";
+import { Recipe } from "@/constants/types";
 import Button from "@/shared/Buttons/Button";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
+import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
+import CookingProcess from "@/widgets/Recipe/RecipeNew/components/forms/CookingProcess";
+import Preview from "@/widgets/Recipe/RecipeNew/components/forms/Preview";
+import Tutorial from "@/widgets/Recipe/RecipeNew/components/forms/Tutorial";
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
-import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
-  Image,
+  KeyboardAvoidingView,
+  Platform,
   View as RNView,
   ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
 } from "react-native";
 
-export default function RecipeNewScreen() {
-  const router = useRouter();
-  const params = useLocalSearchParams();
+const CreateRecipeScreen = () => {
+  const [step, setStep] = useState(1);
 
-  const recipe: RecipeData = JSON.parse(params.data as string);
-  const [stepIndex, setStepIndex] = useState(0);
+  const [recipe, setRecipe] = useState<Partial<Recipe>>({});
 
-  const currentStep = recipe.steps[stepIndex];
-  const isLast = stepIndex === recipe.steps.length - 1;
+  enum CreateStep {
+    BaseInfo = 1,
+    CookingProcess = 2,
+    Tutorial = 3,
+    Review = 4,
+  }
 
-  const handleNext = () => {
-    if (isLast) router.replace("/");
-    else setStepIndex(stepIndex + 1);
+  const updateRecipe = (patch: Partial<Recipe>) => {
+    setRecipe((prev) => ({ ...prev, ...patch }));
   };
 
-  const handlePrev = () => {
-    if (stepIndex === 0) return;
-    else setStepIndex(stepIndex - 1);
+  const goNext = () => setStep((prev) => prev + 1);
+  const goBack = () => setStep((prev) => prev - 1);
+
+  const renderStep = () => {
+    switch (step) {
+      case CreateStep.BaseInfo:
+        return <BaseInfo data={recipe} onChange={updateRecipe} />;
+      case CreateStep.CookingProcess:
+        return (
+          <CookingProcess
+            data={recipe}
+            onChange={updateRecipe}
+            onBack={goBack}
+          />
+        );
+      case CreateStep.Tutorial:
+        return (
+          <Tutorial data={recipe} onChange={updateRecipe} onBack={goBack} />
+        );
+      case CreateStep.Review:
+        return (
+          <Preview
+            data={recipe}
+            onChange={updateRecipe}
+            onSubmit={() => console.log("FINAL", recipe)}
+            onBack={goBack}
+          />
+        );
+    }
   };
 
   return (
     <View>
-      <Header title={recipe.title} />
-      <RNView style={styles.progressWrapper}>
-        <AnimatedProgressBar progress={(stepIndex + 1) / recipe.steps.length} />
-      </RNView>
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <RNView style={styles.stepCard}>
-          {stepIndex > 0 && (
-            <TouchableOpacity onPress={handlePrev}>
-              <ArrowLeft />
-            </TouchableOpacity>
-          )}
-          <Text style={styles.stepNumber}>Step {currentStep.id}</Text>
-          {currentStep.image && (
-            <Image source={currentStep.image} style={styles.stepImage} />
-          )}
-          <Text style={styles.stepDescription}>{currentStep.description}</Text>
-        </RNView>
-      </ScrollView>
-
-      <View style={styles.fixedButtonContainer}>
-        <Button title={isLast ? "Finish" : "Next"} onPress={handleNext} />
-      </View>
+        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+          <Header title={"Add New Recipe"} />
+          <RNView style={styles.progressWrapper}>
+            <AnimatedProgressBar progress={step / 4} />
+          </RNView>
+          {renderStep()}
+          <Button title={"Next"} onPress={goNext} style={styles.button} />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
-}
+};
+
+export default CreateRecipeScreen;
 
 const styles = StyleSheet.create({
   scroll: {
@@ -74,48 +91,11 @@ const styles = StyleSheet.create({
   progressWrapper: {
     width: "100%",
     marginTop: 20,
+    marginBottom: 40,
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonsContainer: {
-    position: "absolute",
-    bottom: 40,
-  },
-  content: {
-    paddingBottom: 140,
-  },
-  fixedButtonContainer: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 30,
-    paddingHorizontal: 20,
-  },
-  title: {
-    color: "#fff",
-    fontSize: 28,
-    fontWeight: "700",
-    marginBottom: 25,
-  },
-  stepCard: {
-    gap: 16,
-    borderRadius: 16,
-    marginTop: 45,
-  },
-  stepNumber: {
-    color: "#fff",
-    fontSize: 22,
-    fontWeight: "600",
-    marginBottom: 10,
-  },
-  stepDescription: {
-    color: "#ccc",
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  stepImage: {
-    width: "100%",
-    height: 240,
-    borderRadius: 12,
+  button: {
+    marginTop: 30,
   },
 });

@@ -10,6 +10,11 @@ const styles = StyleSheet.create({
     gap: 4,
     width: "100%",
   },
+  textInput: {
+    flex: 1,
+    paddingVertical: 12,
+    color: "#fff",
+  },
   inputContainer: {
     width: "100%",
     borderRadius: 29,

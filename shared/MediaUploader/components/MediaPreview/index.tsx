@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -17,7 +18,11 @@ const MediaPreview: React.FC<Props> = ({ media, onRemove }) => {
       />
 
       <TouchableOpacity style={styles.removeBtn} onPress={onRemove}>
-        <MaterialCommunityIcons name="close-circle" size={32} color="#ff5555" />
+        <MaterialCommunityIcons
+          name="close-circle"
+          size={32}
+          color={Colors.purple}
+        />
       </TouchableOpacity>
     </View>
   );

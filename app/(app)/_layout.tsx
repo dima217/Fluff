@@ -8,7 +8,7 @@ import UserTab from "@/assets/images/UserTab.svg";
 import { Colors } from "@/constants/Colors";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import Circle from "@/shared/ui/Circle";
-import { View } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 export default function TabLayout() {
   return (
@@ -45,20 +45,25 @@ export default function TabLayout() {
       <Tabs.Screen
         name="plus"
         options={{
-          tabBarButton: (props) => (
-            <View
-              style={{
-                top: -CircleSizes.MEDIUM / 2,
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-              }}
-            >
-              <Circle size={56} svg={<Add />} />
-            </View>
-          ),
+          tabBarButton: (props) => {
+            const { onPress } = props;
+            return (
+              <TouchableOpacity
+                onPress={onPress}
+                style={{
+                  top: -CircleSizes.MEDIUM / 2,
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
+                <Circle size={56} svg={<Add />} />
+              </TouchableOpacity>
+            );
+          },
         }}
       />
+
       <Tabs.Screen
         name="library"
         options={{

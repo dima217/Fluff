@@ -15,6 +15,7 @@ export interface TextInputProps extends Omit<RNTextInputProps, "style"> {
   errorMessage?: string;
   style?: StyleProp<ViewStyle>;
   inputStyle?: StyleProp<TextStyle>;
+  inputContainerStyle?: StyleProp<ViewStyle>;
   left?: React.ReactNode;
   right?: React.ReactNode;
 }
@@ -24,6 +25,7 @@ const TextInput = ({
   errorMessage,
   style,
   inputStyle,
+  inputContainerStyle,
   left,
   right,
   editable = true,
@@ -41,13 +43,15 @@ const TextInput = ({
           styles.inputContainer,
           hasError && styles.errorInputContainer,
           !editable && styles.disabledInputContainer,
+          inputContainerStyle,
         ]}
       >
         {left && <View style={styles.leftContainer}>{left}</View>}
         <RNTextInput
-          style={[inputStyle]}
+          style={[inputStyle, styles.textInput]}
           editable={editable}
           enablesReturnKeyAutomatically
+          textAlignVertical={rest.multiline ? "top" : "center"}
           {...rest}
         />
         {right && <View style={styles.rightContainer}>{right}</View>}
