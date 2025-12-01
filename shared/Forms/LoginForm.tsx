@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import Button from "../Buttons/Button";
 import EmailInput from "../Inputs/EmailInput";
+import PasswordInput from "../Inputs/PasswordInput";
 
 interface LoginData {
   login: string;
@@ -20,6 +21,7 @@ const LoginForm = () => {
   return (
     <View style={styles.container}>
       <EmailInput placeholder="Enter" />
+      <PasswordInput />
       <Button title="Login" onPress={handleSubmit(onSubmit)} />
     </View>
   );
