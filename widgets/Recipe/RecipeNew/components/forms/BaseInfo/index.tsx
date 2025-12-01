@@ -2,10 +2,19 @@ import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import { ThemedText } from "@/shared/ui/ThemedText";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { StepProps } from "../../../constants";
 
-const BaseInfo = ({ data, onChange, onBack }: StepProps) => {
+const BaseInfo = ({
+  data,
+  onChange,
+  errors,
+}: StepProps & { errors?: Record<string, string> }) => {
+  const renderError = (field: string) => {
+    if (!errors || !errors[field]) return null;
+    return <Text style={styles.errorText}>{errors[field]}</Text>;
+  };
+
   return (
     <View>
       <View style={styles.innerContainer}>
@@ -17,12 +26,45 @@ const BaseInfo = ({ data, onChange, onBack }: StepProps) => {
           cool.
         </ThemedText>
       </View>
+
       <View style={styles.mediaContainer}>
-        <MediaUploader />
+        <MediaUploader
+          value={data.mediaUrl ?? undefined}
+          onChange={(val) => onChange({ mediaUrl: val })}
+        />
       </View>
-      <TextInput label={"name"} placeholder="Enter" />
-      <TextInput label={"Ccal"} placeholder="Enter" />
-      <LongTextInput label={"Ingredients"} placeholder="Enter" />
+
+      <View style={styles.inputWrapper}>
+        <TextInput
+          label="Name"
+          placeholder="Enter"
+          value={data.name}
+          onChangeText={(val) => onChange({ name: val })}
+        />
+        {renderError("name")}
+      </View>
+
+      <View style={styles.inputWrapper}>
+        <TextInput
+          label="Ccal"
+          placeholder="Enter"
+          value={data.ccal?.toString()}
+          onChangeText={(val) =>
+            onChange({ ccal: val === "" ? undefined : Number(val) })
+          }
+        />
+        {renderError("ccal")}
+      </View>
+
+      <View style={styles.inputWrapper}>
+        <LongTextInput
+          label="Ingredients"
+          placeholder="Enter"
+          value={data.ingredients}
+          onChangeText={(val) => onChange({ ingredients: val })}
+        />
+        {renderError("ingredients")}
+      </View>
     </View>
   );
 };
@@ -36,5 +78,13 @@ const styles = StyleSheet.create({
   },
   mediaContainer: {
     marginBottom: 30,
+  },
+  inputWrapper: {
+    marginBottom: 20,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 4,
   },
 });

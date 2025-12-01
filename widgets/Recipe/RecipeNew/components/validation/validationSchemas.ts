@@ -6,12 +6,12 @@ export const baseInfoSchema = yup.object({
     .required("Название рецепта обязательно")
     .min(3, "Минимум 3 символа")
     .max(100, "Максимум 100 символов"),
-  ccal: yup.string().max(500, "Максимум 500 символов"),
+  ccal: yup.number().required("Название рецепта обязательно"),
   ingredients: yup
-    .number()
-    .typeError("Введите число")
-    .positive("Время должно быть положительным")
-    .required("Время приготовления обязательно"),
+    .string()
+    .required("Название рецепта обязательно")
+    .min(3, "Минимум 3 символа")
+    .max(100, "Максимум 100 символов"),
   mediaUrl: yup.string().max(500),
 });
 
@@ -35,7 +35,7 @@ export const tutorialSchema = yup.object({
 export const stepsConfig = [
   {
     schema: baseInfoSchema,
-    defaultValues: { name: "", ccal: "", ingredients: "", mediaUrl: "" },
+    defaultValues: { name: "", ccal: 0, ingredients: "", mediaUrl: "" },
   },
   {
     schema: cookingProcessSchema,

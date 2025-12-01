@@ -1,3 +1,4 @@
+import Button from "@/shared/Buttons/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ReactNode } from "react";
 import {
@@ -37,7 +38,7 @@ const StepWrapper = <T extends AnyObjectSchema>({
     );
   }
 
-  const { setStep, totalSteps } = context;
+  const { setStep, totalSteps, isFirstStep, isLastStep } = context;
 
   const formMethods: UseFormReturn<FormData<T>> = useForm<FormData<T>>({
     defaultValues: defaultValues as DefaultValues<FormData<T>>,
@@ -45,19 +46,20 @@ const StepWrapper = <T extends AnyObjectSchema>({
     mode: "onChange",
   });
 
-  const isLastStep = stepIndex === totalSteps - 1;
-
   const handleSubmit = formMethods.handleSubmit((data: FormData<T>) => {
     onSubmit(stepIndex, data);
 
     if (!isLastStep) {
       setStep(stepIndex + 1);
-    } else {
-      console.log("Final");
     }
   });
 
-  return <FormProvider {...formMethods}>{children}</FormProvider>;
+  return (
+    <FormProvider {...formMethods}>
+      {children}
+      <Button style={styles.button} onPress={handleSubmit} title={"Next"} />
+    </FormProvider>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -65,10 +67,8 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 1,
   },
-  buttons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 20,
+  button: {
+    marginVertical: 32,
   },
 });
 

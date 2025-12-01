@@ -1,13 +1,18 @@
-import { Recipe } from "@/constants/types";
-import Button from "@/shared/Buttons/Button";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
 import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
 import CookingProcess from "@/widgets/Recipe/RecipeNew/components/forms/CookingProcess";
 import Preview from "@/widgets/Recipe/RecipeNew/components/forms/Preview";
 import Tutorial from "@/widgets/Recipe/RecipeNew/components/forms/Tutorial";
+import StepWrapper from "@/widgets/Recipe/RecipeNew/components/StepWrapper";
+import {
+  baseInfoSchema,
+  cookingProcessSchema,
+  tutorialSchema,
+} from "@/widgets/Recipe/RecipeNew/components/validation/validationSchemas";
+import { useRecipeFormContext } from "@/widgets/Recipe/RecipeNew/hooks/useRecipeFormContext";
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
-import { useState } from "react";
+import { useEffect } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -17,49 +22,90 @@ import {
 } from "react-native";
 
 const CreateRecipeScreen = () => {
-  const [step, setStep] = useState(1);
+  const { step, setStep, setTotalSteps, formData, updateFormData, resetForm } =
+    useRecipeFormContext();
 
-  const [recipe, setRecipe] = useState<Partial<Recipe>>({});
+  useEffect(() => {
+    setTotalSteps(4);
+  }, [setTotalSteps]);
 
-  enum CreateStep {
-    BaseInfo = 1,
-    CookingProcess = 2,
-    Tutorial = 3,
-    Review = 4,
-  }
+  const handleStepSubmit = (stepIndex: number, stepData: any) => {
+    updateFormData(stepData);
 
-  const updateRecipe = (patch: Partial<Recipe>) => {
-    setRecipe((prev) => ({ ...prev, ...patch }));
+    if (stepIndex === 3) {
+      handleFinalSubmit({ ...formData, ...stepData });
+    } else {
+      setStep(stepIndex + 1);
+    }
   };
 
-  const goNext = () => setStep((prev) => prev + 1);
-  const goBack = () => setStep((prev) => prev - 1);
+  const handleFinalSubmit = (finalData: any) => {
+    console.log("Все данные формы:", finalData);
+    alert("Рецепт успешно создан!");
+    resetForm();
+  };
 
   const renderStep = () => {
     switch (step) {
-      case CreateStep.BaseInfo:
-        return <BaseInfo data={recipe} onChange={updateRecipe} />;
-      case CreateStep.CookingProcess:
+      case 0:
         return (
-          <CookingProcess
-            data={recipe}
-            onChange={updateRecipe}
-            onBack={goBack}
-          />
+          <StepWrapper
+            stepIndex={0}
+            onSubmit={handleStepSubmit}
+            validationSchema={baseInfoSchema}
+            defaultValues={formData}
+          >
+            <BaseInfo data={formData} onChange={updateFormData} />
+          </StepWrapper>
         );
-      case CreateStep.Tutorial:
+      case 1:
         return (
-          <Tutorial data={recipe} onChange={updateRecipe} onBack={goBack} />
+          <StepWrapper
+            stepIndex={1}
+            onSubmit={handleStepSubmit}
+            validationSchema={cookingProcessSchema}
+            defaultValues={formData}
+          >
+            <CookingProcess
+              data={formData}
+              onChange={updateFormData}
+              onBack={() => setStep(step - 1)}
+            />
+          </StepWrapper>
         );
-      case CreateStep.Review:
+      case 2:
         return (
-          <Preview
-            data={recipe}
-            onChange={updateRecipe}
-            onSubmit={() => console.log("FINAL", recipe)}
-            onBack={goBack}
-          />
+          <StepWrapper
+            stepIndex={2}
+            onSubmit={handleStepSubmit}
+            validationSchema={tutorialSchema}
+            defaultValues={formData}
+          >
+            <Tutorial
+              data={formData}
+              onChange={updateFormData}
+              onBack={() => setStep(step - 1)}
+            />
+          </StepWrapper>
         );
+      case 3:
+        return (
+          <StepWrapper
+            stepIndex={3}
+            onSubmit={handleStepSubmit}
+            validationSchema={tutorialSchema}
+            defaultValues={formData}
+          >
+            <Preview
+              data={formData}
+              onBack={() => setStep(step - 1)}
+              onSubmit={() => handleFinalSubmit(formData)}
+              onChange={updateFormData}
+            />
+          </StepWrapper>
+        );
+      default:
+        return null;
     }
   };
 
@@ -71,11 +117,12 @@ const CreateRecipeScreen = () => {
       >
         <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
           <Header title={"Add New Recipe"} />
+
           <RNView style={styles.progressWrapper}>
-            <AnimatedProgressBar progress={step / 4} />
+            <AnimatedProgressBar progress={(step + 1) / 4} />
           </RNView>
+
           {renderStep()}
-          <Button title={"Next"} onPress={goNext} style={styles.button} />
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
@@ -94,6 +141,11 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     alignItems: "center",
     justifyContent: "center",
+  },
+  progressText: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 8,
   },
   button: {
     marginTop: 30,

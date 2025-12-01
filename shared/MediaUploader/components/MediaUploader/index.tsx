@@ -5,18 +5,41 @@ import { useMediaPicker } from "../../hooks/useMediaPicker";
 import MediaPlaceholder from "../MediaPlaceholderPreview";
 import MediaPreview from "../MediaPreview";
 
-const MediaUploader: React.FC = () => {
-  const { media, pickMedia, clearMedia, labelByType } = useMediaPicker();
+interface MediaUploaderProps {
+  value?: string;
+  onChange?: (media: string | undefined) => void;
+}
+
+const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange }) => {
+  const { media, pickMedia, clearMedia } = useMediaPicker();
+
+  const handleRemove = () => {
+    clearMedia();
+    onChange?.(undefined);
+  };
+
+  const handlePick = async () => {
+    await pickMedia();
+    if (onChange && media) {
+      onChange(media.uri);
+    }
+  };
 
   return (
     <View>
       <TouchableOpacity
-        style={[styles.uploadArea, media ? styles.uploadAreaWithMedia : null]}
-        activeOpacity={media ? 1 : 0.85}
-        onPress={!media ? pickMedia : undefined}
+        style={[
+          styles.uploadArea,
+          media || value ? styles.uploadAreaWithMedia : null,
+        ]}
+        activeOpacity={media || value ? 1 : 0.85}
+        onPress={media || value ? undefined : handlePick}
       >
-        {media ? (
-          <MediaPreview media={media} onRemove={clearMedia} />
+        {media || value ? (
+          <MediaPreview
+            media={media ? media : { uri: value!, type: "image" }}
+            onRemove={handleRemove}
+          />
         ) : (
           <MediaPlaceholder />
         )}
@@ -28,12 +51,6 @@ const MediaUploader: React.FC = () => {
 export default MediaUploader;
 
 const styles = StyleSheet.create({
-  label: {
-    color: "#fff",
-    marginBottom: 10,
-    fontSize: 17,
-    fontWeight: "600",
-  },
   uploadArea: {
     width: "100%",
     height: 250,

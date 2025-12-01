@@ -18,6 +18,8 @@ export interface CreationStep {
 export interface Recipe {
   name: string;
   ccal: number;
-  ingridients: string[];
+  ingredients: string;
   steps: CreationStep[];
+  videoUrl: string;
+  mediaUrl: string;
 }
