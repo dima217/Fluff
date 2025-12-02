@@ -2,17 +2,22 @@ import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { Controller, useFormContext } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
-import { StepProps } from "../../../constants";
 
-const BaseInfo = ({
-  data,
-  onChange,
-  errors,
-}: StepProps & { errors?: Record<string, string> }) => {
+const BaseInfo = () => {
+  const {
+    control,
+    formState: { errors },
+    getValues,
+  } = useFormContext();
+
   const renderError = (field: string) => {
-    if (!errors || !errors[field]) return null;
-    return <Text style={styles.errorText}>{errors[field]}</Text>;
+    const msg = errors?.[field]?.message;
+    if (!msg) return null;
+
+    console.log(getValues());
+    return <Text style={styles.errorText}>{String(msg)}</Text>;
   };
 
   return (
@@ -20,48 +25,82 @@ const BaseInfo = ({
       <View style={styles.innerContainer}>
         <ThemedText type="subtitle">Base</ThemedText>
         <ThemedText type="xs">
-          Break the chocolate into pieces and melt it with the butter in a
-          double boiler, stirring constantly with a spatula or wooden spoon.
-          Remove the resulting thick chocolate sauce from the boiler and let it
-          cool.
+          Break the chocolate into pieces and melt it...
         </ThemedText>
       </View>
 
+      {/* MEDIA */}
       <View style={styles.mediaContainer}>
-        <MediaUploader
-          value={data.mediaUrl ?? undefined}
-          onChange={(val) => onChange({ mediaUrl: val })}
+        <Controller
+          control={control}
+          name="mediaUrl"
+          render={({ field: { value, onChange } }) => (
+            <MediaUploader value={value} onChange={onChange} />
+          )}
         />
+        {renderError("mediaUrl")}
       </View>
 
+      {/* NAME */}
       <View style={styles.inputWrapper}>
-        <TextInput
-          label="Name"
-          placeholder="Enter"
-          value={data.name}
-          onChangeText={(val) => onChange({ name: val })}
+        <Controller
+          control={control}
+          name="name"
+          render={({ field: { value, onChange } }) => (
+            <TextInput
+              label="Name"
+              placeholder="Enter"
+              value={value}
+              onChangeText={onChange}
+            />
+          )}
         />
         {renderError("name")}
       </View>
 
+      {/* CCAL */}
       <View style={styles.inputWrapper}>
-        <TextInput
-          label="Ccal"
-          placeholder="Enter"
-          value={data.ccal?.toString()}
-          onChangeText={(val) =>
-            onChange({ ccal: val === "" ? undefined : Number(val) })
-          }
+        <Controller
+          control={control}
+          name="ccal"
+          render={({ field: { value, onChange } }) => {
+            const textValue = value !== undefined ? String(value) : "";
+
+            return (
+              <TextInput
+                label="Ccal"
+                placeholder="Enter"
+                keyboardType="numeric"
+                value={textValue}
+                onChangeText={(text) => {
+                  const onlyDigits = text.replace(/[^0-9]/g, "");
+
+                  if (onlyDigits === "") {
+                    onChange(undefined);
+                  } else {
+                    onChange(Number(onlyDigits));
+                  }
+                }}
+              />
+            );
+          }}
         />
         {renderError("ccal")}
       </View>
 
+      {/* INGREDIENTS */}
       <View style={styles.inputWrapper}>
-        <LongTextInput
-          label="Ingredients"
-          placeholder="Enter"
-          value={data.ingredients}
-          onChangeText={(val) => onChange({ ingredients: val })}
+        <Controller
+          control={control}
+          name="ingredients"
+          render={({ field: { value, onChange } }) => (
+            <LongTextInput
+              label="Ingredients"
+              placeholder="Enter"
+              value={value}
+              onChangeText={onChange}
+            />
+          )}
         />
         {renderError("ingredients")}
       </View>
@@ -80,11 +119,10 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   inputWrapper: {
-    marginBottom: 20,
+    marginBottom: 10,
   },
   errorText: {
     color: "red",
     fontSize: 12,
-    marginTop: 4,
   },
 });

@@ -5,39 +5,30 @@ import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Feather } from "@expo/vector-icons";
+import { useEffect } from "react";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { StepProps } from "../../../constants";
 
-const CookingProcess = ({ data, onChange, onNext, onBack }: StepProps) => {
-  const steps = data.steps ?? [{ title: "Step 1", description: "" }];
+const CookingProcess = ({ onBack }: { onBack: () => void }) => {
+  const { control } = useFormContext();
 
-  const addStep = () => {
-    const newSteps = [
-      ...steps,
-      { title: `Step ${steps.length + 1}`, description: "" },
-    ];
-    onChange({ ...data, steps: newSteps });
-  };
+  const { fields, append, remove, replace } = useFieldArray({
+    control,
+    name: "steps",
+  });
 
-  const updateStep = (
-    index: number,
-    key: "title" | "description",
-    value: string
-  ) => {
-    const newSteps = [...steps];
-    newSteps[index][key] = value;
-    onChange({ ...data, steps: newSteps });
-  };
+  useEffect(() => {
+    if (fields.length === 0) {
+      append({ title: "Step 1", description: "" });
+    }
+  }, []);
 
-  const removeStep = (index: number) => {
-    const newSteps = steps.filter((_, i) => i !== index);
-
-    const renumbered = newSteps.map((step, i) => ({
+  const renumberSteps = (currentFields: typeof fields) => {
+    const renumbered = currentFields.map((step, index) => ({
       ...step,
-      title: `Step ${i + 1}`,
+      title: `Step ${index + 1}`,
     }));
-
-    onChange({ ...data, steps: renumbered });
+    replace(renumbered);
   };
 
   return (
@@ -45,6 +36,7 @@ const CookingProcess = ({ data, onChange, onNext, onBack }: StepProps) => {
       <TouchableOpacity onPress={onBack}>
         <ArrowLeft />
       </TouchableOpacity>
+
       <View style={styles.innerContainer}>
         <ThemedText type="subtitle">Cooking Process</ThemedText>
         <ThemedText type="xs">
@@ -54,33 +46,60 @@ const CookingProcess = ({ data, onChange, onNext, onBack }: StepProps) => {
           cool.
         </ThemedText>
       </View>
+
       <View style={{ gap: 30 }}>
-        {steps.map((step, index) => (
-          <View key={index} style={{ gap: 12 }}>
+        {fields.map((field, index) => (
+          <View key={field.id} style={{ gap: 12 }}>
             {/* Title */}
-            <TextInput
-              label={`Title`}
-              value={step.title}
-              placeholder="Enter"
-              onChangeText={(text) => updateStep(index, "title", text)}
-              right={
-                <TouchableOpacity onPress={() => removeStep(index)}>
-                  <Feather name="x" size={20} color={Colors.secondary} />
-                </TouchableOpacity>
-              }
+            <Controller
+              control={control}
+              name={`steps.${index}.title`}
+              render={({ field: { value, onChange } }) => (
+                <TextInput
+                  label={`Title`}
+                  placeholder="Enter"
+                  value={value}
+                  onChangeText={onChange}
+                  right={
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (fields.length > 1) {
+                          remove(index);
+                          // авто-нумерация после удаления
+                          renumberSteps(fields.filter((_, i) => i !== index));
+                        }
+                      }}
+                    >
+                      <Feather name="x" size={20} color={Colors.secondary} />
+                    </TouchableOpacity>
+                  }
+                />
+              )}
             />
 
             {/* Description */}
-            <LongTextInput
-              label="Description"
-              value={step.description}
-              placeholder="Enter"
-              onChangeText={(text) => updateStep(index, "description", text)}
+            <Controller
+              control={control}
+              name={`steps.${index}.description`}
+              render={({ field: { value, onChange } }) => (
+                <LongTextInput
+                  label="Description"
+                  placeholder="Enter"
+                  value={value}
+                  onChangeText={onChange}
+                />
+              )}
             />
           </View>
         ))}
       </View>
-      <GradientButton title="Add a Step" onPress={addStep} />
+
+      <GradientButton
+        title="Add a Step"
+        onPress={() => {
+          append({ title: `Step ${fields.length + 1}`, description: "" });
+        }}
+      />
     </View>
   );
 };

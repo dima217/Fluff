@@ -55,7 +55,7 @@ const CreateRecipeScreen = () => {
             validationSchema={baseInfoSchema}
             defaultValues={formData}
           >
-            <BaseInfo data={formData} onChange={updateFormData} />
+            <BaseInfo />
           </StepWrapper>
         );
       case 1:

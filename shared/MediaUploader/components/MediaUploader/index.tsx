@@ -19,9 +19,9 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange }) => {
   };
 
   const handlePick = async () => {
-    await pickMedia();
-    if (onChange && media) {
-      onChange(media.uri);
+    const picked = await pickMedia();
+    if (onChange && picked) {
+      onChange(picked.uri);
     }
   };
 

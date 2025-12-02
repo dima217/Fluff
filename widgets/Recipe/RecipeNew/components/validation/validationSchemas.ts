@@ -6,13 +6,13 @@ export const baseInfoSchema = yup.object({
     .required("Название рецепта обязательно")
     .min(3, "Минимум 3 символа")
     .max(100, "Максимум 100 символов"),
-  ccal: yup.number().required("Название рецепта обязательно"),
+  ccal: yup.number().required("Калории должны быть"),
   ingredients: yup
     .string()
-    .required("Название рецепта обязательно")
+    .required("Ингриденты маст хэв")
     .min(3, "Минимум 3 символа")
     .max(100, "Максимум 100 символов"),
-  mediaUrl: yup.string().max(500),
+  mediaUrl: yup.string().required(),
 });
 
 export const cookingProcessSchema = yup.object({

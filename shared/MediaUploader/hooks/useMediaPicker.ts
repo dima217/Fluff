@@ -106,11 +106,14 @@ export const useMediaPicker = () => {
         thumbnail,
       });
 
-      setMedia({
+      const picked = {
         uri: asset.uri,
         type: asset.type as MediaType,
         thumbnail,
-      });
+      };
+
+      setMedia(picked);
+      return picked;
     } catch (e) {
       console.error("[pickMedia] Ошибка при выборе медиа:", e);
       showError("Ошибка", "Не удалось открыть медиатеку");
