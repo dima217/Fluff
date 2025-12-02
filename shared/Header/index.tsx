@@ -1,23 +1,46 @@
+// Header.tsx
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import Bell from "@/assets/images/Bell.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import ExitConfirmationModal from "../ExitConfirmationModal";
 import Circle from "../ui/Circle";
 import { ThemedText } from "../ui/ThemedText";
+
 type HeaderProps = {
   title?: string;
+  showExitConfirmation?: boolean;
 };
 
-const Header = ({ title }: HeaderProps) => {
+const Header = ({ title, showExitConfirmation = false }: HeaderProps) => {
   const router = useRouter();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleBackPress = () => {
+    if (showExitConfirmation) {
+      setIsModalVisible(true);
+    } else {
+      router.back();
+    }
+  };
+
+  const handleConfirmExit = () => {
+    setIsModalVisible(false);
+    router.back();
+  };
+
+  const handleCancelExit = () => {
+    setIsModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
       <Circle
         svg={<ArrowLeft />}
         frostedGlass
-        onPress={() => router.back()}
+        onPress={handleBackPress}
         size={CircleSizes.MEDIUM}
       />
 
@@ -32,6 +55,12 @@ const Header = ({ title }: HeaderProps) => {
         frostedGlass
         onPress={() => {}}
         size={CircleSizes.MEDIUM}
+      />
+
+      <ExitConfirmationModal
+        isVisible={isModalVisible}
+        onConfirmExit={handleConfirmExit}
+        onCancel={handleCancelExit}
       />
     </View>
   );

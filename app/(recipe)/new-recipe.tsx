@@ -112,7 +112,7 @@ const CreateRecipeScreen = () => {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-          <Header title={"Add New Recipe"} />
+          <Header title={"Add New Recipe"} showExitConfirmation />
 
           <RNView style={styles.progressWrapper}>
             <AnimatedProgressBar progress={(step + 1) / 4} />

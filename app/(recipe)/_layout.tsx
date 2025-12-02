@@ -5,7 +5,18 @@ import { Stack } from "expo-router";
 export default function RecipeLayout() {
   return (
     <RecipeFormProvider>
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen
+          name="new-recipe"
+          options={{
+            gestureEnabled: false,
+          }}
+        />
+      </Stack>
     </RecipeFormProvider>
   );
 }
