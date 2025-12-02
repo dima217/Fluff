@@ -50,6 +50,7 @@ const CreateRecipeScreen = () => {
       case 0:
         return (
           <StepWrapper
+            key={step}
             stepIndex={0}
             onSubmit={handleStepSubmit}
             validationSchema={baseInfoSchema}
@@ -61,36 +62,31 @@ const CreateRecipeScreen = () => {
       case 1:
         return (
           <StepWrapper
+            key={step}
             stepIndex={1}
             onSubmit={handleStepSubmit}
             validationSchema={cookingProcessSchema}
             defaultValues={formData}
           >
-            <CookingProcess
-              data={formData}
-              onChange={updateFormData}
-              onBack={() => setStep(step - 1)}
-            />
+            <CookingProcess onBack={() => setStep(step - 1)} />
           </StepWrapper>
         );
       case 2:
         return (
           <StepWrapper
+            key={step}
             stepIndex={2}
             onSubmit={handleStepSubmit}
             validationSchema={tutorialSchema}
             defaultValues={formData}
           >
-            <Tutorial
-              data={formData}
-              onChange={updateFormData}
-              onBack={() => setStep(step - 1)}
-            />
+            <Tutorial onBack={() => setStep(step - 1)} />
           </StepWrapper>
         );
       case 3:
         return (
           <StepWrapper
+            key={step}
             stepIndex={3}
             onSubmit={handleStepSubmit}
             validationSchema={tutorialSchema}

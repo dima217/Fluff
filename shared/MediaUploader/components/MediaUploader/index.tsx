@@ -11,11 +11,12 @@ interface MediaUploaderProps {
 }
 
 const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange }) => {
-  const { media, pickMedia, clearMedia } = useMediaPicker();
+  const { pickMedia, clearMedia } = useMediaPicker();
 
   const handleRemove = () => {
-    clearMedia();
     onChange?.(undefined);
+    console.log(value);
+    clearMedia();
   };
 
   const handlePick = async () => {
@@ -28,16 +29,15 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange }) => {
   return (
     <View>
       <TouchableOpacity
-        style={[
-          styles.uploadArea,
-          media || value ? styles.uploadAreaWithMedia : null,
-        ]}
-        activeOpacity={media || value ? 1 : 0.85}
-        onPress={media || value ? undefined : handlePick}
+        style={[styles.uploadArea, value ? styles.uploadAreaWithMedia : null]}
+        activeOpacity={value ? 1 : 0.85}
+        onPress={() => {
+          if (!value) handlePick();
+        }}
       >
-        {media || value ? (
+        {value ? (
           <MediaPreview
-            media={media ? media : { uri: value!, type: "image" }}
+            media={{ uri: value, type: "image" }}
             onRemove={handleRemove}
           />
         ) : (

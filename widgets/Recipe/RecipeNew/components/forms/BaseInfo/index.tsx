@@ -3,7 +3,7 @@ import TextInput from "@/shared/Inputs/TextInput";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Controller, useFormContext } from "react-hook-form";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 const BaseInfo = () => {
   const {
@@ -12,12 +12,14 @@ const BaseInfo = () => {
     getValues,
   } = useFormContext();
 
-  const renderError = (field: string) => {
-    const msg = errors?.[field]?.message;
-    if (!msg) return null;
+  const getErrorMessage = (field: string): string | undefined => {
+    const error = errors[field];
 
-    console.log(getValues());
-    return <Text style={styles.errorText}>{String(msg)}</Text>;
+    if (error && error.message) {
+      return String(error.message);
+    }
+
+    return undefined;
   };
 
   return (
@@ -38,7 +40,6 @@ const BaseInfo = () => {
             <MediaUploader value={value} onChange={onChange} />
           )}
         />
-        {renderError("mediaUrl")}
       </View>
 
       {/* NAME */}
@@ -51,11 +52,11 @@ const BaseInfo = () => {
               label="Name"
               placeholder="Enter"
               value={value}
+              errorMessage={getErrorMessage("name")}
               onChangeText={onChange}
             />
           )}
         />
-        {renderError("name")}
       </View>
 
       {/* CCAL */}
@@ -72,6 +73,7 @@ const BaseInfo = () => {
                 placeholder="Enter"
                 keyboardType="numeric"
                 value={textValue}
+                errorMessage={getErrorMessage("ccal")}
                 onChangeText={(text) => {
                   const onlyDigits = text.replace(/[^0-9]/g, "");
 
@@ -85,7 +87,6 @@ const BaseInfo = () => {
             );
           }}
         />
-        {renderError("ccal")}
       </View>
 
       {/* INGREDIENTS */}
@@ -99,10 +100,10 @@ const BaseInfo = () => {
               placeholder="Enter"
               value={value}
               onChangeText={onChange}
+              errorMessage={getErrorMessage("ingredients")}
             />
           )}
         />
-        {renderError("ingredients")}
       </View>
     </View>
   );

@@ -1,6 +1,6 @@
 import Button from "@/shared/Buttons/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import {
   DefaultValues,
   FormProvider,
@@ -41,10 +41,15 @@ const StepWrapper = <T extends AnyObjectSchema>({
   const { setStep, totalSteps, isFirstStep, isLastStep } = context;
 
   const formMethods: UseFormReturn<FormData<T>> = useForm<FormData<T>>({
-    defaultValues: defaultValues as DefaultValues<FormData<T>>,
     resolver: yupResolver(validationSchema),
-    mode: "onChange",
+    mode: "onSubmit",
   });
+
+  useEffect(() => {
+    if (defaultValues) {
+      formMethods.reset(defaultValues as DefaultValues<FormData<T>>);
+    }
+  }, [defaultValues, formMethods]);
 
   const handleSubmit = formMethods.handleSubmit((data: FormData<T>) => {
     onSubmit(stepIndex, data);

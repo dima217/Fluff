@@ -29,7 +29,7 @@ export const cookingProcessSchema = yup.object({
 });
 
 export const tutorialSchema = yup.object({
-  videoUrl: yup.string().max(500),
+  videoUrl: yup.string().required(),
 });
 
 export const stepsConfig = [

@@ -34,20 +34,22 @@ const Circle = ({
   if (onPress) {
     if (frostedGlass) {
       return (
-        <BlurView
-          intensity={20}
-          tint="dark"
-          style={[
-            styles.glassCircle,
-            {
-              width: circleStyle.width,
-              height: circleStyle.height,
-              borderRadius: circleStyle.borderRadius,
-            },
-          ]}
-        >
-          <View>{svg}</View>
-        </BlurView>
+        <TouchableOpacity onPress={onPress}>
+          <BlurView
+            intensity={20}
+            tint="dark"
+            style={[
+              styles.glassCircle,
+              {
+                width: circleStyle.width,
+                height: circleStyle.height,
+                borderRadius: circleStyle.borderRadius,
+              },
+            ]}
+          >
+            <View>{svg}</View>
+          </BlurView>
+        </TouchableOpacity>
       );
     }
     return (
