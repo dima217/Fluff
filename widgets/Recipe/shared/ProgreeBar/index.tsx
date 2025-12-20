@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import { useEffect, useRef } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 

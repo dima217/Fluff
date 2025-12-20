@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-export default function RecipeStepsScreen() {
+const RecipeSteps = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
 
@@ -65,7 +65,9 @@ export default function RecipeStepsScreen() {
       </View>
     </View>
   );
-}
+};
+
+export default RecipeSteps;
 
 const styles = StyleSheet.create({
   scroll: {

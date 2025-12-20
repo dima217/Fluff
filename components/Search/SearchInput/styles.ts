@@ -13,10 +13,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingRight: 4,
   },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
   inputWrapper: {
     flex: 1,
     flexDirection: "row",

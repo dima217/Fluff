@@ -2,7 +2,7 @@ import { Image, TouchableOpacity, View } from "react-native";
 
 import Heart from "@/assets/images/Heart.svg";
 import Check from "@/assets/images/Сheck.svg";
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { styles } from "./styles";
 

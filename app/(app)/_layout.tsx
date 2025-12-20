@@ -5,8 +5,8 @@ import BookTab from "@/assets/images/BookTab.svg";
 import HomeTab from "@/assets/images/HomeTab.svg";
 import HealthTab from "@/assets/images/PillTab.svg";
 import UserTab from "@/assets/images/UserTab.svg";
-import { Colors } from "@/constants/Colors";
 import { CircleSizes } from "@/constants/components/CIrcle";
+import { Colors } from "@/constants/design-tokens";
 import Circle from "@/shared/ui/Circle";
 import { TouchableOpacity } from "react-native";
 

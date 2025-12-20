@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import { LinearGradient, LinearGradientProps } from "expo-linear-gradient";
 import { StyleSheet, ViewProps, ViewStyle } from "react-native";
 

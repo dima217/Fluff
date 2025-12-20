@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import AccountDetails from "@/shared/AccountDetails";
 import { AnimatedWheelPicker } from "@/shared/AnimatedWheelPicker";
 import CalorieInput from "@/shared/Colories/components/CaloriesInput";

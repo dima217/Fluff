@@ -1,5 +1,5 @@
-import { Colors } from "@/constants/Colors";
 import { CircleSizes } from "@/constants/components/CIrcle";
+import { Colors } from "@/constants/design-tokens";
 import { StyleSheet, Text, View } from "react-native";
 import Circle from "../ui/Circle";
 

@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import Circle from "@/shared/ui/Circle";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";

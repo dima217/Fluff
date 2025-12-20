@@ -1,5 +1,5 @@
-import { Colors } from "@/constants/Colors";
 import { CircleSizes } from "@/constants/components/CIrcle";
+import { Colors } from "@/constants/design-tokens";
 import Circle from "@/shared/ui/Circle";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Ionicons } from "@expo/vector-icons";

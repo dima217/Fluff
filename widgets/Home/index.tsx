@@ -1,5 +1,5 @@
 // components/HomeContent.tsx
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import CardsCarousel from "@/shared/CardCarousel";
 import MediaCarousel from "@/shared/MediaCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";

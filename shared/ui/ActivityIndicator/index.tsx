@@ -2,7 +2,7 @@ import { ActivityIndicator as NativeActivityIndicator } from "react-native";
 
 import type { ActivityIndicatorProps } from "react-native";
 
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 
 const ActivityIndicator = ({ ...rest }: ActivityIndicatorProps) => {
   return (

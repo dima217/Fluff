@@ -4,7 +4,7 @@ import { useToggle } from "@/hooks/useToggle";
 
 import TextInput from "../TextInput";
 
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import type { TextInputProps } from "../TextInput";
 
 interface PasswordInputProps extends TextInputProps {

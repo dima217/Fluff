@@ -1,5 +1,5 @@
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";

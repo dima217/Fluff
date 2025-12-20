@@ -4,7 +4,7 @@ import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 
 import ActivityIndicator from "../../ui/ActivityIndicator";
 
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import { styles } from "./styles";
 
 interface ButtonProps {

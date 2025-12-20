@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import Toogle from "@/shared/Toogle";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import SearchInput from "@/widgets/Search/components/SearchInput";

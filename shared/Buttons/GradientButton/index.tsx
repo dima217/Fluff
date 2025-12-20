@@ -3,7 +3,7 @@ import { Text, TouchableOpacity } from "react-native";
 
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 
 import ActivityIndicator from "@/shared/ui/ActivityIndicator";
 

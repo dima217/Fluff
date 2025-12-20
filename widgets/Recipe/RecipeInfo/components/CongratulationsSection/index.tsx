@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import { ImageBackground, StyleSheet } from "react-native";
 
 interface CongratulationsSectionProps {

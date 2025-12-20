@@ -1,5 +1,5 @@
-import { Colors } from "@/constants/Colors";
 import { CircleSizes } from "@/constants/components/CIrcle";
+import { Colors } from "@/constants/design-tokens";
 import CardsCarousel from "@/shared/CardCarousel";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";

@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import VideoSlider from "@/shared/LandingVideo";
 import Swiper from "@/shared/Swiper";
 import { ThemedText } from "@/shared/ui/ThemedText";

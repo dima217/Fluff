@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import { BlurView } from "expo-blur";
 import { ReactNode } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";

@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import { memo } from "react";
 import { TouchableOpacity, View, ViewStyle } from "react-native";
 import { ThemedText } from "../ui/ThemedText";

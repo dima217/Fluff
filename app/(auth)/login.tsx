@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import LoginForm from "@/shared/Forms/LoginForm";
 import SignUpPrompt from "@/shared/ui/SignUpPrompt";

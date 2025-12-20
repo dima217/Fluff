@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import AccountDetails from "@/shared/AccountDetails";
 import Toogle from "@/shared/Toogle";
 import HomeContent from "@/widgets/Home";

@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/design-tokens";
 import { RecipeData } from "@/constants/types";
 import Button from "@/shared/Buttons/Button";
 import View from "@/shared/View";
@@ -75,7 +75,7 @@ export default function RecipeScreen() {
           title={"Cook it"}
           onPress={() => {
             router.push({
-              pathname: "/(recipe)/recipe-steps",
+              pathname: "/recipe-steps",
               params: { data: JSON.stringify(recipeData) },
             });
           }}

@@ -1,10 +1,11 @@
-import { Colors } from "@/constants/Colors";
+import { Colors, Fonts } from "@/constants/design-tokens";
 import { StyleSheet, Text, type TextProps } from "react-native";
 
 export type ThemedTextProps = TextProps & {
   titleSize?: number;
   highlightLastWord?: boolean;
   type?: "title" | "subtitle" | "default" | "mini" | "notion" | "s" | "xs";
+  fontFamilyType?: "sans" | "serif" | "rounded" | "mono";
 };
 
 const getStylesByType = (type: ThemedTextProps["type"]) => {
@@ -31,6 +32,7 @@ export function ThemedText({
   highlightLastWord = false,
   titleSize,
   children,
+  fontFamilyType = "sans",
   ...rest
 }: ThemedTextProps) {
   /* const [fontsLoaded] = useFonts({
@@ -55,7 +57,7 @@ export function ThemedText({
       return (
         <Text
           style={[
-            { color },
+            { color, fontFamily: Fonts[fontFamilyType] },
             baseStyle,
             titleSize
               ? { fontSize: titleSize, lineHeight: titleSize + 2 }
@@ -65,13 +67,20 @@ export function ThemedText({
           {...rest}
         >
           {textWithoutLast}{" "}
-          <Text style={{ color: Colors.primary }}>{lastWord}</Text>
+          <Text
+            style={{ color: Colors.primary, fontFamily: Fonts[fontFamilyType] }}
+          >
+            {lastWord}
+          </Text>
         </Text>
       );
     }
 
     return (
-      <Text style={[{ color }, baseStyle, style]} {...rest}>
+      <Text
+        style={[{ color, fontFamily: Fonts[fontFamilyType] }, baseStyle, style]}
+        {...rest}
+      >
         {text}
       </Text>
     );
