@@ -1,5 +1,6 @@
 // widgets/Modals/ExitConfirmationModal.tsx
 
+import { Colors } from "@/constants/design-tokens";
 import React from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import GradientView from "../ui/Gradient";
@@ -25,24 +26,24 @@ const ExitConfirmationModal: React.FC<ExitConfirmationModalProps> = ({
       <View style={styles.centeredView}>
         <View style={styles.innerContainer}>
           <GradientView style={styles.modalView}>
-            <Text style={styles.modalTitle}>Внимание</Text>
+            <Text style={styles.modalTitle}>Warning</Text>
             <Text style={styles.modalText}>
-              Вы уверены, что хотите выйти? Прогресс не будет сохранен.
+              Are you sure you want to exit? Your progress will not be
+              saved.{" "}
             </Text>
-
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonCancel]}
                 onPress={onCancel}
               >
-                <Text style={styles.textStyleCancel}>Отмена</Text>
+                <Text style={styles.textStyleCancel}>Cancel</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={[styles.button, styles.buttonConfirm]}
                 onPress={onConfirmExit}
               >
-                <Text style={styles.textStyleConfirm}>Выйти</Text>
+                <Text style={styles.textStyleConfirm}>Exit</Text>
               </TouchableOpacity>
             </View>
           </GradientView>
@@ -67,10 +68,9 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
     borderRadius: 12,
     justifyContent: "center",
-    padding: 25,
+    padding: 12,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -87,12 +87,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#333",
+    color: Colors.text,
   },
   modalText: {
     marginBottom: 20,
     textAlign: "center",
-    color: "#666",
+    color: Colors.border,
     fontSize: 14,
     lineHeight: 20,
   },
@@ -110,20 +110,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   buttonCancel: {
-    backgroundColor: "#fff",
-    borderColor: "#ccc",
+    backgroundColor: Colors.text,
     borderWidth: 1,
   },
   buttonConfirm: {
-    backgroundColor: "#ff4d4f",
+    backgroundColor: Colors.primary,
   },
   textStyleCancel: {
-    color: "#333",
+    color: Colors.inactive,
     fontWeight: "bold",
     textAlign: "center",
   },
   textStyleConfirm: {
-    color: "white",
+    color: Colors.text,
     fontWeight: "bold",
     textAlign: "center",
   },
