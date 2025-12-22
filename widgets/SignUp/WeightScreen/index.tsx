@@ -13,8 +13,6 @@ interface StepProps {
   onPrev?: () => void;
   onFinish: () => void;
 }
-
-// Диапазон веса от 30 до 150 кг
 const weightsData: WheelItemData<string>[] = Array.from(
   { length: 121 },
   (_, i) => {
@@ -28,7 +26,7 @@ const weightsData: WheelItemData<string>[] = Array.from(
   }
 );
 
-export const Weight = ({ onPrev, onFinish }: StepProps) => {
+const Weight = ({ onPrev, onFinish }: StepProps) => {
   const [selectedWeight, setSelectedWeight] = useState<string>("70");
 
   const handleWeightChange = (value: WheelItemValue<string>) => {
@@ -38,7 +36,7 @@ export const Weight = ({ onPrev, onFinish }: StepProps) => {
   return (
     <View style={styles.stepContainer}>
       <ThemedText type="subtitle" style={styles.title}>
-        What's your weight?
+        What&apos;s your weight?
       </ThemedText>
       <ThemedText style={styles.currentValueText}>
         Selected: {selectedWeight} kg
@@ -58,6 +56,8 @@ export const Weight = ({ onPrev, onFinish }: StepProps) => {
     </View>
   );
 };
+
+export default Weight;
 
 const styles = StyleSheet.create({
   stepContainer: {
@@ -87,5 +87,3 @@ const styles = StyleSheet.create({
     bottom: "15%",
   },
 });
-
-export default Weight;

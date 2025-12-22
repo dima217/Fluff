@@ -27,7 +27,7 @@ const agesData: WheelItemData<string>[] = Array.from(
   }
 );
 
-export const Age = ({ onPrev, onNext }: StepProps) => {
+const Age = ({ onPrev, onNext }: StepProps) => {
   const [selectedAge, setSelectedAge] = useState<string>("18");
 
   const handleAgeChange = (value: WheelItemValue<string>) => {
@@ -58,6 +58,8 @@ export const Age = ({ onPrev, onNext }: StepProps) => {
   );
 };
 
+export default Age;
+
 const styles = StyleSheet.create({
   stepContainer: {
     flex: 1,
@@ -86,5 +88,3 @@ const styles = StyleSheet.create({
     bottom: "15%",
   },
 });
-
-export default Age;

@@ -14,7 +14,6 @@ interface StepProps {
   onFinish?: () => void;
 }
 
-// Диапазон роста от 100 до 220 см
 const heightsData: WheelItemData<string>[] = Array.from(
   { length: 121 },
   (_, i) => {
@@ -28,7 +27,7 @@ const heightsData: WheelItemData<string>[] = Array.from(
   }
 );
 
-export const Height = ({ onPrev, onNext }: StepProps) => {
+const Height = ({ onPrev, onNext }: StepProps) => {
   const [selectedHeight, setSelectedHeight] = useState<string>("170");
 
   const handleHeightChange = (value: WheelItemValue<string>) => {
@@ -38,7 +37,7 @@ export const Height = ({ onPrev, onNext }: StepProps) => {
   return (
     <View style={styles.stepContainer}>
       <ThemedText type="subtitle" style={styles.title}>
-        What's your height?
+        What&apos;s your height?
       </ThemedText>
       <ThemedText style={styles.currentValueText}>
         Selected: {selectedHeight} cm
@@ -58,6 +57,8 @@ export const Height = ({ onPrev, onNext }: StepProps) => {
     </View>
   );
 };
+
+export default Height;
 
 const styles = StyleSheet.create({
   stepContainer: {
@@ -87,5 +88,3 @@ const styles = StyleSheet.create({
     bottom: "15%",
   },
 });
-
-export default Height;

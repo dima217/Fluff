@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
     backgroundColor: "#1E1E1E",
     borderRadius: 20,
     overflow: "hidden",
-
     elevation: 5,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -21,7 +20,6 @@ export const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "cover",
-    backgroundColor: "#FFFFFF",
   },
   contentContainer: {
     padding: 8,
@@ -60,7 +58,6 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     height: "60%",
-    backgroundColor: "#FFFFFF",
     overflow: "hidden",
     borderBottomLeftRadius: 40,
   },

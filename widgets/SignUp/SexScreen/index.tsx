@@ -12,7 +12,7 @@ interface StepProps {
   onFinish?: () => void;
 }
 
-export const Sex = ({ onNext }: StepProps) => {
+const Sex = ({ onNext }: StepProps) => {
   const [sex, setSex] = useState<Gender>(null);
   return (
     <View style={styles.stepContainer}>
