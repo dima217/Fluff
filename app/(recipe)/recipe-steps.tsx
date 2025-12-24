@@ -3,6 +3,7 @@ import { RecipeData } from "@/constants/types";
 import Button from "@/shared/Buttons/Button";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
+import CongratulationsSection from "@/widgets/Recipe/RecipeInfo/components/CongratulationsSection";
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
@@ -21,12 +22,13 @@ const RecipeSteps = () => {
 
   const recipe: RecipeData = JSON.parse(params.data as string);
   const [stepIndex, setStepIndex] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
 
   const currentStep = recipe.steps[stepIndex];
   const isLast = stepIndex === recipe.steps.length - 1;
 
   const handleNext = () => {
-    if (isLast) router.replace("/");
+    if (isLast) setIsFinished(true);
     else setStepIndex(stepIndex + 1);
   };
 
@@ -34,6 +36,20 @@ const RecipeSteps = () => {
     if (stepIndex === 0) return;
     else setStepIndex(stepIndex - 1);
   };
+
+  if (isFinished) {
+    return (
+      <View style={styles.congratulationContainer}>
+        <RNView style={{ paddingHorizontal: 20 }}>
+          <Header title={recipe.title} />
+        </RNView>
+        <CongratulationsSection />
+        <View style={styles.fixedButtonContainer}>
+          <Button title="Home" onPress={() => {}} />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View>
@@ -72,6 +88,9 @@ export default RecipeSteps;
 const styles = StyleSheet.create({
   scroll: {
     flex: 1,
+  },
+  congratulationContainer: {
+    paddingHorizontal: 0,
   },
   progressWrapper: {
     width: "100%",

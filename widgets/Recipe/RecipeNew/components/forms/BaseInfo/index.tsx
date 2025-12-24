@@ -9,7 +9,6 @@ const BaseInfo = () => {
   const {
     control,
     formState: { errors },
-    getValues,
   } = useFormContext();
 
   const getErrorMessage = (field: string): string | undefined => {

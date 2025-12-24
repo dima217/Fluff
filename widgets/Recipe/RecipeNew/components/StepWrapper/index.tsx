@@ -38,6 +38,7 @@ const StepWrapper = <T extends AnyObjectSchema>({
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { setStep, totalSteps, isFirstStep, isLastStep } = context;
 
   const formMethods: UseFormReturn<FormData<T>> = useForm<FormData<T>>({

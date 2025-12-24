@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    fontFamily: "Inter-SemiBold",
+    fontWeight: "400",
   },
   content: {
     flexDirection: "row",

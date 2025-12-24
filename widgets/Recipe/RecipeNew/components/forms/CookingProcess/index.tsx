@@ -3,6 +3,7 @@ import { Colors } from "@/constants/design-tokens";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";
+import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Feather } from "@expo/vector-icons";
 import { useEffect } from "react";
@@ -65,7 +66,6 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
                       onPress={() => {
                         if (fields.length > 1) {
                           remove(index);
-                          // авто-нумерация после удаления
                           renumberSteps(fields.filter((_, i) => i !== index));
                         }
                       }}
@@ -90,6 +90,16 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
                 />
               )}
             />
+
+            <View style={styles.mediaContainer}>
+              <Controller
+                control={control}
+                name={`steps.${index}.stepMediaUrl`}
+                render={({ field: { value, onChange } }) => (
+                  <MediaUploader value={value} onChange={onChange} />
+                )}
+              />
+            </View>
           </View>
         ))}
       </View>
@@ -108,6 +118,9 @@ const styles = StyleSheet.create({
   innerContainer: {
     gap: 6,
     marginVertical: 30,
+  },
+  mediaContainer: {
+    marginBottom: 30,
   },
 });
 

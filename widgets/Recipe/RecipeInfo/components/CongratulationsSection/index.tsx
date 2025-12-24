@@ -1,46 +1,105 @@
+import Fluffy from "@/assets/images/Fluffy.svg";
 import { Colors } from "@/constants/design-tokens";
-import { ImageBackground, StyleSheet } from "react-native";
+import { ThemedText } from "@/shared/ui/ThemedText";
+import { Feather } from "@expo/vector-icons";
+import { useState } from "react";
+import {
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface CongratulationsSectionProps {
   stars?: number;
+  onRate?: (stars: number) => void;
 }
 
-const CongratulationsSection = ({ stars }: CongratulationsSectionProps) => {
+const MAX_STARS = 5;
+
+const CongratulationsSection = ({
+  stars = 0,
+  onRate,
+}: CongratulationsSectionProps) => {
+  const [rating, setRating] = useState(stars);
+
+  const handleRate = (value: number) => {
+    setRating(value);
+    onRate?.(value);
+  };
+
   return (
-    <ImageBackground
-      source={require("@/assets/images/Cake.png")}
-      style={styles.background}
-      resizeMode="cover"
-    ></ImageBackground>
+    <View style={styles.mainContainer}>
+      <ImageBackground
+        source={require("@/assets/images/Light.png")}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <Fluffy width={250} height={250} />
+        <View style={styles.content}>
+          <ThemedText type="subtitle">Congratulations!</ThemedText>
+
+          <View style={styles.starsRow}>
+            {Array.from({ length: MAX_STARS }).map((_, index) => {
+              const starValue = index + 1;
+              const filled = starValue <= rating;
+
+              return (
+                <TouchableOpacity
+                  key={starValue}
+                  onPress={() => handleRate(starValue)}
+                  activeOpacity={0.7}
+                >
+                  <Feather
+                    name={filled ? "star" : "star"}
+                    size={28}
+                    color={filled ? Colors.primary : Colors.secondary}
+                  />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          <ThemedText type="notion" style={styles.description}>
+            You did a great job! The recipe is now complete. Please rate the
+            dish you made.
+          </ThemedText>
+        </View>
+      </ImageBackground>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: Colors.background,
     flex: 1,
-  },
-  innerContainer: {
-    width: "100%",
-    display: "flex",
-    flex: 1,
-    flexDirection: "column",
-    gap: 40,
   },
   background: {
-    width: "100%",
-    height: 500,
-  },
-  scrollContent: {
+    flex: 1,
     alignItems: "center",
-    paddingBottom: 30,
+    justifyContent: "center",
+    width: "100%",
+    height: 450,
+    paddingBottom: 120,
   },
-  gradient: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 200,
+  content: {
+    marginTop: 20,
+    alignItems: "center",
+    paddingHorizontal: 24,
+    gap: 16,
+  },
+  description: {
+    textAlign: "center",
+    color: Colors.secondary,
+  },
+  starsRow: {
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 16,
+  },
+  ratingText: {
+    marginTop: 8,
+    color: Colors.secondary,
   },
 });
 

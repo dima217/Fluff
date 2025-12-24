@@ -2,7 +2,8 @@
 
 import { Colors } from "@/constants/design-tokens";
 import React from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Modal, StyleSheet, Text, View } from "react-native";
+import Button from "../Buttons/Button";
 import GradientView from "../ui/Gradient";
 
 interface ExitConfirmationModalProps {
@@ -32,19 +33,18 @@ const ExitConfirmationModal: React.FC<ExitConfirmationModalProps> = ({
               saved.{" "}
             </Text>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonCancel]}
-                onPress={onCancel}
-              >
-                <Text style={styles.textStyleCancel}>Cancel</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
+              <Button
+                title="Exit"
                 style={[styles.button, styles.buttonConfirm]}
                 onPress={onConfirmExit}
-              >
-                <Text style={styles.textStyleConfirm}>Exit</Text>
-              </TouchableOpacity>
+              ></Button>
+
+              <Button
+                title="Cancel"
+                style={[styles.button, styles.buttonCancel]}
+                onPress={onCancel}
+                textColor={Colors.primary}
+              ></Button>
             </View>
           </GradientView>
         </View>
@@ -63,11 +63,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.6)",
   },
   innerContainer: {
-    width: "100%",
+    width: "85%",
     height: "32%",
   },
   modalView: {
-    margin: 20,
     borderRadius: 12,
     justifyContent: "center",
     padding: 12,
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: "85%",
+    width: "100%",
     maxWidth: 400,
   },
   modalTitle: {
@@ -97,16 +96,13 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: "column",
+    alignItems: "center",
     width: "100%",
-    marginTop: 10,
+    gap: 10,
   },
   button: {
-    borderRadius: 8,
-    padding: 12,
     elevation: 2,
-    flex: 1,
     marginHorizontal: 5,
   },
   buttonCancel: {

@@ -63,7 +63,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         <View style={styles.divider} />
         <View style={styles.infoItem}>
           <Ionicons name="fast-food-outline" size={16} color={Colors.purple} />
-          <Text style={styles.infoText}>{calories} Kcal</Text>
+          <Text style={styles.infoText}>{calories} Ccal</Text>
         </View>
       </View>
 

@@ -24,7 +24,7 @@ const ICON_SIZE = 90;
 const ACTIVE_COLOR = Colors.primary;
 const INACTIVE_COLOR = "#666";
 
-export const SexOption: React.FC<SexOptionProps> = ({
+const SexOption: React.FC<SexOptionProps> = ({
   label,
   iconName,
   value,
@@ -67,6 +67,8 @@ export const SexOption: React.FC<SexOptionProps> = ({
     </View>
   );
 };
+
+export default SexOption;
 
 const styles = StyleSheet.create({
   pickerContainer: {
@@ -111,5 +113,3 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-
-export default SexOption;

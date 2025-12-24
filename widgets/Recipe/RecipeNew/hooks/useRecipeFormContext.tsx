@@ -57,6 +57,7 @@ export const RecipeFormProvider: React.FC<RecipeFormProviderProps> = ({
       isFirstStep: step === 0,
       isLastStep: step === totalSteps - 1,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [step, totalSteps]
   );
 
