@@ -1,7 +1,7 @@
 import Edit from "@/assets/images/Edit_fill.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import Circle from "@/shared/ui/Circle";
-import GradientView from "@/shared/ui/Gradient";
+import GradientView from "@/shared/ui/GradientView";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";

@@ -4,7 +4,7 @@ import { Colors } from "@/constants/design-tokens";
 import React from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";
 import Button from "../Buttons/Button";
-import GradientView from "../ui/Gradient";
+import GradientView from "../ui/GradientView";
 
 interface ExitConfirmationModalProps {
   isVisible: boolean;

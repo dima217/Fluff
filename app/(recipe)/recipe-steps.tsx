@@ -45,7 +45,12 @@ const RecipeSteps = () => {
         </RNView>
         <CongratulationsSection />
         <View style={styles.fixedButtonContainer}>
-          <Button title="Home" onPress={() => {}} />
+          <Button
+            title="Home"
+            onPress={() => {
+              router.replace("/(app)/home");
+            }}
+          />
         </View>
       </View>
     );

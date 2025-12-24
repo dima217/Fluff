@@ -3,6 +3,6 @@ export const CircleSizes = {
   S: 20,
   XS: 40,
   SMALL: 45,
-  MEDIUM: 56,
+  MEDIUM: 53,
   DOT: 6,
 };

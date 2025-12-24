@@ -1,34 +1,28 @@
-import { Colors } from "@/constants/design-tokens";
-import { StyleSheet, View } from "react-native";
+import Header from "@/shared/Header";
+import View from "@/shared/View";
+import ProfileCard from "@/widgets/Profile/components/ProfileCard";
+import ProfileMenu from "@/widgets/Profile/components/ProfileMenu";
+import { View as RNView, StyleSheet } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
-const Home = () => {
-  return <View style={styles.mainContainer}></View>;
+const Profile = () => {
+  return (
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View>
+        <Header title="My Profile" />
+        <RNView style={styles.content}>
+          <ProfileCard />
+          <ProfileMenu />
+        </RNView>
+      </View>
+    </ScrollView>
+  );
 };
 
-export default Home;
+export default Profile;
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: Colors.background,
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  iconContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 15,
-  },
-  innerContainer: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 10,
-    marginBottom: "15%",
-    width: "100%",
-    alignItems: "center",
+  content: {
+    gap: 12,
   },
 });

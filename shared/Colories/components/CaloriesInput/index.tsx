@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/design-tokens";
 import Button from "@/shared/Buttons/Button";
 import TextInput from "@/shared/Inputs/TextInput";
-import GradientView from "@/shared/ui/Gradient";
+import GradientView from "@/shared/ui/GradientView";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import SearchInput from "@/widgets/Search/components/SearchInput";
 import { Ionicons } from "@expo/vector-icons";

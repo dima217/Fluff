@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/design-tokens";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -26,7 +27,7 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           contentStyle: {
-            backgroundColor: "#F5F5F5",
+            backgroundColor: Colors.background,
           },
           headerShown: false,
         }}

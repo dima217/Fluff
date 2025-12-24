@@ -1,4 +1,6 @@
+import { BlurView } from "expo-blur";
 import { Tabs, useRouter } from "expo-router";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import Add from "@/assets/images/Add.svg";
 import BookTab from "@/assets/images/BookTab.svg";
@@ -8,21 +10,41 @@ import UserTab from "@/assets/images/UserTab.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import { Colors } from "@/constants/design-tokens";
 import Circle from "@/shared/ui/Circle";
-import { TouchableOpacity } from "react-native";
 
 export default function TabLayout() {
   const router = useRouter();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: Colors.primary,
         tabBarStyle: {
-          backgroundColor: Colors.tab,
+          bottom: 16,
+          marginHorizontal: 16,
+          height: 56,
+          borderRadius: 35,
           borderTopWidth: 0,
-          elevation: 0,
-          height: 70,
+          backgroundColor: "transparent",
+          elevation: 10,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.15,
+          shadowRadius: 20,
         },
+        tabBarBackground: () => (
+          <BlurView intensity={70} tint="dark" style={StyleSheet.absoluteFill}>
+            <View
+              style={{
+                flex: 1,
+                borderRadius: 35,
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+                borderWidth: 1,
+                borderColor: "rgba(255, 255, 255, 0.3)",
+              }}
+            />
+          </BlurView>
+        ),
       }}
     >
       <Tabs.Screen
@@ -46,24 +68,21 @@ export default function TabLayout() {
       <Tabs.Screen
         name="plus"
         options={{
-          tabBarButton: () => {
-            return (
-              <TouchableOpacity
-                onPress={() => router.push("/(recipe)/new-recipe")}
-                style={{
-                  top: -CircleSizes.MEDIUM / 2,
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                }}
-              >
-                <Circle size={56} svg={<Add />} />
-              </TouchableOpacity>
-            );
-          },
+          tabBarButton: () => (
+            <TouchableOpacity
+              onPress={() => router.push("/(recipe)/new-recipe")}
+              style={{
+                top: -CircleSizes.MEDIUM / 2,
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+              }}
+            >
+              <Circle size={56} svg={<Add />} />
+            </TouchableOpacity>
+          ),
         }}
       />
-
       <Tabs.Screen
         name="library"
         options={{
@@ -77,9 +96,7 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color }) => (
-            <UserTab width={28} height={28} fill={color} />
-          ),
+          tabBarIcon: ({ color }) => <UserTab width={28} height={28} />,
         }}
       />
     </Tabs>
