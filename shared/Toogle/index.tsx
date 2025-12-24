@@ -30,7 +30,7 @@ const ToggleButtons = ({
             style={[
               styles.button,
               {
-                backgroundColor: isActive ? Colors.primary : Colors.inactive,
+                backgroundColor: isActive ? Colors.purple : Colors.inactive,
               },
 
               style,

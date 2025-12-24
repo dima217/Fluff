@@ -1,6 +1,6 @@
 import { BlurView } from "expo-blur";
 import { Tabs, useRouter } from "expo-router";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 import Add from "@/assets/images/Add.svg";
 import BookTab from "@/assets/images/BookTab.svg";
@@ -22,10 +22,9 @@ export default function TabLayout() {
         tabBarStyle: {
           bottom: 16,
           marginHorizontal: 16,
-          height: 56,
+          height: 52,
           borderRadius: 35,
           borderTopWidth: 0,
-          backgroundColor: "transparent",
           elevation: 10,
           shadowColor: "#000",
           shadowOffset: { width: 0, height: 8 },
@@ -33,17 +32,24 @@ export default function TabLayout() {
           shadowRadius: 20,
         },
         tabBarBackground: () => (
-          <BlurView intensity={70} tint="dark" style={StyleSheet.absoluteFill}>
-            <View
+          <View
+            style={{
+              flex: 1,
+              borderRadius: 35,
+              overflow: "hidden",
+              borderWidth: 1,
+              borderColor: "rgba(255, 255, 255, 0.3)",
+            }}
+          >
+            <BlurView
+              intensity={70}
+              tint="dark"
               style={{
                 flex: 1,
-                borderRadius: 35,
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-                borderWidth: 1,
-                borderColor: "rgba(255, 255, 255, 0.3)",
+                backgroundColor: "rgba(255, 255, 255, 0.25)",
               }}
             />
-          </BlurView>
+          </View>
         ),
       }}
     >
