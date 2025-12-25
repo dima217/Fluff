@@ -1,13 +1,19 @@
 import { Colors } from "@/constants/design-tokens";
 import { RecipeData } from "@/constants/types";
 import Button from "@/shared/Buttons/Button";
+import Header from "@/shared/Header";
 import View from "@/shared/View";
 import IngredientsSection from "@/widgets/Recipe/RecipeInfo/components/IngredientsSection";
 import RecipeCard from "@/widgets/Recipe/RecipeInfo/components/RecipeCard";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 
-import { ImageBackground, ScrollView, StyleSheet } from "react-native";
+import {
+  ImageBackground,
+  View as RNView,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 
 export default function RecipeScreen() {
   const router = useRouter();
@@ -50,6 +56,9 @@ export default function RecipeScreen() {
         style={styles.background}
         resizeMode="cover"
       >
+        <RNView style={styles.backgroundContent}>
+          <Header />
+        </RNView>
         <LinearGradient
           colors={["transparent", Colors.background]}
           style={styles.gradient}
@@ -100,6 +109,9 @@ const styles = StyleSheet.create({
   background: {
     width: "100%",
     height: 500,
+  },
+  backgroundContent: {
+    padding: 20,
   },
   scrollContent: {
     alignItems: "center",
