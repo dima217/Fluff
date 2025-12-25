@@ -12,7 +12,7 @@ const { height } = Dimensions.get("window");
 export default function OnboardingScreen() {
   const router = useRouter();
   const { t } = useTranslation();
-  
+
   return (
     <View style={styles.container}>
       {/* --- Top Video Section --- */}

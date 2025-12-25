@@ -12,7 +12,7 @@ interface SexPickerProps {
 
 const SexPicker = ({ selectedSex, onSelect }: SexPickerProps) => {
   const { t } = useTranslation();
-  
+
   return (
     <View style={styles.container}>
       <SexOption

@@ -9,7 +9,7 @@ interface SignUpPromptProps {
 
 const SignUpPrompt: React.FC<SignUpPromptProps> = ({ onPressSignUp }) => {
   const { t } = useTranslation();
-  
+
   return (
     <View style={styles.container}>
       <Text style={styles.baseText}>{t("auth.dontHaveAccount")} </Text>

@@ -12,11 +12,7 @@ interface PasswordInputProps extends TextInputProps {
   label?: string;
 }
 
-const PasswordInput = ({
-  label,
-  placeholder,
-  ...rest
-}: PasswordInputProps) => {
+const PasswordInput = ({ label, placeholder, ...rest }: PasswordInputProps) => {
   const { state: visible, toggle } = useToggle();
   const { t } = useTranslation();
 

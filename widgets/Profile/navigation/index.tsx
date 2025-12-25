@@ -18,7 +18,7 @@ export interface MenuItem {
 
 export const useProfileMenuItems = (): MenuItem[] => {
   const { t } = useTranslation();
-  
+
   return [
     {
       id: "biometry",

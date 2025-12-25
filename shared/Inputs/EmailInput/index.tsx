@@ -5,13 +5,9 @@ import type { TextInputProps } from "../TextInput";
 
 interface EmailInputProps extends TextInputProps {}
 
-const EmailInput = ({
-  label,
-  placeholder,
-  ...rest
-}: EmailInputProps) => {
+const EmailInput = ({ label, placeholder, ...rest }: EmailInputProps) => {
   const { t } = useTranslation();
-  
+
   return (
     <TextInput
       label={label ?? t("auth.email")}

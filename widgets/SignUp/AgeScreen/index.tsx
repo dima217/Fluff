@@ -1,10 +1,10 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import {
   AnimatedWheelPicker,
   WheelItemData,
   WheelItemValue,
 } from "@/shared/AnimatedWheelPicker";
 import Button from "@/shared/Buttons/Button";
-import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -56,7 +56,11 @@ const Age = ({ onPrev, onNext }: StepProps) => {
         animationType="lens"
         selectStyle={styles.selectorContainer}
       />
-      <Button title={t("signUp.continue")} onPress={onNext} style={styles.button} />
+      <Button
+        title={t("signUp.continue")}
+        onPress={onNext}
+        style={styles.button}
+      />
     </View>
   );
 };

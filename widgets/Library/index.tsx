@@ -1,3 +1,4 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import { StyleSheet, View } from "react-native";
 import CheatMealCard from "./components/MealSection";
 import FoodUploadCard from "./components/UploadSection";
@@ -10,11 +11,13 @@ const phoneImage = require("../../assets/images/Phone.png");
 const qrImage = require("../../assets/images/Qr.png");
 
 const Library = () => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       <View style={styles.leftColumn}>
         <FoodUploadCard
-          title="My Uploads"
+          title={t("library.myUploads")}
           imageSource={saladImage}
           onPress={() => console.log("Tapped My Uploads")}
           backgroundImage={saladBackgroundImage}
@@ -23,8 +26,8 @@ const Library = () => {
 
       <View style={styles.rightColumn}>
         <CheatMealCard
-          title="Cheat Meal"
-          textHint="Drag a favorite item here, open it in cheat meal day"
+          title={t("library.cheatMeal")}
+          textHint={t("library.cheatMealHint")}
           overlayImage={burgerImage}
           backgroundImage={burgerBackgroundImage}
           onPress={() => console.log("Tapped Cheat Meal")}
@@ -32,8 +35,8 @@ const Library = () => {
         />
 
         <CheatMealCard
-          title="Scanner"
-          textHint="Scan a product that is not in the database"
+          title={t("library.scanner")}
+          textHint={t("library.scannerHint")}
           overlayImage={phoneImage}
           backgroundImage={qrImage}
           onPress={() => console.log("Tapped Cheat Meal")}

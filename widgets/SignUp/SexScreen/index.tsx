@@ -20,7 +20,11 @@ const Sex = ({ onNext }: StepProps) => {
     <View style={styles.stepContainer}>
       <ThemedText type="subtitle">{t("signUp.iAm")}</ThemedText>
       <SexPicker selectedSex={sex} onSelect={setSex} />
-      <Button title={t("signUp.continue")} onPress={onNext} style={styles.button} />
+      <Button
+        title={t("signUp.continue")}
+        onPress={onNext}
+        style={styles.button}
+      />
     </View>
   );
 };

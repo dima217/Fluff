@@ -11,7 +11,7 @@ import Fluff from "../../assets/images/Fluff.svg";
 const Login = () => {
   const router = useRouter();
   const { t } = useTranslation();
-  
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>

@@ -2,9 +2,9 @@ import { Colors } from "@/constants/design-tokens";
 import { useTranslation } from "@/hooks/useTranslation";
 import Toogle from "@/shared/Toogle";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import Library from "@/widgets/Library";
+import LibraryContent from "@/widgets/Library/components/LibraryContent";
 import SearchInput from "@/widgets/Search/components/SearchInput";
-import Library from "@/widgets/ Library";
-import LibraryContent from "@/widgets/ Library/components/LibraryContent";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
