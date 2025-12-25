@@ -29,6 +29,7 @@ export default function RootLayout() {
           contentStyle: {
             backgroundColor: Colors.background,
           },
+          presentation: "transparentModal",
           headerShown: false,
         }}
       >

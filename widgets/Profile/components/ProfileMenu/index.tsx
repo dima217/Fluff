@@ -1,8 +1,11 @@
+import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import { profileMenuItems } from "../../menuItems";
+import { profileMenuItems } from "../../navigation";
 import ProfileSection from "./ui/ProfileSection";
 
 const ProfileMenu = () => {
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
       {profileMenuItems.map((item, index) => (
@@ -10,7 +13,11 @@ const ProfileMenu = () => {
           key={item.id}
           icon={item.icon}
           title={item.title}
-          onPress={item.onPress}
+          onPress={() => {
+            if (item.href) {
+              router.push(item.href);
+            } else item.onPress?.();
+          }}
           isNested={item.isNested ?? false}
           isLast={index === profileMenuItems.length - 1}
         />

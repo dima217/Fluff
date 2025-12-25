@@ -3,13 +3,15 @@ import Settings from "@/assets/images/Setting.svg";
 import SignOut from "@/assets/images/SignOut.svg";
 import Support from "@/assets/images/Support.svg";
 import Tooth from "@/assets/images/Tooth.svg";
+import { Href } from "expo-router";
 import { ReactNode } from "react";
 
 export interface MenuItem {
   id: string;
   title: string;
   icon: ReactNode;
-  onPress: () => void;
+  href?: Href;
+  onPress?: () => void;
   isNested?: boolean;
 }
 
@@ -18,35 +20,36 @@ export const profileMenuItems: MenuItem[] = [
     id: "biometry",
     title: "Biometry Data",
     icon: <Tooth />,
-    onPress: () => console.log("Account pressed"),
+    href: "/(app)/profile/biometry",
     isNested: true,
   },
   {
     id: "achievements",
     title: "Achievements",
     icon: <Bell />,
-    onPress: () => console.log("Notifications pressed"),
+    href: "/(app)/profile/achievements",
     isNested: true,
   },
   {
     id: "support",
     title: "Support",
     icon: <Support />,
-    onPress: () => console.log("Settings pressed"),
+    href: "/(app)/profile/support",
     isNested: true,
   },
   {
-    id: "account",
+    id: "settings",
     title: "Account Settings",
     icon: <Settings />,
-    onPress: () => console.log("Help pressed"),
+    href: "/(app)/profile/settings",
     isNested: true,
   },
   {
-    id: "log out",
+    id: "logout",
     title: "Log Out",
     icon: <SignOut />,
-    onPress: () => console.log("Help pressed"),
-    isNested: false,
+    onPress: () => {
+      console.log("Logout");
+    },
   },
 ];

@@ -38,7 +38,7 @@ export default function TabLayout() {
               borderRadius: 35,
               overflow: "hidden",
               borderWidth: 1,
-              borderColor: "rgba(255, 255, 255, 0.3)",
+              borderColor: "rgba(255, 255, 254, 0.3)",
             }}
           >
             <BlurView
@@ -46,7 +46,7 @@ export default function TabLayout() {
               tint="dark"
               style={{
                 flex: 1,
-                backgroundColor: "rgba(255, 255, 255, 0.25)",
+                backgroundColor: "rgba(36, 35, 35, 0.95)",
               }}
             />
           </View>
