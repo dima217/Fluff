@@ -1,10 +1,11 @@
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import { profileMenuItems } from "../../navigation";
+import { useProfileMenuItems } from "../../navigation";
 import ProfileSection from "./ui/ProfileSection";
 
 const ProfileMenu = () => {
   const router = useRouter();
+  const profileMenuItems = useProfileMenuItems();
 
   return (
     <View style={styles.container}>

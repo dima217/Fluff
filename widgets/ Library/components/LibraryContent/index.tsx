@@ -1,4 +1,5 @@
 // components/HomeContent.tsx
+import { useTranslation } from "@/hooks/useTranslation";
 import CardsCarousel from "@/shared/CardCarousel";
 import { StyleSheet, View } from "react-native";
 
@@ -7,8 +8,9 @@ interface HomeContentProps {
 }
 
 const LibraryContent = ({ selected }: HomeContentProps) => {
+  const { t } = useTranslation();
   switch (selected) {
-    case "Recipes":
+    case t("library.recipes"):
       return (
         <View style={styles.section}>
           <CardsCarousel onCardPress={() => {}} variant="featured" />

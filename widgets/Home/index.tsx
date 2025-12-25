@@ -1,5 +1,6 @@
 // components/HomeContent.tsx
 import { Colors } from "@/constants/design-tokens";
+import { useTranslation } from "@/hooks/useTranslation";
 import CardsCarousel from "@/shared/CardCarousel";
 import MediaCarousel from "@/shared/MediaCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -12,21 +13,23 @@ interface HomeContentProps {
 
 const HomeContent = ({ selected }: HomeContentProps) => {
   const router = useRouter();
+  const { t } = useTranslation();
+
   switch (selected) {
-    case "Videos":
+    case t("home.videos"):
       return (
         <>
           <View style={styles.section}>
             <View style={styles.allContainer}>
-              <ThemedText type="s">My recipes</ThemedText>
+              <ThemedText type="s">{t("homeSections.myRecipes")}</ThemedText>
               <ThemedText type="xs" style={{ color: Colors.primary }}>
-                See All
+                {t("homeSections.seeAll")}
               </ThemedText>
             </View>
             <MediaCarousel onCardPress={() => {}} />
           </View>
           <View style={styles.section}>
-            <ThemedText type="s">My recipes</ThemedText>
+            <ThemedText type="s">{t("homeSections.myRecipes")}</ThemedText>
             <MediaCarousel
               variant="long"
               onCardPress={() => {
@@ -37,44 +40,44 @@ const HomeContent = ({ selected }: HomeContentProps) => {
         </>
       );
 
-    case "Recipes":
+    case t("home.recipes"):
       return (
         <>
           <View style={styles.section}>
             <View style={styles.allContainer}>
-              <ThemedText type="s">My recipes</ThemedText>
+              <ThemedText type="s">{t("homeSections.myRecipes")}</ThemedText>
               <ThemedText type="xs" style={{ color: Colors.primary }}>
-                See All
+                {t("homeSections.seeAll")}
               </ThemedText>
             </View>
             <CardsCarousel onCardPress={() => {}} variant="mealsToday" />
           </View>
           <View style={styles.section}>
-            <ThemedText type="s">Meals today</ThemedText>
+            <ThemedText type="s">{t("homeSections.mealsToday")}</ThemedText>
             <CardsCarousel onCardPress={() => {}} variant="featured" />
           </View>
         </>
       );
 
-    case "Calories Base":
+    case t("home.caloriesBase"):
       return (
         <View style={styles.section}>
-          <ThemedText type="s">Meals today</ThemedText>
+          <ThemedText type="s">{t("homeSections.mealsToday")}</ThemedText>
           <CardsCarousel onCardPress={() => {}} variant="featured" />
         </View>
       );
 
-    case "All":
+    case t("home.all"):
     default:
       return (
         <>
           <View style={styles.section}>
-            <ThemedText type="s">Popular recipes</ThemedText>
+            <ThemedText type="s">{t("homeSections.popularRecipes")}</ThemedText>
             <MediaCarousel onCardPress={() => {}} />
           </View>
 
           <View style={styles.section}>
-            <ThemedText type="s">My recipes</ThemedText>
+            <ThemedText type="s">{t("homeSections.myRecipes")}</ThemedText>
             <CardsCarousel
               onCardPress={() => {
                 router.push("/(recipe)/recipe");

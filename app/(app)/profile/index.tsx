@@ -1,3 +1,4 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
 import ProfileCard from "@/widgets/Profile/components/ProfileCard";
@@ -6,10 +7,12 @@ import { View as RNView, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 const Profile = () => {
+  const { t } = useTranslation();
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View>
-        <Header title="My Profile" />
+        <Header title={t("profile.myProfile")} />
         <RNView style={styles.content}>
           <ProfileCard />
           <ProfileMenu />

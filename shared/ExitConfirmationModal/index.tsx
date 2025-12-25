@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/design-tokens";
+import { useTranslation } from "@/hooks/useTranslation";
 import React from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";
 import Button from "../Buttons/Button";
@@ -15,6 +16,8 @@ const ExitConfirmationModal: React.FC<ExitConfirmationModalProps> = ({
   onConfirmExit,
   onCancel,
 }) => {
+  const { t } = useTranslation();
+  
   return (
     <Modal
       visible={isVisible}
@@ -25,20 +28,19 @@ const ExitConfirmationModal: React.FC<ExitConfirmationModalProps> = ({
       <View style={styles.centeredView}>
         <View style={styles.innerContainer}>
           <GradientView style={styles.modalView}>
-            <Text style={styles.modalTitle}>Warning</Text>
+            <Text style={styles.modalTitle}>{t("modal.warning")}</Text>
             <Text style={styles.modalText}>
-              Are you sure you want to exit? Your progress will not be
-              saved.{" "}
+              {t("modal.exitConfirm")}
             </Text>
             <View style={styles.buttonContainer}>
               <Button
-                title="Exit"
+                title={t("modal.exit")}
                 style={[styles.button, styles.buttonConfirm]}
                 onPress={onConfirmExit}
               ></Button>
 
               <Button
-                title="Cancel"
+                title={t("common.cancel")}
                 style={[styles.button, styles.buttonCancel]}
                 onPress={onCancel}
                 textColor={Colors.primary}

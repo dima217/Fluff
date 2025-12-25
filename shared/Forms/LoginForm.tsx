@@ -1,3 +1,4 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
@@ -13,6 +14,7 @@ interface LoginData {
 const LoginForm = () => {
   const { handleSubmit } = useForm<LoginData>();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const onSubmit = (data: LoginData) => {
     router.replace("/(app)/home");
@@ -20,9 +22,9 @@ const LoginForm = () => {
 
   return (
     <View style={styles.container}>
-      <EmailInput placeholder="Enter" />
+      <EmailInput placeholder={t("common.enter")} />
       <PasswordInput />
-      <Button title="Login" onPress={handleSubmit(onSubmit)} />
+      <Button title={t("auth.login")} onPress={handleSubmit(onSubmit)} />
     </View>
   );
 };

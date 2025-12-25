@@ -4,6 +4,7 @@ import {
   WheelItemValue,
 } from "@/shared/AnimatedWheelPicker";
 import Button from "@/shared/Buttons/Button";
+import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -34,13 +35,15 @@ const Height = ({ onPrev, onNext }: StepProps) => {
     setSelectedHeight(String(value));
   };
 
+  const { t } = useTranslation();
+
   return (
     <View style={styles.stepContainer}>
       <ThemedText type="subtitle" style={styles.title}>
-        What&apos;s your height?
+        {t("signUp.whatsYourHeight")}
       </ThemedText>
       <ThemedText style={styles.currentValueText}>
-        Selected: {selectedHeight} cm
+        {t("signUp.selected")}: {selectedHeight} cm
       </ThemedText>
       <AnimatedWheelPicker
         data={heightsData}
@@ -53,7 +56,7 @@ const Height = ({ onPrev, onNext }: StepProps) => {
         animationType="lens"
         selectStyle={styles.selectorContainer}
       />
-      <Button title="Continue" onPress={onNext} style={styles.button} />
+      <Button title={t("signUp.continue")} onPress={onNext} style={styles.button} />
     </View>
   );
 };

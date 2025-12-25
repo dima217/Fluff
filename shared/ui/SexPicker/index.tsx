@@ -1,3 +1,4 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import { View } from "react-native";
 import SexOption from "./SexOption";
 import { styles } from "./styles";
@@ -10,17 +11,19 @@ interface SexPickerProps {
 }
 
 const SexPicker = ({ selectedSex, onSelect }: SexPickerProps) => {
+  const { t } = useTranslation();
+  
   return (
     <View style={styles.container}>
       <SexOption
-        label="Male"
+        label={t("signUp.male")}
         iconName="male"
         value="male"
         isSelected={selectedSex === "male"}
         onPress={onSelect}
       />
       <SexOption
-        label="Female"
+        label={t("signUp.female")}
         iconName="female"
         value="female"
         isSelected={selectedSex === "female"}

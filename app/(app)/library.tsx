@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/design-tokens";
+import { useTranslation } from "@/hooks/useTranslation";
 import Toogle from "@/shared/Toogle";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import SearchInput from "@/widgets/Search/components/SearchInput";
@@ -8,7 +9,9 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 const LibraryScreen = () => {
-  const [toogle, setToogle] = useState<string>("Recipes");
+  const { t } = useTranslation();
+  const [toogle, setToogle] = useState<string>(t("library.recipes"));
+
   return (
     <ScrollView
       style={styles.mainContainer}
@@ -27,12 +30,12 @@ const LibraryScreen = () => {
         <View
           style={{ flex: 1, alignSelf: "stretch", gap: 20, marginBottom: 20 }}
         >
-          <ThemedText type="s">Library</ThemedText>
+          <ThemedText type="s">{t("library.title")}</ThemedText>
           <Library />
-          <ThemedText type="s">Favourities</ThemedText>
+          <ThemedText type="s">{t("library.favourites")}</ThemedText>
         </View>
         <Toogle
-          options={["Recipes", "Products"]}
+          options={[t("library.recipes"), t("library.products")]}
           selected={toogle}
           onSelect={setToogle}
           containerStyle={styles.toogleContainer}

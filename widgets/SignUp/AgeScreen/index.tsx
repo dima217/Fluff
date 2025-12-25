@@ -4,6 +4,7 @@ import {
   WheelItemValue,
 } from "@/shared/AnimatedWheelPicker";
 import Button from "@/shared/Buttons/Button";
+import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -34,13 +35,15 @@ const Age = ({ onPrev, onNext }: StepProps) => {
     setSelectedAge(String(value));
   };
 
+  const { t } = useTranslation();
+
   return (
     <View style={styles.stepContainer}>
       <ThemedText type="subtitle" style={styles.title}>
-        How old are you?
+        {t("signUp.howOldAreYou")}
       </ThemedText>
       <ThemedText style={styles.currentAgeText}>
-        Selected: {selectedAge}
+        {t("signUp.selected")}: {selectedAge}
       </ThemedText>
       <AnimatedWheelPicker
         data={agesData}
@@ -53,7 +56,7 @@ const Age = ({ onPrev, onNext }: StepProps) => {
         animationType="lens"
         selectStyle={styles.selectorContainer}
       />
-      <Button title="Continue" onPress={onNext} style={styles.button} />
+      <Button title={t("signUp.continue")} onPress={onNext} style={styles.button} />
     </View>
   );
 };

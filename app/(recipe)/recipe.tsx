@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/design-tokens";
 import { RecipeData } from "@/constants/types";
+import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
@@ -17,6 +18,7 @@ import {
 
 export default function RecipeScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const recipeData: RecipeData = {
     title: "Brownie",
@@ -81,7 +83,7 @@ export default function RecipeScreen() {
         <IngredientsSection />
 
         <Button
-          title={"Cook it"}
+          title={t("recipe.cookIt")}
           onPress={() => {
             router.push({
               pathname: "/recipe-steps",

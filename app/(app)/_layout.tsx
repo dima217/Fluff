@@ -9,10 +9,12 @@ import HealthTab from "@/assets/images/PillTab.svg";
 import UserTab from "@/assets/images/UserTab.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import { Colors } from "@/constants/design-tokens";
+import { useTranslation } from "@/hooks/useTranslation";
 import Circle from "@/shared/ui/Circle";
 
 export default function TabLayout() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <Tabs
@@ -56,7 +58,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: "Home",
+          title: t("tabs.home"),
           tabBarIcon: ({ color }) => (
             <HomeTab width={28} height={28} fill={color} />
           ),
@@ -65,7 +67,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="health"
         options={{
-          title: "Health",
+          title: t("tabs.health"),
           tabBarIcon: ({ color }) => (
             <HealthTab width={28} height={28} fill={color} />
           ),
@@ -92,7 +94,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="library"
         options={{
-          title: "Library",
+          title: t("tabs.library"),
           tabBarIcon: ({ color }) => (
             <BookTab width={28} height={28} fill={color} />
           ),
@@ -101,7 +103,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: t("tabs.profile"),
           tabBarIcon: ({ color }) => <UserTab width={28} height={28} />,
         }}
       />

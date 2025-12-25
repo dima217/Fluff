@@ -1,3 +1,4 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import SexPicker from "@/shared/ui/SexPicker";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -13,12 +14,13 @@ interface StepProps {
 }
 
 const Sex = ({ onNext }: StepProps) => {
+  const { t } = useTranslation();
   const [sex, setSex] = useState<Gender>(null);
   return (
     <View style={styles.stepContainer}>
-      <ThemedText type="subtitle"> I am...</ThemedText>
+      <ThemedText type="subtitle">{t("signUp.iAm")}</ThemedText>
       <SexPicker selectedSex={sex} onSelect={setSex} />
-      <Button title="Continue" onPress={onNext} style={styles.button} />
+      <Button title={t("signUp.continue")} onPress={onNext} style={styles.button} />
     </View>
   );
 };

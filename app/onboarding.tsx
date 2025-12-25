@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/design-tokens";
+import { useTranslation } from "@/hooks/useTranslation";
 import VideoSlider from "@/shared/LandingVideo";
 import Swiper from "@/shared/Swiper";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -10,6 +11,8 @@ const { height } = Dimensions.get("window");
 
 export default function OnboardingScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
+  
   return (
     <View style={styles.container}>
       {/* --- Top Video Section --- */}
@@ -23,23 +26,23 @@ export default function OnboardingScreen() {
         <View style={styles.headerRow}>
           <Cutlery width={22} height={22} />
           <ThemedText type="mini" highlightLastWord>
-            Culinary Constructor
+            {t("onboarding.culinaryConstructor")}
           </ThemedText>
         </View>
 
         {/* Title */}
         <View style={styles.titleBlock}>
           <ThemedText type="title" highlightLastWord>
-            A Sound Mind
+            {t("onboarding.soundMind")}
           </ThemedText>
           <ThemedText type="title" highlightLastWord>
-            In A Sound Body
+            {t("onboarding.soundBody")}
           </ThemedText>
         </View>
 
         {/* Subtitle / Notion */}
         <ThemedText type="notion" style={styles.notionText}>
-          Track your daily dietary norms without much effort.
+          {t("onboarding.trackDaily")}
         </ThemedText>
 
         <Swiper onSwipeEnd={() => router.replace("/(auth)/login")} />

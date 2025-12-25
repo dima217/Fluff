@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/design-tokens";
+import { useTranslation } from "@/hooks/useTranslation";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import LoginForm from "@/shared/Forms/LoginForm";
 import SignUpPrompt from "@/shared/ui/SignUpPrompt";
@@ -9,18 +10,20 @@ import Fluff from "../../assets/images/Fluff.svg";
 
 const Login = () => {
   const router = useRouter();
+  const { t } = useTranslation();
+  
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
         <View style={styles.iconContainer}>
           <Fluff />
-          <ThemedText>Login</ThemedText>
+          <ThemedText>{t("auth.login")}</ThemedText>
         </View>
         <LoginForm />
       </View>
       <View style={styles.innerContainer}>
-        <GradientButton title="Continue with" onPress={() => {}} />
-        <GradientButton title="Continue with" onPress={() => {}} />
+        <GradientButton title={t("auth.continueWith")} onPress={() => {}} />
+        <GradientButton title={t("auth.continueWith")} onPress={() => {}} />
         <SignUpPrompt
           onPressSignUp={() => {
             router.navigate("/(auth)/register");

@@ -1,19 +1,21 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import View from "@/shared/View";
 import SearchOverlayContent from "@/widgets/Search";
 import SearchInput from "@/widgets/Search/components/SearchInput";
 import { useState } from "react";
 
 const SearchScreen = () => {
+  const { t } = useTranslation();
   const [searchText, setSearchText] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   const availableFilters = [
-    "Pancakes",
-    "Recipes",
-    "Eggs",
-    "Milk",
-    "White Bread",
-    "Calories Base",
+    t("search.pancakes"),
+    t("search.recipes"),
+    t("search.eggs"),
+    t("search.milk"),
+    t("search.whiteBread"),
+    t("search.caloriesBase"),
   ];
 
   const addFilter = (filter: string) => {

@@ -4,6 +4,7 @@ import {
   WheelItemValue,
 } from "@/shared/AnimatedWheelPicker";
 import Button from "@/shared/Buttons/Button";
+import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -33,13 +34,15 @@ const Weight = ({ onPrev, onFinish }: StepProps) => {
     setSelectedWeight(String(value));
   };
 
+  const { t } = useTranslation();
+
   return (
     <View style={styles.stepContainer}>
       <ThemedText type="subtitle" style={styles.title}>
-        What&apos;s your weight?
+        {t("signUp.whatsYourWeight")}
       </ThemedText>
       <ThemedText style={styles.currentValueText}>
-        Selected: {selectedWeight} kg
+        {t("signUp.selected")}: {selectedWeight} kg
       </ThemedText>
       <AnimatedWheelPicker
         data={weightsData}
@@ -52,7 +55,7 @@ const Weight = ({ onPrev, onFinish }: StepProps) => {
         animationType="lens"
         selectStyle={styles.selectorContainer}
       />
-      <Button title="Continue" onPress={onFinish} style={styles.button} />
+      <Button title={t("signUp.continue")} onPress={onFinish} style={styles.button} />
     </View>
   );
 };

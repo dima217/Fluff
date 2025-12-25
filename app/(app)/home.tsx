@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/design-tokens";
+import { useTranslation } from "@/hooks/useTranslation";
 import AccountDetails from "@/shared/AccountDetails";
 import Toogle from "@/shared/Toogle";
 import HomeContent from "@/widgets/Home";
@@ -9,12 +10,20 @@ import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 export default function HomeScreen() {
-  const [toogle, setToogle] = useState("All");
+  const { t } = useTranslation();
+  const [toogle, setToogle] = useState(t("home.all"));
   const router = useRouter();
 
   const navigateToSearch = () => {
     router.push("/(search)/search");
   };
+
+  const toggleOptions = [
+    t("home.all"),
+    t("home.videos"),
+    t("home.recipes"),
+    t("home.caloriesBase"),
+  ];
 
   return (
     <ScrollView
@@ -38,7 +47,7 @@ export default function HomeScreen() {
         </Pressable>
 
         <Toogle
-          options={["All", "Videos", "Recipes", "Calories Base"]}
+          options={toggleOptions}
           selected={toogle}
           onSelect={setToogle}
         />

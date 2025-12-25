@@ -1,5 +1,6 @@
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import { RecipeData } from "@/constants/types";
+import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
@@ -19,6 +20,7 @@ import {
 const RecipeSteps = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
+  const { t } = useTranslation();
 
   const recipe: RecipeData = JSON.parse(params.data as string);
   const [stepIndex, setStepIndex] = useState(0);
@@ -46,7 +48,7 @@ const RecipeSteps = () => {
         <CongratulationsSection />
         <View style={styles.fixedButtonContainer}>
           <Button
-            title="Home"
+            title={t("tabs.home")}
             onPress={() => {
               router.replace("/(app)/home");
             }}

@@ -1,3 +1,4 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import ProgressDots from "@/shared/ui/ProgressDots";
 import Age from "@/widgets/SignUp/AgeScreen";
 import Height from "@/widgets/SignUp/HeightScreen";
@@ -7,6 +8,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 const SpeechScreen: React.FC = () => {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = 4;
 
@@ -14,7 +16,7 @@ const SpeechScreen: React.FC = () => {
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      console.log("Процесс завершен!");
+      console.log(t("signUp.processCompleted"));
     }
   };
 
@@ -37,7 +39,7 @@ const SpeechScreen: React.FC = () => {
       default:
         return (
           <View style={styles.finalView}>
-            <Text style={styles.finalText}>Процесс завершен!</Text>
+            <Text style={styles.finalText}>{t("signUp.processCompleted")}</Text>
           </View>
         );
     }

@@ -1,3 +1,4 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import TextInput from "../TextInput";
 
 import type { TextInputProps } from "../TextInput";
@@ -5,14 +6,16 @@ import type { TextInputProps } from "../TextInput";
 interface EmailInputProps extends TextInputProps {}
 
 const EmailInput = ({
-  label = "Email",
-  placeholder = "Email",
+  label,
+  placeholder,
   ...rest
 }: EmailInputProps) => {
+  const { t } = useTranslation();
+  
   return (
     <TextInput
-      label={label}
-      placeholder={placeholder}
+      label={label ?? t("auth.email")}
+      placeholder={placeholder ?? t("auth.email")}
       inputMode="email"
       keyboardType="email-address"
       textContentType="emailAddress"

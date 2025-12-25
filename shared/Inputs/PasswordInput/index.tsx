@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 
 import { useToggle } from "@/hooks/useToggle";
+import { useTranslation } from "@/hooks/useTranslation";
 
 import TextInput from "../TextInput";
 
@@ -12,18 +13,19 @@ interface PasswordInputProps extends TextInputProps {
 }
 
 const PasswordInput = ({
-  label = "Password",
-  placeholder = "*******",
+  label,
+  placeholder,
   ...rest
 }: PasswordInputProps) => {
   const { state: visible, toggle } = useToggle();
+  const { t } = useTranslation();
 
   const iconName = visible ? "eye-off" : "eye";
 
   return (
     <TextInput
-      label={label}
-      placeholder={placeholder}
+      label={label ?? t("auth.password")}
+      placeholder={placeholder ?? "*******"}
       secureTextEntry={!visible}
       right={
         <Ionicons
