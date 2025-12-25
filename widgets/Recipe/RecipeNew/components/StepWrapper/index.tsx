@@ -1,3 +1,4 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ReactNode, useEffect } from "react";
@@ -31,6 +32,7 @@ const StepWrapper = <T extends AnyObjectSchema>({
   style,
 }: StepWrapperProps<T>) => {
   const context = useRecipeFormContext();
+  const { t } = useTranslation();
 
   if (!context) {
     throw new Error(
@@ -63,7 +65,11 @@ const StepWrapper = <T extends AnyObjectSchema>({
   return (
     <FormProvider {...formMethods}>
       {children}
-      <Button style={styles.button} onPress={handleSubmit} title={"Next"} />
+      <Button
+        style={styles.button}
+        onPress={handleSubmit}
+        title={t("recipe.next")}
+      />
     </FormProvider>
   );
 };

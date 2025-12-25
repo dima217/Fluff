@@ -1,3 +1,4 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
@@ -10,6 +11,7 @@ const BaseInfo = () => {
     control,
     formState: { errors },
   } = useFormContext();
+  const { t } = useTranslation();
 
   const getErrorMessage = (field: string): string | undefined => {
     const error = errors[field];
@@ -24,9 +26,12 @@ const BaseInfo = () => {
   return (
     <View>
       <View style={styles.innerContainer}>
-        <ThemedText type="subtitle">Base</ThemedText>
+        <ThemedText type="subtitle">{t("recipe.base")}</ThemedText>
         <ThemedText type="xs">
-          Break the chocolate into pieces and melt it...
+          Break the chocolate into pieces and melt it with the butter in a
+          double boiler, stirring constantly with a spatula or wooden spoon.
+          Remove the resulting thick chocolate sauce from the boiler and let it
+          cool.
         </ThemedText>
       </View>
 
@@ -48,8 +53,8 @@ const BaseInfo = () => {
           name="name"
           render={({ field: { value, onChange } }) => (
             <TextInput
-              label="Name"
-              placeholder="Enter"
+              label={t("recipe.name")}
+              placeholder={t("common.enter")}
               value={value}
               errorMessage={getErrorMessage("name")}
               onChangeText={onChange}
@@ -68,8 +73,8 @@ const BaseInfo = () => {
 
             return (
               <TextInput
-                label="Ccal"
-                placeholder="Enter"
+                label={t("recipe.ccal")}
+                placeholder={t("common.enter")}
                 keyboardType="numeric"
                 value={textValue}
                 errorMessage={getErrorMessage("ccal")}
@@ -95,8 +100,8 @@ const BaseInfo = () => {
           name="ingredients"
           render={({ field: { value, onChange } }) => (
             <LongTextInput
-              label="Ingredients"
-              placeholder="Enter"
+              label={t("recipe.ingredients")}
+              placeholder={t("common.enter")}
               value={value}
               onChangeText={onChange}
               errorMessage={getErrorMessage("ingredients")}

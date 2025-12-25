@@ -1,5 +1,6 @@
 import Fluffy from "@/assets/images/Fluffy.svg";
 import { Colors } from "@/constants/design-tokens";
+import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
@@ -21,6 +22,7 @@ const CongratulationsSection = ({
   stars = 0,
   onRate,
 }: CongratulationsSectionProps) => {
+  const { t } = useTranslation();
   const [rating, setRating] = useState(stars);
 
   const handleRate = (value: number) => {
@@ -37,7 +39,7 @@ const CongratulationsSection = ({
       >
         <Fluffy width={250} height={250} />
         <View style={styles.content}>
-          <ThemedText type="subtitle">Congratulations!</ThemedText>
+          <ThemedText type="subtitle">{t("recipe.congratulations")}</ThemedText>
 
           <View style={styles.starsRow}>
             {Array.from({ length: MAX_STARS }).map((_, index) => {

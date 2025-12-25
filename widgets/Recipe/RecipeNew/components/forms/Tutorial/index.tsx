@@ -1,4 +1,5 @@
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
+import { useTranslation } from "@/hooks/useTranslation";
 import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
@@ -11,6 +12,7 @@ const Tutorial = ({ onBack }: { onBack: () => void }) => {
     control,
     formState: { errors },
   } = useFormContext();
+  const { t } = useTranslation();
 
   const getErrorMessage = (field: string): string | undefined => {
     const error = errors[field];
@@ -29,7 +31,7 @@ const Tutorial = ({ onBack }: { onBack: () => void }) => {
       </TouchableOpacity>
 
       <View style={styles.innerContainer}>
-        <ThemedText type="subtitle">Add a tutorial</ThemedText>
+        <ThemedText type="subtitle">{t("recipe.addTutorial")}</ThemedText>
         <ThemedText type="xs">
           Break the chocolate into pieces and melt it with the butter in a
           double boiler, stirring constantly with a spatula or wooden spoon.
@@ -54,8 +56,8 @@ const Tutorial = ({ onBack }: { onBack: () => void }) => {
           name="tutorialName"
           render={({ field: { value, onChange } }) => (
             <TextInput
-              label="Name"
-              placeholder="Enter"
+              label={t("recipe.name")}
+              placeholder={t("common.enter")}
               value={value}
               errorMessage={getErrorMessage("name")}
               onChangeText={onChange}
@@ -70,8 +72,8 @@ const Tutorial = ({ onBack }: { onBack: () => void }) => {
           name="tutorialDescription"
           render={({ field: { value, onChange } }) => (
             <LongTextInput
-              label="Ingredients"
-              placeholder="Enter"
+              label={t("recipe.ingredients")}
+              placeholder={t("common.enter")}
               value={value}
               onChangeText={onChange}
               errorMessage={getErrorMessage("ingredients")}

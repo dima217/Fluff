@@ -1,4 +1,5 @@
 import Filter from "@/assets/images/Filter.svg";
+import { useTranslation } from "@/hooks/useTranslation";
 import Circle from "@/shared/ui/Circle";
 import React from "react";
 import {
@@ -33,6 +34,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   onFocus,
   onBlur,
 }) => {
+  const { t } = useTranslation();
   return (
     <View style={[styles.searchBarContainer, style]}>
       <ScrollView
@@ -50,7 +52,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
           <TextInput
             style={[styles.input, { minWidth: 80 }]}
-            placeholder="Search"
+            placeholder={t("common.search")}
             placeholderTextColor="gray"
             value={searchText}
             onChangeText={onSearchChange}

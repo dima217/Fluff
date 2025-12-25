@@ -1,5 +1,6 @@
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import { Colors } from "@/constants/design-tokens";
+import { useTranslation } from "@/hooks/useTranslation";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";
@@ -12,6 +13,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 const CookingProcess = ({ onBack }: { onBack: () => void }) => {
   const { control } = useFormContext();
+  const { t } = useTranslation();
 
   const { fields, append, remove, replace } = useFieldArray({
     control,
@@ -39,7 +41,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
       </TouchableOpacity>
 
       <View style={styles.innerContainer}>
-        <ThemedText type="subtitle">Cooking Process</ThemedText>
+        <ThemedText type="subtitle">{t("recipe.cookingProcess")}</ThemedText>
         <ThemedText type="xs">
           Break the chocolate into pieces and melt it with the butter in a
           double boiler, stirring constantly with a spatula or wooden spoon.
@@ -57,8 +59,8 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
               name={`steps.${index}.title`}
               render={({ field: { value, onChange } }) => (
                 <TextInput
-                  label={`Title`}
-                  placeholder="Enter"
+                  label={t("recipe.title")}
+                  placeholder={t("common.enter")}
                   value={value}
                   onChangeText={onChange}
                   right={
@@ -83,8 +85,8 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
               name={`steps.${index}.description`}
               render={({ field: { value, onChange } }) => (
                 <LongTextInput
-                  label="Description"
-                  placeholder="Enter"
+                  label={t("recipe.description")}
+                  placeholder={t("common.enter")}
                   value={value}
                   onChangeText={onChange}
                 />
@@ -105,7 +107,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
       </View>
 
       <GradientButton
-        title="Add a Step"
+        title={t("recipe.addStep")}
         onPress={() => {
           append({ title: `Step ${fields.length + 1}`, description: "" });
         }}
