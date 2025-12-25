@@ -1,5 +1,3 @@
-// widgets/Modals/ExitConfirmationModal.tsx
-
 import { Colors } from "@/constants/design-tokens";
 import React from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";

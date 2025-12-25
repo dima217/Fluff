@@ -1,11 +1,13 @@
 import Bell from "@/assets/images/Bell.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
+import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import Avatar from "../ui/Avatar";
 import Circle from "../ui/Circle";
 import { ThemedText } from "../ui/ThemedText";
 
 const AccountDetails = () => {
+  const router = useRouter();
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
@@ -15,7 +17,13 @@ const AccountDetails = () => {
           <ThemedText type="xs">katrinkaling@gmail.com</ThemedText>
         </View>
       </View>
-      <Circle size={CircleSizes.MEDIUM} svg={<Bell />} />
+      <Circle
+        size={CircleSizes.MEDIUM}
+        onPress={() => {
+          router.push("/notifications");
+        }}
+        svg={<Bell />}
+      />
     </View>
   );
 };

@@ -53,7 +53,9 @@ const Header = ({ title, showExitConfirmation = false }: HeaderProps) => {
       <Circle
         svg={<Bell />}
         frostedGlass
-        onPress={() => {}}
+        onPress={() => {
+          router.push("/notifications");
+        }}
         size={CircleSizes.MEDIUM}
       />
 

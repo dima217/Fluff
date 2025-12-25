@@ -39,6 +39,7 @@ export default function RootLayout() {
         <Stack.Screen name="(recipe)" options={{ headerShown: false }} />
 
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+        <Stack.Screen name="notifications" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
