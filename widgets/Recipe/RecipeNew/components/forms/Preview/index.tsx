@@ -1,9 +1,8 @@
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { TouchableOpacity, View } from "react-native";
-import { StepProps } from "../../../constants";
 
-const Preview = ({ data, onSubmit, onBack }: StepProps) => {
+const Preview = ({ onBack }: { onBack: () => void }) => {
   return (
     <View>
       <TouchableOpacity onPress={onBack}>

@@ -98,7 +98,11 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
                 control={control}
                 name={`steps.${index}.stepMediaUrl`}
                 render={({ field: { value, onChange } }) => (
-                  <MediaUploader value={value} onChange={onChange} />
+                  <MediaUploader
+                    key={`${fields[index].id}-${value || "empty"}`}
+                    value={value}
+                    onChange={onChange}
+                  />
                 )}
               />
             </View>

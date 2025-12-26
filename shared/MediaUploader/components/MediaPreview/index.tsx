@@ -13,6 +13,7 @@ const MediaPreview: React.FC<Props> = ({ media, onRemove }) => {
   return (
     <View style={styles.wrapper}>
       <Image
+        key={media.uri}
         source={{ uri: media.thumbnail || media.uri }}
         style={styles.preview}
       />

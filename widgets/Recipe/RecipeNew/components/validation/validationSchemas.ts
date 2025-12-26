@@ -39,6 +39,8 @@ export const tutorialSchema = yup.object({
   tutorialDescription: yup.string().required("Step description is required"),
 });
 
+export const previewSchema = yup.object({});
+
 export const stepsConfig = [
   {
     schema: baseInfoSchema,
@@ -62,5 +64,9 @@ export const stepsConfig = [
       tutorialName: "",
       tutorialDescription: "",
     },
+  },
+  {
+    schema: previewSchema,
+    defaultValues: {},
   },
 ];

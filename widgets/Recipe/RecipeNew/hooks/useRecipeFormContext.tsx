@@ -1,5 +1,11 @@
 import { Recipe } from "@/constants/types";
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 interface RecipeFormContextType {
   step: number;
@@ -29,20 +35,23 @@ export const RecipeFormProvider: React.FC<RecipeFormProviderProps> = ({
   const [totalSteps, setTotalSteps] = useState(0);
   const [formData, setFormData] = useState({});
 
-  const goToStep = (targetStep: number) => {
-    if (targetStep >= 0 && targetStep < totalSteps) {
-      setStep(targetStep);
-    }
-  };
+  const goToStep = useCallback(
+    (targetStep: number) => {
+      if (targetStep >= 0 && targetStep < totalSteps) {
+        setStep(targetStep);
+      }
+    },
+    [totalSteps]
+  );
 
-  const updateFormData = (patch: Partial<Recipe>) => {
+  const updateFormData = useCallback((patch: Partial<Recipe>) => {
     setFormData((prev) => ({ ...prev, ...patch }));
-  };
+  }, []);
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     setStep(0);
     setFormData({});
-  };
+  }, []);
 
   const contextValue = useMemo(
     () => ({
@@ -57,8 +66,7 @@ export const RecipeFormProvider: React.FC<RecipeFormProviderProps> = ({
       isFirstStep: step === 0,
       isLastStep: step === totalSteps - 1,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [step, totalSteps]
+    [step, totalSteps, formData, goToStep, updateFormData, resetForm]
   );
 
   return (

@@ -1,15 +1,12 @@
+import { Recipe } from "@/constants/types";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
 import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
 import CookingProcess from "@/widgets/Recipe/RecipeNew/components/forms/CookingProcess";
 import Preview from "@/widgets/Recipe/RecipeNew/components/forms/Preview";
 import Tutorial from "@/widgets/Recipe/RecipeNew/components/forms/Tutorial";
-import StepWrapper from "@/widgets/Recipe/RecipeNew/components/StepWrapper";
-import {
-  baseInfoSchema,
-  cookingProcessSchema,
-  tutorialSchema,
-} from "@/widgets/Recipe/RecipeNew/components/validation/validationSchemas";
+import FormWrapper from "@/widgets/Recipe/RecipeNew/components/FormWrapper";
+import { stepsConfig } from "@/widgets/Recipe/RecipeNew/components/validation/validationSchemas";
 import { useRecipeFormContext } from "@/widgets/Recipe/RecipeNew/hooks/useRecipeFormContext";
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
 import { useEffect } from "react";
@@ -22,24 +19,13 @@ import {
 } from "react-native";
 
 const CreateRecipeScreen = () => {
-  const { step, setStep, setTotalSteps, formData, updateFormData, resetForm } =
-    useRecipeFormContext();
+  const { step, setStep, setTotalSteps, resetForm } = useRecipeFormContext();
 
   useEffect(() => {
     setTotalSteps(4);
   }, [setTotalSteps]);
 
-  const handleStepSubmit = (stepIndex: number, stepData: any) => {
-    updateFormData(stepData);
-
-    if (stepIndex === 3) {
-      handleFinalSubmit({ ...formData, ...stepData });
-    } else {
-      setStep(stepIndex + 1);
-    }
-  };
-
-  const handleFinalSubmit = (finalData: any) => {
+  const handleFinalSubmit = (finalData: Partial<Recipe>) => {
     console.log("Все данные формы:", finalData);
     alert("Рецепт успешно создан!");
     resetForm();
@@ -48,58 +34,13 @@ const CreateRecipeScreen = () => {
   const renderStep = () => {
     switch (step) {
       case 0:
-        return (
-          <StepWrapper
-            key={step}
-            stepIndex={0}
-            onSubmit={handleStepSubmit}
-            validationSchema={baseInfoSchema}
-            defaultValues={formData}
-          >
-            <BaseInfo />
-          </StepWrapper>
-        );
+        return <BaseInfo />;
       case 1:
-        return (
-          <StepWrapper
-            key={step}
-            stepIndex={1}
-            onSubmit={handleStepSubmit}
-            validationSchema={cookingProcessSchema}
-            defaultValues={formData}
-          >
-            <CookingProcess onBack={() => setStep(step - 1)} />
-          </StepWrapper>
-        );
+        return <CookingProcess onBack={() => setStep(step - 1)} />;
       case 2:
-        return (
-          <StepWrapper
-            key={step}
-            stepIndex={2}
-            onSubmit={handleStepSubmit}
-            validationSchema={tutorialSchema}
-            defaultValues={formData}
-          >
-            <Tutorial onBack={() => setStep(step - 1)} />
-          </StepWrapper>
-        );
+        return <Tutorial onBack={() => setStep(step - 1)} />;
       case 3:
-        return (
-          <StepWrapper
-            key={step}
-            stepIndex={3}
-            onSubmit={handleStepSubmit}
-            validationSchema={tutorialSchema}
-            defaultValues={formData}
-          >
-            <Preview
-              data={formData}
-              onBack={() => setStep(step - 1)}
-              onSubmit={() => handleFinalSubmit(formData)}
-              onChange={updateFormData}
-            />
-          </StepWrapper>
-        );
+        return <Preview onBack={() => setStep(step - 1)} />;
       default:
         return null;
     }
@@ -118,7 +59,13 @@ const CreateRecipeScreen = () => {
             <AnimatedProgressBar progress={(step + 1) / 4} />
           </RNView>
 
-          {renderStep()}
+          <FormWrapper
+            key={step}
+            onFinalSubmit={handleFinalSubmit}
+            validationSchemas={stepsConfig}
+          >
+            {renderStep()}
+          </FormWrapper>
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
