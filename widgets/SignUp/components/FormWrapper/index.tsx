@@ -1,4 +1,3 @@
-import { Recipe } from "@/constants/types";
 import FormWrapper from "@/contexts/FormContext/FormWrapper";
 import { DefaultValues } from "react-hook-form";
 import { AnyObjectSchema } from "yup";
@@ -8,28 +7,39 @@ interface StepConfig {
   defaultValues?: DefaultValues<any>;
 }
 
-interface RecipeFormWrapperProps {
-  children: React.ReactNode;
-  onFinalSubmit: (data: Partial<Recipe>) => void;
-  validationSchemas: StepConfig[];
-  style?: any;
+export interface SignUpFormData {
+  email: string;
+  sex: "male" | "female";
+  age: string;
+  height: string;
+  weight: string;
 }
 
-const RecipeFormWrapper = ({
+interface SignUpFormWrapperProps {
+  children: React.ReactNode;
+  onFinalSubmit: (data: Partial<SignUpFormData>) => void;
+  validationSchemas: StepConfig[];
+  style?: any;
+  buttonText?: string;
+}
+
+const SignUpFormWrapper = ({
   children,
   validationSchemas,
   onFinalSubmit,
   style,
-}: RecipeFormWrapperProps) => {
+  buttonText,
+}: SignUpFormWrapperProps) => {
   return (
-    <FormWrapper<Recipe>
+    <FormWrapper<SignUpFormData>
       validationSchemas={validationSchemas}
       onFinalSubmit={onFinalSubmit}
       style={style}
+      buttonText={buttonText}
     >
       {children}
     </FormWrapper>
   );
 };
 
-export default RecipeFormWrapper;
+export default SignUpFormWrapper;

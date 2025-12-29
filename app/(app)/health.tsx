@@ -9,7 +9,6 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 const Health = () => {
-  const [toogle, setToogle] = useState<string>("All");
   const pickerData = useDayPickerData(60);
   const [selectedDateIndex, setSelectedDateIndex] = useState<number>(
     pickerData.initialIndex

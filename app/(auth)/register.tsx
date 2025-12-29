@@ -1,76 +1,74 @@
 import { useTranslation } from "@/hooks/useTranslation";
+import View from "@/shared/View";
 import ProgressDots from "@/shared/ui/ProgressDots";
 import Age from "@/widgets/SignUp/AgeScreen";
+import EmailScreen from "@/widgets/SignUp/EmailScreen";
 import Height from "@/widgets/SignUp/HeightScreen";
 import Sex from "@/widgets/SignUp/SexScreen";
 import Weight from "@/widgets/SignUp/WeightScreen";
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import SignUpFormWrapper, {
+  SignUpFormData,
+} from "@/widgets/SignUp/components/FormWrapper";
+import {
+  SignUpFormProvider,
+  useSignUpFormContext,
+} from "@/widgets/SignUp/hooks/useSignUpFormContext";
+import { signUpStepsConfig } from "@/widgets/SignUp/validation/validationSchemas";
+import React, { useEffect } from "react";
 
-const SpeechScreen: React.FC = () => {
+const RegisterScreenContent: React.FC = () => {
+  const { step, setTotalSteps, resetForm } = useSignUpFormContext();
   const { t } = useTranslation();
-  const [currentStep, setCurrentStep] = useState(0);
-  const totalSteps = 4;
 
-  const goToNextStep = () => {
-    if (currentStep < totalSteps - 1) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      console.log(t("signUp.processCompleted"));
-    }
-  };
+  useEffect(() => {
+    setTotalSteps(5);
+  }, [setTotalSteps]);
 
-  const goToPrevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
+  const handleFinalSubmit = (finalData: Partial<SignUpFormData>) => {
+    console.log("Registration data:", finalData);
+    // Here you would typically send the data to your API
+    alert("Registration completed!");
+    resetForm();
   };
 
   const renderStepComponent = () => {
-    switch (currentStep) {
+    switch (step) {
       case 0:
-        return <Sex onNext={goToNextStep} />;
+        return <EmailScreen />;
       case 1:
-        return <Age onNext={goToNextStep} onPrev={goToPrevStep} />;
+        return <Sex />;
       case 2:
-        return <Height onNext={goToNextStep} onPrev={goToPrevStep} />;
+        return <Age />;
       case 3:
-        return <Weight onFinish={goToNextStep} onPrev={goToPrevStep} />;
+        return <Height />;
+      case 4:
+        return <Weight />;
       default:
-        return (
-          <View style={styles.finalView}>
-            <Text style={styles.finalText}>{t("signUp.processCompleted")}</Text>
-          </View>
-        );
+        return null;
     }
   };
 
   return (
-    <View style={styles.container}>
-      <ProgressDots totalSteps={totalSteps} activeIndex={currentStep} />
-      {renderStepComponent()}
+    <View style={{ paddingTop: "30%" }}>
+      <ProgressDots totalSteps={5} activeIndex={step} />
+      <SignUpFormWrapper
+        key={step}
+        onFinalSubmit={handleFinalSubmit}
+        validationSchemas={signUpStepsConfig}
+        buttonText={t("signUp.continue")}
+      >
+        {renderStepComponent()}
+      </SignUpFormWrapper>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: "8%",
-    backgroundColor: "black",
-    justifyContent: "flex-start",
-    paddingTop: "30%",
-    alignItems: "center",
-  },
-  finalView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  finalText: {
-    color: "white",
-    fontSize: 22,
-  },
-});
+const RegisterScreen: React.FC = () => {
+  return (
+    <SignUpFormProvider>
+      <RegisterScreenContent />
+    </SignUpFormProvider>
+  );
+};
 
-export default SpeechScreen;
+export default RegisterScreen;

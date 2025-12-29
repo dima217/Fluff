@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
-    backgroundColor: "black",
   },
   dotsWrapper: {
     flexDirection: "row",

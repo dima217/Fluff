@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/design-tokens";
 import { LinearGradient } from "expo-linear-gradient";
 import { ReactNode, useEffect, useRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
@@ -134,7 +135,7 @@ export function AnimatedWheelPicker<
       {!noBackground && (
         <>
           <LinearGradient
-            colors={["rgba(0,0,0,0.8)", "transparent"]}
+            colors={[Colors.background, "transparent"]}
             start={gradientStart}
             end={gradientEnd}
             style={[
@@ -145,7 +146,7 @@ export function AnimatedWheelPicker<
             pointerEvents="none"
           />
           <LinearGradient
-            colors={["transparent", "rgba(0,0,0,0.8)"]}
+            colors={["transparent", Colors.background]}
             start={gradientStart}
             end={gradientEnd}
             style={[

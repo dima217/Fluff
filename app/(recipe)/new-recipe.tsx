@@ -5,7 +5,7 @@ import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
 import CookingProcess from "@/widgets/Recipe/RecipeNew/components/forms/CookingProcess";
 import Preview from "@/widgets/Recipe/RecipeNew/components/forms/Preview";
 import Tutorial from "@/widgets/Recipe/RecipeNew/components/forms/Tutorial";
-import FormWrapper from "@/widgets/Recipe/RecipeNew/components/FormWrapper";
+import RecipeFormWrapper from "@/widgets/Recipe/RecipeNew/components/FormWrapper";
 import { stepsConfig } from "@/widgets/Recipe/RecipeNew/components/validation/validationSchemas";
 import { useRecipeFormContext } from "@/widgets/Recipe/RecipeNew/hooks/useRecipeFormContext";
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
@@ -59,13 +59,13 @@ const CreateRecipeScreen = () => {
             <AnimatedProgressBar progress={(step + 1) / 4} />
           </RNView>
 
-          <FormWrapper
+          <RecipeFormWrapper
             key={step}
             onFinalSubmit={handleFinalSubmit}
             validationSchemas={stepsConfig}
           >
             {renderStep()}
-          </FormWrapper>
+          </RecipeFormWrapper>
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
