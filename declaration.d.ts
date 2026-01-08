@@ -4,3 +4,6 @@ declare module "*.svg" {
     const content: React.FC<SvgProps>;
     export default content;
 }
+
+// React Native global variables
+declare const __DEV__: boolean;

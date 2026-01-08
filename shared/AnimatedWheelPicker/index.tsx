@@ -59,10 +59,10 @@ export function AnimatedWheelPicker<
       scrollRef.current?.scrollTo({
         x: isHorizontal ? initialIndex * itemSize : 0,
         y: isHorizontal ? 0 : initialIndex * itemSize,
-        animated: false,
+        animated: true,
       });
     }, 0);
-  }, []);
+  }, [initialIndex, isHorizontal, itemSize]);
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
