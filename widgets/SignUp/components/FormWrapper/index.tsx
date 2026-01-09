@@ -9,7 +9,11 @@ interface StepConfig {
 
 export interface SignUpFormData {
   email: string;
-  sex: "male" | "female";
+  code: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  sex: "male" | "female" | "other";
   age: string;
   height: string;
   weight: string;

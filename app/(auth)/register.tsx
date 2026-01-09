@@ -1,9 +1,15 @@
+import { useSignUpInitMutation, useSignUpMutation } from "@/api";
 import { useTranslation } from "@/hooks/useTranslation";
+import ErrorModal from "@/shared/Modals/ErrorModal";
+import VerificationCodeModal from "@/shared/Modals/VerificationCodeModal";
 import View from "@/shared/View";
 import ProgressDots from "@/shared/ui/ProgressDots";
 import Age from "@/widgets/SignUp/AgeScreen";
+import CodeScreen from "@/widgets/SignUp/CodeScreen";
 import EmailScreen from "@/widgets/SignUp/EmailScreen";
 import Height from "@/widgets/SignUp/HeightScreen";
+import NameScreen from "@/widgets/SignUp/NameScreen";
+import PasswordScreen from "@/widgets/SignUp/PasswordScreen";
 import Sex from "@/widgets/SignUp/SexScreen";
 import Weight from "@/widgets/SignUp/WeightScreen";
 import SignUpFormWrapper, {
@@ -14,21 +20,93 @@ import {
   useSignUpFormContext,
 } from "@/widgets/SignUp/hooks/useSignUpFormContext";
 import { signUpStepsConfig } from "@/widgets/SignUp/validation/validationSchemas";
-import React, { useEffect } from "react";
+import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 
 const RegisterScreenContent: React.FC = () => {
-  const { step, setTotalSteps, resetForm } = useSignUpFormContext();
+  const { step, setTotalSteps, resetForm, formData, setStep } =
+    useSignUpFormContext();
   const { t } = useTranslation();
+  const router = useRouter();
+  const [signUpInit] = useSignUpInitMutation();
+  const [signUp] = useSignUpMutation();
+  const [showCodeModal, setShowCodeModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [codeSent, setCodeSent] = useState(false);
 
   useEffect(() => {
-    setTotalSteps(5);
+    setTotalSteps(8);
   }, [setTotalSteps]);
 
-  const handleFinalSubmit = (finalData: Partial<SignUpFormData>) => {
-    console.log("Registration data:", finalData);
-    // Here you would typically send the data to your API
-    alert("Registration completed!");
-    resetForm();
+  useEffect(() => {
+    const sendCode = async () => {
+      if (step === 1 && formData.email && !codeSent) {
+        try {
+          await signUpInit({ email: formData.email }).unwrap();
+          setCodeSent(true);
+          setShowCodeModal(true);
+        } catch (error: any) {
+          let errorMsg =
+            t("auth.failedToSendCode") || "Не удалось отправить код";
+
+          const status = error?.status;
+          const data = error?.data;
+
+          if (status === 409) {
+            errorMsg = t("auth.emailAlreadyExists");
+          } else if (data?.message) {
+            errorMsg = data.message;
+          }
+
+          setErrorMessage(errorMsg);
+          setShowErrorModal(true);
+          setStep(0);
+          setCodeSent(false);
+        }
+      }
+    };
+    sendCode();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, formData.email, codeSent]);
+
+  const handleFinalSubmit = async (finalData: Partial<SignUpFormData>) => {
+    if (
+      !finalData.email ||
+      !finalData.code ||
+      !finalData.password ||
+      !finalData.firstName ||
+      !finalData.lastName
+    ) {
+      return;
+    }
+
+    try {
+      const birthDate = new Date();
+      birthDate.setFullYear(
+        birthDate.getFullYear() - parseInt(finalData.age || "0")
+      );
+
+      await signUp({
+        email: finalData.email,
+        password: finalData.password,
+        firstName: finalData.firstName,
+        lastName: finalData.lastName,
+        code: finalData.code,
+        gender:
+          finalData.sex === "male"
+            ? "male"
+            : finalData.sex === "female"
+              ? "female"
+              : "other",
+        birthDate: birthDate.toISOString(),
+        height: parseFloat(finalData.height || "0"),
+        weight: parseFloat(finalData.weight || "0"),
+      }).unwrap();
+
+      router.replace("/(app)/home");
+      resetForm();
+    } catch {}
   };
 
   const renderStepComponent = () => {
@@ -36,12 +114,18 @@ const RegisterScreenContent: React.FC = () => {
       case 0:
         return <EmailScreen />;
       case 1:
-        return <Sex />;
+        return <CodeScreen />;
       case 2:
-        return <Age />;
+        return <PasswordScreen />;
       case 3:
-        return <Height />;
+        return <NameScreen />;
       case 4:
+        return <Sex />;
+      case 5:
+        return <Age />;
+      case 6:
+        return <Height />;
+      case 7:
         return <Weight />;
       default:
         return null;
@@ -50,7 +134,7 @@ const RegisterScreenContent: React.FC = () => {
 
   return (
     <View style={{ paddingTop: "30%" }}>
-      <ProgressDots totalSteps={5} activeIndex={step} />
+      <ProgressDots totalSteps={8} activeIndex={step} />
       <SignUpFormWrapper
         key={step}
         onFinalSubmit={handleFinalSubmit}
@@ -59,6 +143,20 @@ const RegisterScreenContent: React.FC = () => {
       >
         {renderStepComponent()}
       </SignUpFormWrapper>
+      <VerificationCodeModal
+        isVisible={showCodeModal}
+        email={formData.email || ""}
+        onClose={() => setShowCodeModal(false)}
+      />
+      <ErrorModal
+        isVisible={showErrorModal}
+        message={errorMessage}
+        onClose={() => {
+          setShowErrorModal(false);
+          // Пользователь уже на шаге с email (step 0)
+          // Не делаем редирект
+        }}
+      />
     </View>
   );
 };
