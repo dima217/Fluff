@@ -198,21 +198,24 @@ import {
 } from '@/api';
 
 function TrackingScreen() {
-  const today = new Date().toISOString();
-  const { data: stats } = useGetDailyStatisticsQuery({ date: today });
+  const { data: calendar } = useGetCalendarQuery();
   const [createTracking] = useCreateTrackingMutation();
   
-  const handleAddCalories = async (calories: number) => {
-    await createTracking({
-      date: today,
-      calories,
-    });
+  // Создать запись из рецепта
+  const handleAddRecipe = async (recipeId: number) => {
+    await createTracking({ recipeId }).unwrap();
+  };
+  
+  // Создать кастомную запись
+  const handleAddCustom = async (name: string, calories: number) => {
+    await createTracking({ name, calories }).unwrap();
   };
   
   return (
     <View>
-      <Text>Total: {stats?.totalCalories || 0} kcal</Text>
-      <Button onPress={() => handleAddCalories(100)} title="Add 100 kcal" />
+      <Text>Calendar: {JSON.stringify(calendar)}</Text>
+      <Button onPress={() => handleAddCustom("Breakfast", 500)} title="Add 500 kcal" />
+      <Button onPress={() => handleAddRecipe(1)} title="Add Recipe" />
     </View>
   );
 }

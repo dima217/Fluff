@@ -45,10 +45,11 @@
 - ✅ `DELETE /products/{id}` - Удалить продукт
 
 ### Трекинг калорий
-- ✅ `GET /tracking` - Получить все записи
+- ✅ `GET /tracking/all` - Получить все записи (было `/tracking`)
+- ✅ `GET /tracking/calendar` - Получить календарь текущего месяца (НОВЫЙ)
 - ✅ `GET /tracking/{id}` - Получить запись по ID
-- ✅ `GET /tracking/statistics?dateStart=...&dateEnd=...` - Статистика (было `/tracking/statistics/day`)
-- ✅ `POST /tracking` - Создать запись (name, calories)
+- ✅ `GET /tracking/statistics?dateStart=...&dateEnd=...` - Статистика
+- ✅ `POST /tracking` - Создать запись (name+calories ИЛИ recipeId)
 - ✅ `PUT /tracking/{id}` - Обновить запись
 - ✅ `DELETE /tracking/{id}` - Удалить запись
 
@@ -73,10 +74,14 @@
 - `TrackingResponse.userId` → удалено
 - `TrackingResponse.updatedAt` → удалено
 - `TrackingResponse.name` → добавлено
+- `TrackingResponse.recipeId` → добавлено (опционально)
 - `TrackingResponse.created` → добавлено (вместо `createdAt`)
 - `CreateTrackingRequest.date` → удалено
-- `CreateTrackingRequest.name` → добавлено
+- `CreateTrackingRequest.name` → опционально (если нет recipeId)
+- `CreateTrackingRequest.calories` → опционально (если нет recipeId)
+- `CreateTrackingRequest.recipeId` → добавлено (опционально)
 - `TrackingStatistics.date` → `TrackingStatistics.dateStart` + `dateEnd`
+- Добавлен `TrackingCalendar` - календарь текущего месяца
 
 ## 📝 Новые эндпоинты
 

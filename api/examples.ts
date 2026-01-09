@@ -173,3 +173,26 @@ export function useSearchProductsExample() {
     search: handleSearch,
   };
 }
+
+// Пример 7: Трекинг калорий с календарем
+export function useTrackingCalendarExample() {
+  const { data: calendar, isLoading } = useGetCalendarQuery();
+  const [createTracking] = useCreateTrackingMutation();
+
+  // Создать запись из рецепта
+  const handleAddRecipe = async (recipeId: number) => {
+    await createTracking({ recipeId }).unwrap();
+  };
+
+  // Создать кастомную запись
+  const handleAddCustom = async (name: string, calories: number) => {
+    await createTracking({ name, calories }).unwrap();
+  };
+
+  return {
+    calendar: calendar || {},
+    isLoading,
+    addRecipe: handleAddRecipe,
+    addCustom: handleAddCustom,
+  };
+}

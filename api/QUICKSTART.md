@@ -124,10 +124,11 @@ baseUrl: __DEV__
 
 ### Трекинг калорий
 
-- `useGetTrackingQuery` - Получить записи трекинга
+- `useGetAllTrackingQuery` - Получить все записи трекинга (GET /tracking/all)
+- `useGetCalendarQuery` - Получить календарь текущего месяца (GET /tracking/calendar)
 - `useGetTrackingByIdQuery` - Получить запись по ID
 - `useGetStatisticsQuery` - Получить статистику за период (dateStart, dateEnd)
-- `useCreateTrackingMutation` - Создать запись (name, calories)
+- `useCreateTrackingMutation` - Создать запись (name+calories ИЛИ recipeId)
 - `useUpdateTrackingMutation` - Обновить запись
 - `useDeleteTrackingMutation` - Удалить запись
 

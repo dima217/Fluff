@@ -2,6 +2,7 @@ import { baseApi } from "../baseApi";
 import type {
   CreateTrackingRequest,
   GetTrackingStatisticsQuery,
+  TrackingCalendar,
   TrackingResponse,
   TrackingStatistics,
   UpdateTrackingRequest,
@@ -10,8 +11,14 @@ import type {
 export const trackingApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get all tracking records
-    getTracking: builder.query<TrackingResponse[], void>({
-      query: () => "/tracking",
+    getAllTracking: builder.query<TrackingResponse[], void>({
+      query: () => "/tracking/all",
+      providesTags: ["Tracking"],
+    }),
+
+    // Get current month calendar
+    getCalendar: builder.query<TrackingCalendar, void>({
+      query: () => "/tracking/calendar",
       providesTags: ["Tracking"],
     }),
 
@@ -74,8 +81,10 @@ export const trackingApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useGetTrackingQuery,
-  useLazyGetTrackingQuery,
+  useGetAllTrackingQuery,
+  useLazyGetAllTrackingQuery,
+  useGetCalendarQuery,
+  useLazyGetCalendarQuery,
   useGetTrackingByIdQuery,
   useLazyGetTrackingByIdQuery,
   useGetStatisticsQuery,

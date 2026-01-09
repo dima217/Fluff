@@ -294,12 +294,14 @@ export interface TrackingResponse {
   id: number;
   name: string;
   calories: number;
+  recipeId: number | null; // Recipe ID if tracking was created from a recipe
   created: string; // ISO 8601
 }
 
 export interface CreateTrackingRequest {
-  name: string;
-  calories: number;
+  name?: string; // Required if recipeId is not provided
+  calories?: number; // Required if recipeId is not provided
+  recipeId?: number; // Optional. If provided, name and calories will be taken from the recipe
 }
 
 export interface UpdateTrackingRequest {
@@ -316,6 +318,15 @@ export interface TrackingStatistics {
 export interface GetTrackingStatisticsQuery {
   dateStart: string; // YYYY-MM-DD
   dateEnd: string; // YYYY-MM-DD
+}
+
+export interface TrackingCalendarDay {
+  totalCalories: number;
+  records: TrackingResponse[];
+}
+
+export interface TrackingCalendar {
+  [date: string]: TrackingCalendarDay; // Key is YYYY-MM-DD
 }
 
 // Favorites types
