@@ -99,6 +99,7 @@ baseUrl: __DEV__
 - `useGetRecipeByIdQuery` - Получить рецепт по ID
 - `useGetMyRecipesQuery` - Получить рецепты текущего пользователя
 - `useGetFavoriteRecipesQuery` - Получить избранные рецепты
+- `useSearchRecipesQuery` - Поиск рецептов по продуктам и названию
 - `useCreateRecipeMutation` - Создать рецепт (с URL)
 - `useCreateRecipeWithMediaIdsMutation` - Создать рецепт (с загрузкой файлов)
 - `useUpdateRecipeMutation` - Обновить рецепт

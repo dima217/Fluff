@@ -9,6 +9,8 @@ import {
   useCreateRecipeWithMediaIdsMutation,
   useGetProfileQuery,
   useGetRecipesQuery,
+  useLazySearchProductsQuery,
+  useLazySearchRecipesQuery,
   useLoginMutation,
   useMarkUploadedMutation,
   usePrepareRecipeUploadMutation,
@@ -128,4 +130,46 @@ export function useCreateRecipeWithFilesExample() {
   };
 
   return { createRecipeWithFiles };
+}
+
+// Пример 5: Поиск рецептов
+export function useSearchRecipesExample() {
+  const [searchRecipes, { data: recipes, isLoading, error }] =
+    useLazySearchRecipesQuery();
+
+  const handleSearch = async (query: string) => {
+    try {
+      await searchRecipes({ q: query }).unwrap();
+    } catch (err) {
+      console.error("Search failed:", err);
+    }
+  };
+
+  return {
+    recipes: recipes || [],
+    isLoading,
+    error,
+    search: handleSearch,
+  };
+}
+
+// Пример 6: Поиск продуктов
+export function useSearchProductsExample() {
+  const [searchProducts, { data: products, isLoading, error }] =
+    useLazySearchProductsQuery();
+
+  const handleSearch = async (query: string) => {
+    try {
+      await searchProducts({ q: query }).unwrap();
+    } catch (err) {
+      console.error("Search failed:", err);
+    }
+  };
+
+  return {
+    products: products || [],
+    isLoading,
+    error,
+    search: handleSearch,
+  };
 }

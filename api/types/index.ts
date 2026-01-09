@@ -340,6 +340,15 @@ export interface PaginationQuery {
   limit?: number;
 }
 
+// Search types
+export interface SearchRecipesQuery {
+  q: string; // Search query (product names and/or recipe name)
+}
+
+export interface SearchProductsQuery {
+  q: string; // Search query (product names)
+}
+
 // Media types
 export interface MediaResponse {
   // Media file stream (blob)

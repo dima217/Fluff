@@ -9,6 +9,7 @@ import type {
   PrepareStepResourcesUploadRequest,
   PrepareStepResourcesUploadResponse,
   RecipeResponse,
+  SearchRecipesQuery,
   UpdateRecipeRequest,
 } from "../types";
 
@@ -74,6 +75,15 @@ export const recipesApi = baseApi.injectEndpoints({
     getFavoriteRecipes: builder.query<RecipeResponse[], void>({
       query: () => "/recipes/favorites",
       providesTags: ["Recipe", "Favorite"],
+    }),
+
+    // Search recipes
+    searchRecipes: builder.query<RecipeResponse[], SearchRecipesQuery>({
+      query: (params) => ({
+        url: "/recipes/search",
+        params: { q: params.q },
+      }),
+      providesTags: ["Recipe"],
     }),
 
     // Prepare recipe image upload
@@ -150,6 +160,8 @@ export const {
   useLazyGetMyRecipesQuery,
   useGetFavoriteRecipesQuery,
   useLazyGetFavoriteRecipesQuery,
+  useSearchRecipesQuery,
+  useLazySearchRecipesQuery,
   usePrepareRecipeUploadMutation,
   usePrepareStepResourcesUploadMutation,
   useMarkUploadedMutation,

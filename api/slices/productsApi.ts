@@ -6,6 +6,7 @@ import type {
   PrepareProductUploadRequest,
   PrepareProductUploadResponse,
   ProductResponse,
+  SearchProductsQuery,
   UpdateProductRequest,
 } from "../types";
 
@@ -62,6 +63,15 @@ export const productsApi = baseApi.injectEndpoints({
     getFavoriteProducts: builder.query<ProductResponse[], void>({
       query: () => "/products/favorites",
       providesTags: ["Product", "Favorite"],
+    }),
+
+    // Search products
+    searchProducts: builder.query<ProductResponse[], SearchProductsQuery>({
+      query: (params) => ({
+        url: "/products/search",
+        params: { q: params.q },
+      }),
+      providesTags: ["Product"],
     }),
 
     // Prepare product image upload
@@ -125,6 +135,8 @@ export const {
   useDeleteProductMutation,
   useGetFavoriteProductsQuery,
   useLazyGetFavoriteProductsQuery,
+  useSearchProductsQuery,
+  useLazySearchProductsQuery,
   usePrepareProductUploadMutation,
   useMarkProductUploadedMutation,
   useCreateProductWithMediaIdsMutation,
