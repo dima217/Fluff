@@ -7,7 +7,7 @@ import SearchInput from "@/widgets/Search/components/SearchInput";
 import { useRouter } from "expo-router";
 
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -34,17 +34,11 @@ export default function HomeScreen() {
       <View style={styles.container}>
         <AccountDetails />
 
-        <Pressable style={styles.pressableContainer} onPress={navigateToSearch}>
-          <SearchInput
-            isFiltering={false}
-            searchText=""
-            selectedFilters={[]}
-            onSearchChange={() => {}}
-            onToggleFilter={() => {}}
-            onFilterRemove={() => {}}
-            onBlur={() => {}}
-          />
-        </Pressable>
+        <SearchInput
+          isPlaceholder={true}
+          onPress={navigateToSearch}
+          onToggleFilter={() => {}}
+        />
 
         <Toogle
           options={toggleOptions}

@@ -13,8 +13,22 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingRight: 4,
   },
+  placeholderContent: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  placeholderText: {
+    flex: 1,
+  },
+  placeholderInput: {
+    color: "gray",
+    fontSize: 16,
+  },
   row: {
     flexDirection: "row",
+    paddingLeft: 10,
     alignItems: "center",
   },
   inputWrapper: {

@@ -5,12 +5,18 @@ import { ThemedText } from "@/shared/ui/ThemedText";
 import Library from "@/widgets/Library";
 import LibraryContent from "@/widgets/Library/components/LibraryContent";
 import SearchInput from "@/widgets/Search/components/SearchInput";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 const LibraryScreen = () => {
   const { t } = useTranslation();
   const [toogle, setToogle] = useState<string>(t("library.recipes"));
+  const router = useRouter();
+
+  const navigateToSearch = () => {
+    router.push("/(search)/search");
+  };
 
   return (
     <ScrollView
@@ -20,12 +26,9 @@ const LibraryScreen = () => {
     >
       <View style={[styles.container]}>
         <SearchInput
-          isFiltering={false}
-          searchText={""}
-          selectedFilters={[]}
-          onSearchChange={() => {}}
+          isPlaceholder={true}
+          onPress={navigateToSearch}
           onToggleFilter={() => {}}
-          onFilterRemove={() => {}}
         />
         <View
           style={{ flex: 1, alignSelf: "stretch", gap: 20, marginBottom: 20 }}
