@@ -5,7 +5,7 @@ import LoginForm from "@/shared/Forms/LoginForm";
 import SignUpPrompt from "@/shared/ui/SignUpPrompt";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useRouter } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import Fluff from "../../assets/images/Fluff.svg";
 
 const Login = () => {
@@ -20,6 +20,14 @@ const Login = () => {
           <ThemedText>{t("auth.login")}</ThemedText>
         </View>
         <LoginForm />
+        <TouchableOpacity
+          onPress={() => router.push("/(auth)/recovery")}
+          style={styles.recoveryLink}
+        >
+          <ThemedText type="xs" style={styles.recoveryLinkText}>
+            {t("auth.forgotPassword") || "Забыли пароль?"}
+          </ThemedText>
+        </TouchableOpacity>
       </View>
       <View style={styles.innerContainer}>
         <GradientButton title={t("auth.continueWith")} onPress={() => {}} />
@@ -62,5 +70,13 @@ const styles = StyleSheet.create({
     marginBottom: "15%",
     width: "90%",
     alignItems: "center",
+  },
+  recoveryLink: {
+    marginTop: 15,
+    alignItems: "center",
+  },
+  recoveryLinkText: {
+    textDecorationLine: "underline",
+    color: Colors.primary,
   },
 });

@@ -58,6 +58,16 @@ export const translations = {
       loginFailed: "Не удалось войти в систему",
       invalidCredentials: "Неверный email или пароль",
       userNotFound: "Пользователь не найден",
+      forgotPassword: "Забыли пароль?",
+      recoverPassword: "Восстановление пароля",
+      recoveryDescription: "Введите email, на который будет отправлен код восстановления",
+      sendCode: "Отправить код",
+      resetPassword: "Сбросить пароль",
+      confirmPassword: "Подтвердите пароль",
+      changeEmail: "изменить email",
+      toLogin: "к входу",
+      recoveryFailed: "Не удалось восстановить пароль",
+      invalidCode: "Неверный код восстановления",
     },
     // Onboarding
     onboarding: {
@@ -213,6 +223,16 @@ export const translations = {
       loginFailed: "Не ўдалося ўвайсці ў сістэму",
       invalidCredentials: "Няправільны email або пароль",
       userNotFound: "Карыстальнік не знойдзены",
+      forgotPassword: "Забылі пароль?",
+      recoverPassword: "Аднаўленне пароля",
+      recoveryDescription: "Увядзіце email, на які будзе адпраўлены код аднаўлення",
+      sendCode: "Адправіць код",
+      resetPassword: "Скінуць пароль",
+      confirmPassword: "Пацвердзіце пароль",
+      changeEmail: "змяніць email",
+      toLogin: "да ўваходу",
+      recoveryFailed: "Не ўдалося аднавіць пароль",
+      invalidCode: "Няправільны код аднаўлення",
     },
     // Onboarding
     onboarding: {
@@ -234,6 +254,7 @@ export const translations = {
       edit: "Рэдагаваць",
       close: "Зачыніць",
       enter: "Увядзіце",
+      loading: "Загрузка...",
     },
     // Health
     health: {
@@ -368,6 +389,16 @@ export const translations = {
       loginFailed: "Failed to log in",
       invalidCredentials: "Invalid email or password",
       userNotFound: "User not found",
+      forgotPassword: "Forgot password?",
+      recoverPassword: "Password Recovery",
+      recoveryDescription: "Enter the email address where the recovery code will be sent",
+      sendCode: "Send Code",
+      resetPassword: "Reset Password",
+      confirmPassword: "Confirm Password",
+      changeEmail: "change email",
+      toLogin: "to login",
+      recoveryFailed: "Failed to recover password",
+      invalidCode: "Invalid recovery code",
     },
     // Onboarding
     onboarding: {
@@ -388,6 +419,7 @@ export const translations = {
       edit: "Edit",
       close: "Close",
       enter: "Enter",
+      loading: "Loading...",
     },
     // Recipe
     recipe: {

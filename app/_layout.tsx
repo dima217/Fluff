@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/design-tokens";
 import { LocalizationProvider } from "@/contexts/LocalizationContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -28,27 +29,29 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <LocalizationProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <Stack
-            screenOptions={{
-              contentStyle: {
-                backgroundColor: Colors.background,
-              },
-              presentation: "transparentModal",
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="(app)" options={{ headerShown: false }} />
-            <Stack.Screen name="(search)" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(recipe)" options={{ headerShown: false }} />
+        <AuthProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Stack
+              screenOptions={{
+                contentStyle: {
+                  backgroundColor: Colors.background,
+                },
+                presentation: "transparentModal",
+                headerShown: false,
+              }}
+            >
+              <Stack.Screen name="(app)" options={{ headerShown: false }} />
+              <Stack.Screen name="(search)" options={{ headerShown: false }} />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(recipe)" options={{ headerShown: false }} />
 
-            <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-            <Stack.Screen name="notifications" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="auto" />
-        </GestureHandlerRootView>
+              <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+              <Stack.Screen name="notifications" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="auto" />
+          </GestureHandlerRootView>
+        </AuthProvider>
       </LocalizationProvider>
     </Provider>
   );

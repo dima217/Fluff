@@ -1,4 +1,6 @@
-import { useLoginMutation } from "@/api";
+import { useGetProfileQuery, useLoginMutation } from "@/api";
+import { useAppDispatch } from "@/api/hooks";
+import { setProfile } from "@/api/slices/userSlice";
 import { useTranslation } from "@/hooks/useTranslation";
 import ErrorModal from "@/shared/Modals/ErrorModal";
 import WelcomeModal from "@/shared/Modals/WelcomeModal";
@@ -32,7 +34,9 @@ const loginSchema = yup.object({
 const LoginForm = () => {
   const router = useRouter();
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
+  const { refetch: refetchProfile } = useGetProfileQuery();
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -55,6 +59,17 @@ const LoginForm = () => {
         username: data.username,
         password: data.password,
       }).unwrap();
+
+      // Load user profile after successful login
+      try {
+        const profileResult = await refetchProfile();
+        if (profileResult.data) {
+          dispatch(setProfile(profileResult.data));
+        }
+      } catch (profileError) {
+        console.error("Failed to load profile:", profileError);
+      }
+
       setShowWelcomeModal(true);
     } catch (error: any) {
       let errorMsg = t("auth.loginFailed") || "Не удалось войти в систему";

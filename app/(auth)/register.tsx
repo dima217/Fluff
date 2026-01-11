@@ -1,9 +1,11 @@
-import { useSignUpInitMutation, useSignUpMutation } from "@/api";
+import { useGetProfileQuery, useSignUpInitMutation, useSignUpMutation } from "@/api";
+import { useAppDispatch } from "@/api/hooks";
 import { useTranslation } from "@/hooks/useTranslation";
 import ErrorModal from "@/shared/Modals/ErrorModal";
 import VerificationCodeModal from "@/shared/Modals/VerificationCodeModal";
 import View from "@/shared/View";
 import ProgressDots from "@/shared/ui/ProgressDots";
+import { setProfile } from "@/api/slices/userSlice";
 import Age from "@/widgets/SignUp/AgeScreen";
 import CodeScreen from "@/widgets/SignUp/CodeScreen";
 import EmailScreen from "@/widgets/SignUp/EmailScreen";
@@ -28,8 +30,10 @@ const RegisterScreenContent: React.FC = () => {
     useSignUpFormContext();
   const { t } = useTranslation();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [signUpInit] = useSignUpInitMutation();
   const [signUp] = useSignUpMutation();
+  const { refetch: refetchProfile } = useGetProfileQuery();
   const [showCodeModal, setShowCodeModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -103,6 +107,16 @@ const RegisterScreenContent: React.FC = () => {
         height: parseFloat(finalData.height || "0"),
         weight: parseFloat(finalData.weight || "0"),
       }).unwrap();
+
+      // Load user profile after successful registration
+      try {
+        const profileResult = await refetchProfile();
+        if (profileResult.data) {
+          dispatch(setProfile(profileResult.data));
+        }
+      } catch (profileError) {
+        console.error("Failed to load profile:", profileError);
+      }
 
       router.replace("/(app)/home");
       resetForm();

@@ -1,3 +1,5 @@
+import { useGetProfileQuery } from "@/api";
+import { useAppSelector } from "@/api/hooks";
 import Bell from "@/assets/images/Bell.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import { useRouter } from "expo-router";
@@ -8,13 +10,36 @@ import { ThemedText } from "../ui/ThemedText";
 
 const AccountDetails = () => {
   const router = useRouter();
+  const { data: profile } = useGetProfileQuery();
+  const user = useAppSelector((state) => state.user.profile);
+
+  const displayProfile = profile || user;
+
+  const getInitials = () => {
+    if (!displayProfile?.user) return "?";
+    const firstName = displayProfile.user.firstName || "";
+    const lastName = displayProfile.user.lastName || "";
+    if (firstName && lastName) {
+      return `${firstName[0]}${lastName[0]}`.toUpperCase();
+    }
+    if (firstName) return firstName[0].toUpperCase();
+    if (displayProfile.user.email)
+      return displayProfile.user.email[0].toUpperCase();
+    return "?";
+  };
+
+  const getFirstName = () => {
+    if (!displayProfile?.user) return "";
+    return displayProfile.user.firstName || displayProfile.user.email || "";
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
-        <Avatar size={CircleSizes.MEDIUM} title="K" />
+        <Avatar size={CircleSizes.MEDIUM} title={getInitials()} />
         <View style={styles.infoContainer}>
-          <ThemedText type="s">Katsiaryna</ThemedText>
-          <ThemedText type="xs">katrinkaling@gmail.com</ThemedText>
+          <ThemedText type="s">{getFirstName()}</ThemedText>
+          <ThemedText type="xs">{displayProfile?.user?.email || ""}</ThemedText>
         </View>
       </View>
       <Circle

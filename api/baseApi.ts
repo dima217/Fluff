@@ -89,7 +89,7 @@ const baseQueryWithReauth: BaseQueryFn<
         // Refresh failed, clear tokens and redirect to login
         await tokenStorage.clearTokens();
       }
-    } catch (error) {
+    } catch {
       // Refresh failed, clear tokens
       await tokenStorage.clearTokens();
     }

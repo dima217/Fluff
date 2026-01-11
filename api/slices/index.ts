@@ -6,3 +6,4 @@ export * from "./productsApi";
 export * from "./profileApi";
 export * from "./recipesApi";
 export * from "./trackingApi";
+export * from "./userSlice";

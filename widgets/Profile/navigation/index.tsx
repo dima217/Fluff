@@ -1,10 +1,13 @@
+import { useLogoutMutation } from "@/api";
+import { useAppDispatch } from "@/api/hooks";
+import { clearUser } from "@/api/slices/userSlice";
 import Bell from "@/assets/images/BellIncative.svg";
 import Settings from "@/assets/images/Setting.svg";
 import SignOut from "@/assets/images/SignOut.svg";
 import Support from "@/assets/images/Support.svg";
 import Tooth from "@/assets/images/Tooth.svg";
 import { useTranslation } from "@/hooks/useTranslation";
-import { Href } from "expo-router";
+import { Href, useRouter } from "expo-router";
 import { ReactNode } from "react";
 
 export interface MenuItem {
@@ -18,6 +21,21 @@ export interface MenuItem {
 
 export const useProfileMenuItems = (): MenuItem[] => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const [logout] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+      dispatch(clearUser());
+      router.replace("/(auth)/login");
+    } catch (error) {
+      // Even if logout fails, clear local state
+      dispatch(clearUser());
+      router.replace("/(auth)/login");
+    }
+  };
 
   return [
     {
@@ -52,9 +70,7 @@ export const useProfileMenuItems = (): MenuItem[] => {
       id: "logout",
       title: t("profile.logOut"),
       icon: <SignOut />,
-      onPress: () => {
-        console.log("Logout");
-      },
+      onPress: handleLogout,
     },
   ];
 };
