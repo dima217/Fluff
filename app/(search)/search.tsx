@@ -1,15 +1,10 @@
-import {
-  useLazySearchProductsQuery,
-  useLazySearchRecipesQuery,
-} from "@/api";
-import { useTranslation } from "@/hooks/useTranslation";
+import { useLazySearchProductsQuery, useLazySearchRecipesQuery } from "@/api";
 import View from "@/shared/View";
 import SearchOverlayContent from "@/widgets/Search";
 import SearchInput from "@/widgets/Search/components/SearchInput";
 import { useEffect, useMemo, useState } from "react";
 
 const SearchScreen = () => {
-  const { t } = useTranslation();
   const [searchText, setSearchText] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
@@ -37,6 +32,12 @@ const SearchScreen = () => {
     }
   }, [debouncedSearchText, searchRecipes, searchProducts]);
 
+  const addFilter = (filter: string) => {
+    if (!selectedFilters.includes(filter)) {
+      setSelectedFilters([...selectedFilters, filter]);
+    }
+  };
+
   const removeFilter = (filter: string) => {
     setSelectedFilters(selectedFilters.filter((f) => f !== filter));
   };
@@ -46,8 +47,7 @@ const SearchScreen = () => {
   };
 
   const handleTagSelect = (tag: string) => {
-    setSearchText(tag);
-    setDebouncedSearchText(tag);
+    addFilter(tag);
   };
 
   const hasSearchResults = useMemo(() => {

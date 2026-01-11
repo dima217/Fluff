@@ -2,7 +2,7 @@ import { Colors } from "@/constants/design-tokens";
 import Circle from "@/shared/ui/Circle";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface RecipeCardProps {
   title: string;
@@ -14,6 +14,7 @@ interface RecipeCardProps {
   description: string;
   onLike?: () => void;
   onMenu?: () => void;
+  onPress?: () => void;
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({
@@ -26,9 +27,10 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   description,
   onLike,
   onMenu,
+  onPress,
 }) => {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.header}>
         <View>
           <Text style={styles.title}>{title}</Text>
@@ -43,7 +45,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
             color={Colors.inactive}
           />
           <Circle
-            onPress={onLike}
+            onPress={onMenu}
             svg={<MaterialIcons name="more-vert" size={24} color="#aaa" />}
             color={Colors.inactive}
           />
@@ -68,7 +70,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
       </View>
 
       <Text style={styles.description}>{description}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

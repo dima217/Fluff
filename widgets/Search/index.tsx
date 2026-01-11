@@ -3,6 +3,7 @@ import { CircleSizes } from "@/constants/components/CIrcle";
 import { Colors } from "@/constants/design-tokens";
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
+import { useRouter } from "expo-router";
 import React, { useMemo } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import Circle from "../../shared/ui/Circle";
@@ -27,6 +28,16 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
   isLoading = false,
   hasSearchResults = false,
 }) => {
+  const router = useRouter();
+
+  const handleRecipePress = (item: MealData) => {
+    if (item.recipeId) {
+      router.push({
+        pathname: "/(recipe)/recipe",
+        params: { recipeId: item.recipeId.toString() },
+      });
+    }
+  };
   const searchHistory = [
     "Pancakes",
     "Recipes",
@@ -89,7 +100,7 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
                 <Text style={overlayStyles.sectionTitle}>Рецепты</Text>
                 <CardsCarousel
                   products={recipesAsMealData}
-                  onCardPress={() => {}}
+                  onCardPress={handleRecipePress}
                   variant="featured"
                 />
               </>
@@ -115,7 +126,6 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
     );
   }
 
-  // Show history and popular when no search
   return (
     <ScrollView
       style={overlayStyles.scrollContainer}
@@ -146,7 +156,7 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
       />
 
       <Text style={overlayStyles.sectionTitle}>Last Visited</Text>
-      <CardsCarousel onCardPress={() => {}} variant="mealsToday" />
+      <CardsCarousel onCardPress={(item) => {}} variant="mealsToday" />
     </ScrollView>
   );
 };

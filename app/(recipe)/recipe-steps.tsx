@@ -22,7 +22,25 @@ const RecipeSteps = () => {
   const params = useLocalSearchParams();
   const { t } = useTranslation();
 
-  const recipe: RecipeData = JSON.parse(params.data as string);
+  let recipe: RecipeData;
+  try {
+    recipe = JSON.parse(params.data as string);
+  } catch (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Ошибка загрузки данных рецепта</Text>
+      </View>
+    );
+  }
+
+  if (!recipe || !recipe.steps || recipe.steps.length === 0) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Рецепт не содержит шагов</Text>
+      </View>
+    );
+  }
+
   const [stepIndex, setStepIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
@@ -75,9 +93,19 @@ const RecipeSteps = () => {
               <ArrowLeft />
             </TouchableOpacity>
           )}
-          <Text style={styles.stepNumber}>Step {currentStep.id}</Text>
+          <Text style={styles.stepNumber}>
+            {currentStep.title || `Step ${currentStep.id}`}
+          </Text>
           {currentStep.image && (
-            <Image source={currentStep.image} style={styles.stepImage} />
+            <Image
+              source={
+                typeof currentStep.image === "object" && "uri" in currentStep.image
+                  ? currentStep.image
+                  : currentStep.image
+              }
+              style={styles.stepImage}
+              resizeMode="cover"
+            />
           )}
           <Text style={styles.stepDescription}>{currentStep.description}</Text>
         </RNView>
@@ -145,5 +173,16 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 240,
     borderRadius: 12,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  errorText: {
+    color: "#fff",
+    fontSize: 16,
+    textAlign: "center",
   },
 });

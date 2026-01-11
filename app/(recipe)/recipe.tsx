@@ -1,3 +1,4 @@
+import { useGetRecipeByIdQuery } from "@/api";
 import { Colors } from "@/constants/design-tokens";
 import { RecipeData } from "@/constants/types";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -7,43 +8,88 @@ import View from "@/shared/View";
 import IngredientsSection from "@/widgets/Recipe/RecipeInfo/components/IngredientsSection";
 import RecipeCard from "@/widgets/Recipe/RecipeInfo/components/RecipeCard";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useMemo } from "react";
 
 import {
+  ActivityIndicator,
   ImageBackground,
   View as RNView,
   ScrollView,
   StyleSheet,
+  Text,
 } from "react-native";
 
 export default function RecipeScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams();
   const { t } = useTranslation();
 
-  const recipeData: RecipeData = {
-    title: "Brownie",
-    steps: [
-      {
-        id: 1,
-        title: "Step 1",
-        description:
-          "Break the chocolate into pieces and melt it with the butter in a double boiler, stirring constantly with a spatula or wooden spoon. Remove the resulting thick chocolate sauce from the boiler and let it cool.",
-      },
-      {
-        id: 2,
-        title: "Step 2",
-        description:
-          "Meanwhile, mix the eggs with 100 grams of brown sugar. Crack the eggs into a separate bowl and beat, gradually adding the sugar. You can beat with a mixer or by hand — whichever you prefer — but for at least two and a half to three minutes.",
-      },
-      {
-        id: 3,
-        title: "Step 3",
-        description:
-          "Using a sharp knife, chop the walnuts on a cutting board. You can toast them in a dry frying pan beforehand until fragrant, but this is optional.",
-        image: require("@/assets/images/step.png"),
-      },
-    ],
+  const recipeId = params.recipeId ? parseInt(params.recipeId as string) : null;
+
+  const {
+    data: recipe,
+    isLoading,
+    error,
+  } = useGetRecipeByIdQuery(recipeId!, {
+    skip: !recipeId,
+  });
+
+  // Convert RecipeResponse to RecipeData
+  const recipeData: RecipeData | null = useMemo(() => {
+    if (!recipe) return null;
+
+    const steps =
+      recipe.stepsConfig?.steps?.map((step, index) => {
+        // Get first image resource if available
+        const imageResource = step.resources?.find((r) => r.type === "image");
+        const imageUrl = imageResource?.source;
+
+        return {
+          id: index + 1,
+          title: step.name || `Step ${index + 1}`,
+          description: step.description,
+          image: imageUrl ? { uri: imageUrl } : undefined,
+        };
+      }) || [];
+
+    return {
+      title: recipe.name,
+      steps,
+    };
+  }, [recipe]);
+
+  // Format cook time
+  const formatCookTime = (seconds: number) => {
+    if (seconds < 60) return `${seconds}м`;
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    if (hours > 0) {
+      const remainingMinutes = minutes % 60;
+      return remainingMinutes > 0
+        ? `${hours}ч ${remainingMinutes}м`
+        : `${hours}ч`;
+    }
+    return `${minutes}м`;
   };
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
+
+  if (error || !recipe || !recipeData) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>
+          {error ? "Ошибка загрузки рецепта" : "Рецепт не найден"}
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView
@@ -54,7 +100,11 @@ export default function RecipeScreen() {
       showsVerticalScrollIndicator={false}
     >
       <ImageBackground
-        source={require("@/assets/images/Cake.png")}
+        source={
+          recipe.image?.cover
+            ? { uri: recipe.image.cover }
+            : require("@/assets/images/Cake.png")
+        }
         style={styles.background}
         resizeMode="cover"
       >
@@ -69,15 +119,27 @@ export default function RecipeScreen() {
 
       <View style={styles.innerContainer}>
         <RecipeCard
-          title="Brownie"
-          category="Dessert"
-          restaurant="Fluff"
-          rating={5.0}
-          time="1h"
-          calories={676}
-          description="One of the world's most popular desserts, the brownie, was invented in 1893 in the kitchen of the legendary Palmer House Hotel in Chicago. They still bake the cake there according to the original recipe, topped with an apricot glaze. The homemade version, however, has such a stunning sugar crust that glazing it would be a crime."
+          title={recipe.name}
+          category={recipe.type?.name || "Recipe"}
+          restaurant={
+            recipe.fluffAt
+              ? "Fluff"
+              : recipe.user
+                ? `${recipe.user.firstName} ${recipe.user.lastName}`
+                : "Unknown"
+          }
+          rating={recipe.average || 0}
+          time={formatCookTime(recipe.cookAt)}
+          calories={recipe.calories}
+          description={recipe.description || ""}
           onLike={() => console.log("Liked!")}
           onMenu={() => console.log("Menu pressed")}
+          onPress={() => {
+            router.push({
+              pathname: "/recipe-steps",
+              params: { data: JSON.stringify(recipeData) },
+            });
+          }}
         />
 
         <IngredientsSection />
@@ -85,10 +147,12 @@ export default function RecipeScreen() {
         <Button
           title={t("recipe.cookIt")}
           onPress={() => {
-            router.push({
-              pathname: "/recipe-steps",
-              params: { data: JSON.stringify(recipeData) },
-            });
+            if (recipeData) {
+              router.push({
+                pathname: "/recipe-steps",
+                params: { data: JSON.stringify(recipeData) },
+              });
+            }
           }}
         />
       </View>
@@ -125,5 +189,23 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 200,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.background,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.background,
+    padding: 20,
+  },
+  errorText: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
   },
 });

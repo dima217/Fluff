@@ -13,7 +13,7 @@ const LibraryContent = ({ selected }: HomeContentProps) => {
     case t("library.recipes"):
       return (
         <View style={styles.section}>
-          <CardsCarousel onCardPress={() => {}} variant="featured" />
+          <CardsCarousel onCardPress={(item) => {}} variant="featured" />
         </View>
       );
   }
