@@ -1,9 +1,6 @@
-import { Colors } from "@/constants/design-tokens";
 import { useTranslation } from "@/hooks/useTranslation";
+import BaseModal from "@/shared/Modals/BaseModal";
 import React from "react";
-import { Modal, StyleSheet, Text, View } from "react-native";
-import Button from "../Buttons/Button";
-import GradientView from "../ui/GradientView";
 
 interface ExitConfirmationModalProps {
   isVisible: boolean;
@@ -17,109 +14,27 @@ const ExitConfirmationModal: React.FC<ExitConfirmationModalProps> = ({
   onCancel,
 }) => {
   const { t } = useTranslation();
-  
-  return (
-    <Modal
-      visible={isVisible}
-      transparent={true}
-      animationType="fade"
-      onRequestClose={onCancel}
-    >
-      <View style={styles.centeredView}>
-        <View style={styles.innerContainer}>
-          <GradientView style={styles.modalView}>
-            <Text style={styles.modalTitle}>{t("modal.warning")}</Text>
-            <Text style={styles.modalText}>
-              {t("modal.exitConfirm")}
-            </Text>
-            <View style={styles.buttonContainer}>
-              <Button
-                title={t("modal.exit")}
-                style={[styles.button, styles.buttonConfirm]}
-                onPress={onConfirmExit}
-              ></Button>
 
-              <Button
-                title={t("common.cancel")}
-                style={[styles.button, styles.buttonCancel]}
-                onPress={onCancel}
-                textColor={Colors.primary}
-              ></Button>
-            </View>
-          </GradientView>
-        </View>
-      </View>
-    </Modal>
+  return (
+    <BaseModal
+      isVisible={isVisible}
+      title={t("modal.warning")}
+      message={t("modal.exitConfirm")}
+      onClose={onCancel}
+      buttons={[
+        {
+          title: t("modal.exit"),
+          onPress: onConfirmExit,
+          variant: "primary",
+        },
+        {
+          title: t("common.cancel"),
+          onPress: onCancel,
+          variant: "secondary",
+        },
+      ]}
+    />
   );
 };
 
 export default ExitConfirmationModal;
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-  },
-  innerContainer: {
-    width: "85%",
-    height: "32%",
-  },
-  modalView: {
-    borderRadius: 12,
-    justifyContent: "center",
-    padding: 12,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    width: "100%",
-    maxWidth: 400,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: Colors.text,
-  },
-  modalText: {
-    marginBottom: 20,
-    textAlign: "center",
-    color: Colors.border,
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  buttonContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    width: "100%",
-    gap: 10,
-  },
-  button: {
-    elevation: 2,
-    marginHorizontal: 5,
-  },
-  buttonCancel: {
-    backgroundColor: Colors.text,
-    borderWidth: 1,
-  },
-  buttonConfirm: {
-    backgroundColor: Colors.primary,
-  },
-  textStyleCancel: {
-    color: Colors.inactive,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  textStyleConfirm: {
-    color: Colors.text,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-});

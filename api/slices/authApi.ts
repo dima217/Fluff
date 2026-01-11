@@ -31,8 +31,12 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          await tokenStorage.setAccessToken(data.access);
-          await tokenStorage.setRefreshToken(data.refresh);
+          if (data?.access && typeof data.access === "string") {
+            await tokenStorage.setAccessToken(data.access);
+          }
+          if (data?.refresh && typeof data.refresh === "string") {
+            await tokenStorage.setRefreshToken(data.refresh);
+          }
         } catch (error) {
           // Token storage failed, but mutation might have succeeded
           console.error("Failed to store tokens:", error);
@@ -50,8 +54,12 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          await tokenStorage.setAccessToken(data.access);
-          await tokenStorage.setRefreshToken(data.refresh);
+          if (data?.access && typeof data.access === "string") {
+            await tokenStorage.setAccessToken(data.access);
+          }
+          if (data?.refresh && typeof data.refresh === "string") {
+            await tokenStorage.setRefreshToken(data.refresh);
+          }
         } catch (error) {
           console.error("Failed to store tokens:", error);
         }
@@ -68,7 +76,9 @@ export const authApi = baseApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           // Returns just the access token as a string
-          await tokenStorage.setAccessToken(data as string);
+          if (data && typeof data === "string") {
+            await tokenStorage.setAccessToken(data);
+          }
           // Refresh token stays in cookie
         } catch (error) {
           console.error("Failed to store token:", error);
@@ -86,7 +96,7 @@ export const authApi = baseApi.injectEndpoints({
         try {
           await queryFulfilled;
           await tokenStorage.clearTokens();
-        } catch (error) {
+        } catch {
           // Even if logout fails, clear local tokens
           await tokenStorage.clearTokens();
         }
@@ -124,8 +134,12 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          await tokenStorage.setAccessToken(data.access);
-          await tokenStorage.setRefreshToken(data.refresh);
+          if (data?.access && typeof data.access === "string") {
+            await tokenStorage.setAccessToken(data.access);
+          }
+          if (data?.refresh && typeof data.refresh === "string") {
+            await tokenStorage.setRefreshToken(data.refresh);
+          }
         } catch (error) {
           console.error("Failed to store tokens:", error);
         }

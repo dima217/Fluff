@@ -7,6 +7,27 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getBaseUrl } from "./config";
 import { tokenStorage } from "./utils/tokenStorage";
 
+// Helper function to extract refreshToken from Set-Cookie header
+const extractRefreshTokenFromCookie = (
+  setCookieHeader: string | string[] | undefined
+): string | null => {
+  if (!setCookieHeader) return null;
+
+  const cookies = Array.isArray(setCookieHeader)
+    ? setCookieHeader
+    : [setCookieHeader];
+
+  for (const cookie of cookies) {
+    // Look for refreshToken cookie
+    const match = cookie.match(/refreshToken=([^;]+)/);
+    if (match && match[1]) {
+      return decodeURIComponent(match[1]);
+    }
+  }
+
+  return null;
+};
+
 // Custom base query with token injection and refresh logic
 const baseQuery = fetchBaseQuery({
   baseUrl: getBaseUrl(),
@@ -19,6 +40,21 @@ const baseQuery = fetchBaseQuery({
     return headers;
   },
   credentials: "include", // Important for cookies (refreshToken)
+  fetchFn: async (url, options) => {
+    const response = await fetch(url, options);
+
+    // Extract refreshToken from Set-Cookie header if present
+    const setCookieHeader = response.headers.get("set-cookie");
+    if (setCookieHeader) {
+      const refreshToken = extractRefreshTokenFromCookie(setCookieHeader);
+      if (refreshToken) {
+        // Store refreshToken in SecureStore for later use
+        await tokenStorage.setRefreshToken(refreshToken);
+      }
+    }
+
+    return response;
+  },
 });
 
 // Base query with token refresh

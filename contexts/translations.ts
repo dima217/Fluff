@@ -55,6 +55,9 @@ export const translations = {
       error: "Ошибка",
       emailAlreadyExists: "Этот email уже зарегистрирован",
       failedToSendCode: "Не удалось отправить код верификации",
+      loginFailed: "Не удалось войти в систему",
+      invalidCredentials: "Неверный email или пароль",
+      userNotFound: "Пользователь не найден",
     },
     // Onboarding
     onboarding: {
@@ -207,6 +210,9 @@ export const translations = {
       error: "Памылка",
       emailAlreadyExists: "Гэты email ужо зарэгістраваны",
       failedToSendCode: "Не ўдалося адправіць код верифікацыі",
+      loginFailed: "Не ўдалося ўвайсці ў сістэму",
+      invalidCredentials: "Няправільны email або пароль",
+      userNotFound: "Карыстальнік не знойдзены",
     },
     // Onboarding
     onboarding: {
@@ -359,6 +365,9 @@ export const translations = {
       error: "Error",
       emailAlreadyExists: "This email is already registered",
       failedToSendCode: "Failed to send verification code",
+      loginFailed: "Failed to log in",
+      invalidCredentials: "Invalid email or password",
+      userNotFound: "User not found",
     },
     // Onboarding
     onboarding: {

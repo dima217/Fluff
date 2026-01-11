@@ -15,7 +15,13 @@ export const tokenStorage = {
 
   async setAccessToken(token: string): Promise<void> {
     try {
-      await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, token);
+      // Ensure token is a string
+      const tokenString = typeof token === 'string' ? token : String(token);
+      if (!tokenString) {
+        console.warn('Attempted to set empty access token');
+        return;
+      }
+      await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, tokenString);
     } catch (error) {
       console.error('Error setting access token:', error);
     }
@@ -32,7 +38,13 @@ export const tokenStorage = {
 
   async setRefreshToken(token: string): Promise<void> {
     try {
-      await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, token);
+      // Ensure token is a string
+      const tokenString = typeof token === 'string' ? token : String(token);
+      if (!tokenString) {
+        console.warn('Attempted to set empty refresh token');
+        return;
+      }
+      await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, tokenString);
     } catch (error) {
       console.error('Error setting refresh token:', error);
     }
