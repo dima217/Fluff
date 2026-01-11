@@ -5,6 +5,7 @@ import CalorieInput from "@/shared/Colories/components/CaloriesInput";
 import CalorieProgress from "@/shared/Colories/components/CaloriesProgress";
 import { useDayPickerData } from "@/shared/DateWheelItem/utils";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import MarkerContainer from "@/widgets/Health/components/MarkerContainer";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
@@ -43,6 +44,9 @@ const Health = () => {
           noBackground
           onValueChange={handleValueChange}
         />
+        <View style={styles.markerContainerWrapper}>
+          <MarkerContainer />
+        </View>
         <CalorieProgress
           currentCalories={456}
           dailyGoal={2137}
@@ -75,5 +79,10 @@ const styles = StyleSheet.create({
   },
   selectContainer: {
     backgroundColor: "transparent",
+  },
+  markerContainerWrapper: {
+    width: "100%",
+    alignItems: "flex-start",
+    paddingBottom: 24,
   },
 });

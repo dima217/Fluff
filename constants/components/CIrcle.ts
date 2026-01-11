@@ -5,4 +5,5 @@ export const CircleSizes = {
   SMALL: 45,
   MEDIUM: 53,
   DOT: 6,
+  MARKER: 16,
 };

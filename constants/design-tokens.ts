@@ -12,6 +12,10 @@ export const Colors = {
   border: "#5B5B5B",
   gradient: ["#1A1A1A", "#242424"] as const,
   reject: "#ff4a75",
+  cheatMeal: "#7CCF77",
+  notTracked: "#D9D9D9",
+  strongExcess: "#FF6D38",
+  insufficientIntake: "#3D80BA",
 };
 
 export const Fonts = Platform.select({
