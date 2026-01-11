@@ -1,28 +1,41 @@
+import {
+  useLazySearchProductsQuery,
+  useLazySearchRecipesQuery,
+} from "@/api";
 import { useTranslation } from "@/hooks/useTranslation";
 import View from "@/shared/View";
 import SearchOverlayContent from "@/widgets/Search";
 import SearchInput from "@/widgets/Search/components/SearchInput";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const SearchScreen = () => {
   const { t } = useTranslation();
   const [searchText, setSearchText] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
 
-  const availableFilters = [
-    t("search.pancakes"),
-    t("search.recipes"),
-    t("search.eggs"),
-    t("search.milk"),
-    t("search.whiteBread"),
-    t("search.caloriesBase"),
-  ];
+  // Lazy queries for search
+  const [searchRecipes, { data: recipes, isLoading: isLoadingRecipes }] =
+    useLazySearchRecipesQuery();
+  const [searchProducts, { data: products, isLoading: isLoadingProducts }] =
+    useLazySearchProductsQuery();
 
-  const addFilter = (filter: string) => {
-    if (!selectedFilters.includes(filter)) {
-      setSelectedFilters([...selectedFilters, filter]);
+  // Debounce search text
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
+  // Perform search when debounced text changes
+  useEffect(() => {
+    if (debouncedSearchText.trim().length > 0) {
+      searchRecipes({ q: debouncedSearchText });
+      searchProducts({ q: debouncedSearchText });
     }
-  };
+  }, [debouncedSearchText, searchRecipes, searchProducts]);
 
   const removeFilter = (filter: string) => {
     setSelectedFilters(selectedFilters.filter((f) => f !== filter));
@@ -30,16 +43,21 @@ const SearchScreen = () => {
 
   const handleSearchChange = (text: string) => {
     setSearchText(text);
-
-    const match = availableFilters.find(
-      (f) => f.toLowerCase() === text.toLowerCase()
-    );
-
-    if (match) {
-      addFilter(match);
-      setSearchText("");
-    }
   };
+
+  const handleTagSelect = (tag: string) => {
+    setSearchText(tag);
+    setDebouncedSearchText(tag);
+  };
+
+  const hasSearchResults = useMemo(() => {
+    return (
+      debouncedSearchText.trim().length > 0 &&
+      ((recipes && recipes.length > 0) || (products && products.length > 0))
+    );
+  }, [debouncedSearchText, recipes, products]);
+
+  const isLoading = isLoadingRecipes || isLoadingProducts;
 
   return (
     <View>
@@ -53,8 +71,13 @@ const SearchScreen = () => {
       />
 
       <SearchOverlayContent
-        onSelectTag={addFilter}
+        onSelectTag={handleTagSelect}
         selectedFilters={selectedFilters}
+        searchText={debouncedSearchText}
+        recipes={recipes}
+        products={products}
+        isLoading={isLoading}
+        hasSearchResults={hasSearchResults}
       />
     </View>
   );
