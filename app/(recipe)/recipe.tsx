@@ -1,4 +1,9 @@
-import { useGetRecipeByIdQuery } from "@/api";
+import {
+  useAddToFavoritesMutation,
+  useGetProductsQuery,
+  useGetRecipeByIdQuery,
+  useRemoveFromFavoritesMutation,
+} from "@/api";
 import { Colors } from "@/constants/design-tokens";
 import { RecipeData } from "@/constants/types";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -9,7 +14,7 @@ import IngredientsSection from "@/widgets/Recipe/RecipeInfo/components/Ingredien
 import RecipeCard from "@/widgets/Recipe/RecipeInfo/components/RecipeCard";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   ActivityIndicator,
@@ -34,6 +39,51 @@ export default function RecipeScreen() {
   } = useGetRecipeByIdQuery(recipeId!, {
     skip: !recipeId,
   });
+
+  // Get all products to filter by recipe product IDs
+  const { data: allProducts } = useGetProductsQuery();
+
+  // Filter products by recipe product IDs
+  const recipeProducts = useMemo(() => {
+    if (!recipe?.products || !allProducts) return [];
+    return allProducts.filter((product) =>
+      recipe.products.includes(product.id)
+    );
+  }, [recipe?.products, allProducts]);
+
+  // Favorites mutations
+  const [addToFavorites] = useAddToFavoritesMutation();
+  const [removeFromFavorites] = useRemoveFromFavoritesMutation();
+
+  // Local like state
+  const [isLiked, setIsLiked] = useState(recipe?.favorite ?? false);
+
+  // Update local state when recipe changes
+  useEffect(() => {
+    if (recipe) {
+      setIsLiked(recipe.favorite ?? false);
+    }
+  }, [recipe]);
+
+  // Handle like toggle
+  const handleLike = useCallback(async () => {
+    if (!recipeId) return;
+
+    const newLikedState = !isLiked;
+    setIsLiked(newLikedState);
+
+    try {
+      if (newLikedState) {
+        await addToFavorites({ type: "recipe", id: recipeId }).unwrap();
+      } else {
+        await removeFromFavorites({ type: "recipe", id: recipeId }).unwrap();
+      }
+    } catch (error) {
+      console.error("Failed to toggle favorite:", error);
+      // Revert on error
+      setIsLiked(!newLikedState);
+    }
+  }, [isLiked, recipeId, addToFavorites, removeFromFavorites]);
 
   // Convert RecipeResponse to RecipeData
   const recipeData: RecipeData | null = useMemo(() => {
@@ -132,7 +182,8 @@ export default function RecipeScreen() {
           time={formatCookTime(recipe.cookAt)}
           calories={recipe.calories}
           description={recipe.description || ""}
-          onLike={() => console.log("Liked!")}
+          onLike={handleLike}
+          isLiked={isLiked}
           onMenu={() => console.log("Menu pressed")}
           onPress={() => {
             router.push({
@@ -142,7 +193,7 @@ export default function RecipeScreen() {
           }}
         />
 
-        <IngredientsSection />
+        <IngredientsSection products={recipeProducts} />
 
         <Button
           title={t("recipe.cookIt")}

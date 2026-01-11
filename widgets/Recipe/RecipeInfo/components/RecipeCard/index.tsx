@@ -15,6 +15,7 @@ interface RecipeCardProps {
   onLike?: () => void;
   onMenu?: () => void;
   onPress?: () => void;
+  isLiked?: boolean;
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({
@@ -28,6 +29,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   onLike,
   onMenu,
   onPress,
+  isLiked = false,
 }) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
@@ -41,7 +43,13 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         <View style={styles.headerIcons}>
           <Circle
             onPress={onLike}
-            svg={<Ionicons name="heart" size={24} color={Colors.primary} />}
+            svg={
+              <Ionicons
+                name={isLiked ? "heart" : "heart-outline"}
+                size={24}
+                color={isLiked ? Colors.primary : "#aaa"}
+              />
+            }
             color={Colors.inactive}
           />
           <Circle
