@@ -1,4 +1,4 @@
-import { useGetProfileQuery } from "@/api";
+import { RootState, useGetProfileQuery } from "@/api";
 import { useAppSelector } from "@/api/hooks";
 import Bell from "@/assets/images/Bell.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
@@ -11,7 +11,7 @@ import { ThemedText } from "../ui/ThemedText";
 const AccountDetails = () => {
   const router = useRouter();
   const { data: profile } = useGetProfileQuery();
-  const user = useAppSelector((state) => state.user.profile);
+  const user = useAppSelector((state: RootState) => state.user.profile);
 
   const displayProfile = profile || user;
 

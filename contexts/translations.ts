@@ -147,9 +147,11 @@ export const translations = {
     // Home sections
     homeSections: {
       myRecipes: "Мои рецепты",
+      previoslyWatched: "Ранее вы искали",
       seeAll: "Смотреть все",
       mealsToday: "Блюда сегодня",
       popularRecipes: "Популярные рецепты",
+      recommendedRecipes: "Рекомендации",
     },
     // Search
     search: {
@@ -317,9 +319,11 @@ export const translations = {
     // Home sections
     homeSections: {
       myRecipes: "Мае рэцэпты",
+      previoslyWatched: "Раней вы шукалі",
       seeAll: "Глядзець усё",
       mealsToday: "Стравы сёння",
       popularRecipes: "Папулярныя рэцэпты",
+      recommendedRecipes: "Рэкамендацыі",
     },
     // Search
     search: {
@@ -486,9 +490,11 @@ export const translations = {
     // Home sections
     homeSections: {
       myRecipes: "My recipes",
+      previoslyWatched: "Previously you searched",
       seeAll: "See All",
       mealsToday: "Meals today",
       popularRecipes: "Popular recipes",
+      recommendedRecipes: "Recommendations",
     },
     // Search
     search: {

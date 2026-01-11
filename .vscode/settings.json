@@ -4,5 +4,13 @@
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
   },
-  "cSpell.words": ["ampm", "ccal", "Incative", "MMKV", "Toogle", "viewability"]
+  "cSpell.words": [
+    "ampm",
+    "ccal",
+    "Incative",
+    "MMKV",
+    "previosly",
+    "Toogle",
+    "viewability"
+  ]
 }

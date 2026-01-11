@@ -13,6 +13,7 @@ interface RecipeCardProps {
   status?: string;
   variant: "carousel" | "list";
   onPress: () => void;
+  onLikePress?: () => void;
   isLiked?: boolean;
 }
 
@@ -22,19 +23,35 @@ const MealCard = ({
   imageUrl,
   status,
   onPress,
+  onLikePress,
   variant,
   isLiked = false,
 }: RecipeCardProps) => {
   const isCarouselItem = variant === "carousel";
 
+  const handleLikePress = (e: any) => {
+    e?.stopPropagation?.();
+    if (onLikePress) {
+      onLikePress();
+    }
+  };
+
+  //TODO: STROKE COLOR CHANGE ON LIKE/UNLIKE
   const renderActionIcon = () => {
     if (isCarouselItem) {
+      const strokeColor = isLiked ? Colors.primary : "#8B868F";
+      const fillColor = isLiked ? Colors.primary : "none";
+
       return (
-        <Heart
-          width={24}
-          height={24}
-          color={isLiked ? Colors.primary : "transparent"}
-        />
+        <TouchableOpacity onPress={handleLikePress} activeOpacity={0.7}>
+          <Heart
+            width={24}
+            height={24}
+            stroke={strokeColor}
+            fill={fillColor}
+            strokeWidth={1}
+          />
+        </TouchableOpacity>
       );
     } else {
       return null;

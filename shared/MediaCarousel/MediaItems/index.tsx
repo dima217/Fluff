@@ -112,11 +112,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     borderRadius: 16,
     overflow: "hidden",
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
   },
   imageWrapper: {
     overflow: "hidden",
@@ -134,6 +129,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     padding: 15,
+    borderRadius: 16,
+    overflow: "hidden",
   },
   playButtonContainer: {
     ...StyleSheet.absoluteFillObject,
