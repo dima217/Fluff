@@ -31,6 +31,12 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
+          console.log("[authApi] SignUp successful, received tokens:", {
+            hasAccess: !!data?.access,
+            hasRefresh: !!data?.refresh,
+            accessType: typeof data?.access,
+            refreshType: typeof data?.refresh,
+          });
           if (data?.access && typeof data.access === "string") {
             await tokenStorage.setAccessToken(data.access);
           }
@@ -39,7 +45,7 @@ export const authApi = baseApi.injectEndpoints({
           }
         } catch (error) {
           // Token storage failed, but mutation might have succeeded
-          console.error("Failed to store tokens:", error);
+          console.error("[authApi] Failed to store tokens:", error);
         }
       },
     }),
@@ -54,6 +60,12 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
+          console.log("[authApi] Login successful, received tokens:", {
+            hasAccess: !!data?.access,
+            hasRefresh: !!data?.refresh,
+            accessType: typeof data?.access,
+            refreshType: typeof data?.refresh,
+          });
           if (data?.access && typeof data.access === "string") {
             await tokenStorage.setAccessToken(data.access);
           }
@@ -61,7 +73,7 @@ export const authApi = baseApi.injectEndpoints({
             await tokenStorage.setRefreshToken(data.refresh);
           }
         } catch (error) {
-          console.error("Failed to store tokens:", error);
+          console.error("[authApi] Failed to store tokens:", error);
         }
       },
     }),
@@ -75,11 +87,9 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          // Returns just the access token as a string
           if (data && typeof data === "string") {
             await tokenStorage.setAccessToken(data);
           }
-          // Refresh token stays in cookie
         } catch (error) {
           console.error("Failed to store token:", error);
         }
@@ -88,18 +98,12 @@ export const authApi = baseApi.injectEndpoints({
 
     // Logout
     logout: builder.mutation<void, void>({
-      query: () => ({
-        url: "/user/sign-out",
-        method: "POST",
-      }),
-      async onQueryStarted(arg, { queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          await tokenStorage.clearTokens();
-        } catch {
-          // Even if logout fails, clear local tokens
-          await tokenStorage.clearTokens();
-        }
+      query: () => {
+        console.log("[authApi] Logout mutation query called");
+        return {
+          url: "/user/sign-out",
+          method: "POST",
+        };
       },
     }),
 
@@ -112,7 +116,6 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // Recovery confirmation
     recoveryConfirm: builder.mutation<
       { message: string },
       RecoveryConfirmRequest
@@ -124,7 +127,6 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // OAuth login
     oauthLogin: builder.mutation<AuthResponse, OAuthLoginRequest>({
       query: (body) => ({
         url: "/oauth/login",
@@ -134,6 +136,12 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
+          console.log("[authApi] OAuth login successful, received tokens:", {
+            hasAccess: !!data?.access,
+            hasRefresh: !!data?.refresh,
+            accessType: typeof data?.access,
+            refreshType: typeof data?.refresh,
+          });
           if (data?.access && typeof data.access === "string") {
             await tokenStorage.setAccessToken(data.access);
           }
@@ -141,7 +149,7 @@ export const authApi = baseApi.injectEndpoints({
             await tokenStorage.setRefreshToken(data.refresh);
           }
         } catch (error) {
-          console.error("Failed to store tokens:", error);
+          console.error("[authApi] Failed to store tokens:", error);
         }
       },
     }),

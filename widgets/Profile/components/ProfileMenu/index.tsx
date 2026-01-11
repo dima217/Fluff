@@ -5,25 +5,28 @@ import ProfileSection from "./ui/ProfileSection";
 
 const ProfileMenu = () => {
   const router = useRouter();
-  const profileMenuItems = useProfileMenuItems();
+  const { items: profileMenuItems, logoutModal } = useProfileMenuItems();
 
   return (
-    <View style={styles.container}>
-      {profileMenuItems.map((item, index) => (
-        <ProfileSection
-          key={item.id}
-          icon={item.icon}
-          title={item.title}
-          onPress={() => {
-            if (item.href) {
-              router.push(item.href);
-            } else item.onPress?.();
-          }}
-          isNested={item.isNested ?? false}
-          isLast={index === profileMenuItems.length - 1}
-        />
-      ))}
-    </View>
+    <>
+      <View style={styles.container}>
+        {profileMenuItems.map((item, index) => (
+          <ProfileSection
+            key={item.id}
+            icon={item.icon}
+            title={item.title}
+            onPress={() => {
+              if (item.href) {
+                router.push(item.href);
+              } else item.onPress?.();
+            }}
+            isNested={item.isNested ?? false}
+            isLast={index === profileMenuItems.length - 1}
+          />
+        ))}
+      </View>
+      {logoutModal}
+    </>
   );
 };
 

@@ -1,11 +1,17 @@
-import { useGetProfileQuery, useSignUpInitMutation, useSignUpMutation } from "@/api";
+import {
+  useGetProfileQuery,
+  useOauthLoginMutation,
+  useSignUpInitMutation,
+  useSignUpMutation,
+} from "@/api";
 import { useAppDispatch } from "@/api/hooks";
+import { setProfile } from "@/api/slices/userSlice";
 import { useTranslation } from "@/hooks/useTranslation";
+import GradientButton from "@/shared/Buttons/GradientButton";
 import ErrorModal from "@/shared/Modals/ErrorModal";
 import VerificationCodeModal from "@/shared/Modals/VerificationCodeModal";
 import View from "@/shared/View";
 import ProgressDots from "@/shared/ui/ProgressDots";
-import { setProfile } from "@/api/slices/userSlice";
 import Age from "@/widgets/SignUp/AgeScreen";
 import CodeScreen from "@/widgets/SignUp/CodeScreen";
 import EmailScreen from "@/widgets/SignUp/EmailScreen";
@@ -24,6 +30,7 @@ import {
 import { signUpStepsConfig } from "@/widgets/SignUp/validation/validationSchemas";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { View as RNView, StyleSheet } from "react-native";
 
 const RegisterScreenContent: React.FC = () => {
   const { step, setTotalSteps, resetForm, formData, setStep } =
@@ -33,11 +40,48 @@ const RegisterScreenContent: React.FC = () => {
   const dispatch = useAppDispatch();
   const [signUpInit] = useSignUpInitMutation();
   const [signUp] = useSignUpMutation();
+  const [oauthLogin] = useOauthLoginMutation();
   const { refetch: refetchProfile } = useGetProfileQuery();
   const [showCodeModal, setShowCodeModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [codeSent, setCodeSent] = useState(false);
+
+  const handleGoogleSignUp = async () => {
+    try {
+      // TODO: Replace with actual Google OAuth token
+      // This should get the token from Google Sign-In SDK
+      const googleToken = "PLACEHOLDER_TOKEN"; // Replace with actual token from Google OAuth
+
+      await oauthLogin({
+        token: googleToken,
+        type: "GOOGLE",
+      }).unwrap();
+
+      // Load user profile after successful registration
+      try {
+        const profileResult = await refetchProfile();
+        if (profileResult.data) {
+          dispatch(setProfile(profileResult.data));
+        }
+      } catch (profileError) {
+        console.error("Failed to load profile:", profileError);
+      }
+
+      router.replace("/(app)/home");
+      resetForm();
+    } catch (error: any) {
+      let errorMsg =
+        t("auth.loginFailed") || "Не удалось зарегистрироваться через Google";
+
+      if (error?.data?.message) {
+        errorMsg = error.data.message;
+      }
+
+      setErrorMessage(errorMsg);
+      setShowErrorModal(true);
+    }
+  };
 
   useEffect(() => {
     setTotalSteps(8);
@@ -157,6 +201,14 @@ const RegisterScreenContent: React.FC = () => {
       >
         {renderStepComponent()}
       </SignUpFormWrapper>
+      {step === 0 && (
+        <RNView style={styles.googleButtonContainer}>
+          <GradientButton
+            title={`${t("auth.continueWith")} Google`}
+            onPress={handleGoogleSignUp}
+          />
+        </RNView>
+      )}
       <VerificationCodeModal
         isVisible={showCodeModal}
         email={formData.email || ""}
@@ -167,8 +219,6 @@ const RegisterScreenContent: React.FC = () => {
         message={errorMessage}
         onClose={() => {
           setShowErrorModal(false);
-          // Пользователь уже на шаге с email (step 0)
-          // Не делаем редирект
         }}
       />
     </View>
@@ -182,5 +232,12 @@ const RegisterScreen: React.FC = () => {
     </SignUpFormProvider>
   );
 };
+
+const styles = StyleSheet.create({
+  googleButtonContainer: {
+    width: "100%",
+    alignSelf: "center",
+  },
+});
 
 export default RegisterScreen;

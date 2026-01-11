@@ -40,16 +40,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const userProfile = useAppSelector((state) => state.user.profile);
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
 
-  // Try to fetch profile if we have a token
   const {
     data: profile,
     isLoading: isLoadingProfile,
     error: profileError,
   } = useGetProfileQuery(undefined, {
-    skip: hasToken === false, // Skip if we know there's no token
+    skip: hasToken === false,
   });
 
-  // Check for token on mount
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -57,10 +55,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setHasToken(!!accessToken);
 
         if (accessToken) {
-          // We have a token, profile query will run automatically
-          // Wait for it to complete
         } else {
-          // No token, user is not authenticated
           dispatch(clearUser());
         }
       } catch (error) {
@@ -75,37 +70,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkAuth();
   }, [dispatch]);
 
-  // Update profile in Redux when fetched
   useEffect(() => {
     if (profile) {
       dispatch(setProfile(profile));
     } else if (profileError && hasToken) {
-      // Token exists but profile fetch failed - likely invalid token
       dispatch(clearUser());
       tokenStorage.clearTokens().catch(console.error);
       setHasToken(false);
     }
   }, [profile, profileError, hasToken, dispatch]);
 
-  // Handle navigation based on auth state
   useEffect(() => {
     if (isInitializing || isLoadingProfile) {
-      return; // Don't navigate while initializing
+      return;
     }
 
     const inAuthGroup = segments[0] === "(auth)";
     const inOnboarding = segments[0] === "onboarding";
 
-    // Skip navigation if we're on onboarding
     if (inOnboarding) {
       return;
     }
 
     if (!isAuthenticated && !inAuthGroup) {
-      // User is not authenticated and not in auth group - redirect to login
       router.replace("/(auth)/login");
     } else if (isAuthenticated && inAuthGroup) {
-      // User is authenticated but in auth group - redirect to home
       router.replace("/(app)/home");
     }
   }, [isAuthenticated, isInitializing, isLoadingProfile, segments, router]);
@@ -116,7 +105,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     profile: userProfile || profile,
   };
 
-  // Show loading screen while initializing
   if (isInitializing || (hasToken === true && isLoadingProfile)) {
     return (
       <View style={styles.loadingContainer}>

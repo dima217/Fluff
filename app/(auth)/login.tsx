@@ -1,16 +1,68 @@
+import { useGetProfileQuery, useOauthLoginMutation } from "@/api";
+import { useAppDispatch } from "@/api/hooks";
+import { setProfile } from "@/api/slices/userSlice";
 import { Colors } from "@/constants/design-tokens";
 import { useTranslation } from "@/hooks/useTranslation";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import LoginForm from "@/shared/Forms/LoginForm";
+import ErrorModal from "@/shared/Modals/ErrorModal";
+import WelcomeModal from "@/shared/Modals/WelcomeModal";
 import SignUpPrompt from "@/shared/ui/SignUpPrompt";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useRouter } from "expo-router";
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Fluff from "../../assets/images/Fluff.svg";
 
 const Login = () => {
   const router = useRouter();
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const [oauthLogin] = useOauthLoginMutation();
+  const { refetch: refetchProfile } = useGetProfileQuery();
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleGoogleLogin = async () => {
+    try {
+      // TODO: Replace with actual Google OAuth token
+      // This should get the token from Google Sign-In SDK
+      // For now, this is a placeholder
+      const googleToken = "PLACEHOLDER_TOKEN"; // Replace with actual token from Google OAuth
+
+      await oauthLogin({
+        token: googleToken,
+        type: "GOOGLE",
+      }).unwrap();
+
+      // Load user profile after successful login
+      try {
+        const profileResult = await refetchProfile();
+        if (profileResult.data) {
+          dispatch(setProfile(profileResult.data));
+        }
+      } catch (profileError) {
+        console.error("Failed to load profile:", profileError);
+      }
+
+      setShowWelcomeModal(true);
+    } catch (error: any) {
+      let errorMsg = t("auth.loginFailed") || "Не удалось войти через Google";
+
+      if (error?.data?.message) {
+        errorMsg = error.data.message;
+      }
+
+      setErrorMessage(errorMsg);
+      setShowErrorModal(true);
+    }
+  };
+
+  const handleWelcomeClose = () => {
+    setShowWelcomeModal(false);
+    router.replace("/(app)/home");
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -30,14 +82,22 @@ const Login = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.innerContainer}>
-        <GradientButton title={t("auth.continueWith")} onPress={() => {}} />
-        <GradientButton title={t("auth.continueWith")} onPress={() => {}} />
+        <GradientButton
+          title={`${t("auth.continueWith")} Google`}
+          onPress={handleGoogleLogin}
+        />
         <SignUpPrompt
           onPressSignUp={() => {
             router.navigate("/(auth)/register");
           }}
         />
       </View>
+      <WelcomeModal isVisible={showWelcomeModal} onClose={handleWelcomeClose} />
+      <ErrorModal
+        isVisible={showErrorModal}
+        message={errorMessage}
+        onClose={() => setShowErrorModal(false)}
+      />
     </View>
   );
 };
