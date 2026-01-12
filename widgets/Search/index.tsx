@@ -3,12 +3,20 @@ import { CircleSizes } from "@/constants/components/CIrcle";
 import { Colors } from "@/constants/design-tokens";
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
+import { searchStorage } from "@/utils/searchStorage";
 import { useRouter } from "expo-router";
-import React, { useMemo } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Circle from "../../shared/ui/Circle";
 import { ThemedText } from "../../shared/ui/ThemedText";
 import FilterTags from "./components/FilterTags";
+import LastVisitedRecipes from "./components/LastVisitedRecipes";
 
 interface SearchOverlayContentProps {
   onSelectTag: (tag: string) => void;
@@ -18,6 +26,7 @@ interface SearchOverlayContentProps {
   products?: ProductResponse[];
   isLoading?: boolean;
   hasSearchResults?: boolean;
+  onSearchFromHistory?: (query: string) => void;
 }
 
 const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
@@ -27,8 +36,25 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
   products = [],
   isLoading = false,
   hasSearchResults = false,
+  onSearchFromHistory,
 }) => {
   const router = useRouter();
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [lastVisitedIds, setLastVisitedIds] = useState<number[]>([]);
+
+  // Load search history and last visited on mount
+  useEffect(() => {
+    setSearchHistory(searchStorage.getSearchHistory());
+    setLastVisitedIds(searchStorage.getLastVisited());
+  }, []);
+
+  // Reload when search text changes (to update history)
+  useEffect(() => {
+    if (searchText.trim().length === 0) {
+      setSearchHistory(searchStorage.getSearchHistory());
+      setLastVisitedIds(searchStorage.getLastVisited());
+    }
+  }, [searchText]);
 
   const handleRecipePress = (item: MealData) => {
     if (item.recipeId) {
@@ -38,14 +64,12 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
       });
     }
   };
-  const searchHistory = [
-    "Pancakes",
-    "Recipes",
-    "Eggs",
-    "Milk",
-    "White Bread",
-    "Calories Base",
-  ];
+
+  const handleHistoryItemPress = (query: string) => {
+    if (onSearchFromHistory) {
+      onSearchFromHistory(query);
+    }
+  };
 
   const popularRecipes = [
     "Eggs",
@@ -69,7 +93,6 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
     }));
   }, [recipes]);
 
-  // Convert products to MealData format
   const productsAsMealData: MealData[] = useMemo(() => {
     return products.map((product) => ({
       id: product.id.toString(),
@@ -81,7 +104,6 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
     }));
   }, [products]);
 
-  // Show search results if there's a search query
   if (searchText.trim().length > 0) {
     return (
       <ScrollView
@@ -134,18 +156,26 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
     >
       <Text style={overlayStyles.sectionTitle}>Search History</Text>
 
-      <View style={overlayStyles.historyContainer}>
-        {searchHistory.map((item, index) => (
-          <React.Fragment key={index}>
-            <ThemedText type="xs" key={index}>
-              {item}
-            </ThemedText>
-            {index < searchHistory.length - 1 && (
-              <Circle size={CircleSizes.DOT} />
-            )}
-          </React.Fragment>
-        ))}
-      </View>
+      {searchHistory.length > 0 ? (
+        <View style={overlayStyles.historyContainer}>
+          {searchHistory.map((item, index) => (
+            <React.Fragment key={index}>
+              <TouchableOpacity onPress={() => handleHistoryItemPress(item)}>
+                <ThemedText type="xs" style={overlayStyles.historyItem}>
+                  {item}
+                </ThemedText>
+              </TouchableOpacity>
+              {index < searchHistory.length - 1 && (
+                <Circle size={CircleSizes.DOT} />
+              )}
+            </React.Fragment>
+          ))}
+        </View>
+      ) : (
+        <ThemedText type="xs" style={overlayStyles.emptyText}>
+          Нет истории поиска
+        </ThemedText>
+      )}
 
       <Text style={overlayStyles.sectionTitle}>Popular recipes</Text>
 
@@ -156,7 +186,16 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
       />
 
       <Text style={overlayStyles.sectionTitle}>Last Visited</Text>
-      <CardsCarousel onCardPress={(item) => {}} variant="mealsToday" />
+      {lastVisitedIds.length > 0 ? (
+        <LastVisitedRecipes
+          recipeIds={lastVisitedIds}
+          onCardPress={handleRecipePress}
+        />
+      ) : (
+        <ThemedText type="xs" style={overlayStyles.emptyText}>
+          Нет посещенных рецептов
+        </ThemedText>
+      )}
     </ScrollView>
   );
 };
@@ -195,6 +234,9 @@ const overlayStyles = StyleSheet.create({
     fontSize: 16,
     marginRight: 10,
     marginBottom: 10,
+  },
+  historyItem: {
+    color: "white",
   },
   loadingText: {
     color: "white",

@@ -31,6 +31,7 @@ interface CardsScrollProps extends ViewProps {
   products?: MealData[]; // Products data from API
   onCardPress: (item: MealData) => void;
   onLikePress?: (item: MealData) => void; // Optional custom handler, if not provided uses built-in logic
+  onScrollToEnd?: () => void; // Callback when user scrolls near the end
 }
 
 const renderListItem = (
@@ -74,6 +75,7 @@ const CardsCarousel = ({
   products,
   onCardPress,
   onLikePress: customOnLikePress,
+  onScrollToEnd,
 }: CardsScrollProps) => {
   const isCarouselVariant = variant === "featured";
 
@@ -177,6 +179,24 @@ const CardsCarousel = ({
     return renderListItem(props, onCardPress, onLikePress);
   };
 
+  const handleScroll = useCallback(
+    (event: any) => {
+      if (!onScrollToEnd) return;
+
+      const { layoutMeasurement, contentOffset, contentSize } =
+        event.nativeEvent;
+      const paddingToEnd = 100; // Load more when 100px from end
+      const isCloseToEnd =
+        layoutMeasurement.width + contentOffset.x >=
+        contentSize.width - paddingToEnd;
+
+      if (isCloseToEnd) {
+        onScrollToEnd();
+      }
+    },
+    [onScrollToEnd]
+  );
+
   if (isCarouselVariant) {
     return (
       <View style={[styles.container, styles.verticalList]}>
@@ -196,6 +216,9 @@ const CardsCarousel = ({
         keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.carouselList}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        onMomentumScrollEnd={handleScroll}
       />
     </View>
   );

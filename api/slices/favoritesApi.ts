@@ -15,9 +15,50 @@ export const favoritesApi = baseApi.injectEndpoints({
         url: `/favorites/${type}/${id}`,
         method: "POST",
       }),
+      async onQueryStarted({ type, id }, { dispatch, queryFulfilled }) {
+        const patches: { undo: () => void }[] = [];
+
+        if (type === "recipe") {
+          // Optimistically update getRecipeById cache
+          const patch1 = dispatch(
+            (baseApi.util.updateQueryData as any)(
+              "getRecipeById",
+              id,
+              (draft: any) => {
+                if (draft) {
+                  draft.favorite = true;
+                }
+              }
+            )
+          );
+          patches.push(patch1);
+        } else if (type === "product") {
+          // Optimistically update getProductById cache
+          const patch1 = dispatch(
+            (baseApi.util.updateQueryData as any)(
+              "getProductById",
+              id,
+              (draft: any) => {
+                if (draft) {
+                  draft.favorite = true;
+                }
+              }
+            )
+          );
+          patches.push(patch1);
+        }
+
+        try {
+          await queryFulfilled;
+        } catch {
+          // Revert all patches on error
+          patches.forEach((patch) => patch.undo());
+        }
+      },
       invalidatesTags: (result, error, { type, id }) => [
         "Favorite",
         { type: type === "recipe" ? "Recipe" : "Product", id },
+        "Recipe", // Invalidate all Recipe queries to update search results
       ],
     }),
 
@@ -30,9 +71,50 @@ export const favoritesApi = baseApi.injectEndpoints({
         url: `/favorites/${type}/${id}`,
         method: "DELETE",
       }),
+      async onQueryStarted({ type, id }, { dispatch, queryFulfilled }) {
+        const patches: { undo: () => void }[] = [];
+
+        if (type === "recipe") {
+          // Optimistically update getRecipeById cache
+          const patch1 = dispatch(
+            (baseApi.util.updateQueryData as any)(
+              "getRecipeById",
+              id,
+              (draft: any) => {
+                if (draft) {
+                  draft.favorite = false;
+                }
+              }
+            )
+          );
+          patches.push(patch1);
+        } else if (type === "product") {
+          // Optimistically update getProductById cache
+          const patch1 = dispatch(
+            (baseApi.util.updateQueryData as any)(
+              "getProductById",
+              id,
+              (draft: any) => {
+                if (draft) {
+                  draft.favorite = false;
+                }
+              }
+            )
+          );
+          patches.push(patch1);
+        }
+
+        try {
+          await queryFulfilled;
+        } catch {
+          // Revert all patches on error
+          patches.forEach((patch) => patch.undo());
+        }
+      },
       invalidatesTags: (result, error, { type, id }) => [
         "Favorite",
         { type: type === "recipe" ? "Recipe" : "Product", id },
+        "Recipe", // Invalidate all Recipe queries to update search results
       ],
     }),
   }),

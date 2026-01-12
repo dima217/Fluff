@@ -1,5 +1,6 @@
 import { useLazySearchProductsQuery, useLazySearchRecipesQuery } from "@/api";
 import View from "@/shared/View";
+import { searchStorage } from "@/utils/searchStorage";
 import SearchOverlayContent from "@/widgets/Search";
 import SearchInput from "@/widgets/Search/components/SearchInput";
 import { useEffect, useMemo, useState } from "react";
@@ -29,6 +30,8 @@ const SearchScreen = () => {
     if (debouncedSearchText.trim().length > 0) {
       searchRecipes({ q: debouncedSearchText });
       searchProducts({ q: debouncedSearchText });
+      // Save to search history
+      searchStorage.addToSearchHistory(debouncedSearchText);
     }
   }, [debouncedSearchText, searchRecipes, searchProducts]);
 
@@ -47,6 +50,8 @@ const SearchScreen = () => {
   };
 
   const handleTagSelect = (tag: string) => {
+    // If tag is from search history, perform search
+    setSearchText(tag);
     addFilter(tag);
   };
 
@@ -78,6 +83,9 @@ const SearchScreen = () => {
         products={products}
         isLoading={isLoading}
         hasSearchResults={hasSearchResults}
+        onSearchFromHistory={(query) => {
+          setSearchText(query);
+        }}
       />
     </View>
   );

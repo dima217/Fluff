@@ -21,7 +21,13 @@ export const recipesApi = baseApi.injectEndpoints({
         url: "/recipes",
         params: params || {},
       }),
-      providesTags: ["Recipe"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "Recipe" as const, id })),
+              "Recipe",
+            ]
+          : ["Recipe"],
     }),
 
     // Get recipe by ID
@@ -83,7 +89,13 @@ export const recipesApi = baseApi.injectEndpoints({
         url: "/recipes/search",
         params: { q: params.q },
       }),
-      providesTags: ["Recipe"],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "Recipe" as const, id })),
+              "Recipe",
+            ]
+          : ["Recipe"],
     }),
 
     // Prepare recipe image upload

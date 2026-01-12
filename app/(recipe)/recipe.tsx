@@ -10,11 +10,12 @@ import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
+import { searchStorage } from "@/utils/searchStorage";
 import IngredientsSection from "@/widgets/Recipe/RecipeInfo/components/IngredientsSection";
 import RecipeCard from "@/widgets/Recipe/RecipeInfo/components/RecipeCard";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 import {
   ActivityIndicator,
@@ -40,10 +41,15 @@ export default function RecipeScreen() {
     skip: !recipeId,
   });
 
-  // Get all products to filter by recipe product IDs
+  // Save to last visited when recipe is loaded
+  useEffect(() => {
+    if (recipeId) {
+      searchStorage.addToLastVisited(recipeId);
+    }
+  }, [recipeId]);
+
   const { data: allProducts } = useGetProductsQuery();
 
-  // Filter products by recipe product IDs
   const recipeProducts = useMemo(() => {
     if (!recipe?.products || !allProducts) return [];
     return allProducts.filter((product) =>
@@ -51,26 +57,13 @@ export default function RecipeScreen() {
     );
   }, [recipe?.products, allProducts]);
 
-  // Favorites mutations
   const [addToFavorites] = useAddToFavoritesMutation();
   const [removeFromFavorites] = useRemoveFromFavoritesMutation();
 
-  // Local like state
-  const [isLiked, setIsLiked] = useState(recipe?.favorite ?? false);
-
-  // Update local state when recipe changes
-  useEffect(() => {
-    if (recipe) {
-      setIsLiked(recipe.favorite ?? false);
-    }
-  }, [recipe]);
-
-  // Handle like toggle
   const handleLike = useCallback(async () => {
-    if (!recipeId) return;
+    if (!recipeId || !recipe) return;
 
-    const newLikedState = !isLiked;
-    setIsLiked(newLikedState);
+    const newLikedState = !recipe.favorite;
 
     try {
       if (newLikedState) {
@@ -80,18 +73,14 @@ export default function RecipeScreen() {
       }
     } catch (error) {
       console.error("Failed to toggle favorite:", error);
-      // Revert on error
-      setIsLiked(!newLikedState);
     }
-  }, [isLiked, recipeId, addToFavorites, removeFromFavorites]);
+  }, [recipe, recipeId, addToFavorites, removeFromFavorites]);
 
-  // Convert RecipeResponse to RecipeData
   const recipeData: RecipeData | null = useMemo(() => {
     if (!recipe) return null;
 
     const steps =
       recipe.stepsConfig?.steps?.map((step, index) => {
-        // Get first image resource if available
         const imageResource = step.resources?.find((r) => r.type === "image");
         const imageUrl = imageResource?.source;
 
@@ -109,7 +98,6 @@ export default function RecipeScreen() {
     };
   }, [recipe]);
 
-  // Format cook time
   const formatCookTime = (seconds: number) => {
     if (seconds < 60) return `${seconds}м`;
     const minutes = Math.floor(seconds / 60);
@@ -183,7 +171,7 @@ export default function RecipeScreen() {
           calories={recipe.calories}
           description={recipe.description || ""}
           onLike={handleLike}
-          isLiked={isLiked}
+          isLiked={recipe.favorite ?? false}
           onMenu={() => console.log("Menu pressed")}
           onPress={() => {
             router.push({
