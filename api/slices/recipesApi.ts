@@ -71,11 +71,24 @@ export const recipesApi = baseApi.injectEndpoints({
     }),
 
     // Search recipes
-    searchRecipes: builder.query<RecipeResponse[], SearchRecipesQuery>({
-      query: (params) => ({
-        url: "/recipes/search",
-        params: { q: params.q },
-      }),
+    searchRecipes: builder.query<
+      RecipeResponse[] | { data: RecipeResponse[]; meta: any },
+      SearchRecipesQuery
+    >({
+      query: (params) => {
+        const queryParams: any = {};
+        if (params.q) {
+          queryParams.q = params.q;
+        }
+        if (params.productIds && params.productIds.length > 0) {
+          queryParams.productIds = params.productIds.join(",");
+        }
+
+        return {
+          url: "/recipes/search",
+          params: queryParams,
+        };
+      },
       providesTags: ["Recipe"],
     }),
 

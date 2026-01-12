@@ -19,11 +19,12 @@ import FilterTags from "./components/FilterTags";
 import LastVisitedRecipes from "./components/LastVisitedRecipes";
 
 interface SearchOverlayContentProps {
-  onSelectTag: (tag: string) => void;
-  selectedFilters: string[];
+  onSelectTag: (productId: number) => void;
+  selectedProductIds: number[];
   searchText?: string;
   recipes?: RecipeResponse[];
   products?: ProductResponse[];
+  allProducts?: ProductResponse[];
   isLoading?: boolean;
   hasSearchResults?: boolean;
   onSearchFromHistory?: (query: string) => void;
@@ -31,9 +32,11 @@ interface SearchOverlayContentProps {
 
 const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
   onSelectTag,
+  selectedProductIds,
   searchText = "",
   recipes = [],
   products = [],
+  allProducts = [],
   isLoading = false,
   hasSearchResults = false,
   onSearchFromHistory,
@@ -71,15 +74,10 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
     }
   };
 
-  const popularRecipes = [
-    "Eggs",
-    "Milk",
-    "White Bread",
-    "Calories Base",
-    "Calories Base",
-    "Calories Base",
-    "Calories Base",
-  ];
+  // Use real products for tags (first 20 products)
+  const popularProducts = useMemo(() => {
+    return allProducts.slice(0, 20);
+  }, [allProducts]);
 
   // Convert recipes to MealData format
   const recipesAsMealData: MealData[] = useMemo(() => {
@@ -180,9 +178,16 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
       <Text style={overlayStyles.sectionTitle}>Popular recipes</Text>
 
       <FilterTags
-        filters={popularRecipes}
+        filters={popularProducts.map((p: ProductResponse) => p.name)}
         onRemove={() => {}}
-        onTagPress={onSelectTag}
+        onTagPress={(productName) => {
+          const product = popularProducts.find(
+            (p: ProductResponse) => p.name === productName
+          );
+          if (product) {
+            onSelectTag(product.id);
+          }
+        }}
       />
 
       <Text style={overlayStyles.sectionTitle}>Last Visited</Text>

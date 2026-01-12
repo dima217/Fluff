@@ -1,6 +1,6 @@
 import {
   useAddToFavoritesMutation,
-  useGetProductsQuery,
+  useGetProductsByIdsQuery,
   useGetRecipeByIdQuery,
   useRemoveFromFavoritesMutation,
 } from "@/api";
@@ -48,27 +48,14 @@ export default function RecipeScreen() {
     }
   }, [recipeId]);
 
-  const { data: productsResponse } = useGetProductsQuery({
-    page: 1,
-    limit: 50,
+  // Get products by IDs from recipe
+  const productIds = useMemo(() => {
+    return recipe?.products || [];
+  }, [recipe?.products]);
+
+  const { data: recipeProducts = [] } = useGetProductsByIdsQuery(productIds, {
+    skip: !recipe || !productIds || productIds.length === 0,
   });
-
-  // Extract products array from API response: { data: [...], meta: {...} }
-  const allProducts = useMemo(() => {
-    if (!productsResponse) return [];
-    if (typeof productsResponse === "object" && "data" in productsResponse) {
-      return Array.isArray(productsResponse.data) ? productsResponse.data : [];
-    }
-    return Array.isArray(productsResponse) ? productsResponse : [];
-  }, [productsResponse]);
-
-  const recipeProducts = useMemo(() => {
-    if (!recipe?.products || !allProducts || allProducts.length === 0)
-      return [];
-    return allProducts.filter((product) =>
-      recipe.products.includes(product.id)
-    );
-  }, [recipe?.products, allProducts]);
 
   const [addToFavorites] = useAddToFavoritesMutation();
   const [removeFromFavorites] = useRemoveFromFavoritesMutation();

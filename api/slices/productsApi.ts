@@ -31,6 +31,21 @@ export const productsApi = baseApi.injectEndpoints({
       providesTags: (result, error, id) => [{ type: "Product", id }],
     }),
 
+    // Get products by list of IDs
+    getProductsByIds: builder.query<ProductResponse[], number[]>({
+      query: (ids) => {
+        const idsString = ids.join(",");
+        return {
+          url: "/products/by-ids",
+          params: { ids: idsString },
+        };
+      },
+      providesTags: (result) =>
+        result
+          ? result.map((product) => ({ type: "Product", id: product.id }))
+          : ["Product"],
+    }),
+
     // Create product (direct URL method)
     createProduct: builder.mutation<ProductResponse, CreateProductRequest>({
       query: (body) => ({
@@ -131,6 +146,8 @@ export const {
   useLazyGetProductsQuery,
   useGetProductByIdQuery,
   useLazyGetProductByIdQuery,
+  useGetProductsByIdsQuery,
+  useLazyGetProductsByIdsQuery,
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,

@@ -353,7 +353,10 @@ export interface PaginationQuery {
 
 // Search types
 export interface SearchRecipesQuery {
-  q: string; // Search query (product names and/or recipe name)
+  q?: string; // Search query (product names and/or recipe name)
+  productIds?: number[]; // Comma-separated list of product IDs
+  page?: number;
+  limit?: number;
 }
 
 export interface SearchProductsQuery {

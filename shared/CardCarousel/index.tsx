@@ -175,11 +175,33 @@ const CardsCarousel = ({
 
   const onLikePress = customOnLikePress || handleLike;
 
-  const getRenderItem = (props: ListRenderItemInfo<MealData>) => {
+  // Render item for mealsToday (horizontal) variant
+  const getListRenderItem = (props: ListRenderItemInfo<MealData>) => {
     return renderListItem(props, onCardPress, onLikePress);
   };
 
+  // Handle scroll for horizontal FlatList (onEndReached doesn't work for horizontal lists)
+  const handleHorizontalScroll = useCallback(
+    (event: any) => {
+      if (!onScrollToEnd) return;
+
+      const { layoutMeasurement, contentOffset, contentSize } =
+        event.nativeEvent;
+      const paddingToEnd = 200; // Load more when 200px from end
+      const isCloseToEnd =
+        layoutMeasurement.width + contentOffset.x >=
+        contentSize.width - paddingToEnd;
+
+      if (isCloseToEnd) {
+        onScrollToEnd();
+      }
+    },
+    [onScrollToEnd]
+  );
+
   if (isCarouselVariant) {
+    // For vertical variant inside ScrollView, use View with map
+    // FlatList cannot be nested in ScrollView with same orientation
     return (
       <View style={[styles.container, styles.verticalList]}>
         {dataWithLikes.map((item) =>
@@ -193,13 +215,14 @@ const CardsCarousel = ({
       <FlatList
         data={dataWithLikes}
         bounces={false}
-        renderItem={getRenderItem}
+        renderItem={getListRenderItem}
         horizontal={true}
         keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.carouselList}
-        onEndReached={onScrollToEnd}
-        onEndReachedThreshold={0.5}
+        onScroll={handleHorizontalScroll}
+        scrollEventThrottle={16}
+        onMomentumScrollEnd={handleHorizontalScroll}
       />
     </View>
   );
