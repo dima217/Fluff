@@ -55,11 +55,7 @@ export const favoritesApi = baseApi.injectEndpoints({
           patches.forEach((patch) => patch.undo());
         }
       },
-      invalidatesTags: (result, error, { type, id }) => [
-        "Favorite",
-        { type: type === "recipe" ? "Recipe" : "Product", id },
-        "Recipe", // Invalidate all Recipe queries to update search results
-      ],
+      invalidatesTags: ["Favorite", "Recipe", "Product"],
     }),
 
     // Remove from favorites
@@ -111,11 +107,7 @@ export const favoritesApi = baseApi.injectEndpoints({
           patches.forEach((patch) => patch.undo());
         }
       },
-      invalidatesTags: (result, error, { type, id }) => [
-        "Favorite",
-        { type: type === "recipe" ? "Recipe" : "Product", id },
-        "Recipe", // Invalidate all Recipe queries to update search results
-      ],
+      invalidatesTags: ["Favorite", "Recipe", "Product"],
     }),
   }),
 });

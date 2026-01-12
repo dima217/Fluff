@@ -63,10 +63,7 @@ export const trackingApi = baseApi.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [
-        { type: "Tracking", id },
-        "Tracking",
-      ],
+      invalidatesTags: ["Tracking"],
     }),
 
     // Delete tracking record

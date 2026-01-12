@@ -8,12 +8,12 @@ interface IngredientsSectionProps {
   products?: ProductResponse[];
 }
 
-const IngredientsSection: React.FC<IngredientsSectionProps> = ({ products }) => {
+const IngredientsSection: React.FC<IngredientsSectionProps> = ({
+  products,
+}) => {
   const ingredients = useMemo(() => {
     if (!products || products.length === 0) return [];
-    return products.map(
-      (product) => `${product.name} (${product.massa}г)`
-    );
+    return products.map((product) => `${product.name} (${product.massa}г)`);
   }, [products]);
 
   if (ingredients.length === 0) {

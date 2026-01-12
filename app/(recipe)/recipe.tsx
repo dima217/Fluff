@@ -48,10 +48,23 @@ export default function RecipeScreen() {
     }
   }, [recipeId]);
 
-  const { data: allProducts } = useGetProductsQuery();
+  const { data: productsResponse } = useGetProductsQuery({
+    page: 1,
+    limit: 50,
+  });
+
+  // Extract products array from API response: { data: [...], meta: {...} }
+  const allProducts = useMemo(() => {
+    if (!productsResponse) return [];
+    if (typeof productsResponse === "object" && "data" in productsResponse) {
+      return Array.isArray(productsResponse.data) ? productsResponse.data : [];
+    }
+    return Array.isArray(productsResponse) ? productsResponse : [];
+  }, [productsResponse]);
 
   const recipeProducts = useMemo(() => {
-    if (!recipe?.products || !allProducts) return [];
+    if (!recipe?.products || !allProducts || allProducts.length === 0)
+      return [];
     return allProducts.filter((product) =>
       recipe.products.includes(product.id)
     );

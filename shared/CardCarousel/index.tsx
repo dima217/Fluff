@@ -179,24 +179,6 @@ const CardsCarousel = ({
     return renderListItem(props, onCardPress, onLikePress);
   };
 
-  const handleScroll = useCallback(
-    (event: any) => {
-      if (!onScrollToEnd) return;
-
-      const { layoutMeasurement, contentOffset, contentSize } =
-        event.nativeEvent;
-      const paddingToEnd = 100; // Load more when 100px from end
-      const isCloseToEnd =
-        layoutMeasurement.width + contentOffset.x >=
-        contentSize.width - paddingToEnd;
-
-      if (isCloseToEnd) {
-        onScrollToEnd();
-      }
-    },
-    [onScrollToEnd]
-  );
-
   if (isCarouselVariant) {
     return (
       <View style={[styles.container, styles.verticalList]}>
@@ -216,9 +198,8 @@ const CardsCarousel = ({
         keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.carouselList}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        onMomentumScrollEnd={handleScroll}
+        onEndReached={onScrollToEnd}
+        onEndReachedThreshold={0.5}
       />
     </View>
   );

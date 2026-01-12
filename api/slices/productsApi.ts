@@ -3,6 +3,7 @@ import type {
   ConfirmProductUploadRequest,
   CreateProductRequest,
   CreateProductWithMediaIdsRequest,
+  PaginationQuery,
   PrepareProductUploadRequest,
   PrepareProductUploadResponse,
   ProductResponse,
@@ -13,8 +14,14 @@ import type {
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get all products
-    getProducts: builder.query<ProductResponse[], void>({
-      query: () => "/products",
+    getProducts: builder.query<
+      { data: ProductResponse[]; meta: any } | ProductResponse[],
+      PaginationQuery | undefined
+    >({
+      query: (params) => ({
+        url: "/products",
+        params: params,
+      }),
       providesTags: ["Product"],
     }),
 
@@ -44,10 +51,7 @@ export const productsApi = baseApi.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [
-        { type: "Product", id },
-        "Product",
-      ],
+      invalidatesTags: ["Product"],
     }),
 
     // Delete product
@@ -117,10 +121,7 @@ export const productsApi = baseApi.injectEndpoints({
         method: "POST",
         body: { productId, mediaIds },
       }),
-      invalidatesTags: (result, error, { productId }) => [
-        { type: "Product", id: productId },
-        "Product",
-      ],
+      invalidatesTags: ["Product"],
     }),
   }),
 });

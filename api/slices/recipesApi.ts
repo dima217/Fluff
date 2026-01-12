@@ -3,7 +3,6 @@ import type {
   ConfirmUploadRequest,
   CreateRecipeRequest,
   CreateRecipeWithMediaIdsRequest,
-  PaginationQuery,
   PrepareRecipeUploadRequest,
   PrepareRecipeUploadResponse,
   PrepareStepResourcesUploadRequest,
@@ -16,18 +15,9 @@ import type {
 export const recipesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get all recipes
-    getRecipes: builder.query<RecipeResponse[], PaginationQuery | void>({
-      query: (params) => ({
-        url: "/recipes",
-        params: params || {},
-      }),
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: "Recipe" as const, id })),
-              "Recipe",
-            ]
-          : ["Recipe"],
+    getRecipes: builder.query<RecipeResponse[], void>({
+      query: () => "/recipes",
+      providesTags: ["Recipe"],
     }),
 
     // Get recipe by ID
@@ -56,10 +46,7 @@ export const recipesApi = baseApi.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [
-        { type: "Recipe", id },
-        "Recipe",
-      ],
+      invalidatesTags: ["Recipe"],
     }),
 
     // Delete recipe
@@ -89,13 +76,7 @@ export const recipesApi = baseApi.injectEndpoints({
         url: "/recipes/search",
         params: { q: params.q },
       }),
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: "Recipe" as const, id })),
-              "Recipe",
-            ]
-          : ["Recipe"],
+      providesTags: ["Recipe"],
     }),
 
     // Prepare recipe image upload
@@ -151,10 +132,7 @@ export const recipesApi = baseApi.injectEndpoints({
           method: "POST",
           body: { recipeId, mediaIds },
         }),
-        invalidatesTags: (result, error, { recipeId }) => [
-          { type: "Recipe", id: recipeId },
-          "Recipe",
-        ],
+        invalidatesTags: ["Recipe"],
       }
     ),
   }),

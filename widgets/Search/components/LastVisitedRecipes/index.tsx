@@ -14,11 +14,21 @@ const LastVisitedRecipes: React.FC<LastVisitedRecipesProps> = ({
 }) => {
   // Get all recipes - RTK Query will cache them
   // We'll filter by last visited IDs
-  const { data: allRecipes } = useGetRecipesQuery();
+  const { data: recipesResponse } = useGetRecipesQuery();
+
+  // Extract recipes array from API response: { data: [...], meta: {...} }
+  const allRecipes = useMemo(() => {
+    if (!recipesResponse) return [];
+    if (typeof recipesResponse === "object" && "data" in recipesResponse) {
+      return Array.isArray(recipesResponse.data) ? recipesResponse.data : [];
+    }
+    return Array.isArray(recipesResponse) ? recipesResponse : [];
+  }, [recipesResponse]);
 
   // Filter and sort recipes by last visited order
   const lastVisitedMealData: MealData[] = useMemo(() => {
-    if (!allRecipes || recipeIds.length === 0) return [];
+    if (!allRecipes || allRecipes.length === 0 || recipeIds.length === 0)
+      return [];
 
     // Create a map for quick lookup
     const recipeMap = new Map(allRecipes.map((r) => [r.id, r]));
