@@ -1,35 +1,103 @@
+import { useLazySearchProductsQuery, useLazySearchRecipesQuery } from "@/api";
+import type { RecipeResponse } from "@/api/types";
 import { Colors } from "@/constants/design-tokens";
 import Button from "@/shared/Buttons/Button";
+import type { MealData } from "@/shared/CardCarousel";
+import CardsCarousel from "@/shared/CardCarousel";
 import TextInput from "@/shared/Inputs/TextInput";
 import GradientView from "@/shared/ui/GradientView";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import SearchInput from "@/widgets/Search/components/SearchInput";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
 type InputMode = "manual" | "search";
 
 interface CalorieInputProps {
-  onAdd: (foodName: string, calories: number) => void;
+  onAdd: (foodName: string, calories: number, recipeId?: number) => void;
 }
 
 const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
   const [mode, setMode] = useState<InputMode>("manual");
   const [foodName, setFoodName] = useState<string>("");
   const [calories, setCalories] = useState<string>("");
+  const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
+  const [selectedRecipes, setSelectedRecipes] = useState<RecipeResponse[]>([]);
+
+  // Lazy queries for search
+  const [searchRecipes, { data: recipes }] = useLazySearchRecipesQuery();
+  const [searchProducts] = useLazySearchProductsQuery();
+
+  // Debounce search text
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
+  // Perform search when debounced text changes
+  useEffect(() => {
+    if (mode === "search" && debouncedSearchText.trim().length > 0) {
+      searchRecipes({ q: debouncedSearchText });
+      searchProducts({ q: debouncedSearchText });
+    }
+  }, [debouncedSearchText, mode, searchRecipes, searchProducts]);
+
+  const recipesArray = useMemo(() => {
+    if (!recipes) return [];
+    if (Array.isArray(recipes)) return recipes;
+    if (typeof recipes === "object" && "data" in recipes) {
+      return Array.isArray(recipes.data) ? recipes.data : [];
+    }
+    return [];
+  }, [recipes]);
+
+  // Convert recipes to MealData format for CardCarousel
+  const recipesAsMealData: MealData[] = useMemo(() => {
+    return recipesArray.map((recipe) => ({
+      id: recipe.id.toString(),
+      title: recipe.name,
+      calories: `${recipe.calories} ккал`,
+      imageUrl: recipe.image?.cover || recipe.image?.preview || "",
+      isLiked: recipe.favorite,
+      recipeId: recipe.id,
+    }));
+  }, [recipesArray]);
 
   const handleAdd = () => {
     if (mode === "manual" && foodName && calories) {
       onAdd(foodName, parseInt(calories));
       setFoodName("");
       setCalories("");
+    } else if (mode === "search" && selectedRecipes.length > 0) {
+      selectedRecipes.forEach((recipe) => {
+        onAdd(recipe.name, recipe.calories, recipe.id);
+      });
+      setSelectedRecipes([]);
+      setSearchText("");
     }
   };
 
   const handleToggleMode = () => {
     setMode(mode === "manual" ? "search" : "manual");
+    setSelectedRecipes([]);
+    setSearchText("");
+  };
+
+  const handleRecipeSelect = (recipe: RecipeResponse) => {
+    if (selectedRecipes.find((r) => r.id === recipe.id)) {
+      setSelectedRecipes(selectedRecipes.filter((r) => r.id !== recipe.id));
+    } else {
+      setSelectedRecipes([...selectedRecipes, recipe]);
+    }
+  };
+
+  const handleRemoveSelectedRecipe = (recipeId: number) => {
+    setSelectedRecipes(selectedRecipes.filter((r) => r.id !== recipeId));
   };
 
   return (
@@ -69,18 +137,54 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
           <>
             <SearchInput
               style={styles.searchInput}
-              isFiltering={false}
-              searchText={""}
-              selectedFilters={[]}
-              onSearchChange={function (text: string): void {}}
-              onToggleFilter={function (): void {}}
-              onFilterRemove={function (filter: string): void {}}
+              isFiltering={selectedRecipes.length > 0}
+              searchText={searchText}
+              selectedFilters={selectedRecipes.map((r) => r.name)}
+              onSearchChange={setSearchText}
+              onToggleFilter={() => {}}
+              onFilterRemove={(filterName) => {
+                const recipe = selectedRecipes.find(
+                  (r) => r.name === filterName
+                );
+                if (recipe) {
+                  handleRemoveSelectedRecipe(recipe.id);
+                }
+              }}
             />
+            {debouncedSearchText.trim().length > 0 &&
+              recipesAsMealData.length > 0 && (
+                <View style={{ marginTop: 10 }}>
+                  <CardsCarousel
+                    products={recipesAsMealData.map((meal) => ({
+                      ...meal,
+                      isLiked: selectedRecipes.some(
+                        (r) => r.id.toString() === meal.id
+                      ),
+                    }))}
+                    onCardPress={(item) => {
+                      const recipe = recipesArray.find(
+                        (r) => r.id.toString() === item.id
+                      );
+                      if (recipe) {
+                        handleRecipeSelect(recipe);
+                      }
+                    }}
+                    variant="mealsToday"
+                  />
+                </View>
+              )}
           </>
         )}
       </View>
 
-      <Button onPress={handleAdd} title={"Add"} />
+      <Button
+        onPress={handleAdd}
+        title={"Add"}
+        disabled={
+          (mode === "manual" && (!foodName || !calories)) ||
+          (mode === "search" && selectedRecipes.length === 0)
+        }
+      />
     </GradientView>
   );
 };

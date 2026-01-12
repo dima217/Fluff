@@ -8,9 +8,38 @@ function getDayOfWeekLetter(date: Date): string {
   return days[date.getDay()];
 }
 
+function getStatusColor(
+  status:
+    | "cheatMeal"
+    | "notTracked"
+    | "strongExcess"
+    | "insufficientIntake"
+    | null
+): string {
+  switch (status) {
+    case "cheatMeal":
+      return Colors.cheatMeal;
+    case "notTracked":
+      return Colors.notTracked;
+    case "strongExcess":
+      return Colors.strongExcess;
+    case "insufficientIntake":
+      return Colors.insufficientIntake;
+    default:
+      return Colors.green;
+  }
+}
+
 interface DateItemData {
-  isMarked: boolean;
+  isMarked?: boolean;
   isToday: boolean;
+  isSelected?: boolean;
+  dayStatus?:
+    | "cheatMeal"
+    | "notTracked"
+    | "strongExcess"
+    | "insufficientIntake"
+    | null;
 }
 
 interface DateWheelItemContentProps {
@@ -22,28 +51,30 @@ interface DateWheelItemContentProps {
 export function DateWheelItem({ date, data, size }: DateWheelItemContentProps) {
   if (!date || !data) return null;
 
-  const { isMarked, isToday } = data;
+  const { isToday, isSelected, dayStatus } = data;
   const dayOfWeekLetter = getDayOfWeekLetter(date);
+  const shouldShowCircle = isSelected || isToday;
+  const circleColor = shouldShowCircle
+    ? getStatusColor(dayStatus || null)
+    : Colors.green;
 
   const toggleStyle = [
     styles.toggleBase,
-    isToday && styles.toggleActive,
-    !isToday && styles.toggleInactive,
+    (isSelected || isToday) && styles.toggleActive,
+    !isSelected && !isToday && styles.toggleInactive,
   ];
 
   return (
     <View style={[styles.container, { width: size }]}>
       <View style={styles.topMarker}>
-        {isMarked ? (
-          <Circle text={dayOfWeekLetter} />
-        ) : (
-          <Text style={styles.dayOfWeekText}>{dayOfWeekLetter}</Text>
-        )}
+        <Text style={styles.dayOfWeekText}>{dayOfWeekLetter}</Text>
       </View>
 
       <View style={styles.toggleContainer}>
         <View style={toggleStyle}>
-          {isToday && <Circle size={CircleSizes.XS} color={Colors.green} />}
+          {shouldShowCircle && (
+            <Circle size={CircleSizes.XS} color={circleColor} />
+          )}
         </View>
       </View>
     </View>
