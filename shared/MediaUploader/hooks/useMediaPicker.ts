@@ -35,63 +35,87 @@ export const useMediaPicker = () => {
 
   const requestPermissions = async () => {
     try {
-      console.log("[requestPermissions] Запрос разрешений...");
+      console.log("[requestPermissions] Requesting permissions...");
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
-      console.log("[requestPermissions] Статус разрешений:", status);
+      console.log("[requestPermissions] Permissions status:", status);
       if (status !== "granted") {
-        showError("Нет разрешения", "Разрешите доступ к медиатеке.");
+        showError(
+          "No permission",
+          "Please allow access to your media library."
+        );
         return false;
       }
       return true;
     } catch (e) {
-      console.error("[requestPermissions] Ошибка запроса разрешений:", e);
-      showError("Ошибка", "Не удалось запросить разрешения.");
+      console.error("[requestPermissions] Failed to request permissions:", e);
+      showError("Error", "Failed to request permissions.");
       return false;
     }
   };
 
   const getVideoThumbnail = async (uri: string): Promise<string | null> => {
     try {
-      console.log("[getVideoThumbnail] Создаём превью для видео:", uri);
+      console.log("[getVideoThumbnail] Creating thumbnail for video:", uri);
       const { uri: thumbnail } = await VideoThumbnails.getThumbnailAsync(uri, {
         time: 1000,
       });
-      console.log("[getVideoThumbnail] Превью создано:", thumbnail);
+      console.log("[getVideoThumbnail] Thumbnail created:", thumbnail);
       return thumbnail;
     } catch (e) {
-      console.warn("[getVideoThumbnail] Не удалось создать превью видео:", e);
+      console.warn("[getVideoThumbnail] Failed to create video thumbnail:", e);
       return null;
     }
   };
 
-  const pickMedia = async () => {
-    console.log("[pickMedia] Начало выбора медиа...");
+  const pickMedia = async (allowedType?: MediaType) => {
+    console.log("[pickMedia] Start picking media...");
     const granted = await requestPermissions();
     if (!granted) {
-      console.log("[pickMedia] Разрешения не получены, выходим");
+      console.log("[pickMedia] Permissions not granted, aborting");
       return;
     }
 
     try {
-      console.log("[pickMedia] Открываем медиатеку...");
+      console.log("[pickMedia] Opening media library...");
+
+      const mediaTypes =
+        allowedType === "image"
+          ? ["images"]
+          : allowedType === "video"
+            ? ["videos"]
+            : ["images", "videos"];
+
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images", "videos"],
+        mediaTypes: mediaTypes as any,
         quality: 1,
       });
 
-      console.log("[pickMedia] Результат медиапикера:", result);
+      console.log("[pickMedia] Media picker result:", result);
 
       if (result.canceled) {
-        console.log("[pickMedia] Пользователь отменил выбор");
+        console.log("[pickMedia] User canceled media picking");
         return;
       }
 
       const asset = result.assets[0];
-      console.log("[pickMedia] Выбранный asset:", asset);
+      console.log("[pickMedia] Picked asset:", asset);
+
+      if (allowedType && asset.type !== allowedType) {
+        console.log(
+          "[pickMedia] Picked media type does not match expected type"
+        );
+        showError(
+          "Invalid media type",
+          `Expected ${allowedType === "image" ? "image" : "video"}, but got ${
+            asset.type === "image" ? "image" : "video"
+          }.`
+        );
+        return;
+      }
 
       if (!validateFile(asset)) {
-        console.log("[pickMedia] Файл не прошёл валидацию");
+        console.log("[pickMedia] File did not pass validation");
         return;
       }
 
@@ -100,7 +124,7 @@ export const useMediaPicker = () => {
         thumbnail = await getVideoThumbnail(asset.uri);
       }
 
-      console.log("[pickMedia] Сохраняем медиа в state:", {
+      console.log("[pickMedia] Saving media to state:", {
         uri: asset.uri,
         type: asset.type,
         thumbnail,
@@ -115,21 +139,21 @@ export const useMediaPicker = () => {
       setMedia(picked);
       return picked;
     } catch (e) {
-      console.error("[pickMedia] Ошибка при выборе медиа:", e);
-      showError("Ошибка", "Не удалось открыть медиатеку");
+      console.error("[pickMedia] Error while picking media:", e);
+      showError("Error", "Failed to open media library");
     }
   };
 
   const clearMedia = () => {
-    console.log("[clearMedia] Очистка медиа");
+    console.log("[clearMedia] Clearing media");
     setMedia(null);
   };
 
   const labelByType = media
     ? media.type === "image"
-      ? "Загружено фото"
-      : "Загружено видео"
-    : "Добавить медиа";
+      ? "Photo uploaded"
+      : "Video uploaded"
+    : "Add media";
 
   return {
     media,

@@ -196,7 +196,8 @@ export interface CreateRecipeWithMediaIdsRequest {
   };
   promotionalVideoMediaId?: string;
   description?: string;
-  productIds: number[];
+  productIds?: number[];
+  customProducts?: string[];
   fluffAt?: string; // ISO 8601
   calories: number;
   cookAt: number;

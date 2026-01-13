@@ -13,6 +13,7 @@ export interface RecipeData {
 export interface CreationStep {
   title: string;
   description: string;
+  stepMediaUrl?: string;
 }
 
 export interface Recipe {

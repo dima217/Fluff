@@ -1,10 +1,13 @@
 import { Colors } from "@/constants/design-tokens";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
 import { StyleSheet, View } from "react-native";
 
-const MediaPlaceholder: React.FC = () => {
+interface MediaUploaderProps {
+  type: "image" | "video";
+}
+
+const MediaPlaceholder = ({ type = "image" }: MediaUploaderProps) => {
   return (
     <View style={styles.placeholder}>
       <MaterialCommunityIcons
@@ -15,10 +18,14 @@ const MediaPlaceholder: React.FC = () => {
       />
 
       <View style={styles.button}>
-        <ThemedText type="mini">Add a Photo</ThemedText>
+        <ThemedText type="mini">
+          {type === "image" ? "Add a Photo" : "Add a Video"}
+        </ThemedText>
       </View>
 
-      <ThemedText type="xs">PNG, JPG up to 100MB</ThemedText>
+      <ThemedText type="xs">
+        {type === "image" ? "PNG, JPG up to 100MB" : "MP4, MOV up to 100MB"}
+      </ThemedText>
     </View>
   );
 };

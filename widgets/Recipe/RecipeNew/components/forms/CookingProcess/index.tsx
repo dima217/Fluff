@@ -102,6 +102,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
                     key={`${fields[index].id}-${value || "empty"}`}
                     value={value}
                     onChange={onChange}
+                    type="image"
                   />
                 )}
               />

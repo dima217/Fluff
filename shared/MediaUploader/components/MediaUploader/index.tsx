@@ -7,10 +7,15 @@ import MediaPreview from "../MediaPreview";
 
 interface MediaUploaderProps {
   value?: string;
+  type: "image" | "video";
   onChange?: (media: string | undefined) => void;
 }
 
-const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange }) => {
+const MediaUploader: React.FC<MediaUploaderProps> = ({
+  value,
+  type,
+  onChange,
+}) => {
   const { pickMedia, clearMedia } = useMediaPicker();
 
   const handleRemove = () => {
@@ -20,7 +25,7 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange }) => {
   };
 
   const handlePick = async () => {
-    const picked = await pickMedia();
+    const picked = await pickMedia(type);
     if (onChange && picked) {
       onChange(picked.uri);
     }
@@ -36,12 +41,9 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange }) => {
         }}
       >
         {value ? (
-          <MediaPreview
-            media={{ uri: value, type: "image" }}
-            onRemove={handleRemove}
-          />
+          <MediaPreview media={{ uri: value, type }} onRemove={handleRemove} />
         ) : (
-          <MediaPlaceholder />
+          <MediaPlaceholder type={type} />
         )}
       </TouchableOpacity>
     </View>

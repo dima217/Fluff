@@ -1,8 +1,6 @@
 import { useGetRecipeByIdQuery } from "@/api";
 import type { TrackingResponse } from "@/api/types";
-import FoodAva from "@/assets/images/FoodAva.png";
 import Check from "@/assets/images/Сheck.svg";
-import Heart from "@/assets/images/Heart.svg";
 import { Colors } from "@/constants/design-tokens";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -24,8 +22,8 @@ const TrackingItem: React.FC<TrackingItemProps> = ({ record }) => {
   const imageSource = record.recipeId
     ? recipe?.image?.cover || recipe?.image?.preview
       ? { uri: recipe.image.cover || recipe.image.preview }
-      : FoodAva
-    : FoodAva;
+      : require("@/assets/images/FoodAva.png")
+    : require("@/assets/images/FoodAva.png");
 
   const source = record.recipeId
     ? recipe?.fluffAt
@@ -52,9 +50,6 @@ const TrackingItem: React.FC<TrackingItemProps> = ({ record }) => {
           {source === "Fluff" && <Check width={14} height={14} />}
         </View>
       </View>
-      <View style={styles.iconContainer}>
-        <Heart width={24} height={24} stroke={Colors.primary} fill={Colors.primary} />
-      </View>
     </TouchableOpacity>
   );
 };
@@ -65,20 +60,23 @@ const TrackingHistory: React.FC<TrackingHistoryProps> = ({ records }) => {
   }
 
   // Group records by time (created field)
-  const groupedRecords = records.reduce((acc, record) => {
-    const date = new Date(record.created);
-    const hours = date.getHours();
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const period = hours >= 12 ? "PM" : "AM";
-    const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
-    const timeKey = `${displayHours}:${minutes} ${period}`;
-    
-    if (!acc[timeKey]) {
-      acc[timeKey] = [];
-    }
-    acc[timeKey].push(record);
-    return acc;
-  }, {} as Record<string, TrackingResponse[]>);
+  const groupedRecords = records.reduce(
+    (acc, record) => {
+      const date = new Date(record.created);
+      const hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const period = hours >= 12 ? "PM" : "AM";
+      const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+      const timeKey = `${displayHours}:${minutes} ${period}`;
+
+      if (!acc[timeKey]) {
+        acc[timeKey] = [];
+      }
+      acc[timeKey].push(record);
+      return acc;
+    },
+    {} as Record<string, TrackingResponse[]>
+  );
 
   return (
     <View style={styles.container}>
@@ -201,4 +199,3 @@ const styles = StyleSheet.create({
 });
 
 export default TrackingHistory;
-

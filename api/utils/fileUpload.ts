@@ -11,6 +11,67 @@ export interface ReactNativeFile {
   size?: number;
 }
 
+/**
+ * Extract filename from URI
+ */
+export function getFilenameFromUri(uri: string): string {
+  const parts = uri.split("/");
+  const filename = parts[parts.length - 1];
+
+  // If filename doesn't have extension, add default based on URI
+  if (!filename.includes(".")) {
+    // Try to determine type from URI or use default
+    if (uri.includes("image") || uri.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+      return `image_${Date.now()}.jpg`;
+    }
+    if (uri.includes("video") || uri.match(/\.(mp4|mov|avi|mkv)$/i)) {
+      return `video_${Date.now()}.mp4`;
+    }
+    return `file_${Date.now()}`;
+  }
+
+  return filename;
+}
+
+/**
+ * Get file size from URI (approximate)
+ * In React Native, we can't always get exact file size from URI
+ * This is a fallback that returns a default size
+ */
+export async function getFileSizeFromUri(uri: string): Promise<number> {
+  try {
+    // Try to get file info using fetch
+    const response = await fetch(uri, { method: "HEAD" });
+    const contentLength = response.headers.get("content-length");
+    if (contentLength) {
+      return parseInt(contentLength, 10);
+    }
+  } catch (error) {
+    console.warn("[getFileSizeFromUri] Failed to get file size:", error);
+  }
+
+  // Default sizes (in bytes)
+  // For images: ~2MB, for videos: ~10MB
+  if (uri.match(/\.(jpg|jpeg|png|gif|webp)$/i) || uri.includes("image")) {
+    return 2 * 1024 * 1024; // 2MB
+  }
+  if (uri.match(/\.(mp4|mov|avi|mkv)$/i) || uri.includes("video")) {
+    return 10 * 1024 * 1024; // 10MB
+  }
+
+  return 5 * 1024 * 1024; // Default 5MB
+}
+
+/**
+ * Determine file type from URI
+ */
+export function getFileTypeFromUri(uri: string): "image" | "video" {
+  if (uri.match(/\.(mp4|mov|avi|mkv|webm)$/i) || uri.includes("video")) {
+    return "video";
+  }
+  return "image";
+}
+
 export type UploadFile = File | Blob | ReactNativeFile;
 
 export interface UploadFileOptions {
