@@ -41,7 +41,7 @@ const BaseInfo = () => {
           control={control}
           name="mediaUrl"
           render={({ field: { value, onChange } }) => (
-            <MediaUploader value={value} onChange={onChange} />
+            <MediaUploader value={value} onChange={onChange} type="image" />
           )}
         />
       </View>

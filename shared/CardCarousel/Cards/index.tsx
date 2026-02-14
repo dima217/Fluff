@@ -2,6 +2,7 @@ import { Image, TouchableOpacity, View } from "react-native";
 
 import Heart from "@/assets/images/Heart.svg";
 import Check from "@/assets/images/Сheck.svg";
+import { useMediaUrl } from "@/api";
 import { Colors } from "@/constants/design-tokens";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { styles } from "./styles";
@@ -28,6 +29,9 @@ const MealCard = ({
   isLiked = false,
 }: RecipeCardProps) => {
   const isCarouselItem = variant === "carousel";
+  const { url: mediaUrl, headers: mediaHeaders } = useMediaUrl(imageUrl, {
+    skip: !imageUrl,
+  });
 
   const handleLikePress = (e: any) => {
     e?.stopPropagation?.();
@@ -73,7 +77,14 @@ const MealCard = ({
             : styles.fullWidthImageWrapper,
         ]}
       >
-        <Image source={{ uri: imageUrl }} style={styles.cardImage} />
+        <Image
+          source={
+            mediaUrl
+              ? { uri: mediaUrl, ...(mediaHeaders && { headers: mediaHeaders }) }
+              : require("@/assets/images/FoodAva.png")
+          }
+          style={styles.cardImage}
+        />
       </View>
 
       <View

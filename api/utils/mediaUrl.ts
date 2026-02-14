@@ -1,66 +1,46 @@
-import { getBaseUrl } from "../config";
+import { getMediaBaseUrl } from "../config";
+
+export type MediaUrlType = "direct" | "path" | "invalid";
 
 /**
- * Тип медиа URL
+ * Проверяет, что URL — обычная http(s) ссылка (в т.ч. localhost).
  */
-export type MediaUrlType = "proxy" | "direct" | "invalid";
+export function isDirectHttpUrl(url: string | null | undefined): boolean {
+  if (!url) return false;
+  return url.startsWith("http://") || url.startsWith("https://");
+}
 
 /**
- * Определяет тип URL медиа файла
- * @param url - URL из API ответа
- * @returns Тип URL: 'proxy' (прокси через API), 'direct' (прямой URL), 'invalid' (невалидный)
+ * Если хост localhost/127.0.0.1 — подменяем на наш медиа-хост (IP), чтобы с телефона запрос уходил на сервер.
+ */
+function rewriteLocalhostToMediaHost(url: string): string {
+  if (!isDirectHttpUrl(url)) return url;
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+    if (host !== "localhost" && host !== "127.0.0.1") return url;
+    const base = getMediaBaseUrl().replace(/\/$/, "");
+    const pathAndSearch = `${parsed.pathname}${parsed.search}`;
+    return `${base}${pathAndSearch.startsWith("/") ? "" : "/"}${pathAndSearch}`;
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * Тип URL: direct = http(s), path = путь вида /3/xxx.mp4 (нужен эндпоинт /media/download).
  */
 export function getMediaUrlType(url: string | null | undefined): MediaUrlType {
   if (!url) return "invalid";
-
-  // Прокси URL начинается с /api/media/ или /media/
-  if (url.startsWith("/api/media/") || url.startsWith("/media/")) {
-    return "proxy";
-  }
-
-  // Прямой URL начинается с http:// или https://
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return "direct";
-  }
-
+  if (url.startsWith("http://") || url.startsWith("https://")) return "direct";
+  if (url.startsWith("/")) return "path";
   return "invalid";
 }
 
 /**
- * Извлекает mediaId из прокси URL
- * @param proxyUrl - Прокси URL вида /api/media/{mediaId} или /media/{mediaId}
- * @returns mediaId или null если не удалось извлечь
- */
-export function extractMediaId(proxyUrl: string): string | null {
-  const match = proxyUrl.match(/\/(?:api\/)?media\/([^/]+)/);
-  return match ? match[1] : null;
-}
-
-/**
- * Преобразует прокси URL в полный URL для запроса
- * @param proxyUrl - Прокси URL вида /api/media/{mediaId} или /media/{mediaId}
- * @returns Полный URL для запроса
- */
-export function getFullMediaUrl(proxyUrl: string): string {
-  // Если URL уже полный, возвращаем как есть
-  if (proxyUrl.startsWith("http://") || proxyUrl.startsWith("https://")) {
-    return proxyUrl;
-  }
-
-  // Убираем ведущий слэш если есть
-  const cleanUrl = proxyUrl.startsWith("/") ? proxyUrl.slice(1) : proxyUrl;
-
-  // Добавляем базовый URL
-  const baseUrl = getBaseUrl().replace(/\/$/, ""); // Убираем trailing slash если есть
-  return `${baseUrl}/${cleanUrl}`;
-}
-
-/**
- * Нормализует медиа URL для использования
- * - Прокси URL преобразуются в полные URL
- * - Прямые URL возвращаются как есть
- * @param url - URL из API ответа
- * @returns Нормализованный URL или null если невалидный
+ * Нормализует URL для использования в Image/Video:
+ * - http(s) — возвращаем как есть (localhost подменяем на mediaBaseUrl).
+ * - путь (/3/xxx.mp4 и т.д.) — собираем URL стрима: ourip:3002/media/download?url=<path>.
  */
 export function normalizeMediaUrl(
   url: string | null | undefined
@@ -70,26 +50,38 @@ export function normalizeMediaUrl(
   const urlType = getMediaUrlType(url);
 
   if (urlType === "direct") {
-    return url;
+    return rewriteLocalhostToMediaHost(url);
   }
 
-  if (urlType === "proxy") {
-    return getFullMediaUrl(url);
+  if (urlType === "path") {
+    const base = getMediaBaseUrl().replace(/\/$/, "");
+    return `${base}/media/download?url=${encodeURIComponent(url)}`;
   }
 
   return null;
 }
 
-/**
- * Проверяет, является ли URL прокси URL (требует авторизации)
- */
+/** Для обратной совместимости: path считаем «прокси» в смысле «через наш сервер». */
 export function isProxyUrl(url: string | null | undefined): boolean {
-  return getMediaUrlType(url) === "proxy";
+  return getMediaUrlType(url) === "path";
 }
 
-/**
- * Проверяет, является ли URL прямым URL (можно использовать напрямую)
- */
 export function isDirectUrl(url: string | null | undefined): boolean {
   return getMediaUrlType(url) === "direct";
+}
+
+/** Оставлено для совместимости; для path URL mediaId не используется. */
+export function extractMediaId(_proxyUrl: string): string | null {
+  return null;
+}
+
+export function getFullMediaUrl(proxyUrl: string): string {
+  return normalizeMediaUrl(proxyUrl) ?? proxyUrl;
+}
+
+/** URL ведёт на наш медиа-сервер (3002) — для таких запросов нужен Authorization. */
+export function isMediaServerUrl(resolvedUrl: string | null | undefined): boolean {
+  if (!resolvedUrl) return false;
+  const base = getMediaBaseUrl().replace(/\/$/, "");
+  return resolvedUrl === base || resolvedUrl.startsWith(base + "/");
 }

@@ -1,4 +1,4 @@
-import { useGetRecipeByIdQuery } from "@/api";
+import { useGetRecipeByIdQuery, useMediaUrl } from "@/api";
 import type { TrackingResponse } from "@/api/types";
 import Check from "@/assets/images/Сheck.svg";
 import { Colors } from "@/constants/design-tokens";
@@ -14,15 +14,21 @@ interface TrackingItemProps {
 }
 
 const TrackingItem: React.FC<TrackingItemProps> = ({ record }) => {
-  // Get recipe data if recipeId exists
   const { data: recipe } = useGetRecipeByIdQuery(record.recipeId!, {
     skip: !record.recipeId,
   });
 
-  const imageSource = record.recipeId
-    ? recipe?.image?.cover || recipe?.image?.preview
-      ? { uri: recipe.image.cover || recipe.image.preview }
-      : require("@/assets/images/FoodAva.png")
+  const recipeImageUrl =
+    record.recipeId && recipe
+      ? recipe.image?.cover || recipe.image?.preview || ""
+      : "";
+  const { url: mediaUrl, headers: mediaHeaders } = useMediaUrl(recipeImageUrl, {
+    skip: !recipeImageUrl,
+  });
+
+  const imageSource =
+    mediaUrl ?
+      { uri: mediaUrl, ...(mediaHeaders && { headers: mediaHeaders }) }
     : require("@/assets/images/FoodAva.png");
 
   const source = record.recipeId

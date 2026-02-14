@@ -1,3 +1,4 @@
+import { useMediaUrl } from "@/api";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import Avatar from "@/shared/ui/Avatar";
 import Circle from "@/shared/ui/Circle";
@@ -41,6 +42,14 @@ const MediaCarouselItem = ({
   variant = "short",
 }: MediaCarouselItemProps) => {
   const isLongVariant = variant === "long";
+  const { url: mediaUrl, headers: mediaHeaders } = useMediaUrl(imageUrl, {
+    skip: !imageUrl,
+  });
+  const sourceUri = mediaUrl || imageUrl || REAL_IMAGE_URL;
+  const source =
+    mediaUrl && mediaHeaders
+      ? { uri: mediaUrl, headers: mediaHeaders }
+      : { uri: sourceUri };
 
   const cardWidth = isLongVariant ? LONG_CARD_WIDTH : SHORT_CARD_WIDTH;
   const cardHeight = isLongVariant ? LONG_CARD_HEIGHT : SHORT_CARD_HEIGHT;
@@ -62,7 +71,7 @@ const MediaCarouselItem = ({
         ]}
       >
         <ImageBackground
-          source={{ uri: imageUrl || REAL_IMAGE_URL }}
+          source={source}
           style={styles.imageBackground}
           imageStyle={styles.image}
           resizeMode="cover"

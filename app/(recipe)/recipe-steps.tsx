@@ -1,3 +1,4 @@
+import { useMediaUrl } from "@/api";
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import { RecipeData } from "@/constants/types";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -22,6 +23,9 @@ const RecipeSteps = () => {
   const params = useLocalSearchParams();
   const { t } = useTranslation();
 
+  const [stepIndex, setStepIndex] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
+
   let recipe: RecipeData;
   try {
     recipe = JSON.parse(params.data as string);
@@ -41,11 +45,19 @@ const RecipeSteps = () => {
     );
   }
 
-  const [stepIndex, setStepIndex] = useState(0);
-  const [isFinished, setIsFinished] = useState(false);
-
   const currentStep = recipe.steps[stepIndex];
   const isLast = stepIndex === recipe.steps.length - 1;
+
+  const stepImageUri =
+    currentStep.image &&
+    typeof currentStep.image === "object" &&
+    "uri" in currentStep.image
+      ? currentStep.image.uri
+      : null;
+  const { url: stepImageUrl, headers: stepImageHeaders } = useMediaUrl(
+    stepImageUri,
+    { skip: !stepImageUri }
+  );
 
   const handleNext = () => {
     if (isLast) setIsFinished(true);
@@ -99,9 +111,15 @@ const RecipeSteps = () => {
           {currentStep.image && (
             <Image
               source={
-                typeof currentStep.image === "object" && "uri" in currentStep.image
-                  ? currentStep.image
-                  : currentStep.image
+                stepImageUrl
+                  ? {
+                      uri: stepImageUrl,
+                      ...(stepImageHeaders && { headers: stepImageHeaders }),
+                    }
+                  : typeof currentStep.image === "object" &&
+                      "uri" in currentStep.image
+                    ? currentStep.image
+                    : currentStep.image
               }
               style={styles.stepImage}
               resizeMode="cover"

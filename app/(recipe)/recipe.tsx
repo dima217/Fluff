@@ -2,6 +2,7 @@ import {
   useAddToFavoritesMutation,
   useGetProductsByIdsQuery,
   useGetRecipeByIdQuery,
+  useMediaUrl,
   useRemoveFromFavoritesMutation,
 } from "@/api";
 import { Colors } from "@/constants/design-tokens";
@@ -56,6 +57,11 @@ export default function RecipeScreen() {
   const { data: recipeProducts = [] } = useGetProductsByIdsQuery(productIds, {
     skip: !recipe || !productIds || productIds.length === 0,
   });
+
+  const { url: coverMediaUrl, headers: coverMediaHeaders } = useMediaUrl(
+    recipe?.image?.cover,
+    { skip: !recipe?.image?.cover }
+  );
 
   const [addToFavorites] = useAddToFavoritesMutation();
   const [removeFromFavorites] = useRemoveFromFavoritesMutation();
@@ -139,9 +145,11 @@ export default function RecipeScreen() {
     >
       <ImageBackground
         source={
-          recipe.image?.cover
-            ? { uri: recipe.image.cover }
-            : require("@/assets/images/Cake.png")
+          coverMediaUrl
+            ? { uri: coverMediaUrl, ...(coverMediaHeaders && { headers: coverMediaHeaders }) }
+            : recipe.image?.cover
+              ? { uri: recipe.image.cover }
+              : require("@/assets/images/Cake.png")
         }
         style={styles.background}
         resizeMode="cover"

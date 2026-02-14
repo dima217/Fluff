@@ -102,6 +102,8 @@ export async function uploadFile({
   contentType,
   onProgress,
 }: UploadFileOptions): Promise<void> {
+  const parsed = new URL(uploadUrl);
+  const cleanUrl = `${parsed.origin}${parsed.pathname}`;
   // Use XMLHttpRequest for progress tracking (works in both web and RN)
   return new Promise((resolve, reject) => {
     // In React Native, XMLHttpRequest is available
@@ -137,7 +139,7 @@ export async function uploadFile({
       reject(new Error("Upload was aborted"));
     });
 
-    xhr.open("PUT", uploadUrl);
+    xhr.open("PUT", cleanUrl);
 
     // Set content type
     if (contentType) {
