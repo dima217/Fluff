@@ -1,64 +1,51 @@
-import { useGetRecipesQuery } from "@/api";
 import type { MealData } from "@/shared/CardCarousel";
-import CardsCarousel from "@/shared/CardCarousel";
-import { useMemo } from "react";
+import { FlatList, ListRenderItemInfo, StyleSheet, View } from "react-native";
+import LastVisitedCard from "./LastVisitedCard";
 
 interface LastVisitedRecipesProps {
   recipeIds: number[];
   onCardPress: (item: MealData) => void;
 }
 
+/**
+ * Показывает последние просмотренные рецепты. Каждый рецепт запрашивается по id
+ * (useGetRecipeByIdQuery), поэтому отображаются все id из хранилища, а не только
+ * те, что попали в первую страницу getRecipes.
+ */
 const LastVisitedRecipes: React.FC<LastVisitedRecipesProps> = ({
   recipeIds,
   onCardPress,
 }) => {
-  // Get all recipes - RTK Query will cache them
-  // We'll filter by last visited IDs
-  const { data: recipesResponse } = useGetRecipesQuery();
+  const renderItem = ({ item: recipeId }: ListRenderItemInfo<number>) => (
+    <LastVisitedCard recipeId={recipeId} onCardPress={onCardPress} />
+  );
 
-  // Extract recipes array from API response: { data: [...], meta: {...} }
-  const allRecipes = useMemo(() => {
-    if (!recipesResponse) return [];
-    if (typeof recipesResponse === "object" && "data" in recipesResponse) {
-      return Array.isArray(recipesResponse.data) ? recipesResponse.data : [];
-    }
-    return Array.isArray(recipesResponse) ? recipesResponse : [];
-  }, [recipesResponse]);
-
-  // Filter and sort recipes by last visited order
-  const lastVisitedMealData: MealData[] = useMemo(() => {
-    if (!allRecipes || allRecipes.length === 0 || recipeIds.length === 0)
-      return [];
-
-    // Create a map for quick lookup
-    const recipeMap = new Map(allRecipes.map((r) => [r.id, r]));
-
-    // Get recipes in the order of last visited (preserve order from recipeIds)
-    const recipes = recipeIds
-      .map((id) => recipeMap.get(id))
-      .filter((recipe) => recipe !== undefined);
-
-    return recipes.map((recipe) => ({
-      id: recipe.id.toString(),
-      title: recipe.name,
-      calories: `${recipe.calories} ккал`,
-      imageUrl: recipe.image?.cover || recipe.image?.preview || "",
-      isLiked: recipe.favorite,
-      recipeId: recipe.id,
-    }));
-  }, [allRecipes, recipeIds]);
-
-  if (lastVisitedMealData.length === 0) {
+  if (!recipeIds.length) {
     return null;
   }
 
   return (
-    <CardsCarousel
-      products={lastVisitedMealData}
-      onCardPress={onCardPress}
-      variant="mealsToday"
-    />
+    <View style={styles.container}>
+      <FlatList
+        data={recipeIds}
+        keyExtractor={(id) => String(id)}
+        renderItem={renderItem}
+        horizontal
+        bounces={false}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
+      />
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    alignSelf: "stretch",
+  },
+  listContent: {
+    gap: 15,
+  },
+});
 
 export default LastVisitedRecipes;

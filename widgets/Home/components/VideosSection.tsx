@@ -2,12 +2,32 @@ import { Colors } from "@/constants/design-tokens";
 import { useTranslation } from "@/hooks/useTranslation";
 import MediaCarousel from "@/shared/MediaCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { searchStorage } from "@/utils/searchStorage";
 import { useRouter } from "expo-router";
+import { useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 const VideosSection = () => {
   const router = useRouter();
   const { t } = useTranslation();
+  const [lastVisitedIds, setLastVisitedIds] = useState<number[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      setLastVisitedIds(searchStorage.getLastVisited());
+    }, [])
+  );
+
+  const handleCardPress = useCallback(
+    (id: string) => {
+      router.push({
+        pathname: "/(recipe)/recipe",
+        params: { recipeId: id },
+      });
+    },
+    [router]
+  );
 
   return (
     <>
@@ -20,18 +40,33 @@ const VideosSection = () => {
             {t("homeSections.seeAll")}
           </ThemedText>
         </View>
-        <MediaCarousel onCardPress={() => {}} />
+        {lastVisitedIds.length > 0 ? (
+          <MediaCarousel
+            recipeIds={lastVisitedIds}
+            variant="short"
+            onCardPress={handleCardPress}
+          />
+        ) : (
+          <ThemedText type="xs" style={styles.emptyText}>
+            Нет недавно просмотренных
+          </ThemedText>
+        )}
       </View>
       <View style={styles.section}>
         <ThemedText type="s">
           {t("homeSections.recommendedRecipes")}
         </ThemedText>
-        <MediaCarousel
-          variant="long"
-          onCardPress={() => {
-            router.push("/(recipe)/recipe");
-          }}
-        />
+        {lastVisitedIds.length > 0 ? (
+          <MediaCarousel
+            recipeIds={lastVisitedIds}
+            variant="long"
+            onCardPress={handleCardPress}
+          />
+        ) : (
+          <ThemedText type="xs" style={styles.emptyText}>
+            Нет рекомендаций
+          </ThemedText>
+        )}
       </View>
     </>
   );
@@ -48,7 +83,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  emptyText: {
+    opacity: 0.7,
+  },
 });
 
 export default VideosSection;
-

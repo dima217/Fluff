@@ -1,3 +1,4 @@
+import { RecipeResponse } from "@/api/types";
 import { MMKV } from "react-native-mmkv";
 
 const storage = new MMKV();
@@ -55,13 +56,19 @@ export const searchStorage = {
     return [];
   },
 
+  getLastVisitedRecipes(availableRecipes: RecipeResponse[]): RecipeResponse[] {
+    const visited = this.getLastVisited();
+    if (!visited.length) return [];
+    return visited.map((id) => availableRecipes.find((recipe) => recipe.id === id)).filter((recipe) => recipe !== undefined);
+  },
+
   addToLastVisited(recipeId: number): void {
-    if (!recipeId) return;
+    const id = Number(recipeId);
+    if (!Number.isInteger(id) || id <= 0) return;
 
     const visited = this.getLastVisited();
-    // Remove duplicate and add to beginning
-    const filtered = visited.filter((id) => id !== recipeId);
-    const updated = [recipeId, ...filtered].slice(0, MAX_LAST_VISITED);
+    const filtered = visited.filter((visitedId) => visitedId !== id);
+    const updated = [id, ...filtered].slice(0, MAX_LAST_VISITED);
 
     try {
       storage.set(LAST_VISITED_KEY, JSON.stringify(updated));
@@ -69,7 +76,7 @@ export const searchStorage = {
       console.error("Error saving last visited:", error);
     }
   },
-
+  
   clearLastVisited(): void {
     storage.delete(LAST_VISITED_KEY);
   },

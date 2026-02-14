@@ -9,6 +9,7 @@ export const MOCK_VIDEO_DATA: VideoData[] = [
     title: "Breakfast",
     author: "Mock Author 1",
     imageUrl: MOCK_IMAGE_URL,
+    videoUrl: require("../../assets/videos/landing-1.mp4"),
   },
   {
     id: "mock_v2",
@@ -16,6 +17,7 @@ export const MOCK_VIDEO_DATA: VideoData[] = [
     author: "Mock Author 2",
     imageUrl:
       "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "mock_v3",
@@ -23,6 +25,7 @@ export const MOCK_VIDEO_DATA: VideoData[] = [
     author: "Mock Author 3",
     imageUrl:
       "https://images.pexels.com/photos/2641886/pexels-photo-2641886.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "mock_v4",
@@ -30,5 +33,6 @@ export const MOCK_VIDEO_DATA: VideoData[] = [
     author: "Mock Author 4",
     imageUrl:
       "https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
 ];

@@ -28,6 +28,7 @@ type MediaCarouselItemProps = {
   title: string;
   author: string;
   imageUrl?: string;
+  videoUrl?: string;
   onPress: () => void;
   style?: ViewStyle;
   variant?: "short" | "long";
@@ -37,6 +38,7 @@ const MediaCarouselItem = ({
   title,
   author,
   imageUrl,
+  videoUrl,
   onPress,
   style,
   variant = "short",

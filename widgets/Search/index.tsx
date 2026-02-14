@@ -61,6 +61,8 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
 
   const handleRecipePress = (item: MealData) => {
     if (item.recipeId) {
+      searchStorage.addToLastVisited(item.recipeId);
+      console.log(item.recipeId);
       router.push({
         pathname: "/(recipe)/recipe",
         params: { recipeId: item.recipeId.toString() },
