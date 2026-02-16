@@ -187,6 +187,17 @@ export interface PrepareStepResourcesUploadResponse {
   }[];
 }
 
+export interface PrepareVideoUploadRequest {
+  filename: string;
+  size: number;
+}
+
+export interface PrepareVideoUploadResponse {
+  mediaId: string;
+  uploadUrl: string;
+  url: string;
+}
+
 export interface CreateRecipeWithMediaIdsRequest {
   name: string;
   recipeTypeId: number;

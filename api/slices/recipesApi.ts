@@ -7,6 +7,8 @@ import type {
   PrepareRecipeUploadResponse,
   PrepareStepResourcesUploadRequest,
   PrepareStepResourcesUploadResponse,
+  PrepareVideoUploadRequest,
+  PrepareVideoUploadResponse,
   RecipeResponse,
   SearchRecipesQuery,
   UpdateRecipeRequest,
@@ -116,6 +118,17 @@ export const recipesApi = baseApi.injectEndpoints({
       }),
     }),
 
+    prepareVideoUpload: builder.mutation<
+      PrepareVideoUploadResponse,
+      PrepareVideoUploadRequest
+    >({
+      query: (body) => ({
+        url: "/recipes/prepare-video-upload",
+        method: "POST",
+        body,
+      }),
+    }),
+
     // Mark file as uploaded
     markUploaded: builder.mutation<{ success: boolean }, string>({
       query: (mediaId) => ({
@@ -167,6 +180,7 @@ export const {
   useLazySearchRecipesQuery,
   usePrepareRecipeUploadMutation,
   usePrepareStepResourcesUploadMutation,
+  usePrepareVideoUploadMutation,
   useMarkUploadedMutation,
   useCreateRecipeWithMediaIdsMutation,
   useConfirmRecipeUploadMutation,

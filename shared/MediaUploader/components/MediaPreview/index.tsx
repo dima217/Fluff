@@ -1,3 +1,4 @@
+import { useMediaUrl } from "@/api/hooks/useMediaUrl";
 import { Colors } from "@/constants/design-tokens";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
@@ -10,11 +11,25 @@ interface Props {
 }
 
 const MediaPreview: React.FC<Props> = ({ media, onRemove }) => {
+  const isLocalMedia =
+    !!media.uri &&
+    !media.uri.startsWith("http://") &&
+    !media.uri.startsWith("https://") &&
+    !media.uri.startsWith("/");
+
+  const { url: mediaUrl, headers: mediaHeaders } = useMediaUrl(media.uri, {
+    // Для локальных файлов (file://, ph:// и т.п.) хук не нужен
+    skip: !media.uri || isLocalMedia,
+  });
+  
   return (
     <View style={styles.wrapper}>
       <Image
         key={media.uri}
-        source={{ uri: media.thumbnail || media.uri }}
+        source={{
+          uri: (isLocalMedia ? media.uri : mediaUrl) || media.thumbnail || "",
+          ...(mediaHeaders && { headers: mediaHeaders }),
+        }}
         style={styles.preview}
       />
 

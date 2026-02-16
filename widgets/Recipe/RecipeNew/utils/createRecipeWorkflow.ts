@@ -5,6 +5,8 @@ import type {
   PrepareRecipeUploadResponse,
   PrepareStepResourcesUploadRequest,
   PrepareStepResourcesUploadResponse,
+  PrepareVideoUploadRequest,
+  PrepareVideoUploadResponse,
   RecipeResponse,
 } from "@/api/types";
 import {
@@ -16,6 +18,11 @@ import {
 } from "@/api/utils/fileUpload";
 import { Recipe } from "@/constants/types";
 
+function isLocalMediaUri(uri: string | undefined): boolean {
+  if (!uri) return false;
+  return uri.startsWith("file://") || !uri.startsWith("http");
+}
+
 export interface CreateRecipeWorkflowParams {
   recipeData: Partial<Recipe>;
   prepareRecipeUpload: (params: PrepareRecipeUploadRequest) => {
@@ -23,6 +30,9 @@ export interface CreateRecipeWorkflowParams {
   };
   prepareStepResourcesUpload: (params: PrepareStepResourcesUploadRequest) => {
     unwrap: () => Promise<PrepareStepResourcesUploadResponse>;
+  };
+  prepareVideoUpload: (params: PrepareVideoUploadRequest) => {
+    unwrap: () => Promise<PrepareVideoUploadResponse>;
   };
   markUploaded: (mediaId: string) => {
     unwrap: () => Promise<{ success: boolean }>;
@@ -57,6 +67,7 @@ export async function createRecipeWorkflow(
     recipeData,
     prepareRecipeUpload,
     prepareStepResourcesUpload,
+    prepareVideoUpload,
     markUploaded,
     createRecipeWithMediaIds,
     confirmRecipeUpload,
@@ -173,12 +184,24 @@ export async function createRecipeWorkflow(
       }
     }
 
-    // Upload tutorial video if exists
+    // Upload promotional (tutorial) video if exists (и это новый локальный файл)
     let promotionalVideoMediaId: string | undefined;
-    if (recipeData.videoUrl) {
-      // For tutorial video, we need to prepare it separately
-      // For now, we'll skip it or handle it similarly
-      // TODO: Add support for promotional video upload
+    if (recipeData.videoUrl && isLocalMediaUri(recipeData.videoUrl)) {
+      const videoFilename = getFilenameFromUri(recipeData.videoUrl);
+      const videoSize = await getFileSizeFromUri(recipeData.videoUrl);
+
+      const videoPrepare = await prepareVideoUpload({
+        filename: videoFilename,
+        size: videoSize,
+      }).unwrap();
+
+      await uploadFile({
+        uploadUrl: videoPrepare.uploadUrl,
+        file: { uri: recipeData.videoUrl } as ReactNativeFile,
+      });
+      await markUploaded(videoPrepare.mediaId).unwrap();
+      promotionalVideoMediaId = videoPrepare.mediaId;
+      allMediaIds.push(videoPrepare.mediaId);
     }
 
     // Step 4: Create recipe with mediaIds

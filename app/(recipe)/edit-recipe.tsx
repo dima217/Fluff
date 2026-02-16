@@ -1,6 +1,8 @@
 import {
   useMarkUploadedMutation,
   usePrepareRecipeUploadMutation,
+  usePrepareStepResourcesUploadMutation,
+  usePrepareVideoUploadMutation,
   useUpdateRecipeMutation,
 } from "@/api/slices/recipesApi";
 import { Recipe } from "@/constants/types";
@@ -35,6 +37,8 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [prepareRecipeUpload] = usePrepareRecipeUploadMutation();
+  const [prepareStepResourcesUpload] = usePrepareStepResourcesUploadMutation();
+  const [prepareVideoUpload] = usePrepareVideoUploadMutation();
   const [markUploaded] = useMarkUploadedMutation();
   const [updateRecipe] = useUpdateRecipeMutation();
 
@@ -51,6 +55,8 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
       existingRecipe: recipe,
       recipeData: finalData,
       prepareRecipeUpload,
+      prepareStepResourcesUpload,
+      prepareVideoUpload,
       markUploaded,
       updateRecipe,
     });
@@ -108,6 +114,7 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
 export default function EditRecipeScreen() {
   const { recipeId } = useLocalSearchParams<{ recipeId: string }>();
   const id = recipeId ? Number(recipeId) : NaN;
+
   const { data: recipe, isLoading } = useGetRecipeByIdQuery(id, {
     skip: !Number.isInteger(id) || id < 1,
   });
@@ -142,6 +149,8 @@ export default function EditRecipeScreen() {
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
+        {/* В режиме редактирования используем отдельный провайдер с начальными данными,
+            чтобы не мешать состоянию формы создания */}
         <RecipeFormProvider initialFormData={initialFormData}>
           <EditRecipeForm recipe={recipe} />
         </RecipeFormProvider>
@@ -178,3 +187,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+

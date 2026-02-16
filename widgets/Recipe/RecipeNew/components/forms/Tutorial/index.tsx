@@ -1,28 +1,13 @@
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import { useTranslation } from "@/hooks/useTranslation";
-import LongTextInput from "@/shared/Inputs/LongTextInput";
-import TextInput from "@/shared/Inputs/TextInput";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Controller, useFormContext } from "react-hook-form";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 const Tutorial = ({ onBack }: { onBack: () => void }) => {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
+  const { control } = useFormContext();
   const { t } = useTranslation();
-
-  const getErrorMessage = (field: string): string | undefined => {
-    const error = errors[field];
-
-    if (error && error.message) {
-      return String(error.message);
-    }
-
-    return undefined;
-  };
 
   return (
     <View>
@@ -49,38 +34,6 @@ const Tutorial = ({ onBack }: { onBack: () => void }) => {
           )}
         />
       </View>
-
-      <View style={styles.inputWrapper}>
-        <Controller
-          control={control}
-          name="tutorialName"
-          render={({ field: { value, onChange } }) => (
-            <TextInput
-              label={t("recipe.name")}
-              placeholder={t("common.enter")}
-              value={value}
-              errorMessage={getErrorMessage("name")}
-              onChangeText={onChange}
-            />
-          )}
-        />
-      </View>
-
-      <View style={styles.inputWrapper}>
-        <Controller
-          control={control}
-          name="tutorialDescription"
-          render={({ field: { value, onChange } }) => (
-            <LongTextInput
-              label={t("recipe.ingredients")}
-              placeholder={t("common.enter")}
-              value={value}
-              onChangeText={onChange}
-              errorMessage={getErrorMessage("ingredients")}
-            />
-          )}
-        />
-      </View>
     </View>
   );
 };
@@ -94,8 +47,5 @@ const styles = StyleSheet.create({
   },
   mediaContainer: {
     marginBottom: 30,
-  },
-  inputWrapper: {
-    marginBottom: 10,
   },
 });

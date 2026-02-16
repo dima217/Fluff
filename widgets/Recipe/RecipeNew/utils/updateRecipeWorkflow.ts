@@ -1,12 +1,18 @@
 import type {
   PrepareRecipeUploadRequest,
   PrepareRecipeUploadResponse,
+  PrepareStepResourcesUploadRequest,
+  PrepareStepResourcesUploadResponse,
+  PrepareVideoUploadRequest,
+  PrepareVideoUploadResponse,
   RecipeResponse,
+  RecipeStepResource,
   UpdateRecipeRequest,
 } from "@/api/types";
 import {
   getFilenameFromUri,
   getFileSizeFromUri,
+  getFileTypeFromUri,
   ReactNativeFile,
   uploadFile,
 } from "@/api/utils/fileUpload";
@@ -24,6 +30,12 @@ export interface UpdateRecipeWorkflowParams {
   prepareRecipeUpload: (params: PrepareRecipeUploadRequest) => {
     unwrap: () => Promise<PrepareRecipeUploadResponse>;
   };
+  prepareStepResourcesUpload: (params: PrepareStepResourcesUploadRequest) => {
+    unwrap: () => Promise<PrepareStepResourcesUploadResponse>;
+  };
+  prepareVideoUpload: (params: PrepareVideoUploadRequest) => {
+    unwrap: () => Promise<PrepareVideoUploadResponse>;
+  };
   markUploaded: (mediaId: string) => {
     unwrap: () => Promise<{ success: boolean }>;
   };
@@ -39,8 +51,10 @@ export interface UpdateRecipeWorkflowResult {
 }
 
 /**
- * Обновление рецепта: загрузка обложки только если mediaUrl поменялся (новый файл), затем PUT.
- * Шаги и видео пока обновляются только текстом; смена медиа шагов — при необходимости отдельно.
+ * Обновление рецепта.
+ * - Картинка (cover/preview) загружается заново, только если пришёл новый локальный файл.
+ * - Видео загружается заново, только если пришёл новый локальный файл.
+ * - stepsConfig: обновляем текст шагов, при этом медиа шагов сохраняем из существующего рецепта.
  */
 export async function updateRecipeWorkflow(
   params: UpdateRecipeWorkflowParams
@@ -50,6 +64,8 @@ export async function updateRecipeWorkflow(
     existingRecipe,
     recipeData,
     prepareRecipeUpload,
+    prepareStepResourcesUpload,
+    prepareVideoUpload,
     markUploaded,
     updateRecipe,
   } = params;
@@ -57,10 +73,13 @@ export async function updateRecipeWorkflow(
   try {
     let coverUrl = existingRecipe.image.cover;
     let previewUrl = existingRecipe.image.preview;
+    let promotionalVideo: string | null = existingRecipe.promotionalVideo ?? null;
 
+    // Обновляем обложку, только если пришёл новый локальный файл
     if (isNewLocalMedia(recipeData.mediaUrl)) {
       const coverFilename = getFilenameFromUri(recipeData.mediaUrl!);
       const coverSize = await getFileSizeFromUri(recipeData.mediaUrl!);
+
       const prepareUploadResult = await prepareRecipeUpload({
         coverFilename,
         coverSize,
@@ -84,18 +103,103 @@ export async function updateRecipeWorkflow(
       previewUrl = prepareUploadResult.previewUrl;
     }
 
+    // Обновляем промо‑видео, только если пришёл новый локальный файл
+    if (isNewLocalMedia(recipeData.videoUrl)) {
+      const videoFilename = getFilenameFromUri(recipeData.videoUrl!);
+      const videoSize = await getFileSizeFromUri(recipeData.videoUrl!);
+
+      const videoPrepare = await prepareVideoUpload({
+        filename: videoFilename,
+        size: videoSize,
+      }).unwrap();
+
+      await uploadFile({
+        uploadUrl: videoPrepare.uploadUrl,
+        file: { uri: recipeData.videoUrl! } as ReactNativeFile,
+      });
+      await markUploaded(videoPrepare.mediaId).unwrap();
+
+      promotionalVideo = videoPrepare.url;
+    }
+
+    // Шаги: загружаем медиа для новых шагов и для шагов с заменённым локальным медиа
+    const steps = recipeData.steps ?? [];
+    const stepResourcesToUpload: {
+      filename: string;
+      size: number;
+      type: string;
+      position: number;
+    }[] = [];
+
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i];
+      if (step.stepMediaUrl && isNewLocalMedia(step.stepMediaUrl)) {
+        stepResourcesToUpload.push({
+          filename: getFilenameFromUri(step.stepMediaUrl),
+          size: await getFileSizeFromUri(step.stepMediaUrl),
+          type: getFileTypeFromUri(step.stepMediaUrl),
+          position: i + 1,
+        });
+      }
+    }
+
+    let stepResourcesResult: PrepareStepResourcesUploadResponse | null = null;
+    if (stepResourcesToUpload.length > 0) {
+      stepResourcesResult = await prepareStepResourcesUpload({
+        resources: stepResourcesToUpload,
+      }).unwrap();
+
+      for (let i = 0; i < steps.length; i++) {
+        const step = steps[i];
+        if (step.stepMediaUrl && isNewLocalMedia(step.stepMediaUrl)) {
+          const resource = stepResourcesResult!.resources.find(
+            (r) => r.position === i + 1
+          );
+          if (resource) {
+            await uploadFile({
+              uploadUrl: resource.uploadUrl,
+              file: { uri: step.stepMediaUrl } as ReactNativeFile,
+            });
+            await markUploaded(resource.mediaId).unwrap();
+          }
+        }
+      }
+    }
+
+    // stepsConfig: текст из формы; ресурсы — загруженные для шага или из существующего рецепта
     const stepsConfig = {
-      steps: (recipeData.steps ?? []).map((step, index) => {
+      steps: steps.map((step, index) => {
         const existingStep = existingRecipe.stepsConfig?.steps?.[index];
+        let resources: RecipeStepResource[] = existingStep?.resources ?? [];
+
+        if (stepResourcesResult) {
+          const uploaded = stepResourcesResult.resources.find(
+            (r) => r.position === index + 1
+          );
+          if (uploaded) {
+            resources = [
+              {
+                position: index + 1,
+                source: uploaded.url,
+                type: uploaded.type,
+              },
+            ];
+          }
+        }
+
         return {
           name: step.title,
           description: step.description,
-          resources: existingStep?.resources ?? [],
+          resources,
         };
       }),
     };
 
-    if (stepsConfig.steps.length === 0 && existingRecipe.stepsConfig?.steps?.length) {
+    // Если шаги не пришли из формы — оставляем stepsConfig как есть
+    if (
+      stepsConfig.steps.length === 0 &&
+      existingRecipe.stepsConfig?.steps?.length
+    ) {
       stepsConfig.steps = existingRecipe.stepsConfig.steps;
     }
 
@@ -103,7 +207,7 @@ export async function updateRecipeWorkflow(
       name: recipeData.name ?? existingRecipe.name,
       recipeTypeId: existingRecipe.type.id,
       image: { cover: coverUrl, preview: previewUrl },
-      promotionalVideo: existingRecipe.promotionalVideo ?? null,
+      promotionalVideo,
       description: recipeData.ingredients ?? existingRecipe.description ?? null,
       productIds: existingRecipe.products,
       calories: recipeData.ccal ?? existingRecipe.calories,
@@ -112,7 +216,11 @@ export async function updateRecipeWorkflow(
     };
 
     const updated = await updateRecipe({ id: recipeId, data: updatePayload }).unwrap();
-    return { success: true, recipe: updated };
+
+    return {
+      success: true,
+      recipe: updated,
+    };
   } catch (error: any) {
     return {
       success: false,
@@ -121,3 +229,4 @@ export async function updateRecipeWorkflow(
     };
   }
 }
+

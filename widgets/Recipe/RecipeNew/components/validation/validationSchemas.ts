@@ -31,12 +31,6 @@ export const cookingProcessSchema = yup.object({
 
 export const tutorialSchema = yup.object({
   videoUrl: yup.string().required("Video is required"),
-  tutorialName: yup
-    .string()
-    .required("Recipe name is required")
-    .min(3, "Minimum 3 characters")
-    .max(100, "Maximum 100 characters"),
-  tutorialDescription: yup.string().required("Step description is required"),
 });
 
 export const previewSchema = yup.object({});
@@ -61,8 +55,6 @@ export const stepsConfig = [
     schema: tutorialSchema,
     defaultValues: {
       videoUrl: "",
-      tutorialName: "",
-      tutorialDescription: "",
     },
   },
   {

@@ -4,6 +4,7 @@ import {
   useMarkUploadedMutation,
   usePrepareRecipeUploadMutation,
   usePrepareStepResourcesUploadMutation,
+  usePrepareVideoUploadMutation,
 } from "@/api/slices/recipesApi";
 import { Recipe } from "@/constants/types";
 import Header from "@/shared/Header";
@@ -19,13 +20,13 @@ import { createRecipeWorkflow } from "@/widgets/Recipe/RecipeNew/utils/createRec
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
 import { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  View as RNView,
-  ScrollView,
-  StyleSheet,
+    ActivityIndicator,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    View as RNView,
+    ScrollView,
+    StyleSheet,
 } from "react-native";
 
 const CreateRecipeScreen = () => {
@@ -34,6 +35,7 @@ const CreateRecipeScreen = () => {
 
   const [prepareRecipeUpload] = usePrepareRecipeUploadMutation();
   const [prepareStepResourcesUpload] = usePrepareStepResourcesUploadMutation();
+  const [prepareVideoUpload] = usePrepareVideoUploadMutation();
   const [markUploaded] = useMarkUploadedMutation();
   const [createRecipeWithMediaIds] = useCreateRecipeWithMediaIdsMutation();
   const [confirmRecipeUpload] = useConfirmRecipeUploadMutation();
@@ -51,6 +53,7 @@ const CreateRecipeScreen = () => {
       recipeData: finalData,
       prepareRecipeUpload,
       prepareStepResourcesUpload,
+      prepareVideoUpload,
       markUploaded,
       createRecipeWithMediaIds,
       confirmRecipeUpload,
