@@ -19,6 +19,7 @@ import Height from "@/widgets/SignUp/HeightScreen";
 import NameScreen from "@/widgets/SignUp/NameScreen";
 import PasswordScreen from "@/widgets/SignUp/PasswordScreen";
 import Sex from "@/widgets/SignUp/SexScreen";
+import { SportActivityScreen } from "@/widgets/SignUp/SportActivityScreen";
 import Weight from "@/widgets/SignUp/WeightScreen";
 import SignUpFormWrapper, {
   SignUpFormData,
@@ -30,7 +31,13 @@ import {
 import { signUpStepsConfig } from "@/widgets/SignUp/validation/validationSchemas";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { View as RNView, StyleSheet } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  View as RNView,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 
 const RegisterScreenContent: React.FC = () => {
   const { step, setTotalSteps, resetForm, formData, setStep } =
@@ -84,7 +91,7 @@ const RegisterScreenContent: React.FC = () => {
   };
 
   useEffect(() => {
-    setTotalSteps(8);
+    setTotalSteps(9);
   }, [setTotalSteps]);
 
   useEffect(() => {
@@ -185,30 +192,44 @@ const RegisterScreenContent: React.FC = () => {
         return <Height />;
       case 7:
         return <Weight />;
+      case 8:
+        return <SportActivityScreen />;
       default:
         return null;
     }
   };
 
   return (
-    <View style={{ paddingTop: "30%" }}>
-      <ProgressDots totalSteps={8} activeIndex={step} />
-      <SignUpFormWrapper
-        key={step}
-        onFinalSubmit={handleFinalSubmit}
-        validationSchemas={signUpStepsConfig}
-        buttonText={t("signUp.continue")}
+    <KeyboardAvoidingView
+      style={styles.keyboardAvoid}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
-        {renderStepComponent()}
-      </SignUpFormWrapper>
-      {step === 0 && (
-        <RNView style={styles.googleButtonContainer}>
-          <GradientButton
-            title={`${t("auth.continueWith")} Google`}
-            onPress={handleGoogleSignUp}
-          />
-        </RNView>
-      )}
+        <View style={styles.formContainer}>
+          <ProgressDots totalSteps={9} activeIndex={step} />
+          <SignUpFormWrapper
+            key={step}
+            onFinalSubmit={handleFinalSubmit}
+            validationSchemas={signUpStepsConfig}
+            buttonText={t("signUp.continue")}
+          >
+            {renderStepComponent()}
+          </SignUpFormWrapper>
+          {step === 0 && (
+            <RNView style={styles.googleButtonContainer}>
+              <GradientButton
+                title={`${t("auth.continueWith")} Google`}
+                onPress={handleGoogleSignUp}
+              />
+            </RNView>
+          )}
+        </View>
+      </ScrollView>
       <VerificationCodeModal
         isVisible={showCodeModal}
         email={formData.email || ""}
@@ -221,7 +242,7 @@ const RegisterScreenContent: React.FC = () => {
           setShowErrorModal(false);
         }}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -234,6 +255,19 @@ const RegisterScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  keyboardAvoid: {
+    flex: 1,
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 40,
+  },
+  formContainer: {
+    paddingTop: "30%",
+  },
   googleButtonContainer: {
     width: "100%",
     alignSelf: "center",

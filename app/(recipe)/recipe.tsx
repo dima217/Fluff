@@ -11,6 +11,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
+import { cheatMealStorage } from "@/utils/cheatMealStorage";
 import { searchStorage } from "@/utils/searchStorage";
 import IngredientsSection from "@/widgets/Recipe/RecipeInfo/components/IngredientsSection";
 import RecipeCard from "@/widgets/Recipe/RecipeInfo/components/RecipeCard";
@@ -180,7 +181,17 @@ export default function RecipeScreen() {
           description={recipe.description || ""}
           onLike={handleLike}
           isLiked={recipe.favorite ?? false}
-          onMenu={() => console.log("Menu pressed")}
+          onMenu={() => {
+            cheatMealStorage.add({
+              id: recipe.id,
+              name: recipe.name,
+              calories: recipe.calories,
+              imageUrl: recipe.image?.cover ?? recipe.image?.preview ?? "",
+              author: recipe.user
+                ? `${recipe.user.firstName} ${recipe.user.lastName}`
+                : "Author",
+            });
+          }}
           onPress={() => {
             router.push({
               pathname: "/recipe-steps",

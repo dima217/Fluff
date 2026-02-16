@@ -1,8 +1,9 @@
-import EditIcon from "@/assets/images/Edit_fill.svg";
 import Heart from "@/assets/images/Heart.svg";
 import { Colors } from "@/constants/design-tokens";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Feather from "@expo/vector-icons/Feather";
 import { ReactNode } from "react";
-import { TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import type { MealData } from "./index";
 
 /** Дефолтная иконка справа на карточке — лайк (не меняет текущую структуру) */
@@ -52,7 +53,46 @@ export function EditRecipeCardAction({
       activeOpacity={0.7}
       hitSlop={12}
     >
-      <EditIcon width={22} height={22} fill={Colors.border} />
+      <Feather name="edit" size={18} color={Colors.text} />
     </TouchableOpacity>
   );
 }
+
+interface DeleteRecipeCardActionProps {
+  item: MealData;
+  onDelete: (item: MealData) => void;
+}
+
+/** Иконка удаления (мусорка) */
+export function DeleteRecipeCardAction({
+  item,
+  onDelete,
+}: DeleteRecipeCardActionProps): ReactNode {
+  return (
+    <TouchableOpacity
+      onPress={(e) => {
+        e?.stopPropagation?.();
+        onDelete(item);
+      }}
+      activeOpacity={0.7}
+      hitSlop={12}
+      style={styles.deleteAction}
+    >
+      <MaterialCommunityIcons
+        name="trash-can-outline"
+        size={22}
+        color={Colors.border}
+      />
+    </TouchableOpacity>
+  );
+}
+
+const styles = StyleSheet.create({
+  deleteAction: {
+    marginLeft: 4,
+  },
+  actionsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+});

@@ -32,7 +32,7 @@ const Library = () => {
           textHint={t("library.cheatMealHint")}
           overlayImage={burgerImage}
           backgroundImage={burgerBackgroundImage}
-          onPress={() => console.log("Tapped Cheat Meal")}
+          onPress={() => router.push("/(app)/library/cheat-meal")}
           style={styles.bottomRightCard}
         />
 
