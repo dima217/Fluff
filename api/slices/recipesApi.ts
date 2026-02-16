@@ -33,7 +33,7 @@ export const recipesApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Recipe"],
+      invalidatesTags: ["Recipe", "MyRecipes"],
     }),
 
     // Update recipe
@@ -46,7 +46,7 @@ export const recipesApi = baseApi.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["Recipe"],
+      invalidatesTags: ["Recipe", "MyRecipes"],
     }),
 
     // Delete recipe
@@ -58,10 +58,10 @@ export const recipesApi = baseApi.injectEndpoints({
       invalidatesTags: ["Recipe"],
     }),
 
-    // Get my recipes
+    // Get my recipes (инвалидируется при создании рецепта)
     getMyRecipes: builder.query<RecipeResponse[], void>({
       query: () => "/recipes/my",
-      providesTags: ["Recipe"],
+      providesTags: ["Recipe", "MyRecipes"],
     }),
 
     // Get favorite recipes
@@ -134,7 +134,7 @@ export const recipesApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Recipe"],
+      invalidatesTags: ["Recipe", "MyRecipes"],
     }),
 
     // Confirm upload and finalize recipe
@@ -145,7 +145,7 @@ export const recipesApi = baseApi.injectEndpoints({
           method: "POST",
           body: { recipeId, mediaIds },
         }),
-        invalidatesTags: ["Recipe"],
+        invalidatesTags: ["Recipe", "MyRecipes"],
       }
     ),
   }),

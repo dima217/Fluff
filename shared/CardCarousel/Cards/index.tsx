@@ -16,6 +16,8 @@ interface RecipeCardProps {
   onPress: () => void;
   onLikePress?: () => void;
   isLiked?: boolean;
+  /** Кастомная иконка справа (например редактирование). По умолчанию — лайк на carousel, ничего на list */
+  rightAction?: React.ReactNode;
 }
 
 const MealCard = ({
@@ -27,6 +29,7 @@ const MealCard = ({
   onLikePress,
   variant,
   isLiked = false,
+  rightAction,
 }: RecipeCardProps) => {
   const isCarouselItem = variant === "carousel";
   const { url: mediaUrl, headers: mediaHeaders } = useMediaUrl(imageUrl, {
@@ -40,8 +43,8 @@ const MealCard = ({
     }
   };
 
-  //TODO: STROKE COLOR CHANGE ON LIKE/UNLIKE
   const renderActionIcon = () => {
+    if (rightAction != null) return rightAction;
     if (isCarouselItem) {
       const strokeColor = isLiked ? Colors.primary : "#8B868F";
       const fillColor = isLiked ? Colors.primary : "none";
@@ -57,9 +60,8 @@ const MealCard = ({
           />
         </TouchableOpacity>
       );
-    } else {
-      return null;
     }
+    return null;
   };
 
   return (

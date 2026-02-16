@@ -1,4 +1,5 @@
 import { useTranslation } from "@/hooks/useTranslation";
+import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import CheatMealCard from "./components/MealSection";
 import FoodUploadCard from "./components/UploadSection";
@@ -12,6 +13,7 @@ const qrImage = require("../../assets/images/Qr.png");
 
 const Library = () => {
   const { t } = useTranslation();
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -19,7 +21,7 @@ const Library = () => {
         <FoodUploadCard
           title={t("library.myUploads")}
           imageSource={saladImage}
-          onPress={() => console.log("Tapped My Uploads")}
+          onPress={() => router.push("/(recipe)/my-uploads")}
           backgroundImage={saladBackgroundImage}
         />
       </View>

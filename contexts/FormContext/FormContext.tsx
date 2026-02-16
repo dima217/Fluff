@@ -2,6 +2,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -21,16 +22,25 @@ interface FormContextType<T = Record<string, any>> {
 
 const FormContext = createContext<FormContextType<any> | undefined>(undefined);
 
-interface FormProviderProps {
+interface FormProviderProps<T = Record<string, any>> {
   children: React.ReactNode;
+  /** Начальные данные формы (например для режима редактирования) */
+  initialFormData?: Partial<T>;
 }
 
 export function FormProvider<T = Record<string, any>>({
   children,
-}: FormProviderProps) {
+  initialFormData,
+}: FormProviderProps<T>) {
   const [step, setStep] = useState(0);
   const [totalSteps, setTotalSteps] = useState(0);
-  const [formData, setFormData] = useState<Partial<T>>({} as Partial<T>);
+  const [formData, setFormData] = useState<Partial<T>>((initialFormData ?? {}) as Partial<T>);
+
+  useEffect(() => {
+    if (initialFormData != null && Object.keys(initialFormData).length > 0) {
+      setFormData(initialFormData as Partial<T>);
+    }
+  }, [initialFormData]);
 
   const goToStep = useCallback(
     (targetStep: number) => {

@@ -2,6 +2,7 @@ import {
   useAddToFavoritesMutation,
   useRemoveFromFavoritesMutation,
 } from "@/api";
+import type { ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FlatList,
@@ -32,12 +33,15 @@ interface CardsScrollProps extends ViewProps {
   onCardPress: (item: MealData) => void;
   onLikePress?: (item: MealData) => void; // Optional custom handler, if not provided uses built-in logic
   onScrollToEnd?: () => void; // Callback when user scrolls near the end
+  /** Кастомная иконка справа на карточке (например редактирование). По умолчанию — лайк */
+  renderCardRightAction?: (item: MealData) => ReactNode;
 }
 
 const renderListItem = (
   { item }: ListRenderItemInfo<MealData>,
   onCardPress: (item: MealData) => void,
-  onLikePress?: (item: MealData) => void
+  onLikePress?: (item: MealData) => void,
+  renderCardRightAction?: (item: MealData) => ReactNode
 ) => (
   <MealCard
     key={item.id}
@@ -46,16 +50,18 @@ const renderListItem = (
     imageUrl={item.imageUrl}
     onPress={() => onCardPress(item)}
     onLikePress={onLikePress ? () => onLikePress(item) : undefined}
-    variant={"list"}
+    variant="list"
     status={item.status}
     isLiked={item.isLiked}
+    rightAction={renderCardRightAction?.(item)}
   />
 );
 
 const renderCarouselItem = (
   item: MealData,
   onCardPress: (item: MealData) => void,
-  onLikePress?: (item: MealData) => void
+  onLikePress?: (item: MealData) => void,
+  renderCardRightAction?: (item: MealData) => ReactNode
 ) => (
   <MealCard
     key={item.id}
@@ -64,9 +70,10 @@ const renderCarouselItem = (
     imageUrl={item.imageUrl}
     onPress={() => onCardPress(item)}
     onLikePress={onLikePress ? () => onLikePress(item) : undefined}
-    variant={"carousel"}
+    variant="carousel"
     status={item.status}
     isLiked={item.isLiked}
+    rightAction={renderCardRightAction?.(item)}
   />
 );
 
@@ -76,6 +83,7 @@ const CardsCarousel = ({
   onCardPress,
   onLikePress: customOnLikePress,
   onScrollToEnd,
+  renderCardRightAction,
 }: CardsScrollProps) => {
   const isCarouselVariant = variant === "featured";
 
@@ -175,9 +183,13 @@ const CardsCarousel = ({
 
   const onLikePress = customOnLikePress || handleLike;
 
-  // Render item for mealsToday (horizontal) variant
   const getListRenderItem = (props: ListRenderItemInfo<MealData>) => {
-    return renderListItem(props, onCardPress, onLikePress);
+    return renderListItem(
+      props,
+      onCardPress,
+      onLikePress,
+      renderCardRightAction
+    );
   };
 
   // Handle scroll for horizontal FlatList (onEndReached doesn't work for horizontal lists)
@@ -200,12 +212,15 @@ const CardsCarousel = ({
   );
 
   if (isCarouselVariant) {
-    // For vertical variant inside ScrollView, use View with map
-    // FlatList cannot be nested in ScrollView with same orientation
     return (
       <View style={[styles.container, styles.verticalList]}>
         {dataWithLikes.map((item) =>
-          renderCarouselItem(item, onCardPress, onLikePress)
+          renderCarouselItem(
+            item,
+            onCardPress,
+            onLikePress,
+            renderCardRightAction
+          )
         )}
       </View>
     );

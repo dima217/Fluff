@@ -16,6 +16,12 @@ export default function RecipeLayout() {
             gestureEnabled: false,
           }}
         />
+        <Stack.Screen
+          name="edit-recipe"
+          options={{
+            gestureEnabled: false,
+          }}
+        />
       </Stack>
     </RecipeFormProvider>
   );
