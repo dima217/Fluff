@@ -1,6 +1,7 @@
 import { useLazySearchProductsQuery, useLazySearchRecipesQuery } from "@/api";
 import type { RecipeResponse } from "@/api/types";
 import { Colors } from "@/constants/design-tokens";
+import { useExcludeCheatMealRecipeIds } from "@/hooks/useCheatMealDay";
 import Button from "@/shared/Buttons/Button";
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
@@ -27,6 +28,9 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
   const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [selectedRecipes, setSelectedRecipes] = useState<RecipeResponse[]>([]);
 
+  // When today is cheat meal day, exclude cheat meal recipes from search results
+  const excludeCheatMealIds = useExcludeCheatMealRecipeIds();
+
   // Lazy queries for search
   const [searchRecipes, { data: recipes }] = useLazySearchRecipesQuery();
   const [searchProducts] = useLazySearchProductsQuery();
@@ -48,13 +52,16 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
   }, [debouncedSearchText, mode, searchRecipes, searchProducts]);
 
   const recipesArray = useMemo(() => {
+    console.log("excludeCheatMealIds", excludeCheatMealIds);
     if (!recipes) return [];
-    if (Array.isArray(recipes)) return recipes;
-    if (typeof recipes === "object" && "data" in recipes) {
-      return Array.isArray(recipes.data) ? recipes.data : [];
+    let list: RecipeResponse[] = [];
+    if (Array.isArray(recipes)) list = recipes;
+    else if (typeof recipes === "object" && "data" in recipes) {
+      list = Array.isArray(recipes.data) ? recipes.data : [];
     }
-    return [];
-  }, [recipes]);
+    if (excludeCheatMealIds.size === 0) return list;
+    return list.filter((r) => !excludeCheatMealIds.has(r.id));
+  }, [recipes, excludeCheatMealIds]);
 
   // Convert recipes to MealData format for CardCarousel
   const recipesAsMealData: MealData[] = useMemo(() => {

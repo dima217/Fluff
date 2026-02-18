@@ -1,3 +1,7 @@
+import {
+  useCheatMealSettings,
+  useIsCheatMealDay,
+} from "@/hooks/useCheatMealDay";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
@@ -14,6 +18,9 @@ const qrImage = require("../../assets/images/Qr.png");
 const Library = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const settings = useCheatMealSettings();
+  const isCheatMealDay = useIsCheatMealDay();
+  const showCheatMealLock = settings.configured === true;
 
   return (
     <View style={styles.container}>
@@ -34,6 +41,8 @@ const Library = () => {
           backgroundImage={burgerBackgroundImage}
           onPress={() => router.push("/(app)/library/cheat-meal")}
           style={styles.bottomRightCard}
+          showLock={showCheatMealLock}
+          isUnlocked={isCheatMealDay}
         />
 
         <CheatMealCard

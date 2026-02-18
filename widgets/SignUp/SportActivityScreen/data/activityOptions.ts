@@ -7,7 +7,7 @@ export type ActivityOption = {
 export const activityOptions: ActivityOption[] = [
   {
     label: "Sedentary lifestyle",
-    trainingCount: "0",
+    trainingCount: "0-1",
     description: "Sedentary lifestyle is a great way to stay in shape.",
   },
   {

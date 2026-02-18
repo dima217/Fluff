@@ -13,6 +13,7 @@ import VerificationCodeModal from "@/shared/Modals/VerificationCodeModal";
 import View from "@/shared/View";
 import ProgressDots from "@/shared/ui/ProgressDots";
 import Age from "@/widgets/SignUp/AgeScreen";
+import CheatMealDay from "@/widgets/SignUp/CheatMealDay";
 import CodeScreen from "@/widgets/SignUp/CodeScreen";
 import EmailScreen from "@/widgets/SignUp/EmailScreen";
 import Height from "@/widgets/SignUp/HeightScreen";
@@ -24,6 +25,7 @@ import Weight from "@/widgets/SignUp/WeightScreen";
 import SignUpFormWrapper, {
   SignUpFormData,
 } from "@/widgets/SignUp/components/FormWrapper";
+import { cheatMealSettingsStorage } from "@/utils/cheatMealSettingsStorage";
 import {
   SignUpFormProvider,
   useSignUpFormContext,
@@ -35,9 +37,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   View as RNView,
-  ScrollView,
   StyleSheet,
 } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 const RegisterScreenContent: React.FC = () => {
   const { step, setTotalSteps, resetForm, formData, setStep } =
@@ -53,6 +55,7 @@ const RegisterScreenContent: React.FC = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [codeSent, setCodeSent] = useState(false);
+
 
   const handleGoogleSignUp = async () => {
     try {
@@ -91,7 +94,7 @@ const RegisterScreenContent: React.FC = () => {
   };
 
   useEffect(() => {
-    setTotalSteps(9);
+    setTotalSteps(10);
   }, [setTotalSteps]);
 
   useEffect(() => {
@@ -157,7 +160,18 @@ const RegisterScreenContent: React.FC = () => {
         birthDate: birthDate.toISOString(),
         height: parseFloat(finalData.height || "0"),
         weight: parseFloat(finalData.weight || "0"),
+        sportActivity: finalData.sportActivity,
+        cheatMealDay: finalData.cheatMealDay,
+        periodOfDays: finalData.periodOfDays,
       }).unwrap();
+
+      if (finalData.cheatMealDay != null || finalData.periodOfDays != null) {
+        cheatMealSettingsStorage.set({
+          cheatMealDay: finalData.cheatMealDay,
+          periodOfDays: finalData.periodOfDays,
+          configured: true,
+        });
+      }
 
       // Load user profile after successful registration
       try {
@@ -194,6 +208,8 @@ const RegisterScreenContent: React.FC = () => {
         return <Weight />;
       case 8:
         return <SportActivityScreen />;
+      case 9:
+        return <CheatMealDay />;
       default:
         return null;
     }
@@ -209,9 +225,10 @@ const RegisterScreenContent: React.FC = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
+        nestedScrollEnabled
       >
         <View style={styles.formContainer}>
-          <ProgressDots totalSteps={9} activeIndex={step} />
+          <ProgressDots totalSteps={10} activeIndex={step} />
           <SignUpFormWrapper
             key={step}
             onFinalSubmit={handleFinalSubmit}

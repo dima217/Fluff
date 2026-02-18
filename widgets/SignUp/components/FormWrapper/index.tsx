@@ -17,6 +17,9 @@ export interface SignUpFormData {
   age: string;
   height: string;
   weight: string;
+  sportActivity: string;
+  cheatMealDay: string;
+  periodOfDays: string;
 }
 
 interface SignUpFormWrapperProps {

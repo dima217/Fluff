@@ -108,6 +108,7 @@ export function AnimatedWheelPicker<
     <View style={[styles.container, containerSizeStyle, containerStyle]}>
       <Animated.ScrollView
         ref={scrollRef}
+        nestedScrollEnabled={true}
         horizontal={isHorizontal}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}

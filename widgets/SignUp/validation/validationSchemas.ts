@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { activityOptions } from "../SportActivityScreen/data/activityOptions";
 
 export const emailSchema = yup.object({
   email: yup
@@ -73,6 +74,30 @@ export const weightSchema = yup.object({
     }),
 });
 
+export const cheatMealDaySchema = yup.object({
+  cheatMealDay: yup
+    .string()
+    .required("День чытміла обязателен")
+    .test("is-valid-cheat-meal-day", "Введите корректный день чытміла", (value) => {
+      const cheatMealDay = parseInt(value || "0", 10);
+      return cheatMealDay >= 1 && cheatMealDay <= 31;
+    }),
+  periodOfDays: yup
+    .string()
+    .required("Период дней обязателен")
+    .test("is-valid-period-of-days", "Введите корректный период дней", (value) => {
+      const periodOfDays = parseInt(value || "0", 10);
+      return periodOfDays >= 7 && periodOfDays <= 31;
+    }),
+});
+
+export const sportActivitySchema = yup.object({
+  sportActivity: yup
+    .string()
+    .required("Спорт обязателен")
+    .oneOf(activityOptions.map((option) => option.trainingCount), "Выберите вашу спортивную активность"),
+});
+
 export const signUpStepsConfig = [
   {
     schema: emailSchema,
@@ -121,6 +146,19 @@ export const signUpStepsConfig = [
     schema: weightSchema,
     defaultValues: {
       weight: "70",
+    },
+  },
+  {
+    schema: sportActivitySchema,
+    defaultValues: {
+      sportActivity: null,
+    },
+  },
+  {
+    schema: cheatMealDaySchema,
+    defaultValues: {
+      cheatMealDay: 1,
+      periodOfDays: 1,
     },
   },
 ];

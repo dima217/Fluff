@@ -22,6 +22,9 @@ export interface SignUpRequest {
   birthDate: string; // ISO 8601
   height: number; // 50-300 cm
   weight: number; // 20-500 kg
+  sportActivity?: string;
+  cheatMealDay?: string; // day of month 1-31
+  periodOfDays?: string; // period in days, e.g. "7"
 }
 
 export interface LoginRequest {

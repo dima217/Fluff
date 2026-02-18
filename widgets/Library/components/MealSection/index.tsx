@@ -1,4 +1,5 @@
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { Ionicons } from "@expo/vector-icons";
 import {
   Image,
   ImageSourcePropType,
@@ -16,6 +17,9 @@ export interface CheatMealCardProps extends TouchableOpacityProps {
   overlayImage: ImageSourcePropType;
   backgroundImage: ImageSourcePropType;
   style?: StyleProp<ViewStyle>;
+  /** Show lock icon (top right). When true = unlocked, false = locked */
+  showLock?: boolean;
+  isUnlocked?: boolean;
 }
 
 const CheatMealCard = ({
@@ -25,9 +29,29 @@ const CheatMealCard = ({
   backgroundImage,
   onPress,
   style,
+  showLock,
+  isUnlocked = true,
 }: CheatMealCardProps) => {
+  console.log("isUnlocked", isUnlocked);
+  const locked = showLock && !isUnlocked;
+  const handlePress = locked ? undefined : onPress;
+
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.card, style]}>
+    <TouchableOpacity
+      onPress={handlePress}
+      style={[styles.card, style, locked && styles.cardLocked]}
+      activeOpacity={locked ? 1 : undefined}
+      disabled={locked}
+    >
+      {showLock && (
+        <View style={styles.lockIcon} pointerEvents="none">
+          <Ionicons
+            name={isUnlocked ? "lock-open-outline" : "lock-closed-outline"}
+            size={20}
+            color="rgba(255,255,255,0.9)"
+          />
+        </View>
+      )}
       <View style={styles.backgroundImage}>
         <Image source={backgroundImage} resizeMode="cover" />
       </View>
@@ -55,6 +79,15 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     flex: 1,
     justifyContent: "flex-start",
+  },
+  cardLocked: {
+    opacity: 0.85,
+  },
+  lockIcon: {
+    position: "absolute",
+    top: 12,
+    right: 12,
+    zIndex: 15,
   },
   content: {
     padding: 16,
