@@ -50,7 +50,7 @@ const Library = () => {
           textHint={t("library.scannerHint")}
           overlayImage={phoneImage}
           backgroundImage={qrImage}
-          onPress={() => console.log("Tapped Cheat Meal")}
+          onPress={() => router.push("/(app)/library/notes")}
           style={styles.bottomRightCard}
         />
       </View>

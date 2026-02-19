@@ -9,6 +9,8 @@ export default function LibraryLayout() {
     >
       <Stack.Screen name="index" />
       <Stack.Screen name="cheat-meal" />
+      <Stack.Screen name="notes" />
+      <Stack.Screen name="note-create" />
     </Stack>
   );
 }
