@@ -6,9 +6,13 @@ import VideosSection from "./components/VideosSection";
 
 interface HomeContentProps {
   selected: string;
+  caloriesLoadMoreSignal?: number;
 }
 
-const HomeContent = ({ selected }: HomeContentProps) => {
+const HomeContent = ({
+  selected,
+  caloriesLoadMoreSignal = 0,
+}: HomeContentProps) => {
   const { t } = useTranslation();
 
   switch (selected) {
@@ -19,7 +23,9 @@ const HomeContent = ({ selected }: HomeContentProps) => {
       return <RecipesSection />;
 
     case t("home.caloriesBase"):
-      return <CaloriesBaseSection />;
+      return (
+        <CaloriesBaseSection loadMoreSignal={caloriesLoadMoreSignal} />
+      );
 
     case t("home.all"):
     default:

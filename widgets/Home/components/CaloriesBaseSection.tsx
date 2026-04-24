@@ -1,98 +1,64 @@
 import { useGetProductsQuery } from "@/api";
+import { Colors } from "@/constants/design-tokens";
+import usePagination from "@/hooks/usePagination";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { getProductsAsMealData, getProductsData } from "../utils/data";
+import { useEffect, useMemo } from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { getProductsAsMealData } from "../utils/data";
 
-const CaloriesBaseSection = () => {
+interface CaloriesBaseSectionProps {
+  loadMoreSignal?: number;
+}
+
+const CaloriesBaseSection = ({
+  loadMoreSignal = 0,
+}: CaloriesBaseSectionProps) => {
   const { t } = useTranslation();
-  const [page, setPage] = useState(1);
-  const limit = 10;
-  const [accumulatedProducts, setAccumulatedProducts] = useState<any[]>([]);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const limit = 20;
 
-  const {
-    data: productsResponse,
-    isLoading: isLoadingProducts,
-    isFetching: isFetchingProducts,
-  } = useGetProductsQuery({ page, limit });
-
-  const products = useMemo(() => {
-    return getProductsData(productsResponse);
-  }, [productsResponse]);
-
-  const totalProducts = useMemo(() => {
-    if (!productsResponse) return 0;
-    if (typeof productsResponse === "object" && "meta" in productsResponse) {
-      return productsResponse.meta?.total || 0;
-    }
-    return 0;
-  }, [productsResponse]);
+  const { accumulatedData, isLoading, isFetching, isLoadingMore, handleLoadMore } =
+    usePagination({
+    limit,
+    queryHook: useGetProductsQuery,
+    queryArgs: { limit },
+  });
 
   useEffect(() => {
-    if (products && products.length > 0) {
-      if (page === 1) {
-        setAccumulatedProducts(products);
-      } else {
-        setAccumulatedProducts((prev) => {
-          const existingIds = new Set(prev.map((p) => p.id));
-          const uniqueNewProducts = products.filter(
-            (p: any) => !existingIds.has(p.id)
-          );
-          return [...prev, ...uniqueNewProducts];
-        });
-      }
-      setIsLoadingMore(false);
-    } else if (page === 1 && !isLoadingProducts) {
-      setAccumulatedProducts([]);
-      setIsLoadingMore(false);
+    if (loadMoreSignal > 0) {
+      handleLoadMore();
     }
-  }, [products, page, isLoadingProducts]);
-
-  const handleLoadMore = useCallback(() => {
-    if (
-      productsResponse &&
-      totalProducts > 0 &&
-      accumulatedProducts.length < totalProducts &&
-      !isFetchingProducts &&
-      !isLoadingProducts &&
-      !isLoadingMore
-    ) {
-      setIsLoadingMore(true);
-      setPage((prev) => prev + 1);
-    }
-  }, [
-    productsResponse,
-    accumulatedProducts.length,
-    totalProducts,
-    isLoadingProducts,
-    isFetchingProducts,
-    isLoadingMore,
-  ]);
+  }, [loadMoreSignal]);
 
   const productsAsMealData: MealData[] = useMemo(
     () =>
-      Array.isArray(accumulatedProducts) && accumulatedProducts.length > 0
-        ? getProductsAsMealData(accumulatedProducts)
+      Array.isArray(accumulatedData) && accumulatedData.length > 0
+        ? getProductsAsMealData(accumulatedData)
         : [],
-    [accumulatedProducts]
+    [accumulatedData]
   );
 
   return (
     <View style={styles.section}>
       <ThemedText type="s">{t("homeSections.mealsToday")}</ThemedText>
-      {isLoadingProducts && page === 1 ? (
-        <ThemedText type="xs">Загрузка...</ThemedText>
+      {isLoading && productsAsMealData.length === 0 ? (
+        <ActivityIndicator size="large" color={Colors.primary} />
       ) : productsAsMealData.length > 0 ? (
-        <CardsCarousel
-          products={productsAsMealData}
-          onCardPress={(item) => {}}
-          variant="featured"
-          onScrollToEnd={handleLoadMore}
-        />
+        <>
+          <CardsCarousel
+            products={productsAsMealData}
+            onCardPress={(item) => {}}
+            variant="featured"
+            onScrollToEnd={handleLoadMore}
+          />
+          {isFetching || isLoadingMore ? (
+            <View style={styles.loadMoreContainer}>
+              <ActivityIndicator size="small" color={Colors.primary} />
+            </View>
+          ) : null}
+        </>
       ) : (
         <ThemedText type="xs">Нет продуктов</ThemedText>
       )}
@@ -105,6 +71,9 @@ const styles = StyleSheet.create({
     gap: 20,
     marginTop: "10%",
     alignSelf: "stretch",
+  },
+  loadMoreContainer: {
+    alignItems: "center",
   },
 });
 
