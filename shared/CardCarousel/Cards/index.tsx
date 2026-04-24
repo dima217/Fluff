@@ -1,8 +1,8 @@
 import { Image, TouchableOpacity, View } from "react-native";
 
+import { useMediaUrl } from "@/api";
 import Heart from "@/assets/images/Heart.svg";
 import Check from "@/assets/images/Сheck.svg";
-import { useMediaUrl } from "@/api";
 import { Colors } from "@/constants/design-tokens";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { styles } from "./styles";
@@ -99,16 +99,14 @@ const MealCard = ({
           <ThemedText type="xs" style={{ color: "#FFFFFF", fontSize: 12 }}>
             {title}
           </ThemedText>
-          <View>
+          <View style={styles.recipeStatusTextContainer}>
             <ThemedText type="xs">{calories}</ThemedText>
-            {status && (
               <View style={styles.statusContainer}>
                 <ThemedText style={{ color: Colors.text }} type="xs">
                   Fluff
                 </ThemedText>
                 <Check width={14} height={14} />
               </View>
-            )}
           </View>
         </View>
         {renderActionIcon()}

@@ -1,3 +1,4 @@
+import { useGetRecipeByIdQuery } from "@/api";
 import {
   useMarkUploadedMutation,
   usePrepareRecipeUploadMutation,
@@ -5,6 +6,7 @@ import {
   usePrepareVideoUploadMutation,
   useUpdateRecipeMutation,
 } from "@/api/slices/recipesApi";
+import type { RecipeResponse } from "@/api/types";
 import { Recipe } from "@/constants/types";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
@@ -13,10 +15,10 @@ import CookingProcess from "@/widgets/Recipe/RecipeNew/components/forms/CookingP
 import Preview from "@/widgets/Recipe/RecipeNew/components/forms/Preview";
 import Tutorial from "@/widgets/Recipe/RecipeNew/components/forms/Tutorial";
 import RecipeFormWrapper from "@/widgets/Recipe/RecipeNew/components/FormWrapper";
+import { stepsConfig } from "@/widgets/Recipe/RecipeNew/components/validation/validationSchemas";
 import { RecipeFormProvider, useRecipeFormContext } from "@/widgets/Recipe/RecipeNew/hooks/useRecipeFormContext";
 import { recipeResponseToFormData } from "@/widgets/Recipe/RecipeNew/utils/recipeToFormData";
 import { updateRecipeWorkflow } from "@/widgets/Recipe/RecipeNew/utils/updateRecipeWorkflow";
-import { stepsConfig } from "@/widgets/Recipe/RecipeNew/components/validation/validationSchemas";
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -29,8 +31,6 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import { useGetRecipeByIdQuery } from "@/api";
-import type { RecipeResponse } from "@/api/types";
 
 function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
   const { step, setStep, setTotalSteps } = useRecipeFormContext();
@@ -149,8 +149,6 @@ export default function EditRecipeScreen() {
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        {/* В режиме редактирования используем отдельный провайдер с начальными данными,
-            чтобы не мешать состоянию формы создания */}
         <RecipeFormProvider initialFormData={initialFormData}>
           <EditRecipeForm recipe={recipe} />
         </RecipeFormProvider>

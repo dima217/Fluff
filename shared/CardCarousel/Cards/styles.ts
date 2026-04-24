@@ -23,12 +23,13 @@ export const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 8,
+    paddingLeft: 12,
     flexDirection: "row",
     alignItems: "center",
   },
   textDetails: {
     flexDirection: "column",
-    gap: 8,
+    gap: 4,
   },
   title: {
     fontWeight: "bold",
@@ -44,6 +45,14 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
+  },
+  recipeStatusContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+  },
+  recipeStatusTextContainer: {
+    gap: 2,
   },
   statusText: {
     fontSize: 14,
