@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     width: "100%",
-    height: 70,
+    height: 80,
     gap: 10,
     marginRight: 15,
   },

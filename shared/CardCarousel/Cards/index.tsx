@@ -56,7 +56,7 @@ const MealCard = ({
             height={24}
             stroke={strokeColor}
             fill={fillColor}
-            strokeWidth={1}
+            strokeWidth={fillColor === Colors.primary ? 0 : 1}
           />
         </TouchableOpacity>
       );
