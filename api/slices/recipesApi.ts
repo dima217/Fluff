@@ -66,6 +66,12 @@ export const recipesApi = baseApi.injectEndpoints({
       providesTags: ["Recipe", "MyRecipes"],
     }),
 
+    // Get recipes by ids
+    getRecipesByIds: builder.query<RecipeResponse[], number[]>({
+      query: (ids) => `/recipes/ids?ids=${ids.join(",")}`,
+      providesTags: ["Recipe"],
+    }),
+
     // Get favorite recipes
     getFavoriteRecipes: builder.query<RecipeResponse[], void>({
       query: () => "/recipes/favorites",
@@ -173,6 +179,7 @@ export const {
   useUpdateRecipeMutation,
   useDeleteRecipeMutation,
   useGetMyRecipesQuery,
+  useGetRecipesByIdsQuery,
   useLazyGetMyRecipesQuery,
   useGetFavoriteRecipesQuery,
   useLazyGetFavoriteRecipesQuery,

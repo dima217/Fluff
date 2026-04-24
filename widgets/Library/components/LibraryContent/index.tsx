@@ -3,6 +3,7 @@ import { useLazyGetFavoriteProductsQuery, useLazyGetFavoriteRecipesQuery } from 
 import { useTranslation } from "@/hooks/useTranslation";
 import CardsCarousel from "@/shared/CardCarousel";
 import { getProductsAsMealData, getRecipesAsMealData } from "@/widgets/Home/utils/data";
+import { router } from "expo-router";
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -29,7 +30,10 @@ const LibraryContent = ({ selected }: HomeContentProps) => {
       const recipesAsMealData = getRecipesAsMealData(recipesResponse || []);
       return (
         <View style={styles.section}>
-          <CardsCarousel products={recipesAsMealData} onCardPress={(item) => {}} variant="featured" />
+          <CardsCarousel products={recipesAsMealData} onCardPress={(item) => {router.push({
+            pathname: "/(recipe)/recipe",
+            params: { recipeId: item.recipeId?.toString() },
+          });}} variant="featured" />
         </View>
       );
     case t("library.products"):
