@@ -1,5 +1,4 @@
-import { useGetRecipesQuery } from "@/api";
-import type { RecipeResponse } from "@/api/types";
+import { useGetMyRecipesQuery } from "@/api";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
@@ -10,6 +9,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { getRecipesAsMealData, getRecipesData } from "../utils/data";
 
 const AllSection = () => {
   const router = useRouter();
@@ -22,29 +22,18 @@ const AllSection = () => {
     }, [])
   );
 
-  const { data: recipesResponse } = useGetRecipesQuery();
+  const { data: recipes, isLoading } = useGetMyRecipesQuery();
 
-  const recipes = useMemo(() => {
-    if (!recipesResponse) return [];
-    if (typeof recipesResponse === "object" && "data" in recipesResponse) {
-      return Array.isArray(recipesResponse.data) ? recipesResponse.data : [];
-    }
-    return Array.isArray(recipesResponse) ? recipesResponse : [];
-  }, [recipesResponse]);
+  const recipesData = useMemo(() => {
+    return getRecipesData(recipes);
+  }, [recipes]);
 
   const recipesAsMealData: MealData[] = useMemo(
     () =>
-      Array.isArray(recipes) && recipes.length > 0
-        ? recipes.map((recipe: RecipeResponse) => ({
-            id: recipe.id.toString(),
-            title: recipe.name,
-            calories: `${recipe.calories} ккал`,
-            imageUrl: recipe.image?.cover || recipe.image?.preview || "",
-            isLiked: recipe.favorite,
-            recipeId: recipe.id,
-          }))
+      Array.isArray(recipesData) && recipesData.length > 0
+        ? getRecipesAsMealData(recipesData)
         : [],
-    [recipes]
+    [recipesData]
   );
 
   return (

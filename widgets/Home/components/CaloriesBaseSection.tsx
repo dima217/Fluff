@@ -5,6 +5,7 @@ import CardsCarousel from "@/shared/CardCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { getProductsAsMealData, getProductsData } from "../utils/data";
 
 const CaloriesBaseSection = () => {
   const { t } = useTranslation();
@@ -20,11 +21,7 @@ const CaloriesBaseSection = () => {
   } = useGetProductsQuery({ page, limit });
 
   const products = useMemo(() => {
-    if (!productsResponse) return [];
-    if (typeof productsResponse === "object" && "data" in productsResponse) {
-      return Array.isArray(productsResponse.data) ? productsResponse.data : [];
-    }
-    return Array.isArray(productsResponse) ? productsResponse : [];
+    return getProductsData(productsResponse);
   }, [productsResponse]);
 
   const totalProducts = useMemo(() => {
@@ -79,14 +76,7 @@ const CaloriesBaseSection = () => {
   const productsAsMealData: MealData[] = useMemo(
     () =>
       Array.isArray(accumulatedProducts) && accumulatedProducts.length > 0
-        ? accumulatedProducts.map((product) => ({
-            id: product.id.toString(),
-            title: product.name,
-            calories: `${product.calories} ккал / ${product.massa}г`,
-            imageUrl: product.image?.cover || product.image?.preview || "",
-            isLiked: product.favorite,
-            productId: product.id,
-          }))
+        ? getProductsAsMealData(accumulatedProducts)
         : [],
     [accumulatedProducts]
   );

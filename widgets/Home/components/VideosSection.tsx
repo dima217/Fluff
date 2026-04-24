@@ -1,12 +1,14 @@
+import { useGetRecipesQuery } from "@/api";
 import { Colors } from "@/constants/design-tokens";
 import { useTranslation } from "@/hooks/useTranslation";
 import MediaCarousel from "@/shared/MediaCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { searchStorage } from "@/utils/searchStorage";
-import { useRouter } from "expo-router";
-import { useCallback, useState } from "react";
-import { StyleSheet, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { useRouter } from "expo-router";
+import { useCallback, useMemo, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { getRecipesData } from "../utils/data";
 
 const VideosSection = () => {
   const router = useRouter();
@@ -18,6 +20,12 @@ const VideosSection = () => {
       setLastVisitedIds(searchStorage.getLastVisited());
     }, [])
   );
+
+  const { data: recipesResponse } = useGetRecipesQuery();
+
+  const recipes = useMemo(() => {
+    return getRecipesData(recipesResponse);
+  }, [recipesResponse]);
 
   const handleCardPress = useCallback(
     (id: string) => {
@@ -58,7 +66,7 @@ const VideosSection = () => {
         </ThemedText>
         {lastVisitedIds.length > 0 ? (
           <MediaCarousel
-            recipeIds={lastVisitedIds}
+            recipeIds={recipes.map((recipe) => recipe.id)}
             variant="long"
             onCardPress={handleCardPress}
           />

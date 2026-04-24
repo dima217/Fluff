@@ -6,6 +6,7 @@ import CardsCarousel from "@/shared/CardCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
+import { getRecipesAsMealData, getRecipesData } from "../utils/data";
 
 const RecipesSection = () => {
   const { t } = useTranslation();
@@ -14,24 +15,13 @@ const RecipesSection = () => {
 
   // Extract recipes array from API response: { data: [...], meta: {...} }
   const recipes = useMemo(() => {
-    if (!recipesResponse) return [];
-    if (typeof recipesResponse === "object" && "data" in recipesResponse) {
-      return Array.isArray(recipesResponse.data) ? recipesResponse.data : [];
-    }
-    return Array.isArray(recipesResponse) ? recipesResponse : [];
+    return getRecipesData(recipesResponse);
   }, [recipesResponse]);
 
   const recipesAsMealData: MealData[] = useMemo(
     () =>
       Array.isArray(recipes) && recipes.length > 0
-        ? recipes.map((recipe) => ({
-            id: recipe.id.toString(),
-            title: recipe.name,
-            calories: `${recipe.calories} ккал`,
-            imageUrl: recipe.image?.cover || recipe.image?.preview || "",
-            isLiked: recipe.favorite,
-            recipeId: recipe.id,
-          }))
+        ? getRecipesAsMealData(recipes)
         : [],
     [recipes]
   );
