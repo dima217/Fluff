@@ -1,7 +1,7 @@
-import { useGetProfileQuery, useOauthLoginMutation } from "@/api";
 import { useAppDispatch } from "@/api/hooks";
-import { setProfile } from "@/api/slices/userSlice";
+import { setAuth } from "@/api/slices/userSlice";
 import { Colors } from "@/constants/design-tokens";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { useTranslation } from "@/hooks/useTranslation";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import LoginForm from "@/shared/Forms/LoginForm";
@@ -18,44 +18,24 @@ const Login = () => {
   const router = useRouter();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [oauthLogin] = useOauthLoginMutation();
-  const { refetch: refetchProfile } = useGetProfileQuery();
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { signInWithGoogle } = useGoogleAuth();
 
   const handleGoogleLogin = async () => {
     try {
-      // TODO: Replace with actual Google OAuth token
-      // This should get the token from Google Sign-In SDK
-      // For now, this is a placeholder
-      const googleToken = "PLACEHOLDER_TOKEN"; // Replace with actual token from Google OAuth
-
-      await oauthLogin({
-        token: googleToken,
-        type: "GOOGLE",
-      }).unwrap();
-
-      // Load user profile after successful login
-      try {
-        const profileResult = await refetchProfile();
-        if (profileResult.data) {
-          dispatch(setProfile(profileResult.data));
-        }
-      } catch (profileError) {
-        console.error("Failed to load profile:", profileError);
+      const isNewUser = await signInWithGoogle();
+      if (isNewUser === true) {
+        router.replace("/(auth)/register?googleOnboarding=1");
+        return;
       }
-
-      setShowWelcomeModal(true);
-    } catch (error: any) {
-      let errorMsg = t("auth.loginFailed") || "Не удалось войти через Google";
-
-      if (error?.data?.message) {
-        errorMsg = error.data.message;
+      if (isNewUser === false) {
+        dispatch(setAuth(true));
+        router.replace("/(app)/home");
       }
-
-      setErrorMessage(errorMsg);
-      setShowErrorModal(true);
+    } catch (error) {
+      console.error("Failed to sign in with Google:", error);
     }
   };
 

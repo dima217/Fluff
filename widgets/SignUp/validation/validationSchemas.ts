@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { activityOptions } from "../SportActivityScreen/data/activityOptions";
+import { activityOptions } from "../components/SportActivityScreen/data/activityOptions";
 
 export const emailSchema = yup.object({
   email: yup
@@ -124,6 +124,47 @@ export const signUpStepsConfig = [
       lastName: "",
     },
   },
+  {
+    schema: sexSchema,
+    defaultValues: {
+      sex: null,
+    },
+  },
+  {
+    schema: ageSchema,
+    defaultValues: {
+      age: "18",
+    },
+  },
+  {
+    schema: heightSchema,
+    defaultValues: {
+      height: "170",
+    },
+  },
+  {
+    schema: weightSchema,
+    defaultValues: {
+      weight: "70",
+    },
+  },
+  {
+    schema: sportActivitySchema,
+    defaultValues: {
+      sportActivity: null,
+    },
+  },
+  {
+    schema: cheatMealDaySchema,
+    defaultValues: {
+      cheatMealDay: 1,
+      periodOfDays: 1,
+    },
+  },
+];
+
+/** Соответствует `signUpWithGoogleStepOrder` (без email/code/password/name). */
+export const googleSignUpStepsConfig = [
   {
     schema: sexSchema,
     defaultValues: {

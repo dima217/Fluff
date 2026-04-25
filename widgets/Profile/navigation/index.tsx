@@ -1,6 +1,7 @@
 import { useLogoutMutation } from "@/api";
-import { useAppDispatch } from "@/api/hooks";
+import { useAppDispatch, useAppSelector } from "@/api/hooks";
 import { clearUser } from "@/api/slices/userSlice";
+import { RootState } from "@/api/store";
 import { tokenStorage } from "@/api/utils/tokenStorage";
 import Bell from "@/assets/images/BellIncative.svg";
 import Settings from "@/assets/images/Setting.svg";
@@ -10,7 +11,7 @@ import Tooth from "@/assets/images/Tooth.svg";
 import { useTranslation } from "@/hooks/useTranslation";
 import LogoutConfirmationModal from "@/shared/Modals/LogoutConfirmationModal";
 import { Href, useRouter } from "expo-router";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 export interface MenuItem {
   id: string;
@@ -31,6 +32,12 @@ export const useProfileMenuItems = (): {
   const [logout] = useLogoutMutation();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
+  const isAuthenticated = useAppSelector((state: RootState) => state.user.isAuthenticated);
+
+  useEffect(() => {
+    console.log("isAuthenticated changed:", isAuthenticated);
+  }, [isAuthenticated]);
+  
   const handleLogoutClick = () => {
     console.log("Logout clicked");
 
@@ -41,39 +48,10 @@ export const useProfileMenuItems = (): {
     console.log("[ProfileMenu] Logout confirmed");
     setShowLogoutModal(false);
 
-    // Create a timeout promise to prevent hanging
-    const timeoutPromise = new Promise<never>((_, reject) => {
-      setTimeout(() => {
-        console.warn("[ProfileMenu] Logout timeout after 5 seconds");
-        reject(new Error("Logout timeout"));
-      }, 5000); // 5 second timeout
-    });
-
-    try {
-      console.log("[ProfileMenu] Calling logout API...");
-      // Call logout API with timeout - it will clear tokens in onQueryStarted
-      await Promise.race([logout().unwrap(), timeoutPromise]);
-      console.log("[ProfileMenu] Logout API call completed");
-    } catch (error: any) {
-      // Even if logout fails or times out, ensure tokens are cleared
-      console.error("[ProfileMenu] Logout error or timeout:", error);
-      console.log(
-        "[ProfileMenu] Manually clearing tokens due to error/timeout..."
-      );
-      await tokenStorage.clearTokens();
-    }
-
-    // Clear user state
-    console.log("[ProfileMenu] Clearing user state...");
-    dispatch(clearUser());
     await tokenStorage.clearTokens();
-
-    // Wait a bit for state to update, then navigate
-    // This ensures AuthContext sees the updated state
-    setTimeout(() => {
-      console.log("[ProfileMenu] Navigating to login...");
-      router.replace("/(auth)/login");
-    }, 50);
+    dispatch(clearUser());
+    
+    router.replace("/(auth)/login");
   };
 
   const handleLogoutCancel = () => {

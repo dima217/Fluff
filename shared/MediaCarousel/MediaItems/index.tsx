@@ -87,7 +87,7 @@ const MediaCarouselItem = ({
               <Circle
                 svg={<Ionicons name="play" size={24} color="#FFF" />}
                 frostedGlass
-                onPress={() => {}}
+                onPress={onPress}
               />
             </View>
             {/* Text for short variant */}

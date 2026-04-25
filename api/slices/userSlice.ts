@@ -21,7 +21,9 @@ const userSlice = createSlice({
   reducers: {
     setProfile: (state, action: PayloadAction<ProfileResponse | null>) => {
       state.profile = action.payload;
-      state.isAuthenticated = !!action.payload;
+    },
+    setAuth: (state, action: PayloadAction<boolean>) => {
+      state.isAuthenticated = action.payload;
     },
     clearUser: (state) => {
       state.profile = null;
@@ -42,11 +44,6 @@ const userSlice = createSlice({
       state.isAuthenticated = true;
     });
 
-    // Handle OAuth login success
-    builder.addMatcher(authApi.endpoints.oauthLogin.matchFulfilled, (state) => {
-      state.isAuthenticated = true;
-    });
-
     // Handle logout
     builder.addMatcher(authApi.endpoints.logout.matchFulfilled, (state) => {
       state.profile = null;
@@ -58,15 +55,6 @@ const userSlice = createSlice({
       profileApi.endpoints.getProfile.matchPending,
       (state) => {
         state.isLoading = true;
-      }
-    );
-
-    builder.addMatcher(
-      profileApi.endpoints.getProfile.matchFulfilled,
-      (state, action) => {
-        state.profile = action.payload;
-        state.isAuthenticated = true;
-        state.isLoading = false;
       }
     );
 
@@ -88,5 +76,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setProfile, clearUser, setLoading } = userSlice.actions;
+export const { setProfile, setAuth, clearUser, setLoading } = userSlice.actions;
 export default userSlice.reducer;

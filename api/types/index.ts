@@ -57,14 +57,14 @@ export interface ProfileResponse {
     firstName: string;
     lastName: string;
   };
-  birthDate: string | null;
-  bio: string | null;
+  birthDate?: string | null;
+  bio?: string | null;
   photo: string | null;
-  gender: "male" | "female" | "other" | null;
-  height: number | null; // cm
-  weight: number | null; // kg
-  createdAt: string;
-  updatedAt: string;
+  gender?: "male" | "female" | "other" | null;
+  height?: number | null; // cm
+  weight?: number | null; // kg
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface UpdateProfileRequest {
@@ -76,6 +76,9 @@ export interface UpdateProfileRequest {
   gender?: "male" | "female" | "other";
   height?: number; // 50-300
   weight?: number; // 20-500
+  sportActivity?: string;
+  cheatMealDay?: string; 
+  periodOfDays?: string; 
 }
 
 // Recipe types

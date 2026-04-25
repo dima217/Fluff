@@ -27,6 +27,8 @@ module.exports = {
           "@screens": "./src/screens",
           "@store": "./src/store",
           "@utils": "./src/utils",
+          "@api": "./src/api",
+          "@services": "./src/services",
         },
       },
     ],

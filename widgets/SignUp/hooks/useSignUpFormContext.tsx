@@ -2,7 +2,7 @@ import {
   FormProvider,
   useFormContext,
 } from "@/contexts/FormContext/FormContext";
-import { SignUpFormData } from "../components/FormWrapper";
+import { SignUpFormData } from "../wrappers/FormWrapper";
 
 export const SignUpFormProvider = FormProvider<SignUpFormData>;
 
