@@ -1,4 +1,4 @@
-import { RootState, useGetProfileQuery } from "@/api";
+import { RootState, useGetProfileQuery, useMediaUrl } from "@/api";
 import { useAppSelector } from "@/api/hooks";
 import Bell from "@/assets/images/Bell.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
@@ -14,6 +14,10 @@ const AccountDetails = () => {
   const user = useAppSelector((state: RootState) => state.user.profile);
 
   const displayProfile = profile || user;
+
+  const { url: photoUrl, headers: photoHeaders } = useMediaUrl(displayProfile?.photo, {
+    skip: !displayProfile?.photo,
+  });
 
   const getInitials = () => {
     if (!displayProfile?.user) return "?";
@@ -36,8 +40,13 @@ const AccountDetails = () => {
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
-        <Avatar size={CircleSizes.MEDIUM} title={getInitials()} />
-        <View style={styles.infoContainer}>
+          <Avatar 
+            size={CircleSizes.MEDIUM} 
+            {...(photoUrl 
+            ? { source: { uri: photoUrl, ...(photoHeaders && { headers: photoHeaders }) } }
+            : { title: getInitials() } )}
+          />        
+          <View style={styles.infoContainer}>
           <ThemedText type="s">{getFirstName()}</ThemedText>
           <ThemedText type="xs">{displayProfile?.user?.email || ""}</ThemedText>
         </View>

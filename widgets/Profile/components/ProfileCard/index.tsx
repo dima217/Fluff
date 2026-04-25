@@ -1,4 +1,4 @@
-import { useGetProfileQuery } from "@/api";
+import { useGetProfileQuery, useMediaUrl } from "@/api";
 import { useAppSelector } from "@/api/hooks";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -19,6 +19,10 @@ const ProfileCard = () => {
   const user = useAppSelector((state) => state.user.profile);
 
   const displayProfile = profile || user;
+
+  const { url: photoUrl, headers: photoHeaders } = useMediaUrl(displayProfile?.photo, {
+    skip: !displayProfile?.photo,
+  });
 
   const getInitials = () => {
     if (!displayProfile?.user) return "?";
@@ -58,7 +62,12 @@ const ProfileCard = () => {
       <PatternBackground style={styles.patternContainer} />
       <RadialGradientBackground style={styles.radialContainer} />
       <View style={styles.profileRow}>
-        <Avatar size={CircleSizes.MEDIUM} title={getInitials()} />
+        <Avatar 
+          size={CircleSizes.MEDIUM} 
+          {...(photoUrl 
+            ? { source: { uri: photoUrl, ...(photoHeaders && { headers: photoHeaders }) } }
+            : { title: getInitials() } )}
+        />
         <Button
           style={styles.button}
           textStyle={styles.buttonText}

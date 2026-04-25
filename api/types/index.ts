@@ -204,6 +204,23 @@ export interface PrepareVideoUploadResponse {
   url: string;
 }
 
+// Generic media upload types
+export interface CreateMediaRequest {
+  filename: string;
+  size: number;
+  metadata: {
+    width?: number;
+    height?: number;
+    format: string;
+  }
+}
+
+export interface CreateMediaResponse {
+  mediaId: string;
+  uploadUrl: string;
+  url: string;
+}
+
 export interface CreateRecipeWithMediaIdsRequest {
   name: string;
   recipeTypeId: number;
