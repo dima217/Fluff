@@ -2,6 +2,7 @@ import { useGetProfileQuery, useLoginMutation } from "@/api";
 import { useAppDispatch } from "@/api/hooks";
 import { setProfile } from "@/api/slices/userSlice";
 import { useTranslation } from "@/hooks/useTranslation";
+import { getDeviceTimeZone } from "@/services/timezone";
 import ErrorModal from "@/shared/Modals/ErrorModal";
 import WelcomeModal from "@/shared/Modals/WelcomeModal";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -58,6 +59,7 @@ const LoginForm = () => {
       await login({
         username: data.username,
         password: data.password,
+        timeZone: getDeviceTimeZone(),
       }).unwrap();
 
       // Load user profile after successful login

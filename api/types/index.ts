@@ -25,11 +25,13 @@ export interface SignUpRequest {
   sportActivity?: string;
   cheatMealDay?: string; // day of month 1-31
   periodOfDays?: string; // period in days, e.g. "7"
+  timeZone?: string;
 }
 
 export interface LoginRequest {
   username: string; // email
   password: string;
+  timeZone?: string;
 }
 
 export interface AuthResponse {
@@ -378,6 +380,7 @@ export interface FavoriteItem {
 export interface OAuthLoginRequest {
   token: string;
   type: "GOOGLE";
+  timeZone?: string;
 }
 
 export interface SetFcmTokenRequest {

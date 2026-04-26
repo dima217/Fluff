@@ -3,6 +3,7 @@ import { useSignUpInitMutation, useSignUpMutation } from "@/api/slices/authApi";
 import { useLazyGetProfileQuery, useUpdateProfileMutation } from "@/api/slices/profileApi";
 import { setAuth, setProfile } from "@/api/slices/userSlice";
 import { useTranslation } from "@/hooks/useTranslation";
+import { getDeviceTimeZone } from "@/services/timezone";
 import { cheatMealSettingsStorage } from "@/utils/cheatMealSettingsStorage";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -90,6 +91,7 @@ export const useSignUp = () => {
         sportActivity: finalData.sportActivity,
         cheatMealDay: finalData.cheatMealDay,
         periodOfDays: finalData.periodOfDays,
+        timeZone: getDeviceTimeZone(),
       }).unwrap();
 
       if (finalData.cheatMealDay != null || finalData.periodOfDays != null) {

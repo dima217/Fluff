@@ -3,6 +3,7 @@ import { useLazyGetProfileQuery } from "@/api/slices/profileApi";
 import type { AppDispatch } from "@/api/store";
 import { completeGoogleAuthSession } from "@/services/auth/completeGoogleAuthSession";
 import { ensureGoogleSignInConfigured } from "@/services/google/configureGoogleSignIn";
+import { getDeviceTimeZone } from "@/services/timezone";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
@@ -51,7 +52,7 @@ export function useGoogleAuth() {
         );
       }
 
-      const tokens = await oauthLogin({ token: idToken, type: "GOOGLE" }).unwrap();
+      const tokens = await oauthLogin({ token: idToken, type: "GOOGLE", timeZone: getDeviceTimeZone() }).unwrap();
       const googleAccountEmail = signInResult.data.user.email;
       const isNewUser = await completeGoogleAuthSession(
         dispatch,
