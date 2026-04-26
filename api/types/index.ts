@@ -380,6 +380,10 @@ export interface OAuthLoginRequest {
   type: "GOOGLE";
 }
 
+export interface SetFcmTokenRequest {
+  token: string | null;
+}
+
 // Pagination
 export interface PaginationQuery {
   page?: number;

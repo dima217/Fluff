@@ -163,7 +163,6 @@ export const signUpStepsConfig = [
   },
 ];
 
-/** Соответствует `signUpWithGoogleStepOrder` (без email/code/password/name). */
 export const googleSignUpStepsConfig = [
   {
     schema: sexSchema,

@@ -5,6 +5,7 @@ import type {
   OAuthLoginRequest,
   RecoveryConfirmRequest,
   RecoveryInitRequest,
+  SetFcmTokenRequest,
   SignUpInitRequest,
   SignUpRequest,
 } from "../types";
@@ -153,6 +154,18 @@ export const authApi = baseApi.injectEndpoints({
         }
       },
     }),
+
+    setFcmToken: builder.mutation<void, SetFcmTokenRequest>({
+      query: (body) => ({
+        url: "/user/fcm-token",
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
   }),
 });
 

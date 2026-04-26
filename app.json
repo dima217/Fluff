@@ -26,7 +26,8 @@
         "backgroundColor": "#0F0F0F"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.fluff.fluffMobile"
+      "package": "com.fluff.fluffMobile",
+      "googleServicesFile": "./google-services.json"
     },
     "plugins": [
       "expo-router",

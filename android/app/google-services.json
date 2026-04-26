@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "388022913869",
+    "project_id": "fluff-527b4",
+    "storage_bucket": "fluff-527b4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388022913869:android:23888eecb935cc68910504",
+        "android_client_info": {
+          "package_name": "com.fluff.fluffMobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaXDr3inbCDcywMO9cETBz5fGuia6RC_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

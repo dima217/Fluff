@@ -1,13 +1,14 @@
+import { store } from "@/api/store";
 import { Colors } from "@/constants/design-tokens";
-import { LocalizationProvider } from "@/contexts/LocalizationContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LocalizationProvider } from "@/contexts/LocalizationContext";
+import { PushNotificationsController } from "@/providers/PushNotificationsController";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { MMKV } from "react-native-mmkv";
-import { Provider } from "react-redux";
-import { store } from "@/api/store";
 import "react-native-reanimated";
+import { Provider } from "react-redux";
 
 const storage = new MMKV();
 
@@ -28,6 +29,7 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
+      <PushNotificationsController />
       <LocalizationProvider>
         <AuthProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
