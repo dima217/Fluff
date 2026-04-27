@@ -106,6 +106,7 @@ const Health = () => {
       style={styles.mainContainer}
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
+      nestedScrollEnabled
     >
       <View style={[styles.container]}>
         <AccountDetails />

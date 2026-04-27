@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/design-tokens";
 import { LinearGradient } from "expo-linear-gradient";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useCallback, useEffect, useRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import Animated, {
   runOnJS,
@@ -52,16 +52,18 @@ export function AnimatedWheelPicker<
   const isHorizontal = orientation === "horizontal";
   const scrollPosition = useSharedValue(initialIndex * itemSize);
 
-  const scrollRef = useRef<Animated.ScrollView>(null);
+  const scrollRef = useRef<Animated.FlatList<WheelItemData<T>>>(null);
+  const didInitialScroll = useRef(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      scrollRef.current?.scrollTo({
-        x: isHorizontal ? initialIndex * itemSize : 0,
-        y: isHorizontal ? 0 : initialIndex * itemSize,
-        animated: true,
+    if (didInitialScroll.current) return;
+    didInitialScroll.current = true;
+    requestAnimationFrame(() => {
+      scrollRef.current?.scrollToOffset({
+        offset: initialIndex * itemSize,
+        animated: false,
       });
-    }, 0);
+    });
   }, [initialIndex, isHorizontal, itemSize]);
 
   const scrollHandler = useAnimatedScrollHandler({
@@ -70,16 +72,33 @@ export function AnimatedWheelPicker<
         ? event.contentOffset.x
         : event.contentOffset.y;
     },
-    onMomentumEnd: (event) => {
+  });
+
+  const handleMomentumEnd = useCallback(
+    (event: any) => {
       const offset = isHorizontal
-        ? event.contentOffset.x
-        : event.contentOffset.y;
+        ? event.nativeEvent.contentOffset.x
+        : event.nativeEvent.contentOffset.y;
 
       const index = Math.round(offset / itemSize);
       const finalIndex = Math.max(0, Math.min(data.length - 1, index));
-      runOnJS(onValueChange)?.(data[finalIndex].value, finalIndex);
+
+      // Для vertical режима мягко корректируем накопившийся drift.
+      if (!isHorizontal) {
+        const targetOffset = finalIndex * itemSize;
+        const delta = Math.abs(targetOffset - offset);
+        if (delta > 0.5) {
+          scrollRef.current?.scrollToOffset({
+            offset: targetOffset,
+            animated: true,
+          });
+        }
+      }
+
+      onValueChange(data[finalIndex].value, finalIndex);
     },
-  });
+    [data, isHorizontal, itemSize, onValueChange]
+  );
 
   const padding = ((visibleCount - 1) / 2) * itemSize;
 
@@ -106,22 +125,33 @@ export function AnimatedWheelPicker<
 
   return (
     <View style={[styles.container, containerSizeStyle, containerStyle]}>
-      <Animated.ScrollView
+      <Animated.FlatList
         ref={scrollRef}
-        nestedScrollEnabled={true}
+        data={data}
+        keyExtractor={(item) => item.key}
         horizontal={isHorizontal}
+        nestedScrollEnabled
+        directionalLockEnabled
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         snapToInterval={itemSize}
         decelerationRate="fast"
         onScroll={scrollHandler}
+        onMomentumScrollEnd={handleMomentumEnd}
         scrollEventThrottle={16}
         scrollEnabled={isScrollEnabled}
         contentContainerStyle={contentPaddingStyle}
-      >
-        {data.map((item, index) => (
+        initialNumToRender={Math.min(data.length, visibleCount + 2)}
+        maxToRenderPerBatch={Math.max(visibleCount + 2, 8)}
+        windowSize={5}
+        removeClippedSubviews
+        getItemLayout={(_, index) => ({
+          length: itemSize,
+          offset: itemSize * index,
+          index,
+        })}
+        renderItem={({ item, index }) => (
           <WheelItem
-            key={item.key}
             index={index}
             item={item}
             itemSize={itemSize}
@@ -130,8 +160,8 @@ export function AnimatedWheelPicker<
             animationType={animationType}
             style={itemStyle}
           />
-        ))}
-      </Animated.ScrollView>
+        )}
+      />
 
       {!noBackground && (
         <>

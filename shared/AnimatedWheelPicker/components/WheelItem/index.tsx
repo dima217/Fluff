@@ -1,4 +1,5 @@
-import React, { memo } from "react";
+import { formatDate } from "@/shared/utils/formatDate";
+import { memo } from "react";
 import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native";
 import Animated, { SharedValue } from "react-native-reanimated";
 import { WheelItemData } from "../..";
@@ -14,11 +15,6 @@ interface FlexibleWheelItemProps {
   orientation: "vertical" | "horizontal";
   animationType?: "fixed" | "lens";
 }
-
-type ContentProps = {
-  data?: any;
-  date?: any;
-};
 
 export const WheelItem = memo(function FlexibleWheelItem({
   index,
@@ -44,21 +40,15 @@ export const WheelItem = memo(function FlexibleWheelItem({
   const sizeStyle = isHorizontal ? { width: itemSize } : { height: itemSize };
 
   const displayValue =
-    item.value instanceof Date
-      ? item.value.toLocaleDateString()
-      : String(item.value);
+  item.value instanceof Date
+    ? formatDate(item.value)
+    : String(item.value);
 
   return (
     <Animated.View style={[styles.itemContainer, sizeStyle, style]}>
       {item.content ? (
         <Animated.View style={[styles.customContentWrapper, animatedStyle]}>
-          {React.cloneElement(
-            item.content as React.ReactElement<ContentProps>,
-            {
-              data: item.dataForContent.data,
-              date: item.dataForContent.date,
-            }
-          )}
+          {item.content}
         </Animated.View>
       ) : (
         <Text style={styles.itemText}>{displayValue}</Text>
@@ -72,7 +62,6 @@ const styles = StyleSheet.create({
     zIndex: 5,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 10,
   },
   itemText: {
     fontSize: 20,
@@ -83,5 +72,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     alignItems: "center",
+    justifyContent: "center",
   },
 });

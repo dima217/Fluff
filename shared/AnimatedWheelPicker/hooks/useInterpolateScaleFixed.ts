@@ -1,8 +1,8 @@
 import {
-  Extrapolate,
+  Extrapolation,
   interpolate,
   SharedValue,
-  useAnimatedStyle,
+  useAnimatedStyle
 } from "react-native-reanimated";
 
 interface UseInterpolateScaleProps {
@@ -25,7 +25,7 @@ export const useInterpolateScaleFixed = ({
       offset,
       [-centerTolerance, 0, centerTolerance],
       [0.8, 1.1, 0.8],
-      Extrapolate.CLAMP
+      Extrapolation.CLAMP
     );
 
     return {

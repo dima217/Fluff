@@ -1,8 +1,8 @@
 import {
-  Extrapolate,
+  Extrapolation,
   interpolate,
   SharedValue,
-  useAnimatedStyle,
+  useAnimatedStyle
 } from "react-native-reanimated";
 
 interface UseInterpolateScaleProps {
@@ -21,16 +21,16 @@ export const useInterpolateScaleLens = ({
 
     const scale = interpolate(
       offset,
-      [-itemSize * 2, -itemSize, 0, itemSize, itemSize * 2],
-      [0.75, 0.9, 1.2, 0.9, 0.75],
-      Extrapolate.CLAMP
+      [-itemSize, 0, itemSize],
+      [0.9, 1.2, 0.9],
+      Extrapolation.CLAMP
     );
 
     const opacity = interpolate(
       offset,
       [-itemSize * 2, -itemSize, 0, itemSize, itemSize * 2],
       [0.3, 0.6, 1, 0.6, 0.3],
-      Extrapolate.CLAMP
+      Extrapolation.CLAMP
     );
 
     return {

@@ -1,5 +1,6 @@
 import type { TrackingCalendar } from "@/api/types";
 import { WheelItemData } from "@/shared/AnimatedWheelPicker";
+import { useMemo } from "react";
 import { DateWheelItem } from "..";
 
 function getDaysInMonth(year: number, month: number): number {
@@ -30,60 +31,61 @@ export function useDayPickerData(
   dailyGoal: number = 2137,
   selectedDateIndex?: number
 ) {
-  const rawData: WheelItemData<string>[] = [];
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth();
-  const todayDateNumber = currentDate.getDate();
+  return useMemo(() => {
+    const rawData: WheelItemData<string>[] = [];
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth();
+    const todayDateNumber = currentDate.getDate();
 
-  const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+    const daysInMonth = getDaysInMonth(currentYear, currentMonth);
 
-  let initialIndex = 0;
+    let initialIndex = 0;
 
-  for (let dateNumber = 1; dateNumber <= daysInMonth; dateNumber++) {
-    const date = new Date(currentYear, currentMonth, dateNumber);
-    const dateKey = formatDateAsKey(date);
-    const dayData = calendar?.[dateKey];
+    for (let dateNumber = 1; dateNumber <= daysInMonth; dateNumber++) {
+      const date = new Date(currentYear, currentMonth, dateNumber);
+      const dateKey = formatDateAsKey(date);
+      const dayData = calendar?.[dateKey];
 
-    const isTodayFlag = dateNumber === todayDateNumber;
-    const isSelectedFlag =
-      selectedDateIndex !== undefined && dateNumber === selectedDateIndex + 1;
-    const totalCalories = dayData?.totalCalories || 0;
-    const dayStatus = getDayStatus(totalCalories, dailyGoal);
+      const isTodayFlag = dateNumber === todayDateNumber;
+      const isSelectedFlag =
+        selectedDateIndex !== undefined && dateNumber === selectedDateIndex + 1;
+      const totalCalories = dayData?.totalCalories || 0;
+      const dayStatus = getDayStatus(totalCalories, dailyGoal);
 
-    if (isTodayFlag) {
-      initialIndex = todayDateNumber - 1; // 0-based index
+      if (isTodayFlag) {
+        initialIndex = todayDateNumber - 1;
+      }
+
+      rawData.push({
+        key: `date-${dateNumber}`,
+        value: dateNumber.toString(),
+        content: (
+          <DateWheelItem
+            size={size}
+            date={date}
+            data={{
+              isToday: isTodayFlag,
+              isSelected: isSelectedFlag,
+              dayStatus: dayStatus,
+            }}
+          />
+        ),
+        dataForContent: {
+          date,
+          dayOfMonth: dateNumber,
+          data: {
+            isToday: isTodayFlag,
+            isSelected: isSelectedFlag,
+            dayStatus,
+          },
+        },
+      });
     }
 
-    rawData.push({
-      key: `date-${dateNumber}`,
-      value: dateNumber.toString(),
-      content: <DateWheelItem />,
-      dataForContent: {
-        date: date,
-        dayOfMonth: dateNumber,
-        data: {
-          isToday: isTodayFlag,
-          isSelected: isSelectedFlag,
-          dayStatus: dayStatus,
-        },
-      },
-    });
-  }
-
-  const preparedData = rawData.map((item) => ({
-    ...item,
-    content: (
-      <DateWheelItem
-        size={size}
-        date={item.dataForContent.date}
-        data={item.dataForContent.data}
-      />
-    ),
-  }));
-
-  return {
-    data: preparedData,
-    initialIndex: initialIndex,
-  };
+    return {
+      data: rawData,
+      initialIndex,
+    };
+  }, [calendar, dailyGoal, selectedDateIndex, size]);
 }
