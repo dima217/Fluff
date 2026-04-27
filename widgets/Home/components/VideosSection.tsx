@@ -64,17 +64,11 @@ const VideosSection = () => {
         <ThemedText type="s">
           {t("homeSections.recommendedRecipes")}
         </ThemedText>
-        {lastVisitedIds.length > 0 ? (
           <MediaCarousel
             recipeIds={recipes.map((recipe) => recipe.id)}
             variant="long"
             onCardPress={handleCardPress}
           />
-        ) : (
-          <ThemedText type="xs" style={styles.emptyText}>
-            Нет рекомендаций
-          </ThemedText>
-        )}
       </View>
     </>
   );

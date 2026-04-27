@@ -5,15 +5,27 @@ import React, { useMemo } from "react";
 import { View } from "react-native";
 
 interface IngredientsSectionProps {
-  products?: ProductResponse[];
+  products?: ProductResponse[] | string; 
 }
 
 const IngredientsSection: React.FC<IngredientsSectionProps> = ({
   products,
 }) => {
   const ingredients = useMemo(() => {
-    if (!products || products.length === 0) return [];
-    return products.map((product) => `${product.name} (${product.massa}г)`);
+    if (!products) return [];
+    
+    if (typeof products === 'string') {
+      return products
+        .replace(/[.,!?;:()\[\]{}"'`]/g, '') 
+        .split(/\s+/) 
+        .filter(item => item.trim().length > 0); 
+    }
+    
+    if (Array.isArray(products) && products.length > 0) {
+      return products.map((product) => `${product.name} (${product.massa}г)`);
+    }
+    
+    return [];
   }, [products]);
 
   if (ingredients.length === 0) {

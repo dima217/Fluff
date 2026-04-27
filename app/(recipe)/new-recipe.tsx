@@ -20,13 +20,13 @@ import { createRecipeWorkflow } from "@/widgets/Recipe/RecipeNew/utils/createRec
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
 import { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    View as RNView,
-    ScrollView,
-    StyleSheet,
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  View as RNView,
+  ScrollView,
+  StyleSheet,
 } from "react-native";
 
 const CreateRecipeScreen = () => {
@@ -90,7 +90,8 @@ const CreateRecipeScreen = () => {
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false} contentContainerStyle={step === 3 ? styles.fullScreenContent : styles.scrollContent}
+        >
           <Header title={"Add New Recipe"} showExitConfirmation />
 
           <RNView style={styles.progressWrapper}>
@@ -128,6 +129,12 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     alignItems: "center",
     justifyContent: "center",
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  fullScreenContent: {
+    flex: 1,
   },
   progressText: {
     fontSize: 14,

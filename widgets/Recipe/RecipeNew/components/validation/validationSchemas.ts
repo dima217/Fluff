@@ -33,7 +33,10 @@ export const tutorialSchema = yup.object({
   videoUrl: yup.string().required("Video is required"),
 });
 
-export const previewSchema = yup.object({});
+export const previewSchema = yup.object({
+  makePublic: yup.boolean().required(),
+  submitToSystem: yup.boolean().required(),
+});
 
 export const stepsConfig = [
   {
@@ -59,6 +62,9 @@ export const stepsConfig = [
   },
   {
     schema: previewSchema,
-    defaultValues: {},
+    defaultValues: {
+      makePublic: false,
+      submitToSystem: false,
+    },
   },
 ];

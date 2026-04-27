@@ -145,6 +145,8 @@ export interface CreateRecipeRequest {
   calories: number;
   cookAt: number; // seconds
   stepsConfig: RecipeStepsConfig;
+  makePublic: boolean,
+  submitToSystem: boolean,
 }
 
 export interface UpdateRecipeRequest {
@@ -249,6 +251,8 @@ export interface CreateRecipeWithMediaIdsRequest {
       }[];
     }[];
   };
+  makePublic: boolean,
+  submitToSystem: boolean,
 }
 
 export interface ConfirmUploadRequest {

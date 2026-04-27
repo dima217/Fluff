@@ -23,4 +23,6 @@ export interface Recipe {
   steps: CreationStep[];
   videoUrl: string;
   mediaUrl: string;
+  makePublic?: boolean,
+  submitToSystem?: boolean,
 }

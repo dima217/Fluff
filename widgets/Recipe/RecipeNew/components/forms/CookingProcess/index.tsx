@@ -12,7 +12,7 @@ import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 const CookingProcess = ({ onBack }: { onBack: () => void }) => {
-  const { control } = useFormContext();
+  const { control, getValues } = useFormContext();
   const { t } = useTranslation();
 
   const { fields, append, remove, replace } = useFieldArray({
