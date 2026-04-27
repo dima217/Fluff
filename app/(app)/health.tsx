@@ -1,5 +1,7 @@
-import { useCreateTrackingMutation, useGetCalendarQuery } from "@/api";
+import { RootState, useCreateTrackingMutation, useGetCalendarQuery } from "@/api";
 import { Colors } from "@/constants/design-tokens";
+import { getAge } from "@/services/equation/age";
+import { calculateDailyCalories } from "@/services/equation/calories";
 import AccountDetails from "@/shared/AccountDetails";
 import { AnimatedWheelPicker } from "@/shared/AnimatedWheelPicker";
 import CalorieInput from "@/shared/Colories/components/CaloriesInput";
@@ -10,12 +12,30 @@ import MarkerContainer from "@/widgets/Health/components/MarkerContainer";
 import TrackingHistory from "@/widgets/Health/components/TrackingHistory";
 import { useMemo, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
 
 const Health = () => {
   // Get calendar data for current month
   const { data: calendar, refetch: refetchCalendar } = useGetCalendarQuery();
+  const profile = useSelector((state: RootState) => state.user.profile);
+  let dailyGoal;
 
-  const dailyGoal = 2137; // TODO: Get from user profile/settings
+  if (
+    profile?.weight != null &&
+    profile?.height != null &&
+    profile?.birthDate &&
+    profile?.gender
+  ) {
+    const age = getAge(profile.birthDate);
+  
+    dailyGoal = calculateDailyCalories({
+      weight: Number(profile.weight),
+      height: Number(profile.height),
+      age,
+      gender: profile.gender,
+      activity: profile.sportActivity ?? null,
+    });
+  }
   const [selectedDateIndex, setSelectedDateIndex] = useState<number>(() => {
     const currentDate = new Date();
     return currentDate.getDate() - 1; // 0-based index
@@ -24,7 +44,7 @@ const Health = () => {
   const pickerData = useDayPickerData(
     60,
     calendar,
-    dailyGoal,
+    dailyGoal ?? undefined,
     selectedDateIndex
   );
 
@@ -106,7 +126,7 @@ const Health = () => {
         </View>
         <CalorieProgress
           currentCalories={currentCalories}
-          dailyGoal={dailyGoal}
+          dailyGoal={dailyGoal ?? 1000}
           onEditPress={() => {}}
         />
         <CalorieInput onAdd={handleAddFood} />

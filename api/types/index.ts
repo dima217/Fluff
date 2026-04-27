@@ -67,6 +67,7 @@ export interface ProfileResponse {
   weight?: number | null; // kg
   createdAt?: string;
   updatedAt?: string;
+  sportActivity?: string;
 }
 
 export interface UpdateProfileRequest {
