@@ -35,7 +35,7 @@ export const tutorialSchema = yup.object({
 
 export const previewSchema = yup.object({
   makePublic: yup.boolean().required(),
-  submitToSystem: yup.boolean().required(),
+  submitToSystem: yup.boolean().nullable()
 });
 
 export const stepsConfig = [

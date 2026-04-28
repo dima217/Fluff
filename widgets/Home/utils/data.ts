@@ -16,6 +16,7 @@ export const getRecipesAsMealData = (recipesData: RecipeResponse[]) => {
         imageUrl: recipe.image?.cover || recipe.image?.preview || "",
         isLiked: recipe.favorite,
         recipeId: recipe.id,
+        isFluff: recipe.isFluff,
     }));
 };
 
@@ -27,6 +28,7 @@ export const getProductsAsMealData = (productsData: ProductResponse[]) => {
         imageUrl: product.image?.cover || product.image?.preview || "",
         isLiked: product.favorite,
         productId: product.id,
+        isFluff: product.isFluff,
     }));
 };
 

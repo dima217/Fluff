@@ -23,6 +23,7 @@ export interface MealData {
   status?: "Completed";
   productId?: number; // Product ID for like handler
   recipeId?: number; // Recipe ID for like handler
+  isFluff: boolean;
 }
 
 type CardsScrollVariant = "featured" | "mealsToday";
@@ -54,6 +55,7 @@ const renderListItem = (
     status={item.status}
     isLiked={item.isLiked}
     rightAction={renderCardRightAction?.(item)}
+    isFluff={item.isFluff}
   />
 );
 
@@ -73,6 +75,7 @@ const renderCarouselItem = (
     variant="carousel"
     status={item.status}
     isLiked={item.isLiked}
+    isFluff={item.isFluff}
     rightAction={renderCardRightAction?.(item)}
   />
 );

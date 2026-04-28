@@ -24,5 +24,5 @@ export interface Recipe {
   videoUrl: string;
   mediaUrl: string;
   makePublic?: boolean,
-  submitToSystem?: boolean,
+  submitToSystem?: false | null,
 }

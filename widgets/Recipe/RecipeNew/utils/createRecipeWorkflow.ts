@@ -262,7 +262,7 @@ export async function createRecipeWorkflow(
       cookAt: 0, // TODO: Get from form
       stepsConfig,
       makePublic: recipeData.makePublic ?? false,
-      submitToSystem: recipeData.submitToSystem ?? false,
+      submitToSystem: recipeData.submitToSystem ?? null,
     }).unwrap();
 
     console.log("[createRecipeWorkflow] Recipe created:", createRecipeResult);

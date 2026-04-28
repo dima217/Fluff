@@ -18,6 +18,7 @@ interface RecipeCardProps {
   isLiked?: boolean;
   /** Кастомная иконка справа (например редактирование). По умолчанию — лайк на carousel, ничего на list */
   rightAction?: React.ReactNode;
+  isFluff: boolean,
 }
 
 const MealCard = ({
@@ -28,6 +29,7 @@ const MealCard = ({
   onPress,
   onLikePress,
   variant,
+  isFluff,
   isLiked = false,
   rightAction,
 }: RecipeCardProps) => {
@@ -101,12 +103,14 @@ const MealCard = ({
           </ThemedText>
           <View style={styles.recipeStatusTextContainer}>
             <ThemedText type="xs">{calories}</ThemedText>
+            {isFluff &&
               <View style={styles.statusContainer}>
                 <ThemedText style={{ color: Colors.text }} type="xs">
                   Fluff
                 </ThemedText>
                 <Check width={14} height={14} />
               </View>
+            }
           </View>
         </View>
         {renderActionIcon()}

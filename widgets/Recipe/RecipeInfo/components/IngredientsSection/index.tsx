@@ -5,7 +5,7 @@ import React, { useMemo } from "react";
 import { View } from "react-native";
 
 interface IngredientsSectionProps {
-  products?: ProductResponse[] | string; 
+  products?: ProductResponse[] | string | string[]; 
 }
 
 const IngredientsSection: React.FC<IngredientsSectionProps> = ({
@@ -22,7 +22,10 @@ const IngredientsSection: React.FC<IngredientsSectionProps> = ({
     }
     
     if (Array.isArray(products) && products.length > 0) {
-      return products.map((product) => `${product.name} (${product.massa}г)`);
+      if (products[0] && typeof products[0] === 'object' && 'calories' in products[0]) {
+        return (products as ProductResponse[]).map((product) => `${product.name} (${product.calories} ccal)`);
+      }
+      return products as string[];
     }
     
     return [];

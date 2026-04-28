@@ -4,19 +4,36 @@ import { CheckBox as RNCheckBox } from "react-native-elements";
 
 interface CheckBoxProps {
     title: string;
-    checked: boolean;
-    setChecked: (checked: boolean) => void;
+    checked: boolean | null;
+    setChecked: (checked: boolean | null) => void;
     size?: number;
+    allowNull?: boolean; 
 }
 
-const CheckBox = ({title, checked, setChecked, size = 24}: CheckBoxProps) => {
+const CheckBox = ({title, checked, setChecked, size = 24, allowNull = false}: CheckBoxProps) => {
+    const isChecked = allowNull ? checked === false : checked === true;
+    
+    const handlePress = () => {
+        if (!allowNull) {
+            setChecked(!checked);
+        } else {
+            if (checked === true) {
+                setChecked(false);
+            } else if (checked === false) {
+                setChecked(null);
+            } else { 
+                setChecked(false);
+            }
+        }
+    };
+
     return (
         <RNCheckBox
             title={title}
-            checked={checked}
+            checked={isChecked}
             checkedIcon="dot-circle-o"  
             uncheckedIcon="circle-o"   
-            onPress={() => setChecked(!checked)}
+            onPress={handlePress}
             containerStyle={styles.checkboxContainer}
             textStyle={styles.checkboxText}
             checkedColor={Colors.primary}

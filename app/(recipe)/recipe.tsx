@@ -1,9 +1,8 @@
 import {
   useAddToFavoritesMutation,
-  useGetProductsByIdsQuery,
   useGetRecipeByIdQuery,
   useMediaUrl,
-  useRemoveFromFavoritesMutation,
+  useRemoveFromFavoritesMutation
 } from "@/api";
 import { Colors } from "@/constants/design-tokens";
 import { RecipeData } from "@/constants/types";
@@ -43,21 +42,11 @@ export default function RecipeScreen() {
     skip: !recipeId,
   });
 
-  // Save to last visited when recipe is loaded
   useEffect(() => {
     if (recipeId) {
       searchStorage.addToLastVisited(recipeId);
     }
   }, [recipeId]);
-
-  // Get products by IDs from recipe
-  const productIds = useMemo(() => {
-    return recipe?.products || [];
-  }, [recipe?.products]);
-
-  const { data: recipeProducts = [] } = useGetProductsByIdsQuery(productIds, {
-    skip: !recipe || !productIds || productIds.length === 0,
-  });
 
   const { url: coverMediaUrl, headers: coverMediaHeaders } = useMediaUrl(
     recipe?.image?.cover,
@@ -169,7 +158,7 @@ export default function RecipeScreen() {
           title={recipe.name}
           category={recipe.type?.name || "Recipe"}
           restaurant={
-            recipe.fluffAt
+            recipe.isFluff
               ? "Fluff"
               : recipe.user
                 ? `${recipe.user.firstName} ${recipe.user.lastName}`
@@ -200,7 +189,7 @@ export default function RecipeScreen() {
           }}
         />
 
-        <IngredientsSection products={recipeProducts} />
+        <IngredientsSection products={recipe.products?.length !== 0 ? recipe.products : recipe.customProducts} />
 
         <Button
           title={t("recipe.cookIt")}

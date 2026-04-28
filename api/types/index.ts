@@ -125,12 +125,13 @@ export interface RecipeResponse {
   image: RecipeImage;
   promotionalVideo: string | null;
   description: string | null;
-  products: number[];
-  fluffAt: string | null;
+  products?: ProductResponse[];
+  isFluff: boolean;
   calories: number;
   cookAt: number; // seconds
   stepsConfig: RecipeStepsConfig;
   createdAt: string;
+  customProducts?: string[]
   updatedAt: string;
 }
 
@@ -156,10 +157,10 @@ export interface UpdateRecipeRequest {
   promotionalVideo?: string | null;
   description?: string | null;
   productIds?: number[];
-  fluffAt?: string | null;
   calories?: number;
   cookAt?: number;
   stepsConfig?: RecipeStepsConfig;
+  submitToSystem: false | null,
 }
 
 // Recipe upload types
@@ -252,7 +253,7 @@ export interface CreateRecipeWithMediaIdsRequest {
     }[];
   };
   makePublic: boolean,
-  submitToSystem: boolean,
+  submitToSystem: false | null,
 }
 
 export interface ConfirmUploadRequest {
@@ -272,7 +273,7 @@ export interface ProductResponse {
   } | null;
   countFavorites: number;
   favorite: boolean;
-  fluffAt: string | null;
+  isFluff: boolean;
   createdAt: string;
 }
 

@@ -47,6 +47,7 @@ const Preview = ({ onBack }: { onBack: () => void }) => {
           <CheckBox
             title="Submit a request to be added to the system"
             checked={value}
+            allowNull
             setChecked={onChange}
         />)}
       />
