@@ -2,21 +2,28 @@
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
+  SharedValue,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { scheduleOnUI } from "react-native-worklets";
 
 interface ProgressBarProps {
   progress: number;
 }
+
+const animateProgress = (shared: SharedValue<number>, to: number) => {
+  'worklet';
+  shared.value = withTiming(to, { duration: 1000 });
+};
 
 const ProgressBar = ({ progress }: ProgressBarProps) => {
   const sharedValue = useSharedValue(0);
   const clampedProgress = Math.max(0, Math.min(100, progress)) / 100;
 
   useEffect(() => {
-    sharedValue.value = withTiming(clampedProgress, { duration: 1000 });
+    scheduleOnUI(() => animateProgress(sharedValue, clampedProgress));
   }, [clampedProgress]);
 
   const animatedBarStyle = useAnimatedStyle(() => {

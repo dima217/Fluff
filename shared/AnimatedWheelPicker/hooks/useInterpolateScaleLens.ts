@@ -17,6 +17,8 @@ export const useInterpolateScaleLens = ({
   scrollPosition,
 }: UseInterpolateScaleProps) => {
   return useAnimatedStyle(() => {
+    'worklet'
+    
     const offset = index * itemSize - scrollPosition.value;
 
     const scale = interpolate(

@@ -3,9 +3,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { ReactNode, useCallback, useEffect, useRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import Animated, {
-  runOnJS,
   useAnimatedScrollHandler,
-  useSharedValue,
+  useSharedValue
 } from "react-native-reanimated";
 import { WheelItem } from "./components/WheelItem";
 
@@ -83,7 +82,6 @@ export function AnimatedWheelPicker<
       const index = Math.round(offset / itemSize);
       const finalIndex = Math.max(0, Math.min(data.length - 1, index));
 
-      // Для vertical режима мягко корректируем накопившийся drift.
       if (!isHorizontal) {
         const targetOffset = finalIndex * itemSize;
         const delta = Math.abs(targetOffset - offset);

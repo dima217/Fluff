@@ -17,13 +17,16 @@ export const useInterpolateScaleFixed = ({
   scrollPosition,
 }: UseInterpolateScaleProps) => {
   return useAnimatedStyle(() => {
-    const offset = index * itemSize - scrollPosition.value;
+    'worklet';
 
-    const centerTolerance = itemSize / 2;
+    const center = scrollPosition.value;
+    const itemCenter = index * itemSize;
+
+    const distance = itemCenter - center;
 
     const scale = interpolate(
-      offset,
-      [-centerTolerance, 0, centerTolerance],
+      distance,
+      [-itemSize, 0, itemSize],
       [0.8, 1.1, 0.8],
       Extrapolation.CLAMP
     );

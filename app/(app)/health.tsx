@@ -119,7 +119,6 @@ const Health = () => {
           data={pickerData.data}
           visibleCount={7}
           initialIndex={selectedDateIndex}
-          noBackground
           onValueChange={handleValueChange}
         />
         <View style={styles.markerContainerWrapper}>

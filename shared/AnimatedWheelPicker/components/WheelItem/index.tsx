@@ -1,5 +1,5 @@
 import { formatDate } from "@/shared/utils/formatDate";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native";
 import Animated, { SharedValue } from "react-native-reanimated";
 import { WheelItemData } from "../..";
@@ -27,39 +27,42 @@ export const WheelItem = memo(function FlexibleWheelItem({
 }: FlexibleWheelItemProps) {
   const isHorizontal = orientation === "horizontal";
 
-  const animatedStyle = (
-    animationType === "fixed"
-      ? useInterpolateScaleFixed
-      : useInterpolateScaleLens
-  )({
+  const fixedStyle = useInterpolateScaleFixed({
     index,
     itemSize,
     scrollPosition,
   });
+  
+  const lensStyle = useInterpolateScaleLens({
+    index,
+    itemSize,
+    scrollPosition,
+  });
+  
+  const animatedStyle =
+    animationType === "fixed" ? fixedStyle : lensStyle;
 
   const sizeStyle = isHorizontal ? { width: itemSize } : { height: itemSize };
 
-  const displayValue =
-  item.value instanceof Date
-    ? formatDate(item.value)
-    : String(item.value);
+  const displayValue = useMemo(() => {
+    return item.value instanceof Date
+      ? formatDate(item.value)
+      : String(item.value);
+  }, [item.value]);
 
   return (
     <Animated.View style={[styles.itemContainer, sizeStyle, style]}>
-      {item.content ? (
-        <Animated.View style={[styles.customContentWrapper, animatedStyle]}>
-          {item.content}
-        </Animated.View>
-      ) : (
-        <Text style={styles.itemText}>{displayValue}</Text>
-      )}
+      <Animated.View style={[styles.customContentWrapper, animatedStyle]}>
+        {item.content ? item.content : (
+          <Text style={styles.itemText}>{displayValue}</Text>
+        )}
+      </Animated.View>
     </Animated.View>
   );
 });
 
 const styles = StyleSheet.create({
   itemContainer: {
-    zIndex: 5,
     justifyContent: "center",
     alignItems: "center",
   },
