@@ -2,6 +2,7 @@ import { baseApi } from "../baseApi";
 import type {
   AuthResponse,
   LoginRequest,
+  NotificationResponse,
   OAuthLoginRequest,
   RecoveryConfirmRequest,
   RecoveryInitRequest,
@@ -165,7 +166,37 @@ export const authApi = baseApi.injectEndpoints({
         },
       }),
     }),
-
+    getNotification: builder.query<NotificationResponse[], void>({
+      query: () => ({
+        url: "/user/notifications",
+      }),
+      providesTags: ["Notification"]
+    }),
+    markNotificationsAsRead: builder.mutation<{ success: boolean }, number[]>({
+      query: (ids) => ({
+        url: "/user/notifications/read", 
+        method: "POST",
+        body: { ids },
+      }),
+      async onQueryStarted(ids, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          authApi.util.updateQueryData('getNotification', undefined, (draft) => {
+            draft.forEach((notification) => {
+              if (ids.includes(notification.id)) {
+                notification.isRead = true;
+              }
+            });
+          })
+        );
+        try {
+          await queryFulfilled;
+          console.log('Уведомления отмечены как прочитанные на сервере');
+        } catch (error) {
+          patchResult.undo();
+          console.error('Ошибка при отметке уведомлений:', error);
+        }
+      },
+    }),
   }),
 });
 
@@ -176,6 +207,8 @@ export const {
   useRefreshTokenMutation,
   useLogoutMutation,
   useRecoveryInitMutation,
+  useGetNotificationQuery,
   useRecoveryConfirmMutation,
   useOauthLoginMutation,
+  useMarkNotificationsAsReadMutation,
 } = authApi;

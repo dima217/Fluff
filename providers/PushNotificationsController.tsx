@@ -5,6 +5,7 @@ import {
   PushNotificationDataType,
 } from "@/constants/pushNotifications";
 import { getNativeFcmToken } from "@/services/push/getNativeFcmToken";
+import { invalidateNotifications } from "@/services/push/invalidateNotifications";
 import { syncFcmTokenToBackend } from "@/services/push/syncFcmTokenToBackend";
 import * as Notifications from "expo-notifications";
 import { useRouter } from "expo-router";
@@ -122,6 +123,7 @@ export function PushNotificationsController() {
       (response) => {
         const raw = response.notification.request.content.data;
         navigateFromPushData(router, raw as Record<string, unknown>);
+        invalidateNotifications();
       }
     );
 
@@ -131,10 +133,33 @@ export function PushNotificationsController() {
       if (!last) return;
       const raw = last.notification.request.content.data;
       navigateFromPushData(router, raw as Record<string, unknown>);
+      invalidateNotifications();
+      coldStartNotificationHandled = false;
     }
 
     return () => opened.remove();
   }, [router]);
 
+  useEffect(() => {
+    if (Platform.OS === "web") return;
+  
+    const notificationListener = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        
+        invalidateNotifications();
+        
+        const data = notification.request.content.data as Record<string, unknown>;
+        if (data?.type === PushNotificationDataType.TRACKING_REMINDER) {
+          //TODO
+        }
+      }
+    );
+  
+    return () => {
+      notificationListener.remove();
+    };
+  }, []);
+
   return null;
 }
+

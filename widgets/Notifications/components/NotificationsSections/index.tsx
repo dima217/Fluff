@@ -1,16 +1,40 @@
+import { NotificationResponse } from "@/api";
+import { useGetNotificationQuery, useMarkNotificationsAsReadMutation } from "@/api/slices/authApi";
 import { Colors } from "@/constants/design-tokens";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import NotificationCard from "@/widgets/Notifications/components/NotificationCard";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useRef } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { groupNotifications } from "../../utils";
-import { mockNotifications } from "../../utils/mockdata";
 
 const NotificationsSections = () => {
-  const grouped = groupNotifications(mockNotifications);
+  const { data, isLoading } = useGetNotificationQuery();
+  const [markAsRead] = useMarkNotificationsAsReadMutation();
+  const grouped = groupNotifications(data || []);
+  
+  const unreadIdsRef = useRef<number[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (data && data.length > 0) {
+        const unreadIds = data
+          .filter(notification => !notification.isRead)
+          .map(notification => notification.id);
+        
+        unreadIdsRef.current = unreadIds;
+      }
+      return () => {
+        if (unreadIdsRef.current.length > 0) {
+          markAsRead(unreadIdsRef.current);
+        }
+      };
+    }, [data, markAsRead])
+  );
 
   const renderSection = (
     title: string,
-    notifications: typeof mockNotifications
+    notifications: NotificationResponse[],
   ) => {
     if (notifications.length === 0) return null;
     return (
@@ -25,8 +49,13 @@ const NotificationsSections = () => {
     );
   };
 
+  if (isLoading) {
+    return null;
+  }
+
   return (
     <ScrollView style={styles.container}>
+      {renderSection("New", grouped.new)}
       {renderSection("Today", grouped.today)}
       {renderSection("Yesterday", grouped.yesterday)}
       {renderSection("Last 7 Days", grouped.last7Days)}
@@ -43,7 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   section: {
-    marginVertical: 10,
+    marginVertical: 16,
   },
   sectionTitle: {
     fontWeight: "bold",
@@ -53,6 +82,6 @@ const styles = StyleSheet.create({
   },
   cardWrapper: {
     marginBottom: 8,
-    padding: 4,
+    paddingVertical: 4,
   },
 });

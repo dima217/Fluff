@@ -7,7 +7,7 @@ import { renderTime } from "../../utils";
 
 interface NotificationCardProps {
   title?: string;
-  description?: string;
+  body?: string;
   actionText?: string;
   action2Text?: string;
   createdAt?: Date | string;
@@ -15,7 +15,7 @@ interface NotificationCardProps {
 
 const NotificationCard = ({
   title = "Not enough calories today",
-  description = "At this rate, you yourself will become like my stem. Have another meal!",
+  body = "At this rate, you yourself will become like my stem. Have another meal!",
   actionText = "Add a meal",
   action2Text,
   createdAt,
@@ -26,7 +26,7 @@ const NotificationCard = ({
       <View style={styles.content}>
         <ThemedText style={styles.title}>{title}</ThemedText>
         <ThemedText type="mini" style={styles.description}>
-          {description}
+          {body}
         </ThemedText>
         <View style={styles.buttons}>
           <Button
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flexDirection: "row",
-    padding: 12,
+    paddingVertical: 12,
     alignItems: "flex-start",
   },
   content: {

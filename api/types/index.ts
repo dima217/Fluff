@@ -416,3 +416,20 @@ export interface MediaResponse {
   // Media file stream (blob)
   blob: Blob;
 }
+
+export interface NotificationResponse {
+  id: number;
+  userId: number;
+  type: string;
+  title: string;
+  body: string;
+  data: {
+    date: string;        
+    type: string;
+    caloriesLeft: string;
+    targetCalories: string;
+    consumedCalories: string;
+  };
+  isRead: boolean;
+  createdAt: string;     
+}

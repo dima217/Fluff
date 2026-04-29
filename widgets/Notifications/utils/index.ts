@@ -1,4 +1,4 @@
-import { mockNotifications } from "./mockdata";
+import { NotificationResponse } from "@/api";
 
 export function renderTime(createdAt: Date | string) {
   if (!createdAt) return null;
@@ -14,7 +14,7 @@ export function renderTime(createdAt: Date | string) {
   return createdDate.toLocaleDateString();
 }
 
-export const groupNotifications = (notifications: typeof mockNotifications) => {
+export const groupNotifications = (notifications: NotificationResponse[]) => {
   const now = new Date();
 
   const todayStart = new Date(now);
@@ -30,6 +30,9 @@ export const groupNotifications = (notifications: typeof mockNotifications) => {
   last30DaysStart.setDate(last30DaysStart.getDate() - 30);
 
   return {
+    new: notifications.filter(
+      (n) => n.isRead == false
+    ),
     today: notifications.filter(
       (n) => new Date(n.createdAt) >= todayStart && new Date(n.createdAt) <= now
     ),
