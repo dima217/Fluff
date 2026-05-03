@@ -1,6 +1,8 @@
 import { baseApi } from "../baseApi";
 import type {
   AuthResponse,
+  CreateTicketRequest,
+  CreateTicketResponse,
   LoginRequest,
   NotificationResponse,
   OAuthLoginRequest,
@@ -8,7 +10,7 @@ import type {
   RecoveryInitRequest,
   SetFcmTokenRequest,
   SignUpInitRequest,
-  SignUpRequest,
+  SignUpRequest
 } from "../types";
 import { tokenStorage } from "../utils/tokenStorage";
 
@@ -197,6 +199,12 @@ export const authApi = baseApi.injectEndpoints({
         }
       },
     }),
+    createSupportTicket: builder.mutation<CreateTicketResponse, CreateTicketRequest>({
+      query: () => ({
+        url: "/support/tickets",
+        method: "POST",
+      })
+    })
   }),
 });
 
@@ -211,4 +219,5 @@ export const {
   useRecoveryConfirmMutation,
   useOauthLoginMutation,
   useMarkNotificationsAsReadMutation,
+  useCreateSupportTicketMutation,
 } = authApi;

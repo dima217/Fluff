@@ -433,3 +433,30 @@ export interface NotificationResponse {
   isRead: boolean;
   createdAt: string;     
 }
+
+export interface Media {
+  name: string;
+  size: number;
+}
+
+export interface CreateTicketRequest {
+  subject: string;
+  message: string;
+  screenshot?: Media;
+}
+
+export interface Ticket {
+  id: number;
+  userId: number;
+  subject: string;
+  message: string;
+  status: 'open' | 'closed' | 'pending';
+  adminResponse: string | null;
+  createdAt: Date; 
+  updatedAt: Date;
+}
+
+export interface CreateTicketResponse {
+  ticket: Ticket;
+  media: CreateMediaResponse;
+}
