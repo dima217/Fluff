@@ -10,8 +10,10 @@ import Button from "@/shared/Buttons/Button";
 import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
+import BaseModal from "@/shared/Modals/BaseModal";
 import ErrorModal from "@/shared/Modals/ErrorModal";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
@@ -21,6 +23,7 @@ const SupportRequest = () => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RequestFormData>({
     resolver: yupResolver(supportSchema),
@@ -33,7 +36,10 @@ const SupportRequest = () => {
   const { t } = useTranslation();
   const [createSupportTicket] = useCreateSupportTicketMutation();
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const router = useRouter();
 
   const getErrorMessage = (
     field: keyof RequestFormData
@@ -49,9 +55,12 @@ const SupportRequest = () => {
 
   const onSubmit = async (data: RequestFormData) => {
     try {
+      console.log("sdcds");
       const fileName = getFilenameFromUri(data.screenshot);
       const fileSize = await getFileSizeFromUri(data.screenshot);
+      console.log(fileName + fileSize);
 
+      console.log(data.title);
       const response = await createSupportTicket({
         subject: data.title,
         message: data.description,
@@ -68,6 +77,8 @@ const SupportRequest = () => {
             file: { uri: data.screenshot } as ReactNativeFile,
           })
         : {};
+
+      setShowSuccessModal(true);
     } catch (error: any) {
       let errorMsg = t("auth.loginFailed") || "Не удалось войти в систему";
 
@@ -85,6 +96,12 @@ const SupportRequest = () => {
       setErrorMessage(errorMsg);
       setShowErrorModal(true);
     }
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccessModal(false);
+    reset(); // 💥 очищаем форму
+    router.navigate("/(app)/home");
   };
 
   return (
@@ -137,11 +154,17 @@ const SupportRequest = () => {
           message={errorMessage}
           onClose={() => setShowErrorModal(false)}
         />
+        <BaseModal
+          title="Success"
+          isVisible={showSuccessModal}
+          message="You Request Has Been Approved!"
+          onClose={handleSuccessClose}
+        />
       </View>
 
       <Button
         title={t("auth.send")}
-        onPress={() => handleSubmit(onSubmit)}
+        onPress={handleSubmit(onSubmit)}
         //disabled={isLoading}
         //loading={isLoading}
       />

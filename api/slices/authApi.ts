@@ -10,7 +10,7 @@ import type {
   RecoveryInitRequest,
   SetFcmTokenRequest,
   SignUpInitRequest,
-  SignUpRequest
+  SignUpRequest,
 } from "../types";
 import { tokenStorage } from "../utils/tokenStorage";
 
@@ -172,39 +172,47 @@ export const authApi = baseApi.injectEndpoints({
       query: () => ({
         url: "/user/notifications",
       }),
-      providesTags: ["Notification"]
+      providesTags: ["Notification"],
     }),
     markNotificationsAsRead: builder.mutation<{ success: boolean }, number[]>({
       query: (ids) => ({
-        url: "/user/notifications/read", 
+        url: "/user/notifications/read",
         method: "POST",
         body: { ids },
       }),
       async onQueryStarted(ids, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          authApi.util.updateQueryData('getNotification', undefined, (draft) => {
-            draft.forEach((notification) => {
-              if (ids.includes(notification.id)) {
-                notification.isRead = true;
-              }
-            });
-          })
+          authApi.util.updateQueryData(
+            "getNotification",
+            undefined,
+            (draft) => {
+              draft.forEach((notification) => {
+                if (ids.includes(notification.id)) {
+                  notification.isRead = true;
+                }
+              });
+            }
+          )
         );
         try {
           await queryFulfilled;
-          console.log('Уведомления отмечены как прочитанные на сервере');
+          console.log("Уведомления отмечены как прочитанные на сервере");
         } catch (error) {
           patchResult.undo();
-          console.error('Ошибка при отметке уведомлений:', error);
+          console.error("Ошибка при отметке уведомлений:", error);
         }
       },
     }),
-    createSupportTicket: builder.mutation<CreateTicketResponse, CreateTicketRequest>({
-      query: () => ({
+    createSupportTicket: builder.mutation<
+      CreateTicketResponse,
+      CreateTicketRequest
+    >({
+      query: (body) => ({
         url: "/support/tickets",
         method: "POST",
-      })
-    })
+        body,
+      }),
+    }),
   }),
 });
 
