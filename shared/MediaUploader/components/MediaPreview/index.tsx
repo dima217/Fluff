@@ -1,7 +1,10 @@
 import { useMediaUrl } from "@/api/hooks/useMediaUrl";
 import { Colors } from "@/constants/design-tokens";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
+import Circle from "@/shared/ui/Circle";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { ResizeMode, Video } from "expo-av";
+import * as VideoThumbnails from "expo-video-thumbnails";
+import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { MediaFile } from "../../hooks/useMediaPicker";
 
@@ -11,27 +14,80 @@ interface Props {
 }
 
 const MediaPreview: React.FC<Props> = ({ media, onRemove }) => {
+  const [thumbnail, setThumbnail] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const isLocalMedia =
     !!media.uri &&
     !media.uri.startsWith("http://") &&
     !media.uri.startsWith("https://") &&
     !media.uri.startsWith("/");
 
+  const isVideo =
+    media.uri?.endsWith(".mp4") ||
+    media.uri?.endsWith(".mov") ||
+    media.uri?.includes("video");
+
   const { url: mediaUrl, headers: mediaHeaders } = useMediaUrl(media.uri, {
-    // Для локальных файлов (file://, ph:// и т.п.) хук не нужен
     skip: !media.uri || isLocalMedia,
   });
-  
+
+  const videoUri = isLocalMedia ? media.uri : mediaUrl;
+
+  useEffect(() => {
+    const generateThumbnail = async () => {
+      if (!media.uri || !isVideo) return;
+
+      try {
+        const { uri } = await VideoThumbnails.getThumbnailAsync(media.uri, {
+          time: 1000,
+        });
+        setThumbnail(uri);
+      } catch (e) {
+        console.warn("Thumbnail error:", e);
+      }
+    };
+
+    generateThumbnail();
+  }, [isVideo, media.uri]);
+
   return (
     <View style={styles.wrapper}>
-      <Image
-        key={media.uri}
-        source={{
-          uri: (isLocalMedia ? media.uri : mediaUrl) || media.thumbnail || "",
-          ...(mediaHeaders && { headers: mediaHeaders }),
-        }}
-        style={styles.preview}
-      />
+      {isVideo ? (
+        isPlaying ? (
+          <Video
+            source={{ uri: videoUri ?? "" }}
+            style={styles.preview}
+            resizeMode={ResizeMode.COVER}
+            shouldPlay
+            useNativeControls
+          />
+        ) : (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.preview}
+            onPress={() => setIsPlaying(true)}
+          >
+            <Image source={{ uri: thumbnail || "" }} style={styles.preview} />
+
+            <View style={styles.playButtonContainer}>
+              <Circle
+                svg={<Ionicons name="play" size={24} color="#FFF" />}
+                frostedGlass
+                onPress={() => setIsPlaying(true)}
+              />
+            </View>
+          </TouchableOpacity>
+        )
+      ) : (
+        <Image
+          source={{
+            uri: isLocalMedia ? media.uri : mediaUrl || media.thumbnail || "",
+            ...(mediaHeaders ? { headers: mediaHeaders } : {}),
+          }}
+          style={styles.preview}
+        />
+      )}
 
       <TouchableOpacity style={styles.removeBtn} onPress={onRemove}>
         <MaterialCommunityIcons
@@ -54,11 +110,22 @@ const styles = StyleSheet.create({
   preview: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
+  },
+  playButton: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: [{ translateX: -32 }, { translateY: -32 }],
   },
   removeBtn: {
     position: "absolute",
     top: 10,
     right: 10,
+  },
+  playButtonContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1,
   },
 });

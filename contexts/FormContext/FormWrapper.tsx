@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    marginVertical: 32,
+    marginVertical: 16,
   },
 });
 

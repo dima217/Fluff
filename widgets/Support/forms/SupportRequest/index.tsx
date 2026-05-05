@@ -1,4 +1,10 @@
-import { getFilenameFromUri, getFileSizeFromUri, ReactNativeFile, uploadFile, useCreateSupportTicketMutation } from "@/api";
+import {
+  getFilenameFromUri,
+  getFileSizeFromUri,
+  ReactNativeFile,
+  uploadFile,
+  useCreateSupportTicketMutation,
+} from "@/api";
 import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import LongTextInput from "@/shared/Inputs/LongTextInput";
@@ -10,7 +16,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import { RequestFormData, supportSchema } from "../shemas";
-  
+
 const SupportRequest = () => {
   const {
     control,
@@ -29,7 +35,9 @@ const SupportRequest = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const getErrorMessage = (field: keyof RequestFormData): string | undefined => {
+  const getErrorMessage = (
+    field: keyof RequestFormData
+  ): string | undefined => {
     const error = errors[field];
 
     if (error && error.message) {
@@ -43,7 +51,7 @@ const SupportRequest = () => {
     try {
       const fileName = getFilenameFromUri(data.screenshot);
       const fileSize = await getFileSizeFromUri(data.screenshot);
-      
+
       const response = await createSupportTicket({
         subject: data.title,
         message: data.description,
@@ -52,9 +60,14 @@ const SupportRequest = () => {
           size: fileSize,
         },
       }).unwrap();
-    
-      response.media ? await uploadFile({ uploadUrl: response.media.uploadUrl, file: { uri: data.screenshot } as ReactNativeFile }) : {};
 
+      // eslint-disable-next-line no-unused-expressions
+      response.media
+        ? await uploadFile({
+            uploadUrl: response.media.uploadUrl,
+            file: { uri: data.screenshot } as ReactNativeFile,
+          })
+        : {};
     } catch (error: any) {
       let errorMsg = t("auth.loginFailed") || "Не удалось войти в систему";
 
@@ -111,7 +124,7 @@ const SupportRequest = () => {
           name="description"
           render={({ field: { value, onChange } }) => (
             <LongTextInput
-              label={t("recipe.ingredients")}
+              label={"Description"}
               placeholder={t("common.enter")}
               value={value}
               onChangeText={onChange}
@@ -119,21 +132,19 @@ const SupportRequest = () => {
             />
           )}
         />
-       <ErrorModal
-        isVisible={showErrorModal}
-        message={errorMessage}
-        onClose={() => setShowErrorModal(false)}
-      />
+        <ErrorModal
+          isVisible={showErrorModal}
+          message={errorMessage}
+          onClose={() => setShowErrorModal(false)}
+        />
       </View>
 
-    <View style={styles.submitButton}>
       <Button
         title={t("auth.send")}
         onPress={() => handleSubmit(onSubmit)}
         //disabled={isLoading}
         //loading={isLoading}
       />
-    </View>
     </View>
   );
 };
@@ -143,10 +154,6 @@ export default SupportRequest;
 const styles = StyleSheet.create({
   mediaContainer: {
     marginBottom: 30,
-  },
-  submitButton: {
-    position: "absolute",
-    bottom: 20,
   },
   inputWrapper: {
     marginBottom: 10,

@@ -90,8 +90,7 @@ const CreateRecipeScreen = () => {
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false} contentContainerStyle={step === 3 ? styles.fullScreenContent : styles.scrollContent}
-        >
+        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
           <Header title={"Add New Recipe"} showExitConfirmation />
 
           <RNView style={styles.progressWrapper}>

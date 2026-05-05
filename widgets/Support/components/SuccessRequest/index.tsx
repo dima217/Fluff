@@ -4,9 +4,9 @@ import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import {
-    ImageBackground,
-    StyleSheet,
-    View,
+  ImageBackground,
+  StyleSheet,
+  View,
 } from "react-native";
 
 const CongratulationsSection = () => {
@@ -70,6 +70,8 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     position: "absolute",
+    left: 0,
+    right: 0,
     bottom: 20,
   },
   ratingText: {
