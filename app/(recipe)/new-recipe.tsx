@@ -18,10 +18,12 @@ import { stepsConfig } from "@/widgets/Recipe/RecipeNew/components/validation/va
 import { useRecipeFormContext } from "@/widgets/Recipe/RecipeNew/hooks/useRecipeFormContext";
 import { createRecipeWorkflow } from "@/widgets/Recipe/RecipeNew/utils/createRecipeWorkflow";
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  BackHandler,
   KeyboardAvoidingView,
   Platform,
   View as RNView,
@@ -32,6 +34,7 @@ import {
 const CreateRecipeScreen = () => {
   const { step, setStep, setTotalSteps, resetForm } = useRecipeFormContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const [prepareRecipeUpload] = usePrepareRecipeUploadMutation();
   const [prepareStepResourcesUpload] = usePrepareStepResourcesUploadMutation();
@@ -43,6 +46,21 @@ const CreateRecipeScreen = () => {
   useEffect(() => {
     setTotalSteps(4);
   }, [setTotalSteps]);
+
+  useEffect(() => {
+    const onBackPress = () => {
+      if (step === 0) {
+        router.back();
+      }
+      setStep(step - 1);
+
+      return true;
+    };
+
+    const sub = BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+    return () => sub.remove();
+  }, [router, setStep, step]);
 
   const handleFinalSubmit = async (finalData: Partial<Recipe>) => {
     if (isSubmitting) return;

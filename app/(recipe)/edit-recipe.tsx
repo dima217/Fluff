@@ -16,15 +16,19 @@ import Preview from "@/widgets/Recipe/RecipeNew/components/forms/Preview";
 import Tutorial from "@/widgets/Recipe/RecipeNew/components/forms/Tutorial";
 import RecipeFormWrapper from "@/widgets/Recipe/RecipeNew/components/FormWrapper";
 import { stepsConfig } from "@/widgets/Recipe/RecipeNew/components/validation/validationSchemas";
-import { RecipeFormProvider, useRecipeFormContext } from "@/widgets/Recipe/RecipeNew/hooks/useRecipeFormContext";
+import {
+  RecipeFormProvider,
+  useRecipeFormContext,
+} from "@/widgets/Recipe/RecipeNew/hooks/useRecipeFormContext";
 import { recipeResponseToFormData } from "@/widgets/Recipe/RecipeNew/utils/recipeToFormData";
 import { updateRecipeWorkflow } from "@/widgets/Recipe/RecipeNew/utils/updateRecipeWorkflow";
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  BackHandler,
   KeyboardAvoidingView,
   Platform,
   View as RNView,
@@ -35,6 +39,22 @@ import {
 function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
   const { step, setStep, setTotalSteps } = useRecipeFormContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const onBackPress = () => {
+      if (step === 0) {
+        router.back();
+      }
+      setStep(step - 1);
+
+      return true;
+    };
+
+    const sub = BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+    return () => sub.remove();
+  }, [router, setStep, step]);
 
   const [prepareRecipeUpload] = usePrepareRecipeUploadMutation();
   const [prepareStepResourcesUpload] = usePrepareStepResourcesUploadMutation();
@@ -185,4 +205,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
