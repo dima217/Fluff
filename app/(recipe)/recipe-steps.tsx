@@ -1,4 +1,4 @@
-import { useMediaUrl } from "@/api";
+import { useMediaUrl, useRateRecipeMutation } from "@/api";
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import { RecipeData } from "@/constants/types";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -23,27 +23,25 @@ const RecipeSteps = () => {
   const params = useLocalSearchParams();
   const { t } = useTranslation();
 
+  const [rateRecipe] = useRateRecipeMutation();
+
   const [stepIndex, setStepIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+  const [rating, setRating] = useState(0);
 
   let recipe: RecipeData;
-  try {
-    recipe = JSON.parse(params.data as string);
-  } catch (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Ошибка загрузки данных рецепта</Text>
-      </View>
-    );
-  }
 
-  if (!recipe || !recipe.steps || recipe.steps.length === 0) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Рецепт не содержит шагов</Text>
-      </View>
-    );
-  }
+  recipe = JSON.parse(params.data as string);
+
+  const handleRateRecipe = () => {
+    if (rating > 0) {
+      rateRecipe({
+        recipeId: recipe.id,
+        value: rating,
+      });
+    }
+    router.replace("/(app)/home");
+  };
 
   const currentStep = recipe.steps[stepIndex];
   const isLast = stepIndex === recipe.steps.length - 1;
@@ -54,10 +52,19 @@ const RecipeSteps = () => {
     "uri" in currentStep.image
       ? currentStep.image.uri
       : null;
+
   const { url: stepImageUrl, headers: stepImageHeaders } = useMediaUrl(
     stepImageUri,
     { skip: !stepImageUri }
   );
+
+  if (!recipe || !recipe.steps || recipe.steps.length === 0) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Рецепт не содержит шагов</Text>
+      </View>
+    );
+  }
 
   const handleNext = () => {
     if (isLast) setIsFinished(true);
@@ -75,14 +82,9 @@ const RecipeSteps = () => {
         <RNView style={{ paddingHorizontal: 20 }}>
           <Header title={recipe.title} />
         </RNView>
-        <CongratulationsSection />
+        <CongratulationsSection stars={rating} onRate={setRating} />
         <View style={styles.fixedButtonContainer}>
-          <Button
-            title={t("tabs.home")}
-            onPress={() => {
-              router.replace("/(app)/home");
-            }}
-          />
+          <Button title={t("tabs.home")} onPress={handleRateRecipe} />
         </View>
       </View>
     );

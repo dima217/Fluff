@@ -3,7 +3,6 @@ import { Colors } from "@/constants/design-tokens";
 import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Feather } from "@expo/vector-icons";
-import { useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -23,10 +22,8 @@ const CongratulationsSection = ({
   onRate,
 }: CongratulationsSectionProps) => {
   const { t } = useTranslation();
-  const [rating, setRating] = useState(stars);
 
   const handleRate = (value: number) => {
-    setRating(value);
     onRate?.(value);
   };
 
@@ -44,7 +41,7 @@ const CongratulationsSection = ({
           <View style={styles.starsRow}>
             {Array.from({ length: MAX_STARS }).map((_, index) => {
               const starValue = index + 1;
-              const filled = starValue <= rating;
+              const filled = starValue <= stars;
 
               return (
                 <TouchableOpacity

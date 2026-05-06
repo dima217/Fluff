@@ -55,7 +55,6 @@ const SupportRequest = () => {
 
   const onSubmit = async (data: RequestFormData) => {
     try {
-      console.log("sdcds");
       const fileName = getFilenameFromUri(data.screenshot);
       const fileSize = await getFileSizeFromUri(data.screenshot);
       console.log(fileName + fileSize);

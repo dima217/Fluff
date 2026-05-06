@@ -80,7 +80,9 @@ export function getFullMediaUrl(proxyUrl: string): string {
 }
 
 /** URL ведёт на наш медиа-сервер (3002) — для таких запросов нужен Authorization. */
-export function isMediaServerUrl(resolvedUrl: string | null | undefined): boolean {
+export function isMediaServerUrl(
+  resolvedUrl: string | null | undefined
+): boolean {
   if (!resolvedUrl) return false;
   const base = getMediaBaseUrl().replace(/\/$/, "");
   return resolvedUrl === base || resolvedUrl.startsWith(base + "/");

@@ -1,17 +1,19 @@
 import { baseApi } from "../baseApi";
-import type {
-  ConfirmUploadRequest,
-  CreateRecipeRequest,
-  CreateRecipeWithMediaIdsRequest,
-  PrepareRecipeUploadRequest,
-  PrepareRecipeUploadResponse,
-  PrepareStepResourcesUploadRequest,
-  PrepareStepResourcesUploadResponse,
-  PrepareVideoUploadRequest,
-  PrepareVideoUploadResponse,
-  RecipeResponse,
-  SearchRecipesQuery,
-  UpdateRecipeRequest,
+import {
+  RateRecipeRequest,
+  RateRecipeResponse,
+  type ConfirmUploadRequest,
+  type CreateRecipeRequest,
+  type CreateRecipeWithMediaIdsRequest,
+  type PrepareRecipeUploadRequest,
+  type PrepareRecipeUploadResponse,
+  type PrepareStepResourcesUploadRequest,
+  type PrepareStepResourcesUploadResponse,
+  type PrepareVideoUploadRequest,
+  type PrepareVideoUploadResponse,
+  type RecipeResponse,
+  type SearchRecipesQuery,
+  type UpdateRecipeRequest,
 } from "../types";
 
 export const recipesApi = baseApi.injectEndpoints({
@@ -167,6 +169,14 @@ export const recipesApi = baseApi.injectEndpoints({
         invalidatesTags: ["Recipe", "MyRecipes"],
       }
     ),
+    rateRecipe: builder.mutation<RateRecipeResponse, RateRecipeRequest>({
+      query: ({ recipeId, value }) => ({
+        url: `/recipes/${recipeId}/rate`,
+        method: "POST",
+        body: { value },
+      }),
+      invalidatesTags: ["Recipe", "MyRecipes"],
+    }),
   }),
 });
 
@@ -191,4 +201,5 @@ export const {
   useMarkUploadedMutation,
   useCreateRecipeWithMediaIdsMutation,
   useConfirmRecipeUploadMutation,
+  useRateRecipeMutation,
 } = recipesApi;

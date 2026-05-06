@@ -8,6 +8,7 @@ export interface RecipeStep {
 export interface RecipeData {
   title: string;
   steps: RecipeStep[];
+  id: number;
 }
 
 export interface CreationStep {
@@ -23,6 +24,6 @@ export interface Recipe {
   steps: CreationStep[];
   videoUrl: string;
   mediaUrl: string;
-  makePublic?: boolean,
-  submitToSystem?: false | null,
+  makePublic?: boolean;
+  submitToSystem?: false | null;
 }

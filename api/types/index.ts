@@ -80,8 +80,8 @@ export interface UpdateProfileRequest {
   height?: number; // 50-300
   weight?: number; // 20-500
   sportActivity?: string;
-  cheatMealDay?: string; 
-  periodOfDays?: string; 
+  cheatMealDay?: string;
+  periodOfDays?: string;
 }
 
 // Recipe types
@@ -131,8 +131,9 @@ export interface RecipeResponse {
   cookAt: number; // seconds
   stepsConfig: RecipeStepsConfig;
   createdAt: string;
-  customProducts?: string[]
+  customProducts?: string[];
   updatedAt: string;
+  userRating?: number | null;
 }
 
 export interface CreateRecipeRequest {
@@ -146,8 +147,8 @@ export interface CreateRecipeRequest {
   calories: number;
   cookAt: number; // seconds
   stepsConfig: RecipeStepsConfig;
-  makePublic: boolean,
-  submitToSystem: boolean,
+  makePublic: boolean;
+  submitToSystem: boolean;
 }
 
 export interface UpdateRecipeRequest {
@@ -160,7 +161,7 @@ export interface UpdateRecipeRequest {
   calories?: number;
   cookAt?: number;
   stepsConfig?: RecipeStepsConfig;
-  submitToSystem: false | null,
+  submitToSystem: false | null;
 }
 
 // Recipe upload types
@@ -218,7 +219,7 @@ export interface CreateMediaRequest {
     width?: number;
     height?: number;
     format: string;
-  }
+  };
 }
 
 export interface CreateMediaResponse {
@@ -252,8 +253,8 @@ export interface CreateRecipeWithMediaIdsRequest {
       }[];
     }[];
   };
-  makePublic: boolean,
-  submitToSystem: false | null,
+  makePublic: boolean;
+  submitToSystem: false | null;
 }
 
 export interface ConfirmUploadRequest {
@@ -424,14 +425,14 @@ export interface NotificationResponse {
   title: string;
   body: string;
   data: {
-    date: string;        
+    date: string;
     type: string;
     caloriesLeft: string;
     targetCalories: string;
     consumedCalories: string;
   };
   isRead: boolean;
-  createdAt: string;     
+  createdAt: string;
 }
 
 export interface Media {
@@ -450,13 +451,23 @@ export interface Ticket {
   userId: number;
   subject: string;
   message: string;
-  status: 'open' | 'closed' | 'pending';
+  status: "open" | "closed" | "pending";
   adminResponse: string | null;
-  createdAt: Date; 
+  createdAt: Date;
   updatedAt: Date;
 }
 
 export interface CreateTicketResponse {
   ticket: Ticket;
   media: CreateMediaResponse;
+}
+
+export interface RateRecipeRequest {
+  recipeId: number;
+  value: number;
+}
+
+export interface RateRecipeResponse {
+  average: number;
+  ratingCounts: number;
 }

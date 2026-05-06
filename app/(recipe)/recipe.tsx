@@ -2,7 +2,7 @@ import {
   useAddToFavoritesMutation,
   useGetRecipeByIdQuery,
   useMediaUrl,
-  useRemoveFromFavoritesMutation
+  useRemoveFromFavoritesMutation,
 } from "@/api";
 import { Colors } from "@/constants/design-tokens";
 import { RecipeData } from "@/constants/types";
@@ -90,6 +90,7 @@ export default function RecipeScreen() {
 
     return {
       title: recipe.name,
+      id: recipe.id,
       steps,
     };
   }, [recipe]);
@@ -136,7 +137,10 @@ export default function RecipeScreen() {
       <ImageBackground
         source={
           coverMediaUrl
-            ? { uri: coverMediaUrl, ...(coverMediaHeaders && { headers: coverMediaHeaders }) }
+            ? {
+                uri: coverMediaUrl,
+                ...(coverMediaHeaders && { headers: coverMediaHeaders }),
+              }
             : recipe.image?.cover
               ? { uri: recipe.image.cover }
               : require("@/assets/images/Cake.png")
@@ -189,7 +193,13 @@ export default function RecipeScreen() {
           }}
         />
 
-        <IngredientsSection products={recipe.products?.length !== 0 ? recipe.products : recipe.customProducts} />
+        <IngredientsSection
+          products={
+            recipe.products?.length !== 0
+              ? recipe.products
+              : recipe.customProducts
+          }
+        />
 
         <Button
           title={t("recipe.cookIt")}
