@@ -9,6 +9,7 @@ export interface RecipeData {
   title: string;
   steps: RecipeStep[];
   id: number;
+  userRating?: number | null;
 }
 
 export interface CreationStep {

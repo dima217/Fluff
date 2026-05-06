@@ -8,7 +8,7 @@ import View from "@/shared/View";
 import CongratulationsSection from "@/widgets/Recipe/RecipeInfo/components/CongratulationsSection";
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Image,
   View as RNView,
@@ -27,14 +27,19 @@ const RecipeSteps = () => {
 
   const [stepIndex, setStepIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
-  const [rating, setRating] = useState(0);
 
   let recipe: RecipeData;
 
   recipe = JSON.parse(params.data as string);
 
+  const [rating, setRating] = useState(0);
+
+  useEffect(() => {
+    setRating(recipe.userRating ?? 0);
+  }, [recipe.userRating]);
+
   const handleRateRecipe = () => {
-    if (rating > 0) {
+    if (rating > 0 || recipe.userRating === rating) {
       rateRecipe({
         recipeId: recipe.id,
         value: rating,

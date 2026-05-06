@@ -92,6 +92,7 @@ export default function RecipeScreen() {
       title: recipe.name,
       id: recipe.id,
       steps,
+      userRating: recipe.userRating,
     };
   }, [recipe]);
 
