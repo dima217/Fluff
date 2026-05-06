@@ -10,9 +10,7 @@ import ProgressDots from "@/shared/ui/ProgressDots";
 import { renderStepComponent } from "@/widgets/SignUp/constants/signUpStepOrder";
 import { renderGoogleSignUpStepComponent } from "@/widgets/SignUp/constants/signUpWithGoogleStepOrder";
 import { useSignUp } from "@/widgets/SignUp/hooks/useSignUp";
-import {
-  SignUpFormProvider
-} from "@/widgets/SignUp/hooks/useSignUpFormContext";
+import { SignUpFormProvider } from "@/widgets/SignUp/hooks/useSignUpFormContext";
 import {
   googleSignUpStepsConfig,
   signUpStepsConfig,
@@ -21,6 +19,7 @@ import SignUpFormWrapper from "@/widgets/SignUp/wrappers/FormWrapper";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  BackHandler,
   KeyboardAvoidingView,
   Platform,
   View as RNView,
@@ -36,7 +35,20 @@ const RegisterScreenContent: React.FC = () => {
   }>();
   const { signInWithGoogle } = useGoogleAuth();
   const dispatch = useAppDispatch();
-  const { handleFinalSubmit, handleGoogleFinalSubmit, setTotalSteps, totalSteps, step, formData, showCodeModal, setShowCodeModal, showErrorModal, setShowErrorModal, errorMessage } = useSignUp();
+  const {
+    handleFinalSubmit,
+    handleGoogleFinalSubmit,
+    setTotalSteps,
+    totalSteps,
+    step,
+    setStep,
+    formData,
+    showCodeModal,
+    setShowCodeModal,
+    showErrorModal,
+    setShowErrorModal,
+    errorMessage,
+  } = useSignUp();
   const [isGoogleSignUp, setIsGoogleSignUp] = useState(
     () => googleOnboarding === "1" || googleOnboarding === "true"
   );
@@ -47,14 +59,28 @@ const RegisterScreenContent: React.FC = () => {
     }
   }, [googleOnboarding]);
 
+  useEffect(() => {
+    const onBackPress = () => {
+      if (step === 0) {
+        router.back();
+      }
+      setStep(step - 1);
+
+      return true;
+    };
+
+    const sub = BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+    return () => sub.remove();
+  }, [router, setStep, step]);
+
   const handleGoogleSignUp = async () => {
     try {
       const isNewUser = await signInWithGoogle();
       console.log("isNewUser", isNewUser);
       if (isNewUser) {
         setIsGoogleSignUp(true);
-      }
-      else {
+      } else {
         dispatch(setAuth(true));
         router.replace("/(app)/home");
       }
@@ -87,13 +113,17 @@ const RegisterScreenContent: React.FC = () => {
           <ProgressDots totalSteps={totalSteps} activeIndex={step} />
           <SignUpFormWrapper
             key={`${isGoogleSignUp ? "g" : "e"}-${step}`}
-            onFinalSubmit={isGoogleSignUp ? handleGoogleFinalSubmit : handleFinalSubmit}
+            onFinalSubmit={
+              isGoogleSignUp ? handleGoogleFinalSubmit : handleFinalSubmit
+            }
             validationSchemas={
               isGoogleSignUp ? googleSignUpStepsConfig : signUpStepsConfig
             }
             buttonText={t("signUp.continue")}
           >
-            {isGoogleSignUp ? renderGoogleSignUpStepComponent(step) : renderStepComponent(step)}
+            {isGoogleSignUp
+              ? renderGoogleSignUpStepComponent(step)
+              : renderStepComponent(step)}
           </SignUpFormWrapper>
           {step === 0 && !isGoogleSignUp && (
             <RNView style={styles.googleButtonContainer}>

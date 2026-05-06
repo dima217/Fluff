@@ -2,7 +2,7 @@ import {
   Extrapolation,
   interpolate,
   SharedValue,
-  useAnimatedStyle
+  useAnimatedStyle,
 } from "react-native-reanimated";
 
 interface UseInterpolateScaleProps {
@@ -17,7 +17,7 @@ export const useInterpolateScaleFixed = ({
   scrollPosition,
 }: UseInterpolateScaleProps) => {
   return useAnimatedStyle(() => {
-    'worklet';
+    "worklet";
 
     const center = scrollPosition.value;
     const itemCenter = index * itemSize;

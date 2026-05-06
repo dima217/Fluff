@@ -10,6 +10,7 @@ import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+  BackHandler,
   Image,
   View as RNView,
   ScrollView,
@@ -47,6 +48,24 @@ const RecipeSteps = () => {
     }
     router.replace("/(app)/home");
   };
+
+  useEffect(() => {
+    const onBackPress = () => {
+      if (stepIndex === 0) {
+        router.back();
+      }
+      setStepIndex((prev) => {
+        if (prev <= 0) return 0;
+        return prev - 1;
+      });
+
+      return true;
+    };
+
+    const sub = BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+    return () => sub.remove();
+  }, [router, stepIndex]);
 
   const currentStep = recipe.steps[stepIndex];
   const isLast = stepIndex === recipe.steps.length - 1;
