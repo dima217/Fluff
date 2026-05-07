@@ -59,27 +59,6 @@ const renderListItem = (
   />
 );
 
-const renderCarouselItem = (
-  item: MealData,
-  onCardPress: (item: MealData) => void,
-  onLikePress?: (item: MealData) => void,
-  renderCardRightAction?: (item: MealData) => ReactNode
-) => (
-  <MealCard
-    key={item.id}
-    title={item.title}
-    calories={item.calories}
-    imageUrl={item.imageUrl}
-    onPress={() => onCardPress(item)}
-    onLikePress={onLikePress ? () => onLikePress(item) : undefined}
-    variant="carousel"
-    status={item.status}
-    isLiked={item.isLiked}
-    isFluff={item.isFluff}
-    rightAction={renderCardRightAction?.(item)}
-  />
-);
-
 const CardsCarousel = ({
   variant,
   products,
@@ -167,7 +146,6 @@ const CardsCarousel = ({
     },
     [addToFavorites, removeFromFavorites, localLikes]
   );
-
   const dataWithLikes = useMemo(() => {
     return finalData.map((item) => {
       const key = item.productId
@@ -185,6 +163,24 @@ const CardsCarousel = ({
   }, [finalData, localLikes]);
 
   const onLikePress = customOnLikePress || handleLike;
+
+  const memoizedCards = useMemo(() => {
+    return dataWithLikes.map((item) => (
+      <MealCard
+        key={item.id}
+        title={item.title}
+        calories={item.calories}
+        imageUrl={item.imageUrl}
+        onPress={() => onCardPress(item)}
+        onLikePress={onLikePress ? () => onLikePress(item) : undefined}
+        variant="carousel"
+        status={item.status}
+        isLiked={item.isLiked}
+        isFluff={item.isFluff}
+        rightAction={renderCardRightAction?.(item)}
+      />
+    ));
+  }, [dataWithLikes, onCardPress, onLikePress, renderCardRightAction]);
 
   const getListRenderItem = (props: ListRenderItemInfo<MealData>) => {
     return renderListItem(
@@ -217,14 +213,7 @@ const CardsCarousel = ({
   if (isCarouselVariant) {
     return (
       <View style={[styles.container, styles.verticalList]}>
-        {dataWithLikes.map((item) =>
-          renderCarouselItem(
-            item,
-            onCardPress,
-            onLikePress,
-            renderCardRightAction
-          )
-        )}
+        {memoizedCards}
       </View>
     );
   }

@@ -5,10 +5,7 @@ import { DeleteRecipeCardAction } from "@/shared/CardCarousel/cardActions";
 import Header from "@/shared/Header";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import View from "@/shared/View";
-import {
-  cheatMealStorage,
-  type CheatMealItem,
-} from "@/utils/cheatMealStorage";
+import { cheatMealStorage, type CheatMealItem } from "@/utils/cheatMealStorage";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
@@ -20,6 +17,7 @@ function cheatMealToMealData(item: CheatMealItem): MealData {
     calories: `${item.calories} ккал`,
     imageUrl: item.imageUrl,
     recipeId: item.id,
+    isFluff: true,
   };
 }
 

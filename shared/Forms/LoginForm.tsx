@@ -5,6 +5,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { getDeviceTimeZone } from "@/services/timezone";
 import ErrorModal from "@/shared/Modals/ErrorModal";
 import WelcomeModal from "@/shared/Modals/WelcomeModal";
+import { cheatMealSettingsStorage } from "@/utils/cheatMealSettingsStorage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -62,17 +63,18 @@ const LoginForm = () => {
         timeZone: getDeviceTimeZone(),
       }).unwrap();
 
-      cheatMealSettingsStorage.set({
-        cheatMealDay: finalData.cheatMealDay,
-        periodOfDays: finalData.periodOfDays,
-        configured: true,
-      });
       // Load user profile after successful login
       try {
         const profileResult = await refetchProfile();
         if (profileResult.data) {
           dispatch(setProfile(profileResult.data));
         }
+
+        cheatMealSettingsStorage.set({
+          cheatMealDay: profileResult.data?.cheatMealDay,
+          periodOfDays: profileResult.data?.periodOfDays,
+          configured: true,
+        });
       } catch (profileError) {
         console.error("Failed to load profile:", profileError);
       }

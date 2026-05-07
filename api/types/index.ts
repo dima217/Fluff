@@ -68,6 +68,8 @@ export interface ProfileResponse {
   createdAt?: string;
   updatedAt?: string;
   sportActivity?: string;
+  cheatMealDay: string;
+  periodOfDays: string;
 }
 
 export interface UpdateProfileRequest {

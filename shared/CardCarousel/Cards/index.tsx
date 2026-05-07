@@ -5,6 +5,7 @@ import Heart from "@/assets/images/Heart.svg";
 import Check from "@/assets/images/Сheck.svg";
 import { Colors } from "@/constants/design-tokens";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import React from "react";
 import { styles } from "./styles";
 
 interface RecipeCardProps {
@@ -16,9 +17,8 @@ interface RecipeCardProps {
   onPress: () => void;
   onLikePress?: () => void;
   isLiked?: boolean;
-  /** Кастомная иконка справа (например редактирование). По умолчанию — лайк на carousel, ничего на list */
   rightAction?: React.ReactNode;
-  isFluff: boolean,
+  isFluff: boolean;
 }
 
 const MealCard = ({
@@ -84,7 +84,10 @@ const MealCard = ({
         <Image
           source={
             mediaUrl
-              ? { uri: mediaUrl, ...(mediaHeaders && { headers: mediaHeaders }) }
+              ? {
+                  uri: mediaUrl,
+                  ...(mediaHeaders && { headers: mediaHeaders }),
+                }
               : require("@/assets/images/FoodAva.png")
           }
           style={styles.cardImage}
@@ -103,14 +106,14 @@ const MealCard = ({
           </ThemedText>
           <View style={styles.recipeStatusTextContainer}>
             <ThemedText type="xs">{calories}</ThemedText>
-            {isFluff &&
+            {isFluff && (
               <View style={styles.statusContainer}>
                 <ThemedText style={{ color: Colors.text }} type="xs">
                   Fluff
                 </ThemedText>
                 <Check width={14} height={14} />
               </View>
-            }
+            )}
           </View>
         </View>
         {renderActionIcon()}
@@ -119,4 +122,4 @@ const MealCard = ({
   );
 };
 
-export default MealCard;
+export default React.memo(MealCard);

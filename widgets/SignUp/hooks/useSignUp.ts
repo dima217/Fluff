@@ -1,6 +1,9 @@
 import { useAppDispatch } from "@/api/hooks";
 import { useSignUpInitMutation, useSignUpMutation } from "@/api/slices/authApi";
-import { useLazyGetProfileQuery, useUpdateProfileMutation } from "@/api/slices/profileApi";
+import {
+  useLazyGetProfileQuery,
+  useUpdateProfileMutation,
+} from "@/api/slices/profileApi";
 import { setAuth, setProfile } from "@/api/slices/userSlice";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getDeviceTimeZone } from "@/services/timezone";
@@ -11,20 +14,21 @@ import { SignUpFormData } from "../wrappers/FormWrapper";
 import { useSignUpFormContext } from "./useSignUpFormContext";
 
 export const useSignUp = () => {
-    const { step, setTotalSteps, totalSteps, formData, setStep } = useSignUpFormContext();
-    const [codeSent, setCodeSent] = useState(false);
-    const [showCodeModal, setShowCodeModal] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [showErrorModal, setShowErrorModal] = useState(false);
-    const [signUpInit] = useSignUpInitMutation();
-    const [signUp] = useSignUpMutation();
-    const [getProfile] = useLazyGetProfileQuery();
-    const [updateProfileMutation] = useUpdateProfileMutation();
-    const dispatch = useAppDispatch();
-    const router = useRouter();
-    const { t } = useTranslation();
+  const { step, setTotalSteps, totalSteps, formData, setStep } =
+    useSignUpFormContext();
+  const [codeSent, setCodeSent] = useState(false);
+  const [showCodeModal, setShowCodeModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [signUpInit] = useSignUpInitMutation();
+  const [signUp] = useSignUpMutation();
+  const [getProfile] = useLazyGetProfileQuery();
+  const [updateProfileMutation] = useUpdateProfileMutation();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { t } = useTranslation();
 
-    useEffect(() => {
+  useEffect(() => {
     const sendCode = async () => {
       if (step === 1 && formData.email && !codeSent) {
         try {
@@ -118,8 +122,18 @@ export const useSignUp = () => {
     }
   };
 
-  const handleGoogleFinalSubmit = async (finalData: Partial<SignUpFormData>) => {
-    if (!finalData.sex || !finalData.age || !finalData.height || !finalData.weight || !finalData.sportActivity || !finalData.cheatMealDay || !finalData.periodOfDays) {
+  const handleGoogleFinalSubmit = async (
+    finalData: Partial<SignUpFormData>
+  ) => {
+    if (
+      !finalData.sex ||
+      !finalData.age ||
+      !finalData.height ||
+      !finalData.weight ||
+      !finalData.sportActivity ||
+      !finalData.cheatMealDay ||
+      !finalData.periodOfDays
+    ) {
       return;
     }
     console.log("age", finalData.age);
@@ -128,9 +142,14 @@ export const useSignUp = () => {
     console.log("sportActivity", finalData.sportActivity);
     console.log("cheatMealDay", finalData.cheatMealDay);
     console.log("periodOfDays", finalData.periodOfDays);
-    
+
     await updateProfileMutation({
-      gender: finalData.sex === "male" ? "male" : finalData.sex === "female" ? "female" : "other",
+      gender:
+        finalData.sex === "male"
+          ? "male"
+          : finalData.sex === "female"
+            ? "female"
+            : "other",
       birthDate: new Date(finalData.age || "0").toISOString(),
       height: parseFloat(finalData.height || "0"),
       weight: parseFloat(finalData.weight || "0"),
@@ -139,12 +158,19 @@ export const useSignUp = () => {
       periodOfDays: finalData.periodOfDays,
     }).unwrap();
     const profileResult = await getProfile().unwrap();
+    if (finalData.cheatMealDay != null || finalData.periodOfDays != null) {
+      cheatMealSettingsStorage.set({
+        cheatMealDay: finalData.cheatMealDay,
+        periodOfDays: finalData.periodOfDays,
+        configured: true,
+      });
+    }
     if (profileResult) {
       dispatch(setProfile(profileResult));
     }
     dispatch(setAuth(true));
     router.replace("/(app)/home");
-  }
+  };
 
   return {
     step,
@@ -163,4 +189,4 @@ export const useSignUp = () => {
     codeSent,
     setCodeSent,
   };
-}
+};

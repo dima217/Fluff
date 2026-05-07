@@ -23,7 +23,7 @@ export default function MyUploadsScreen() {
       imageUrl: recipe.image?.cover || recipe.image?.preview || "",
       isLiked: recipe.favorite,
       recipeId: recipe.id,
-      isFluff: recipe.isFluff
+      isFluff: recipe.isFluff,
     }));
   }, [recipes]);
 
