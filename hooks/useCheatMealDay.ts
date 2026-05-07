@@ -56,7 +56,6 @@ export function useIsCheatMealDay(): boolean {
   }, [settings.cheatMealDay, settings.periodOfDays]);
 }
 
-
 /**
  * When today is a cheat meal day, returns the set of recipe IDs that are in the user's cheat meal list.
  * Use this to exclude those recipes from the calorie tracker search on health screen so they don't appear there.

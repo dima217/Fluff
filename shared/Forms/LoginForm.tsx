@@ -62,6 +62,11 @@ const LoginForm = () => {
         timeZone: getDeviceTimeZone(),
       }).unwrap();
 
+      cheatMealSettingsStorage.set({
+        cheatMealDay: finalData.cheatMealDay,
+        periodOfDays: finalData.periodOfDays,
+        configured: true,
+      });
       // Load user profile after successful login
       try {
         const profileResult = await refetchProfile();

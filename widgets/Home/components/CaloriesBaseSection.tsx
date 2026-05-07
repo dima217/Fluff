@@ -19,8 +19,13 @@ const CaloriesBaseSection = ({
   const { t } = useTranslation();
   const limit = 20;
 
-  const { accumulatedData, isLoading, isFetching, isLoadingMore, handleLoadMore } =
-    usePagination({
+  const {
+    accumulatedData,
+    isLoading,
+    isFetching,
+    isLoadingMore,
+    handleLoadMore,
+  } = usePagination({
     limit,
     queryHook: useGetProductsQuery,
     queryArgs: { limit },
@@ -30,7 +35,7 @@ const CaloriesBaseSection = ({
     if (loadMoreSignal > 0) {
       handleLoadMore();
     }
-  }, [loadMoreSignal]);
+  }, [handleLoadMore, loadMoreSignal]);
 
   const productsAsMealData: MealData[] = useMemo(
     () =>
