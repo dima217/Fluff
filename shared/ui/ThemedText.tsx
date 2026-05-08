@@ -35,56 +35,59 @@ export function ThemedText({
   fontFamilyType = "sans",
   ...rest
 }: ThemedTextProps) {
-  /* const [fontsLoaded] = useFonts({
-    'SFProText-Medium': require('../../assets/fonts/SFProText-Medium.ttf'),
-  }); 
-
-  if (!fontsLoaded) {
-    return null; 
-  } */
-
   const color = Colors.text;
+  const baseStyle = getStylesByType(type);
 
-  if (typeof children === "string") {
-    const words = children.trim().split(" ");
-    const text = words.join(" ");
-    const baseStyle = getStylesByType(type);
+  const text =
+    typeof children === "number" || typeof children === "string"
+      ? String(children)
+      : "";
 
-    if (highlightLastWord) {
-      const lastWord = words.pop();
-      const textWithoutLast = words.join(" ");
+  if (!text) {
+    return <Text style={style} {...rest} />;
+  }
 
-      return (
-        <Text
-          style={[
-            { color, fontFamily: Fonts[fontFamilyType] },
-            baseStyle,
-            titleSize
-              ? { fontSize: titleSize, lineHeight: titleSize + 2 }
-              : null,
-            style,
-          ]}
-          {...rest}
-        >
-          {textWithoutLast}{" "}
-          <Text
-            style={{ color: Colors.primary, fontFamily: Fonts[fontFamilyType] }}
-          >
-            {lastWord}
-          </Text>
-        </Text>
-      );
-    }
+  if (highlightLastWord) {
+    const words = text.trim().split(" ");
+    const lastWord = words.pop();
+    const restText = words.join(" ");
 
     return (
       <Text
-        style={[{ color, fontFamily: Fonts[fontFamilyType] }, baseStyle, style]}
+        style={[
+          { color, fontFamily: Fonts[fontFamilyType] },
+          baseStyle,
+          titleSize ? { fontSize: titleSize, lineHeight: titleSize + 2 } : null,
+          style,
+        ]}
         {...rest}
       >
-        {text}
+        {restText}{" "}
+        <Text
+          style={{
+            color: Colors.primary,
+            fontFamily: Fonts[fontFamilyType],
+          }}
+        >
+          {lastWord}
+        </Text>
       </Text>
     );
   }
+
+  return (
+    <Text
+      style={[
+        { color, fontFamily: Fonts[fontFamilyType] },
+        baseStyle,
+        titleSize ? { fontSize: titleSize, lineHeight: titleSize + 2 } : null,
+        style,
+      ]}
+      {...rest}
+    >
+      {text}
+    </Text>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -116,6 +119,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#8B868F",
     fontWeight: "100",
-    opacity: 50,
+    opacity: 0.5,
   },
 });

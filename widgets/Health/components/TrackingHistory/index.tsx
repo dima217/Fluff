@@ -1,88 +1,37 @@
-import { useGetRecipeByIdQuery, useMediaUrl } from "@/api";
+import { useGetRecipesByIdsQuery } from "@/api";
 import type { TrackingResponse } from "@/api/types";
-import Check from "@/assets/images/Сheck.svg";
 import { Colors } from "@/constants/design-tokens";
 import { ThemedText } from "@/shared/ui/ThemedText";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { getGroupedTrackingRecords } from "../../utils";
+import TrackingItem from "./ui/TrackingItem";
 
 interface TrackingHistoryProps {
   records: TrackingResponse[];
+  onPress: (recipeId?: number) => void;
 }
 
-interface TrackingItemProps {
-  record: TrackingResponse;
-}
+const TrackingHistory: React.FC<TrackingHistoryProps> = ({
+  records,
+  onPress,
+}) => {
+  const recipeIds = [
+    ...new Set(
+      records
+        .map((record) => record.recipeId)
+        .filter((id): id is number => id != null)
+    ),
+  ];
 
-const TrackingItem: React.FC<TrackingItemProps> = ({ record }) => {
-  const { data: recipe } = useGetRecipeByIdQuery(record.recipeId!, {
-    skip: !record.recipeId,
+  const { data: recipes } = useGetRecipesByIdsQuery(recipeIds, {
+    skip: recipeIds.length === 0,
   });
 
-  const recipeImageUrl =
-    record.recipeId && recipe
-      ? recipe.image?.cover || recipe.image?.preview || ""
-      : "";
-  const { url: mediaUrl, headers: mediaHeaders } = useMediaUrl(recipeImageUrl, {
-    skip: !recipeImageUrl,
-  });
-
-  const imageSource =
-    mediaUrl ?
-      { uri: mediaUrl, ...(mediaHeaders && { headers: mediaHeaders }) }
-    : require("@/assets/images/FoodAva.png");
-
-  const source = record.recipeId
-    ? recipe?.fluffAt
-      ? "Fluff"
-      : "Your recipe"
-    : "Your recipe";
-
-  return (
-    <TouchableOpacity style={styles.card}>
-      <View style={styles.imageContainer}>
-        <Image source={imageSource} style={styles.image} resizeMode="cover" />
-      </View>
-      <View style={styles.content}>
-        <ThemedText type="xs" style={styles.title}>
-          {record.name}
-        </ThemedText>
-        <ThemedText type="xs" style={styles.calories}>
-          {record.calories} KK
-        </ThemedText>
-        <View style={styles.sourceContainer}>
-          <ThemedText type="xs" style={styles.source}>
-            {source}
-          </ThemedText>
-          {source === "Fluff" && <Check width={14} height={14} />}
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-const TrackingHistory: React.FC<TrackingHistoryProps> = ({ records }) => {
   if (!records || records.length === 0) {
     return null;
   }
 
-  // Group records by time (created field)
-  const groupedRecords = records.reduce(
-    (acc, record) => {
-      const date = new Date(record.created);
-      const hours = date.getHours();
-      const minutes = String(date.getMinutes()).padStart(2, "0");
-      const period = hours >= 12 ? "PM" : "AM";
-      const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
-      const timeKey = `${displayHours}:${minutes} ${period}`;
-
-      if (!acc[timeKey]) {
-        acc[timeKey] = [];
-      }
-      acc[timeKey].push(record);
-      return acc;
-    },
-    {} as Record<string, TrackingResponse[]>
-  );
+  const groupedRecords = getGroupedTrackingRecords(records, recipes || []);
 
   return (
     <View style={styles.container}>
@@ -106,7 +55,7 @@ const TrackingHistory: React.FC<TrackingHistoryProps> = ({ records }) => {
             </ThemedText>
           </View>
           {timeRecords.map((record) => (
-            <TrackingItem key={record.id} record={record} />
+            <TrackingItem onPress={onPress} key={record.id} record={record} />
           ))}
         </View>
       ))}

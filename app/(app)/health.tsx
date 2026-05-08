@@ -14,13 +14,31 @@ import { useDayPickerData } from "@/shared/DateWheelItem/utils";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import MarkerContainer from "@/widgets/Health/components/MarkerContainer";
 import TrackingHistory from "@/widgets/Health/components/TrackingHistory";
-import { useMemo, useState } from "react";
+import { useRouter } from "expo-router";
+import { useCallback, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 
 const Health = () => {
-  // Get calendar data for current month
   const { data: calendar, refetch: refetchCalendar } = useGetCalendarQuery();
+
+  const router = useRouter();
+
+  const handleTrackingCardPress = useCallback(
+    (recipeId?: number) => {
+      if (!recipeId) return;
+
+      router.push({
+        pathname: "/(recipe)/recipe",
+        params: {
+          recipeId: recipeId.toString(),
+        },
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   const profile = useSelector((state: RootState) => state.user.profile);
   let dailyGoal;
 
@@ -42,7 +60,7 @@ const Health = () => {
   }
   const [selectedDateIndex, setSelectedDateIndex] = useState<number>(() => {
     const currentDate = new Date();
-    return currentDate.getDate() - 1; // 0-based index
+    return currentDate.getDate() - 1;
   });
 
   const pickerData = useDayPickerData(
@@ -136,7 +154,10 @@ const Health = () => {
         />
         <CalorieInput onAdd={handleAddFood} />
         {dayData?.records && dayData.records.length > 0 && (
-          <TrackingHistory records={dayData.records} />
+          <TrackingHistory
+            onPress={handleTrackingCardPress}
+            records={dayData.records}
+          />
         )}
       </View>
     </ScrollView>
