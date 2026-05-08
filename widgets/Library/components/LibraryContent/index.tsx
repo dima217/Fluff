@@ -5,14 +5,14 @@ import {
   useLazyGetFavoriteRecipesQuery,
 } from "@/api/slices";
 import { useTranslation } from "@/hooks/useTranslation";
-import CardsCarousel from "@/shared/CardCarousel";
+import CardsCarousel, { MealData } from "@/shared/CardCarousel";
 import ActivityIndicator from "@/shared/ui/ActivityIndicator";
 import {
   getProductsAsMealData,
   getRecipesAsMealData,
 } from "@/widgets/Home/utils/data";
 import { router } from "expo-router";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 
 interface HomeContentProps {
@@ -32,6 +32,17 @@ const LibraryContent = ({ selected }: HomeContentProps) => {
   ] = useLazyGetFavoriteProductsQuery();
 
   const cheatMealIds = useAppSelector((state) => state.user.profile?.cheatMeal);
+
+  const handleRecipePress = useCallback((item: MealData) => {
+    const id = item.recipeId;
+
+    if (!id) return;
+
+    router.push({
+      pathname: "/(recipe)/recipe",
+      params: { recipeId: id.toString() },
+    });
+  }, []);
 
   useEffect(() => {
     if (selected === t("library.recipes")) {
@@ -62,12 +73,7 @@ const LibraryContent = ({ selected }: HomeContentProps) => {
         <View style={styles.section}>
           <CardsCarousel
             products={recipesAsMealData}
-            onCardPress={(item) => {
-              router.push({
-                pathname: "/(recipe)/recipe",
-                params: { recipeId: item.recipeId?.toString() },
-              });
-            }}
+            onCardPress={handleRecipePress}
             variant="featured"
             isDraggable
           />

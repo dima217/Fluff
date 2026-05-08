@@ -26,7 +26,8 @@ const MealsFlatListComponent = ({
         item={item}
         variant="list"
         onPress={onCardPress}
-        onLikePress={onLikePress}
+        onLike={onLikePress}
+        isDraggable={false}
       />
     ),
     [onCardPress, onLikePress]

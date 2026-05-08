@@ -1,55 +1,60 @@
+import { DraggableMealCard } from "@/shared/ui/Animated/DraggableMealCard";
 import React from "react";
 import { MealData } from "..";
 import MealCard from "./MealCard";
 
-export type MealCardItemProps = {
+type Props = {
   item: MealData;
-
-  onPress: (item: MealData) => void;
-  onLikePress: (item: MealData) => void;
-
-  rightAction?: (item: MealData) => React.ReactNode;
-
   variant?: "carousel" | "list";
+  isDraggable: boolean;
+  dropZoneLayout?: any;
+  setIsOverDropZone?: (v: boolean) => void;
+  onDrop?: (item: MealData) => void;
+  onPress: (item: MealData) => void;
+  onLike: (item: MealData) => void;
+  rightAction?: (item: MealData) => React.ReactNode;
 };
 
-const MealCardItemComponent = ({
+const MealItem = ({
   item,
-  onPress,
-  onLikePress,
-  rightAction,
   variant = "carousel",
-}: MealCardItemProps) => {
-  const handlePress = React.useCallback(() => {
-    onPress(item);
-  }, [onPress, item]);
-
-  const handleLikePress = React.useCallback(() => {
-    onLikePress(item);
-  }, [onLikePress, item]);
-
-  const right = React.useMemo(() => {
-    return rightAction?.(item);
-  }, [rightAction, item]);
-
-  return (
+  isDraggable,
+  dropZoneLayout,
+  setIsOverDropZone,
+  onDrop,
+  onPress,
+  onLike,
+  rightAction,
+}: Props) => {
+  const card = (
     <MealCard
       title={item.title}
       calories={item.calories}
       imageUrl={item.imageUrl}
-      onPress={handlePress}
-      onLikePress={handleLikePress}
-      isLiked={item.isLiked}
-      status={item.status}
-      isFluff={item.isFluff}
-      rightAction={right}
+      onPress={() => onPress(item)}
+      onLikePress={() => onLike(item)}
       variant={variant}
+      status={item.status}
+      isLiked={item.isLiked}
+      isFluff={item.isFluff}
+      rightAction={rightAction?.(item)}
     />
+  );
+
+  if (!isDraggable || !setIsOverDropZone) {
+    return card;
+  }
+
+  return (
+    <DraggableMealCard
+      item={item}
+      dropZoneLayout={dropZoneLayout}
+      setIsOverDropZone={setIsOverDropZone}
+      onDrop={() => onDrop?.(item)}
+    >
+      {card}
+    </DraggableMealCard>
   );
 };
 
-const MealCardItem = React.memo(MealCardItemComponent);
-
-MealCardItem.displayName = "MealCardItem";
-
-export default MealCardItem;
+export default React.memo(MealItem);

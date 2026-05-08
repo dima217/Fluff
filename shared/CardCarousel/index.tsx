@@ -1,10 +1,9 @@
 import { useUpdateProfileMutation } from "@/api";
 import { useDrag } from "@/contexts/DragContext";
+import MealCardItem from "@/shared/CardCarousel/Cards";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { StyleSheet, View, ViewProps } from "react-native";
-import { DraggableMealCard } from "../ui/Animated/DraggableMealCard";
-import MealCard from "./Cards/MealCard";
 import { useMealLikes } from "./hooks/useMealLikes";
 import { useMealsData } from "./hooks/useMealsData";
 import MealsFlatList from "./MealsFlatList";
@@ -57,59 +56,47 @@ const CardsCarousel = ({
 
   const memoizedCards = useMemo(() => {
     return dataWithLikes.map((item) => (
-      <MealCard
+      <MealCardItem
         key={item.id}
-        title={item.title}
-        calories={item.calories}
-        imageUrl={item.imageUrl}
-        onPress={() => onCardPress(item)}
-        onLikePress={() => toggleLike(item)}
+        item={item}
         variant="carousel"
-        status={item.status}
-        isLiked={item.isLiked}
-        isFluff={item.isFluff}
-        rightAction={renderCardRightAction?.(item)}
+        isDraggable={false}
+        onPress={onCardPress}
+        onLike={toggleLike}
+        rightAction={renderCardRightAction}
       />
     ));
-  }, [dataWithLikes, onCardPress, renderCardRightAction, toggleLike]);
+  }, [dataWithLikes, onCardPress, toggleLike, renderCardRightAction]);
 
   const memoizedDraggableCards = useMemo(() => {
-    if (setIsOverDropZone)
-      return dataWithLikes.map((item) => (
-        <DraggableMealCard
-          key={item.id}
-          item={item}
-          dropZoneLayout={dropZoneLayout}
-          setIsOverDropZone={setIsOverDropZone}
-          onDrop={(item) => {
-            updateProfile({
-              recipeToCheatMealId: Number(item.id),
-            });
-          }}
-        >
-          <MealCard
-            key={item.id}
-            title={item.title}
-            calories={item.calories}
-            imageUrl={item.imageUrl}
-            onPress={() => onCardPress(item)}
-            onLikePress={() => toggleLike(item)}
-            variant="carousel"
-            status={item.status}
-            isLiked={item.isLiked}
-            isFluff={item.isFluff}
-            rightAction={renderCardRightAction?.(item)}
-          />
-        </DraggableMealCard>
-      ));
+    if (!setIsOverDropZone) return null;
+
+    return dataWithLikes.map((item) => (
+      <MealCardItem
+        key={item.id}
+        item={item}
+        variant="carousel"
+        isDraggable
+        dropZoneLayout={dropZoneLayout}
+        setIsOverDropZone={setIsOverDropZone}
+        onDrop={(item) => {
+          updateProfile({
+            recipeToCheatMealId: Number(item.id),
+          });
+        }}
+        onPress={onCardPress}
+        onLike={toggleLike}
+        rightAction={renderCardRightAction}
+      />
+    ));
   }, [
     dataWithLikes,
     dropZoneLayout,
-    onCardPress,
-    renderCardRightAction,
     setIsOverDropZone,
-    toggleLike,
     updateProfile,
+    onCardPress,
+    toggleLike,
+    renderCardRightAction,
   ]);
 
   if (isCarouselVariant) {

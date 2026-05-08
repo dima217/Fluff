@@ -26,13 +26,14 @@ const TrackingItem: React.FC<TrackingItemProps> = ({ record, onPress }) => {
       <MealCardItem
         item={item}
         onPress={() => onPress(record.recipe?.id)}
-        onLikePress={() =>
+        onLike={() =>
           toggleFavorite({
             id: record.recipe!.id,
             isFavorite: record.recipe!.favorite,
             type: "recipe",
           })
         }
+        isDraggable={false}
       />
     );
   }
