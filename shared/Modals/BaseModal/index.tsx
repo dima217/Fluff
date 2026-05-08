@@ -4,7 +4,14 @@ import Button from "@/shared/Buttons/Button";
 import GradientView from "@/shared/ui/GradientView";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import React, { ReactNode } from "react";
-import { Modal, StyleSheet, View, ViewStyle } from "react-native";
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from "react-native";
 
 export interface BaseModalButton {
   title: string;
@@ -22,7 +29,6 @@ export interface BaseModalProps {
   buttons?: BaseModalButton[];
   onClose?: () => void;
   width?: string | number;
-  height?: string | number;
   titleType?: "title" | "subtitle" | "default" | "mini" | "notion" | "s" | "xs";
   messageType?:
     | "title"
@@ -42,22 +48,19 @@ const BaseModal: React.FC<BaseModalProps> = ({
   buttons,
   onClose,
   width = "85%",
-  height = "32%",
   titleType = "subtitle",
   messageType = "default",
 }) => {
   const { t } = useTranslation();
 
-  const handleRequestClose = () => {
-    if (onClose) {
-      onClose();
-    }
+  const handleClose = () => {
+    onClose?.();
   };
 
-  const defaultButtons: BaseModalButton[] = buttons || [
+  const finalButtons: BaseModalButton[] = buttons || [
     {
       title: t("common.close"),
-      onPress: handleRequestClose,
+      onPress: handleClose,
       variant: "primary",
     },
   ];
@@ -65,68 +68,69 @@ const BaseModal: React.FC<BaseModalProps> = ({
   return (
     <Modal
       visible={isVisible}
-      transparent={true}
+      transparent
       animationType="fade"
-      onRequestClose={handleRequestClose}
+      onRequestClose={handleClose}
     >
-      <View style={styles.centeredView}>
-        <View
-          style={[
-            styles.innerContainer,
-            {
-              width:
-                typeof width === "number"
-                  ? width
-                  : typeof width === "string"
-                    ? (width as `${number}%`)
-                    : undefined,
-              height:
-                typeof height === "number"
-                  ? height
-                  : typeof height === "string"
-                    ? (height as `${number}%`)
-                    : undefined,
-            },
-          ]}
-        >
-          <GradientView style={styles.modalView}>
-            {title && (
-              <ThemedText type={titleType} style={styles.modalTitle}>
-                {title}
-              </ThemedText>
-            )}
-            {message && (
-              <ThemedText type={messageType} style={styles.modalText}>
-                {message}
-              </ThemedText>
-            )}
-            {children && (
-              <View style={styles.childrenContainer}>{children}</View>
-            )}
-            <View style={styles.buttonContainer}>
-              {defaultButtons.map((button, index) => (
-                <Button
-                  key={index}
-                  title={button.title}
-                  onPress={button.onPress}
-                  style={[
-                    styles.button,
-                    button.variant === "primary" && styles.buttonPrimary,
-                    button.variant === "secondary" && styles.buttonSecondary,
-                    button.style,
-                  ]}
-                  textColor={
-                    button.textColor ||
-                    (button.variant === "secondary"
-                      ? Colors.primary
-                      : undefined)
-                  }
-                />
-              ))}
-            </View>
-          </GradientView>
+      {/* backdrop */}
+      <Pressable style={styles.backdrop} onPress={handleClose}>
+        <View style={[styles.centerWrapper]}>
+          {/* modal container */}
+          <Pressable
+            style={[
+              styles.container,
+              {
+                width: Number(width),
+              },
+            ]}
+          >
+            <GradientView style={styles.modal}>
+              {/* content scroll (important for long text) */}
+              <ScrollView
+                contentContainerStyle={styles.content}
+                showsVerticalScrollIndicator={false}
+              >
+                {title && (
+                  <ThemedText type={titleType} style={styles.title}>
+                    {title}
+                  </ThemedText>
+                )}
+
+                {message && (
+                  <ThemedText type={messageType} style={styles.message}>
+                    {message}
+                  </ThemedText>
+                )}
+
+                {children && <View style={styles.children}>{children}</View>}
+              </ScrollView>
+
+              {/* buttons always fixed bottom */}
+              <View style={styles.buttons}>
+                {finalButtons.map((button, index) => (
+                  <Button
+                    key={index}
+                    title={button.title}
+                    onPress={button.onPress}
+                    style={[
+                      styles.button,
+                      button.variant === "primary" && styles.primary,
+                      button.variant === "secondary" && styles.secondary,
+                      button.style,
+                    ]}
+                    textColor={
+                      button.textColor ||
+                      (button.variant === "secondary"
+                        ? Colors.primary
+                        : undefined)
+                    }
+                  />
+                ))}
+              </View>
+            </GradientView>
+          </Pressable>
         </View>
-      </View>
+      </Pressable>
     </Modal>
   );
 };
@@ -134,57 +138,61 @@ const BaseModal: React.FC<BaseModalProps> = ({
 export default BaseModal;
 
 const styles = StyleSheet.create({
-  centeredView: {
+  backdrop: {
     flex: 1,
+    backgroundColor: "rgba(0,0,0,0.6)",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
   },
-  innerContainer: {
-    width: "85%",
-    height: "32%",
-  },
-  modalView: {
-    borderRadius: 12,
-    justifyContent: "center",
-    padding: 12,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+
+  centerWrapper: {
     width: "100%",
-    maxWidth: 400,
+    alignItems: "center",
   },
-  modalTitle: {
-    marginBottom: 10,
+
+  container: {
+    width: "100%",
   },
-  modalText: {
-    marginBottom: 20,
+
+  modal: {
+    borderRadius: 14,
+    padding: 30,
+    width: "85%",
+    flex: 0,
+  },
+
+  content: {
+    paddingBottom: 12,
+  },
+
+  title: {
+    marginBottom: 8,
     textAlign: "center",
   },
-  childrenContainer: {
-    width: "100%",
-    marginBottom: 20,
+
+  message: {
+    marginBottom: 12,
+    textAlign: "center",
   },
-  buttonContainer: {
-    flexDirection: "column",
-    alignItems: "center",
+
+  children: {
     width: "100%",
+    marginBottom: 12,
+  },
+
+  buttons: {
     gap: 10,
   },
+
   button: {
-    elevation: 2,
-    marginHorizontal: 5,
+    width: "100%",
   },
-  buttonPrimary: {
+
+  primary: {
     backgroundColor: Colors.primary,
   },
-  buttonSecondary: {
+
+  secondary: {
     backgroundColor: Colors.text,
     borderWidth: 1,
     borderColor: Colors.primary,
