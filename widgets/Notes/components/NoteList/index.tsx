@@ -19,16 +19,20 @@ interface NoteListProps {
 }
 
 const NoteList = ({ notes }: NoteListProps) => {
- const [search, setSearch] = useState("");
- const [filteredNotes, setFilteredNotes] = useState<NoteListItem[]>(notes);
- 
- const handleSearch = (text: string) => {
-  setSearch(text);
- }
+  const [search, setSearch] = useState("");
+  const [filteredNotes, setFilteredNotes] = useState<NoteListItem[]>(notes);
 
- useEffect(() => {
-  setFilteredNotes(notes.filter((note) => note.title.toLowerCase().includes(search.toLowerCase())));
- }, [search, notes]);
+  const handleSearch = (text: string) => {
+    setSearch(text);
+  };
+
+  useEffect(() => {
+    setFilteredNotes(
+      notes.filter((note) =>
+        note.title.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search, notes]);
 
   return (
     <View style={styles.listContainer}>
@@ -39,15 +43,15 @@ const NoteList = ({ notes }: NoteListProps) => {
         inputContainerStyle={styles.searchInputContainer}
         right={<Circle onPress={() => {}} svg={<SerchLight />} />}
         onChangeText={handleSearch}
-        value={search}
+        defaultValue={search}
       />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {filteredNotes.map((note) => (
-        <View key={note.id} style={styles.noteCardContainer}>
-          <NoteCard key={note.id} {...note} />
-        </View>
-      ))}
-    </ScrollView>
+        {filteredNotes.map((note) => (
+          <View key={note.id} style={styles.noteCardContainer}>
+            <NoteCard key={note.id} {...note} />
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 };
@@ -55,22 +59,22 @@ const NoteList = ({ notes }: NoteListProps) => {
 export default NoteList;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    noteCardContainer: {
-        marginBottom: 10,
-    },
-    listContainer: {
-        flex: 1,
-        gap: 10,
-    },
-    searchInput: {
-      borderWidth: 0,
-      backgroundColor: "transparent",
-    },
-    searchInputContainer: {
-      borderWidth: 0,
-      paddingRight: 6,
-    },
+  container: {
+    flex: 1,
+  },
+  noteCardContainer: {
+    marginBottom: 10,
+  },
+  listContainer: {
+    flex: 1,
+    gap: 10,
+  },
+  searchInput: {
+    borderWidth: 0,
+    backgroundColor: "transparent",
+  },
+  searchInputContainer: {
+    borderWidth: 0,
+    paddingRight: 6,
+  },
 });

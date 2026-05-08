@@ -4,18 +4,10 @@ import { ThemedText } from "@/shared/ui/ThemedText";
 import View from "@/shared/View";
 import { notesStorage, type Note } from "@/utils/notesStorage";
 import NoteList from "@/widgets/Notes/components/NoteList";
+import { getNoteItems } from "@/widgets/Notes/utils";
 import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Pressable, View as RNView, StyleSheet } from "react-native";
-
-const formatDate = (iso: string) => {
-  const d = new Date(iso);
-  return d.toLocaleDateString(undefined, {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-};
 
 const Notes = () => {
   const router = useRouter();
@@ -27,44 +19,52 @@ const Notes = () => {
     }, [])
   );
 
-  const handleCreate = () => {
+  const handleCreate = useCallback(() => {
     router.push("/(app)/library/note-create");
-  };
+  }, [router]);
 
-  const handleNotePress = (note: Note) => {
-    router.push({
-      pathname: "/(app)/library/note-create",
-      params: { id: note.id },
-    });
-  };
+  const handleNotePress = useCallback(
+    (note: Note) => {
+      router.push({
+        pathname: "/(app)/library/note-create",
+        params: { id: note.id },
+      });
+    },
+    [router]
+  );
 
-  const handleDelete = (id: string) => {
+  const handleDelete = useCallback((id: string) => {
     notesStorage.remove(id);
     setNotes(notesStorage.getAll());
-  };
+  }, []);
 
-  const noteItems = notes.map((n) => ({
-    id: n.id,
-    title: n.title,
-    createdAt: formatDate(n.createdAt),
-    onPress: () => handleNotePress(n),
-    onDelete: () => handleDelete(n.id),
-  }));
+  const noteItems = useMemo(
+    () =>
+      getNoteItems(notes, {
+        onPress: handleNotePress,
+        onDelete: handleDelete,
+      }),
+    [notes, handleNotePress, handleDelete]
+  );
 
   return (
     <View>
       <Header title="Notes" />
+
       <RNView style={styles.container}>
         <NoteList notes={noteItems} />
+
         <RNView style={styles.createBtnContainer}>
-        <Pressable onPress={handleCreate} style={styles.createBtn}>
-          <ThemedText type="s">New note</ThemedText>
-        </Pressable>
+          <Pressable onPress={handleCreate} style={styles.createBtn}>
+            <ThemedText type="s">New note</ThemedText>
+          </Pressable>
         </RNView>
       </RNView>
     </View>
   );
 };
+
+export default Notes;
 
 const styles = StyleSheet.create({
   container: {
@@ -85,5 +85,3 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
 });
-
-export default Notes;

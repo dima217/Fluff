@@ -1,5 +1,8 @@
 import { NotificationResponse } from "@/api";
-import { useGetNotificationQuery, useMarkNotificationsAsReadMutation } from "@/api/slices/authApi";
+import {
+  useGetNotificationQuery,
+  useMarkNotificationsAsReadMutation,
+} from "@/api/slices/authApi";
 import { Colors } from "@/constants/design-tokens";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import NotificationCard from "@/widgets/Notifications/components/NotificationCard";
@@ -12,16 +15,16 @@ const NotificationsSections = () => {
   const { data, isLoading } = useGetNotificationQuery();
   const [markAsRead] = useMarkNotificationsAsReadMutation();
   const grouped = groupNotifications(data || []);
-  
+
   const unreadIdsRef = useRef<number[]>([]);
 
   useFocusEffect(
     useCallback(() => {
       if (data && data.length > 0) {
         const unreadIds = data
-          .filter(notification => !notification.isRead)
-          .map(notification => notification.id);
-        
+          .filter((notification) => !notification.isRead)
+          .map((notification) => notification.id);
+
         unreadIdsRef.current = unreadIds;
       }
       return () => {
@@ -34,7 +37,7 @@ const NotificationsSections = () => {
 
   const renderSection = (
     title: string,
-    notifications: NotificationResponse[],
+    notifications: NotificationResponse[]
   ) => {
     if (notifications.length === 0) return null;
     return (

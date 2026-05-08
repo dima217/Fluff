@@ -1,23 +1,22 @@
 import { Colors } from "@/constants/design-tokens";
 import Header from "@/shared/Header";
-import LongTextInput from "@/shared/Inputs/LongTextInput";
-import TextInput from "@/shared/Inputs/TextInput";
-import { ThemedText } from "@/shared/ui/ThemedText";
+import AutoGrowingTextInput from "@/shared/Inputs/AutoGrowingTextInput";
+import BorderlessTextInput from "@/shared/Inputs/BorderlessTextInput";
 import View from "@/shared/View";
 import { notesStorage } from "@/utils/notesStorage";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
+  View as RNView,
   StyleSheet,
 } from "react-native";
 
 const NoteCreate = () => {
-  const router = useRouter();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const isEdit = Boolean(id);
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -33,66 +32,85 @@ const NoteCreate = () => {
 
   const canEditContent = title.trim().length > 0;
 
-  const handleSave = () => {
+  const saveNote = () => {
     const trimmedTitle = title.trim();
-    if (!trimmedTitle) return;
+    const trimmedContent = content.trim();
+
+    if (!isEdit && !trimmedTitle) return;
+
     if (isEdit && id) {
-      notesStorage.update(id, { title: trimmedTitle, content: content.trim() });
+      const existing = notesStorage.getById(id);
+
+      if (!existing) return;
+
+      notesStorage.update(id, {
+        title: trimmedTitle || existing.title,
+        content: trimmedContent,
+      });
     } else {
-      notesStorage.add({ title: trimmedTitle, content: content.trim() });
+      notesStorage.add({
+        title: trimmedTitle,
+        content: trimmedContent,
+      });
     }
-    router.back();
   };
 
-  const canSave = title.trim().length > 0;
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        saveNote();
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [title, content])
+  );
 
   return (
     <View>
       <Header title={isEdit ? "Edit note" : "New note"} />
+
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboard}
       >
-        <TextInput
-          label="Title"
-          placeholder="Note title..."
-          placeholderTextColor={Colors.border}
-          value={title}
-          onChangeText={setTitle}
-          style={styles.input}
-        />
-        <LongTextInput
-          label="Content"
-          placeholder={
-            canEditContent ? "Write your note..." : "Enter title first"
-          }
-          placeholderTextColor={Colors.border}
-          value={content}
-          onChangeText={setContent}
-          editable={canEditContent}
-          style={styles.input}
-          height={200}
-        />
-        <Pressable
-          onPress={handleSave}
-          disabled={!canSave}
-          style={[styles.saveBtn, !canSave && styles.saveBtnDisabled]}
-        >
-          <ThemedText type="s">Save</ThemedText>
-        </Pressable>
+        {/* CARD CONTAINER */}
+        <RNView style={styles.card}>
+          <BorderlessTextInput
+            placeholder="Note title..."
+            placeholderTextColor={Colors.border}
+            value={title}
+            onChangeText={setTitle}
+          />
+
+          <AutoGrowingTextInput
+            placeholder={
+              canEditContent ? "Write your note..." : "Enter title first"
+            }
+            placeholderTextColor={Colors.border}
+            value={content}
+            onChangeText={setContent}
+            editable={canEditContent}
+            minHeight={120}
+          />
+        </RNView>
       </KeyboardAvoidingView>
     </View>
   );
 };
+
+export default NoteCreate;
 
 const styles = StyleSheet.create({
   keyboard: {
     paddingTop: 20,
     flex: 1,
   },
-  input: {
-    marginBottom: 16,
+
+  card: {
+    borderRadius: 16,
+    paddingTop: 16,
+    gap: 26,
   },
+
   saveBtn: {
     marginTop: 24,
     backgroundColor: Colors.primary,
@@ -100,9 +118,8 @@ const styles = StyleSheet.create({
     borderRadius: 29,
     alignItems: "center",
   },
+
   saveBtnDisabled: {
     opacity: 0.5,
   },
 });
-
-export default NoteCreate;
