@@ -4,7 +4,10 @@ import {
 } from "@/hooks/useCheatMealDay";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useRouter } from "expo-router";
+import { useRef } from "react";
 import { StyleSheet, View } from "react-native";
+
+import { useDrag } from "@/contexts/DragContext";
 import CheatMealCard from "./components/MealSection";
 import FoodUploadCard from "./components/UploadSection";
 
@@ -18,12 +21,17 @@ const qrImage = require("../../assets/images/Qr.png");
 const Library = () => {
   const { t } = useTranslation();
   const router = useRouter();
+
   const settings = useCheatMealSettings();
   const isCheatMealDay = useIsCheatMealDay();
   const showCheatMealLock = settings.configured === true;
 
+  const { dropZoneLayout } = useDrag();
+  const dropZoneRef = useRef<View>(null);
+
   return (
     <View style={styles.container}>
+      {/* LEFT SIDE */}
       <View style={styles.leftColumn}>
         <FoodUploadCard
           title={t("library.myUploads")}
@@ -33,7 +41,17 @@ const Library = () => {
         />
       </View>
 
-      <View style={styles.rightColumn}>
+      {/* RIGHT SIDE = DROP ZONE */}
+      <View
+        ref={dropZoneRef}
+        style={styles.rightColumn}
+        onLayout={() => {
+          dropZoneRef.current?.measureInWindow((x, y, width, height) => {
+            dropZoneLayout.value = { x, y, width, height };
+          });
+        }}
+      >
+        {/* CHEAT MEAL */}
         <CheatMealCard
           title={t("library.cheatMeal")}
           textHint={t("library.cheatMealHint")}
@@ -45,6 +63,7 @@ const Library = () => {
           isUnlocked={isCheatMealDay}
         />
 
+        {/* NOTES */}
         <CheatMealCard
           title={t("library.scanner")}
           textHint={t("library.scannerHint")}
@@ -57,6 +76,8 @@ const Library = () => {
     </View>
   );
 };
+
+export default Library;
 
 const styles = StyleSheet.create({
   container: {
@@ -77,5 +98,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-export default Library;

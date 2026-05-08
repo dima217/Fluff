@@ -2,6 +2,7 @@ import { store } from "@/api/store";
 import { Colors } from "@/constants/design-tokens";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LocalizationProvider } from "@/contexts/LocalizationContext";
+import { DragProvider } from "@/providers/DragProvider";
 import { PushNotificationsController } from "@/providers/PushNotificationsController";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -33,25 +34,27 @@ export default function RootLayout() {
       <LocalizationProvider>
         <AuthProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <Stack
-              screenOptions={{
-                contentStyle: {
-                  backgroundColor: Colors.background,
-                },
-                presentation: "transparentModal",
-                headerShown: false,
-              }}
-            >
-              <Stack.Screen name="(app)" options={{ headerShown: false }} />
-              <Stack.Screen name="(search)" options={{ headerShown: false }} />
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="(recipe)" options={{ headerShown: false }} />
+            <DragProvider>
+              <Stack
+                screenOptions={{
+                  contentStyle: {
+                    backgroundColor: Colors.background,
+                  },
+                  presentation: "transparentModal",
+                  headerShown: false,
+                }}
+              >
+                <Stack.Screen name="(app)" />
+                <Stack.Screen name="(search)" />
+                <Stack.Screen name="(auth)" />
+                <Stack.Screen name="(recipe)" />
+                <Stack.Screen name="onboarding" />
+                <Stack.Screen name="notifications" />
+                <Stack.Screen name="+not-found" />
+              </Stack>
 
-              <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-              <Stack.Screen name="notifications" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-            <StatusBar style="auto" />
+              <StatusBar style="auto" />
+            </DragProvider>
           </GestureHandlerRootView>
         </AuthProvider>
       </LocalizationProvider>

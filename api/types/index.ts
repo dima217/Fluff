@@ -70,6 +70,7 @@ export interface ProfileResponse {
   sportActivity?: string;
   cheatMealDay: string;
   periodOfDays: string;
+  cheatMeal: number[];
 }
 
 export interface UpdateProfileRequest {
@@ -84,6 +85,8 @@ export interface UpdateProfileRequest {
   sportActivity?: string;
   cheatMealDay?: string;
   periodOfDays?: string;
+  recipeToCheatMealId?: number;
+  recipeFromCheatMealId?: number;
 }
 
 // Recipe types

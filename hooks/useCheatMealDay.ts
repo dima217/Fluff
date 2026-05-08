@@ -11,8 +11,6 @@ export function useCheatMealSettings() {
 }
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
-const REFERENCE_DATE = new Date(2026, 0, 1).getTime();
-
 /**
  * Returns true if today is a cheat meal day based on user settings.
  * Logic: first cheat day = REFERENCE_DATE + (cheatMealDay - 1) days;
@@ -26,7 +24,6 @@ export function useIsCheatMealDay(): boolean {
     console.log("cheatDay", cheatDay);
     const period = parseInt(settings.periodOfDays, 10) || 7;
 
-    const now = new Date();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 

@@ -4,7 +4,7 @@ import { ReactNode, useCallback, useEffect, useRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
-  useSharedValue
+  useSharedValue,
 } from "react-native-reanimated";
 import { WheelItem } from "./components/WheelItem";
 
@@ -139,9 +139,10 @@ export function AnimatedWheelPicker<
         scrollEventThrottle={16}
         scrollEnabled={isScrollEnabled}
         contentContainerStyle={contentPaddingStyle}
-        initialNumToRender={Math.min(data.length, visibleCount + 2)}
-        maxToRenderPerBatch={Math.max(visibleCount + 2, 8)}
-        windowSize={5}
+        initialNumToRender={Math.min(data.length, visibleCount)}
+        maxToRenderPerBatch={1}
+        windowSize={2}
+        updateCellsBatchingPeriod={50}
         removeClippedSubviews
         getItemLayout={(_, index) => ({
           length: itemSize,

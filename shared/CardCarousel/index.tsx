@@ -1,17 +1,13 @@
-import {
-  useAddToFavoritesMutation,
-  useRemoveFromFavoritesMutation,
-} from "@/api";
+import { useUpdateProfileMutation } from "@/api";
+import { useDrag } from "@/contexts/DragContext";
 import type { ReactNode } from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  FlatList,
-  ListRenderItemInfo,
-  StyleSheet,
-  View,
-  ViewProps,
-} from "react-native";
-import MealCard from "./Cards";
+import { useMemo } from "react";
+import { StyleSheet, View, ViewProps } from "react-native";
+import { DraggableMealCard } from "../ui/Animated/DraggableMealCard";
+import MealCard from "./Cards/MealCard";
+import { useMealLikes } from "./hooks/useMealLikes";
+import { useMealsData } from "./hooks/useMealsData";
+import MealsFlatList from "./MealsFlatList";
 import { featuredRecipes, mealsToday } from "./mock";
 
 export interface MealData {
@@ -26,7 +22,7 @@ export interface MealData {
   isFluff: boolean;
 }
 
-type CardsScrollVariant = "featured" | "mealsToday";
+export type CardsScrollVariant = "featured" | "mealsToday";
 
 interface CardsScrollProps extends ViewProps {
   variant: CardsScrollVariant;
@@ -34,30 +30,9 @@ interface CardsScrollProps extends ViewProps {
   onCardPress: (item: MealData) => void;
   onLikePress?: (item: MealData) => void; // Optional custom handler, if not provided uses built-in logic
   onScrollToEnd?: () => void; // Callback when user scrolls near the end
-  /** Кастомная иконка справа на карточке (например редактирование). По умолчанию — лайк */
   renderCardRightAction?: (item: MealData) => ReactNode;
+  isDraggable?: boolean;
 }
-
-const renderListItem = (
-  { item }: ListRenderItemInfo<MealData>,
-  onCardPress: (item: MealData) => void,
-  onLikePress?: (item: MealData) => void,
-  renderCardRightAction?: (item: MealData) => ReactNode
-) => (
-  <MealCard
-    key={item.id}
-    title={item.title}
-    calories={item.calories}
-    imageUrl={item.imageUrl}
-    onPress={() => onCardPress(item)}
-    onLikePress={onLikePress ? () => onLikePress(item) : undefined}
-    variant="list"
-    status={item.status}
-    isLiked={item.isLiked}
-    rightAction={renderCardRightAction?.(item)}
-    isFluff={item.isFluff}
-  />
-);
 
 const CardsCarousel = ({
   variant,
@@ -65,104 +40,20 @@ const CardsCarousel = ({
   onCardPress,
   onLikePress: customOnLikePress,
   onScrollToEnd,
+  isDraggable = false,
   renderCardRightAction,
 }: CardsScrollProps) => {
   const isCarouselVariant = variant === "featured";
 
-  const [addToFavorites] = useAddToFavoritesMutation();
-  const [removeFromFavorites] = useRemoveFromFavoritesMutation();
-
-  const [localLikes, setLocalLikes] = useState<Record<string, boolean>>({});
-  const [isInitialized, setIsInitialized] = useState(false);
+  const { dropZoneLayout, setIsOverDropZone } = useDrag();
 
   const mockData = isCarouselVariant ? featuredRecipes : mealsToday;
   const finalData = products && products.length > 0 ? products : mockData;
+  const [updateProfile] = useUpdateProfileMutation();
 
-  useEffect(() => {
-    if (finalData && !isInitialized) {
-      const initialLikes: Record<string, boolean> = {};
-      finalData.forEach((item) => {
-        const key = item.productId
-          ? `product-${item.productId}`
-          : item.recipeId
-            ? `recipe-${item.recipeId}`
-            : item.id;
-        initialLikes[key] = item.isLiked ?? false;
-      });
-      setLocalLikes(initialLikes);
-      setIsInitialized(true);
-    }
-  }, [finalData, isInitialized]);
+  const { likes, toggleLike } = useMealLikes(finalData);
 
-  const handleLike = useCallback(
-    async (item: MealData) => {
-      const key = item.productId
-        ? `product-${item.productId}`
-        : item.recipeId
-          ? `recipe-${item.recipeId}`
-          : item.id;
-
-      const currentLiked = localLikes[key] ?? item.isLiked ?? false;
-
-      const newLikedState = !currentLiked;
-      setLocalLikes((prev) => ({
-        ...prev,
-        [key]: newLikedState,
-      }));
-
-      try {
-        if (item.productId) {
-          if (currentLiked) {
-            await removeFromFavorites({
-              type: "product",
-              id: item.productId,
-            }).unwrap();
-          } else {
-            await addToFavorites({
-              type: "product",
-              id: item.productId,
-            }).unwrap();
-          }
-        } else if (item.recipeId) {
-          if (currentLiked) {
-            await removeFromFavorites({
-              type: "recipe",
-              id: item.recipeId,
-            }).unwrap();
-          } else {
-            await addToFavorites({
-              type: "recipe",
-              id: item.recipeId,
-            }).unwrap();
-          }
-        }
-      } catch (error) {
-        console.error("Failed to toggle favorite:", error);
-        setLocalLikes((prev) => ({
-          ...prev,
-          [key]: currentLiked,
-        }));
-      }
-    },
-    [addToFavorites, removeFromFavorites, localLikes]
-  );
-  const dataWithLikes = useMemo(() => {
-    return finalData.map((item) => {
-      const key = item.productId
-        ? `product-${item.productId}`
-        : item.recipeId
-          ? `recipe-${item.recipeId}`
-          : item.id;
-      const isLiked = localLikes[key] ?? item.isLiked ?? false;
-
-      return {
-        ...item,
-        isLiked,
-      };
-    });
-  }, [finalData, localLikes]);
-
-  const onLikePress = customOnLikePress || handleLike;
+  const dataWithLikes = useMealsData(finalData, variant, likes);
 
   const memoizedCards = useMemo(() => {
     return dataWithLikes.map((item) => (
@@ -172,7 +63,7 @@ const CardsCarousel = ({
         calories={item.calories}
         imageUrl={item.imageUrl}
         onPress={() => onCardPress(item)}
-        onLikePress={onLikePress ? () => onLikePress(item) : undefined}
+        onLikePress={() => toggleLike(item)}
         variant="carousel"
         status={item.status}
         isLiked={item.isLiked}
@@ -180,56 +71,60 @@ const CardsCarousel = ({
         rightAction={renderCardRightAction?.(item)}
       />
     ));
-  }, [dataWithLikes, onCardPress, onLikePress, renderCardRightAction]);
+  }, [dataWithLikes, onCardPress, renderCardRightAction, toggleLike]);
 
-  const getListRenderItem = (props: ListRenderItemInfo<MealData>) => {
-    return renderListItem(
-      props,
-      onCardPress,
-      onLikePress,
-      renderCardRightAction
-    );
-  };
-
-  // Handle scroll for horizontal FlatList (onEndReached doesn't work for horizontal lists)
-  const handleHorizontalScroll = useCallback(
-    (event: any) => {
-      if (!onScrollToEnd) return;
-
-      const { layoutMeasurement, contentOffset, contentSize } =
-        event.nativeEvent;
-      const paddingToEnd = 200; // Load more when 200px from end
-      const isCloseToEnd =
-        layoutMeasurement.width + contentOffset.x >=
-        contentSize.width - paddingToEnd;
-
-      if (isCloseToEnd) {
-        onScrollToEnd();
-      }
-    },
-    [onScrollToEnd]
-  );
+  const memoizedDraggableCards = useMemo(() => {
+    if (setIsOverDropZone)
+      return dataWithLikes.map((item) => (
+        <DraggableMealCard
+          key={item.id}
+          item={item}
+          dropZoneLayout={dropZoneLayout}
+          setIsOverDropZone={setIsOverDropZone}
+          onDrop={(item) => {
+            updateProfile({
+              recipeToCheatMealId: Number(item.id),
+            });
+          }}
+        >
+          <MealCard
+            key={item.id}
+            title={item.title}
+            calories={item.calories}
+            imageUrl={item.imageUrl}
+            onPress={() => onCardPress(item)}
+            onLikePress={() => toggleLike(item)}
+            variant="carousel"
+            status={item.status}
+            isLiked={item.isLiked}
+            isFluff={item.isFluff}
+            rightAction={renderCardRightAction?.(item)}
+          />
+        </DraggableMealCard>
+      ));
+  }, [
+    dataWithLikes,
+    dropZoneLayout,
+    onCardPress,
+    renderCardRightAction,
+    setIsOverDropZone,
+    toggleLike,
+    updateProfile,
+  ]);
 
   if (isCarouselVariant) {
     return (
       <View style={[styles.container, styles.verticalList]}>
-        {memoizedCards}
+        {isDraggable ? memoizedDraggableCards : memoizedCards}
       </View>
     );
   }
   return (
     <View style={[styles.container]}>
-      <FlatList
+      <MealsFlatList
         data={dataWithLikes}
-        bounces={false}
-        renderItem={getListRenderItem}
-        horizontal={true}
-        keyExtractor={(item) => item.id}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.carouselList}
-        onScroll={handleHorizontalScroll}
-        scrollEventThrottle={16}
-        onMomentumScrollEnd={handleHorizontalScroll}
+        onCardPress={onCardPress}
+        onLikePress={toggleLike}
       />
     </View>
   );
@@ -238,6 +133,8 @@ const CardsCarousel = ({
 const styles = StyleSheet.create({
   container: {
     alignSelf: "stretch",
+    zIndex: 1,
+    elevation: 1,
   },
   sectionTitle: {
     color: "white",

@@ -1,5 +1,6 @@
 import { baseApi } from "../baseApi";
 import type { ProfileResponse, UpdateProfileRequest } from "../types";
+import { setProfile } from "./userSlice";
 
 export const profileApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,6 +17,17 @@ export const profileApi = baseApi.injectEndpoints({
         method: "PUT",
         body,
       }),
+
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+
+          dispatch(setProfile(data));
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
       invalidatesTags: ["Profile"],
     }),
   }),

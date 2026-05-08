@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { baseApi } from './baseApi';
-import userReducer from './slices/userSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import { baseApi } from "./baseApi";
+import userReducer, { UserState } from "./slices/userSlice";
 import {
   getPersistedIsAuthenticated,
   setPersistedIsAuthenticated,
-} from './utils/authSessionStorage';
+} from "./utils/authSessionStorage";
 
 export const store = configureStore({
   reducer: {
@@ -16,13 +16,13 @@ export const store = configureStore({
       profile: null,
       isLoading: false,
       isAuthenticated: getPersistedIsAuthenticated(),
-    },
+    } as UserState,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ['persist/PERSIST'],
+        ignoredActions: ["persist/PERSIST"],
       },
     }).concat(baseApi.middleware),
 });

@@ -3,7 +3,7 @@ import type { ProfileResponse } from "../types";
 import { authApi } from "./authApi";
 import { profileApi } from "./profileApi";
 
-interface UserState {
+export interface UserState {
   profile: ProfileResponse | null;
   isAuthenticated: boolean;
   isLoading: boolean;

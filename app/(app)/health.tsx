@@ -1,4 +1,8 @@
-import { RootState, useCreateTrackingMutation, useGetCalendarQuery } from "@/api";
+import {
+  RootState,
+  useCreateTrackingMutation,
+  useGetCalendarQuery,
+} from "@/api";
 import { Colors } from "@/constants/design-tokens";
 import { getAge } from "@/services/equation/age";
 import { calculateDailyCalories } from "@/services/equation/calories";
@@ -27,7 +31,7 @@ const Health = () => {
     profile?.gender
   ) {
     const age = getAge(profile.birthDate);
-  
+
     dailyGoal = calculateDailyCalories({
       weight: Number(profile.weight),
       height: Number(profile.height),
@@ -114,6 +118,7 @@ const Health = () => {
           {label}
         </ThemedText>
         <AnimatedWheelPicker
+          itemSize={60}
           containerStyle={styles.animatedWheelPicker}
           selectStyle={styles.selectContainer}
           data={pickerData.data}

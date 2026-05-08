@@ -32,7 +32,6 @@ const CheatMealCard = ({
   showLock,
   isUnlocked = true,
 }: CheatMealCardProps) => {
-  console.log("isUnlocked", isUnlocked);
   const locked = showLock && !isUnlocked;
   const handlePress = locked ? undefined : onPress;
 

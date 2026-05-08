@@ -1,6 +1,6 @@
 import { useGetRecipeByIdQuery } from "@/api";
 import type { MealData } from "@/shared/CardCarousel";
-import MealCard from "@/shared/CardCarousel/Cards";
+import MealCard from "@/shared/CardCarousel/Cards/MealCard";
 import { useMemo } from "react";
 import { View } from "react-native";
 

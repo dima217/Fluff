@@ -63,7 +63,6 @@ interface DeleteRecipeCardActionProps {
   onDelete: (item: MealData) => void;
 }
 
-/** Иконка удаления (мусорка) */
 export function DeleteRecipeCardAction({
   item,
   onDelete,

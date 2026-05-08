@@ -1,10 +1,12 @@
 // components/HomeContent.tsx
+import { useAppSelector } from "@/api";
 import {
   useLazyGetFavoriteProductsQuery,
   useLazyGetFavoriteRecipesQuery,
 } from "@/api/slices";
 import { useTranslation } from "@/hooks/useTranslation";
 import CardsCarousel from "@/shared/CardCarousel";
+import ActivityIndicator from "@/shared/ui/ActivityIndicator";
 import {
   getProductsAsMealData,
   getRecipesAsMealData,
@@ -29,6 +31,8 @@ const LibraryContent = ({ selected }: HomeContentProps) => {
     { data: productsResponse, isLoading: isLoadingProducts },
   ] = useLazyGetFavoriteProductsQuery();
 
+  const cheatMealIds = useAppSelector((state) => state.user.profile?.cheatMeal);
+
   useEffect(() => {
     if (selected === t("library.recipes")) {
       getFavoriteRecipes();
@@ -39,7 +43,21 @@ const LibraryContent = ({ selected }: HomeContentProps) => {
 
   switch (selected) {
     case t("library.recipes"):
-      const recipesAsMealData = getRecipesAsMealData(recipesResponse || []);
+      if (isLoadingRecipes) {
+        return (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" />
+          </View>
+        );
+      }
+
+      const filteredRecipes =
+        recipesResponse?.filter(
+          (product) => !cheatMealIds?.includes(product.id)
+        ) || [];
+
+      const recipesAsMealData = getRecipesAsMealData(filteredRecipes || []);
+
       return (
         <View style={styles.section}>
           <CardsCarousel
@@ -51,11 +69,22 @@ const LibraryContent = ({ selected }: HomeContentProps) => {
               });
             }}
             variant="featured"
+            isDraggable
           />
         </View>
       );
+
     case t("library.products"):
+      if (isLoadingProducts) {
+        return (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size="large" />
+          </View>
+        );
+      }
+
       const productsAsMealData = getProductsAsMealData(productsResponse || []);
+
       return (
         <View style={styles.section}>
           <CardsCarousel
@@ -75,6 +104,10 @@ const styles = StyleSheet.create({
     gap: 20,
     marginTop: "6%",
     alignSelf: "stretch",
+  },
+  loaderContainer: {
+    marginTop: 40,
+    alignItems: "center",
   },
   allContainer: {
     flexDirection: "row",

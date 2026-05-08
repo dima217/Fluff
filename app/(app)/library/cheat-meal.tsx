@@ -1,3 +1,8 @@
+import {
+  useAppSelector,
+  useGetRecipesByIdsQuery,
+  useUpdateProfileMutation,
+} from "@/api";
 import { Colors } from "@/constants/design-tokens";
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
@@ -5,42 +10,35 @@ import { DeleteRecipeCardAction } from "@/shared/CardCarousel/cardActions";
 import Header from "@/shared/Header";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import View from "@/shared/View";
-import { cheatMealStorage, type CheatMealItem } from "@/utils/cheatMealStorage";
-import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback, useMemo, useState } from "react";
+import { useRouter } from "expo-router";
+import { useCallback, useMemo } from "react";
 import { ScrollView, StyleSheet } from "react-native";
-
-function cheatMealToMealData(item: CheatMealItem): MealData {
-  return {
-    id: String(item.id),
-    title: item.name,
-    calories: `${item.calories} ккал`,
-    imageUrl: item.imageUrl,
-    recipeId: item.id,
-    isFluff: true,
-  };
-}
 
 export default function CheatMealScreen() {
   const router = useRouter();
-  const [items, setItems] = useState<CheatMealItem[]>(() =>
-    cheatMealStorage.getAll()
+
+  const cheatMealIds = useAppSelector(
+    (state) => state.user.profile?.cheatMeal ?? []
   );
 
-  const products: MealData[] = useMemo(
-    () => items.map(cheatMealToMealData),
-    [items]
-  );
+  const { data, isLoading } = useGetRecipesByIdsQuery(cheatMealIds, {
+    skip: cheatMealIds.length === 0,
+  });
 
-  const refresh = useCallback(() => {
-    setItems(cheatMealStorage.getAll());
-  }, []);
+  const [updateProfile] = useUpdateProfileMutation();
 
-  useFocusEffect(
-    useCallback(() => {
-      refresh();
-    }, [refresh])
-  );
+  const products: MealData[] = useMemo(() => {
+    if (!data) return [];
+
+    return data.map((recipe) => ({
+      id: String(recipe.id),
+      title: recipe.name,
+      calories: `${recipe.calories} ккал`,
+      imageUrl: recipe.image.preview,
+      recipeId: recipe.id,
+      isFluff: true,
+    }));
+  }, [data]);
 
   const handleCardPress = useCallback(
     (item: MealData) => {
@@ -54,24 +52,18 @@ export default function CheatMealScreen() {
     [router]
   );
 
-  const handleRemove = useCallback((item: MealData) => {
-    if (item.recipeId != null) {
-      cheatMealStorage.remove(item.recipeId);
-      setItems(cheatMealStorage.getAll());
-    }
-  }, []);
-
   return (
     <View style={styles.container}>
       <Header title="Cheat Meal" />
+
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {items.length === 0 ? (
+        {products.length === 0 && !isLoading ? (
           <ThemedText type="xs" style={styles.empty}>
-            Пока ничего нет. Добавьте рецепт из экрана рецепта (меню ⋮).
+            Пока ничего нет.
           </ThemedText>
         ) : (
           <CardsCarousel
@@ -79,7 +71,12 @@ export default function CheatMealScreen() {
             variant="featured"
             onCardPress={handleCardPress}
             renderCardRightAction={(item) => (
-              <DeleteRecipeCardAction item={item} onDelete={handleRemove} />
+              <DeleteRecipeCardAction
+                item={item}
+                onDelete={() =>
+                  updateProfile({ recipeFromCheatMealId: Number(item.id) })
+                }
+              />
             )}
           />
         )}

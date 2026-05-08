@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/design-tokens";
+import { DragContext, useDrag } from "@/contexts/DragContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import Toogle from "@/shared/Toogle";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -18,34 +19,44 @@ const LibraryScreen = () => {
     router.push("/(search)/search");
   };
 
+  const { dropZoneLayout, isOverDropZone, setIsOverDropZone } = useDrag();
+
   return (
-    <ScrollView
-      style={styles.mainContainer}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
+    <DragContext.Provider
+      value={{
+        dropZoneLayout,
+        isOverDropZone,
+        setIsOverDropZone,
+      }}
     >
-      <View style={[styles.container]}>
-        <SearchInput
-          isPlaceholder={true}
-          onPress={navigateToSearch}
-          onToggleFilter={() => {}}
-        />
-        <View
-          style={{ flex: 1, alignSelf: "stretch", gap: 20, marginBottom: 20 }}
-        >
-          <ThemedText type="s">{t("library.title")}</ThemedText>
-          <Library />
-          <ThemedText type="s">{t("library.favourites")}</ThemedText>
+      <ScrollView
+        style={styles.mainContainer}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={[styles.container]}>
+          <SearchInput
+            isPlaceholder={true}
+            onPress={navigateToSearch}
+            onToggleFilter={() => {}}
+          />
+          <View
+            style={{ flex: 1, alignSelf: "stretch", gap: 20, marginBottom: 20 }}
+          >
+            <ThemedText type="s">{t("library.title")}</ThemedText>
+            <Library />
+            <ThemedText type="s">{t("library.favourites")}</ThemedText>
+          </View>
+          <Toogle
+            options={[t("library.recipes"), t("library.products")]}
+            selected={toogle}
+            onSelect={setToogle}
+            containerStyle={styles.toogleContainer}
+          />
+          <LibraryContent selected={toogle} />
         </View>
-        <Toogle
-          options={[t("library.recipes"), t("library.products")]}
-          selected={toogle}
-          onSelect={setToogle}
-          containerStyle={styles.toogleContainer}
-        />
-        <LibraryContent selected={toogle} />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </DragContext.Provider>
   );
 };
 

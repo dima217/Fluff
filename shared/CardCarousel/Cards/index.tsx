@@ -1,125 +1,55 @@
-import { Image, TouchableOpacity, View } from "react-native";
-
-import { useMediaUrl } from "@/api";
-import Heart from "@/assets/images/Heart.svg";
-import Check from "@/assets/images/Сheck.svg";
-import { Colors } from "@/constants/design-tokens";
-import { ThemedText } from "@/shared/ui/ThemedText";
 import React from "react";
-import { styles } from "./styles";
+import { MealData } from "..";
+import MealCard from "./MealCard";
 
-interface RecipeCardProps {
-  title: string;
-  calories: string;
-  imageUrl: string;
-  status?: string;
-  variant: "carousel" | "list";
-  onPress: () => void;
-  onLikePress?: () => void;
-  isLiked?: boolean;
-  rightAction?: React.ReactNode;
-  isFluff: boolean;
-}
+export type MealCardItemProps = {
+  item: MealData;
 
-const MealCard = ({
-  title,
-  calories,
-  imageUrl,
-  status,
+  onPress: (item: MealData) => void;
+  onLikePress: (item: MealData) => void;
+
+  rightAction?: (item: MealData) => React.ReactNode;
+
+  variant?: "carousel" | "list";
+};
+
+const MealCardItemComponent = ({
+  item,
   onPress,
   onLikePress,
-  variant,
-  isFluff,
-  isLiked = false,
   rightAction,
-}: RecipeCardProps) => {
-  const isCarouselItem = variant === "carousel";
-  const { url: mediaUrl, headers: mediaHeaders } = useMediaUrl(imageUrl, {
-    skip: !imageUrl,
-  });
+  variant = "carousel",
+}: MealCardItemProps) => {
+  const handlePress = React.useCallback(() => {
+    onPress(item);
+  }, [onPress, item]);
 
-  const handleLikePress = (e: any) => {
-    e?.stopPropagation?.();
-    if (onLikePress) {
-      onLikePress();
-    }
-  };
+  const handleLikePress = React.useCallback(() => {
+    onLikePress(item);
+  }, [onLikePress, item]);
 
-  const renderActionIcon = () => {
-    if (rightAction != null) return rightAction;
-    if (isCarouselItem) {
-      const strokeColor = isLiked ? Colors.primary : "#8B868F";
-      const fillColor = isLiked ? Colors.primary : "none";
-
-      return (
-        <TouchableOpacity onPress={handleLikePress} activeOpacity={0.7}>
-          <Heart
-            width={24}
-            height={24}
-            stroke={strokeColor}
-            fill={fillColor}
-            strokeWidth={fillColor === Colors.primary ? 0 : 1}
-          />
-        </TouchableOpacity>
-      );
-    }
-    return null;
-  };
+  const right = React.useMemo(() => {
+    return rightAction?.(item);
+  }, [rightAction, item]);
 
   return (
-    <TouchableOpacity
-      style={[
-        styles.cardContainer,
-        isCarouselItem ? styles.carouselContainer : "",
-      ]}
-      onPress={onPress}
-    >
-      <View
-        style={[
-          isCarouselItem
-            ? styles.carouselImageWrapper
-            : styles.fullWidthImageWrapper,
-        ]}
-      >
-        <Image
-          source={
-            mediaUrl
-              ? {
-                  uri: mediaUrl,
-                  ...(mediaHeaders && { headers: mediaHeaders }),
-                }
-              : require("@/assets/images/FoodAva.png")
-          }
-          style={styles.cardImage}
-        />
-      </View>
-
-      <View
-        style={[
-          styles.contentContainer,
-          isCarouselItem && styles.carouselContentContainer,
-        ]}
-      >
-        <View style={styles.textDetails}>
-          <ThemedText type="xs" style={{ color: "#FFFFFF", fontSize: 12 }}>
-            {title}
-          </ThemedText>
-          <View style={styles.recipeStatusTextContainer}>
-            <ThemedText type="xs">{calories}</ThemedText>
-            {isFluff && (
-              <View style={styles.statusContainer}>
-                <ThemedText style={{ color: Colors.text }} type="xs">
-                  Fluff
-                </ThemedText>
-                <Check width={14} height={14} />
-              </View>
-            )}
-          </View>
-        </View>
-        {renderActionIcon()}
-      </View>
-    </TouchableOpacity>
+    <MealCard
+      title={item.title}
+      calories={item.calories}
+      imageUrl={item.imageUrl}
+      onPress={handlePress}
+      onLikePress={handleLikePress}
+      isLiked={item.isLiked}
+      status={item.status}
+      isFluff={item.isFluff}
+      rightAction={right}
+      variant={variant}
+    />
   );
 };
 
-export default React.memo(MealCard);
+const MealCardItem = React.memo(MealCardItemComponent);
+
+MealCardItem.displayName = "MealCardItem";
+
+export default MealCardItem;
