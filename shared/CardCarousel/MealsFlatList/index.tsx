@@ -44,9 +44,9 @@ const MealsFlatListComponent = ({
       showsHorizontalScrollIndicator={false}
       removeClippedSubviews
       ItemSeparatorComponent={Separator}
-      initialNumToRender={8}
-      maxToRenderPerBatch={8}
-      windowSize={5}
+      initialNumToRender={4}
+      maxToRenderPerBatch={4}
+      windowSize={2}
       getItemLayout={undefined}
     />
   );
