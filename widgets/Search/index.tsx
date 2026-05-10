@@ -15,6 +15,10 @@ import {
 } from "react-native";
 import Circle from "../../shared/ui/Circle";
 import { ThemedText } from "../../shared/ui/ThemedText";
+import {
+  getProductsAsMealData,
+  getRecipesAsMealData,
+} from "../Home/utils/data";
 import FilterTags from "./components/FilterTags";
 import LastVisitedRecipes from "./components/LastVisitedRecipes";
 
@@ -22,6 +26,8 @@ interface SearchOverlayContentProps {
   onSelectTag: (productId: number) => void;
   selectedProductIds: number[];
   searchText?: string;
+  isSearchTriggered: boolean;
+  selectedIds: number[];
   recipes?: RecipeResponse[];
   products?: ProductResponse[];
   allProducts?: ProductResponse[];
@@ -34,10 +40,12 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
   onSelectTag,
   selectedProductIds,
   searchText = "",
+  selectedIds = [],
   recipes = [],
   products = [],
   allProducts = [],
   isLoading = false,
+  isSearchTriggered,
   hasSearchResults = false,
   onSearchFromHistory,
 }) => {
@@ -45,13 +53,11 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [lastVisitedIds, setLastVisitedIds] = useState<number[]>([]);
 
-  // Load search history and last visited on mount
   useEffect(() => {
     setSearchHistory(searchStorage.getSearchHistory());
     setLastVisitedIds(searchStorage.getLastVisited());
   }, []);
 
-  // Reload when search text changes (to update history)
   useEffect(() => {
     if (searchText.trim().length === 0) {
       setSearchHistory(searchStorage.getSearchHistory());
@@ -76,35 +82,23 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
     }
   };
 
-  // Use real products for tags (first 20 products)
   const popularProducts = useMemo(() => {
     return allProducts.slice(0, 20);
   }, [allProducts]);
 
-  // Convert recipes to MealData format
-  const recipesAsMealData: MealData[] = useMemo(() => {
-    return recipes.map((recipe) => ({
-      id: recipe.id.toString(),
-      title: recipe.name,
-      calories: `${recipe.calories} ккал`,
-      imageUrl: recipe.image?.cover || recipe.image?.preview || "",
-      isLiked: recipe.favorite,
-      recipeId: recipe.id,
-    }));
-  }, [recipes]);
+  const recipesAsMealData: MealData[] = useMemo(
+    () => getRecipesAsMealData(recipes),
+    [recipes]
+  );
+  const productsAsMealData: MealData[] = useMemo(
+    () => getProductsAsMealData(products),
+    [products]
+  );
 
-  const productsAsMealData: MealData[] = useMemo(() => {
-    return products.map((product) => ({
-      id: product.id.toString(),
-      title: product.name,
-      calories: `${product.calories} ккал / ${product.massa}г`,
-      imageUrl: product.image?.cover || product.image?.preview || "",
-      isLiked: product.favorite,
-      productId: product.id,
-    }));
-  }, [products]);
-
-  if (searchText.trim().length > 0) {
+  if (
+    (searchText.trim().length > 0 || selectedIds.length > 0) &&
+    isSearchTriggered
+  ) {
     return (
       <ScrollView
         style={overlayStyles.scrollContainer}

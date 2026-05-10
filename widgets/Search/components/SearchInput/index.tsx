@@ -20,6 +20,7 @@ interface SearchInputProps {
   searchText?: string;
   style?: StyleProp<ViewStyle>;
   selectedFilters?: string[];
+  isSearchTriggered?: boolean;
   onSearchChange?: (text: string) => void;
   onToggleFilter?: () => void;
   onFilterRemove?: (filter: string) => void;
@@ -33,6 +34,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   searchText = "",
   style,
   selectedFilters = [],
+  isSearchTriggered,
   onSearchChange,
   onToggleFilter,
   onFilterRemove,
@@ -70,7 +72,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
     );
   }
 
-  // Full search input with filters
   return (
     <View style={[styles.searchBarContainer, style]}>
       <ScrollView
@@ -102,7 +103,12 @@ const SearchInput: React.FC<SearchInputProps> = ({
       </ScrollView>
 
       {onToggleFilter && (
-        <Circle onPress={onToggleFilter} frostedGlass svg={<Search />} />
+        <Circle
+          onPress={onToggleFilter}
+          isSearchTriggered={isSearchTriggered}
+          frostedGlass
+          svg={<Search />}
+        />
       )}
     </View>
   );

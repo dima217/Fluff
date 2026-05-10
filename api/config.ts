@@ -1,13 +1,9 @@
 // API Configuration
 export const API_CONFIG = {
-  // Development
-  baseUrl: __DEV__
-    ? "http://10.188.8.195:3000"
-    : "https://api.yourdomain.com",
+  baseUrl: __DEV__ ? "http://10.30.220.195:3000" : "https://api.yourdomain.com",
 
-  // Медиа (стрим/скачивание) — отдельный порт, например 3002
   mediaBaseUrl: __DEV__
-    ? "http://10.188.8.195:3002"
+    ? "http://10.30.220.195:3002"
     : "https://api.yourdomain.com",
 
   // Timeouts

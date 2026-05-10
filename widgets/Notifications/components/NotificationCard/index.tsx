@@ -2,6 +2,8 @@ import { Colors } from "@/constants/design-tokens";
 import Button from "@/shared/Buttons/Button";
 import Avatar from "@/shared/ui/Avatar";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { useRouter } from "expo-router";
+import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import { renderTime } from "../../utils";
 
@@ -20,6 +22,12 @@ const NotificationCard = ({
   action2Text,
   createdAt,
 }: NotificationCardProps) => {
+  const router = useRouter();
+
+  const goHealth = useCallback(() => {
+    router.replace("/(app)/health");
+  }, [router]);
+
   return (
     <View style={styles.container}>
       <Avatar size="medium" source={require("@/assets/images/Fluffy.png")} />
@@ -33,14 +41,14 @@ const NotificationCard = ({
             title={actionText}
             style={styles.button}
             textStyle={styles.buttonText}
-            onPress={() => {}}
+            onPress={goHealth}
           />
           {action2Text && (
             <Button
               title={action2Text}
               style={styles.button}
               textStyle={styles.buttonText}
-              onPress={() => {}}
+              onPress={goHealth}
             />
           )}
         </View>

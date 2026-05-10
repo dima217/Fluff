@@ -3,142 +3,147 @@ import {
   useLazySearchProductsQuery,
   useLazySearchRecipesQuery,
 } from "@/api";
+
 import View from "@/shared/View";
-import { searchStorage } from "@/utils/searchStorage";
 import SearchOverlayContent from "@/widgets/Search";
 import SearchInput from "@/widgets/Search/components/SearchInput";
-import { useEffect, useMemo, useState } from "react";
+
+import { normalizeApiArray } from "@/utils/normalizeApiArray";
+
+import { tryAddMatchedProduct } from "@/widgets/Search/utils/tryAddMatchedProduct";
+import { useCallback, useMemo, useState } from "react";
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>([]);
-  const [debouncedSearchText, setDebouncedSearchText] = useState("");
+  const [isSearchTriggered, setIsSearchTriggered] = useState(false);
 
-  // Load products for tags
   const { data: productsResponse } = useGetProductsQuery({
     page: 1,
     limit: 50,
   });
 
-  const allProducts = useMemo(() => {
-    if (!productsResponse) return [];
-    if (typeof productsResponse === "object" && "data" in productsResponse) {
-      return Array.isArray(productsResponse.data) ? productsResponse.data : [];
-    }
-    return Array.isArray(productsResponse) ? productsResponse : [];
-  }, [productsResponse]);
-
-  // Lazy queries for search
   const [searchRecipes, { data: recipes, isLoading: isLoadingRecipes }] =
     useLazySearchRecipesQuery();
+
   const [searchProducts, { data: products, isLoading: isLoadingProducts }] =
     useLazySearchProductsQuery();
 
-  // Debounce search text
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchText(searchText);
-    }, 500);
+  const allProducts = useMemo(
+    () => normalizeApiArray<any>(productsResponse),
+    [productsResponse]
+  );
 
-    return () => clearTimeout(timer);
-  }, [searchText]);
-
-  // Perform search when debounced text or selected products change
-  useEffect(() => {
-    const searchParams: any = {};
-
-    if (debouncedSearchText.trim().length > 0) {
-      searchParams.q = debouncedSearchText;
-      searchStorage.addToSearchHistory(debouncedSearchText);
-    }
-
-    if (selectedProductIds.length > 0) {
-      searchParams.productIds = selectedProductIds;
-    }
-
-    if (
-      debouncedSearchText.trim().length > 0 ||
-      selectedProductIds.length > 0
-    ) {
-      searchRecipes(searchParams);
-    }
-
-    if (debouncedSearchText.trim().length > 0) {
-      searchProducts({ q: debouncedSearchText });
-    }
-  }, [debouncedSearchText, selectedProductIds, searchRecipes, searchProducts]);
-
-  const addProductFilter = (productId: number) => {
-    if (!selectedProductIds.includes(productId)) {
-      setSelectedProductIds([...selectedProductIds, productId]);
-    }
-  };
-
-  const removeProductFilter = (productId: number) => {
-    setSelectedProductIds(selectedProductIds.filter((id) => id !== productId));
-  };
-
-  const handleSearchChange = (text: string) => {
-    setSearchText(text);
-  };
-
-  const handleTagSelect = (productId: number) => {
-    // Add product to filters, but don't change search text
-    addProductFilter(productId);
-  };
-
-  const handleHistoryItemPress = (query: string) => {
-    setSearchText(query);
-  };
-
-  // Extract recipes from response
-  const recipesArray = useMemo(() => {
-    if (!recipes) return [];
-    if (Array.isArray(recipes)) return recipes;
-    if (typeof recipes === "object" && "data" in recipes) {
-      return Array.isArray(recipes.data) ? recipes.data : [];
-    }
-    return [];
-  }, [recipes]);
-
-  const hasSearchResults = useMemo(() => {
-    return (
-      (debouncedSearchText.trim().length > 0 ||
-        selectedProductIds.length > 0) &&
-      ((recipesArray && recipesArray.length > 0) ||
-        (products && products.length > 0))
-    );
-  }, [debouncedSearchText, selectedProductIds, recipesArray, products]);
+  const recipesArray = useMemo(
+    () => normalizeApiArray<any>(recipes),
+    [recipes]
+  );
 
   const isLoading = isLoadingRecipes || isLoadingProducts;
 
-  // Get selected product names for display
   const selectedProductNames = useMemo(() => {
     return allProducts
       .filter((p) => selectedProductIds.includes(p.id))
       .map((p) => p.name);
   }, [selectedProductIds, allProducts]);
 
+  const hasSearchResults = useMemo(() => {
+    return (
+      (searchText.trim().length > 0 || selectedProductIds.length > 0) &&
+      (recipesArray.length > 0 || (products?.length ?? 0) > 0)
+    );
+  }, [searchText, selectedProductIds, recipesArray, products]);
+
+  const addProductFilter = useCallback((productId: number) => {
+    setSelectedProductIds((prev) => {
+      if (prev.includes(productId)) {
+        return prev;
+      }
+
+      return [...prev, productId];
+    });
+  }, []);
+
+  const removeProductFilter = useCallback((productId: number) => {
+    setSelectedProductIds((prev) => prev.filter((id) => id !== productId));
+  }, []);
+
+  const handleSearchChange = useCallback(
+    (text: string) => {
+      setSearchText(text);
+
+      tryAddMatchedProduct({
+        text,
+        products: allProducts,
+        selectedIds: selectedProductIds,
+        onAdd: addProductFilter,
+        onClearText: () => setSearchText(""),
+      });
+      setIsSearchTriggered(false);
+    },
+    [allProducts, selectedProductIds, addProductFilter]
+  );
+
+  const handleTagSelect = useCallback(
+    (productId: number) => {
+      addProductFilter(productId);
+    },
+    [addProductFilter]
+  );
+
+  const handleHistoryItemPress = useCallback((query: string) => {
+    setSearchText(query);
+  }, []);
+
+  const handleToggleFilter = useCallback(() => {
+    if (searchText === "" && selectedProductIds.length <= 0) {
+      setIsSearchTriggered(false);
+      return;
+    }
+    if (isSearchTriggered) {
+      setIsSearchTriggered(false);
+      return;
+    }
+    searchRecipes({ q: searchText, productIds: selectedProductIds });
+    searchProducts({ q: searchText });
+    setIsSearchTriggered(true);
+  }, [
+    isSearchTriggered,
+    searchProducts,
+    searchRecipes,
+    searchText,
+    selectedProductIds,
+  ]);
+
+  const handleFilterRemove = useCallback(
+    (filterName: string) => {
+      const product = allProducts.find((p) => p.name === filterName);
+
+      if (product) {
+        removeProductFilter(product.id);
+      }
+    },
+    [allProducts, removeProductFilter]
+  );
+
   return (
     <View>
       <SearchInput
         isFiltering={selectedProductIds.length > 0}
+        isSearchTriggered={isSearchTriggered}
         searchText={searchText}
         selectedFilters={selectedProductNames}
         onSearchChange={handleSearchChange}
-        onToggleFilter={() => {}}
-        onFilterRemove={(filterName) => {
-          const product = allProducts.find((p) => p.name === filterName);
-          if (product) {
-            removeProductFilter(product.id);
-          }
-        }}
+        onToggleFilter={handleToggleFilter}
+        onFilterRemove={handleFilterRemove}
       />
 
       <SearchOverlayContent
         onSelectTag={handleTagSelect}
         selectedProductIds={selectedProductIds}
-        searchText={debouncedSearchText}
+        isSearchTriggered={isSearchTriggered}
+        searchText={searchText}
+        selectedIds={selectedProductIds}
         recipes={recipesArray}
         products={products}
         allProducts={allProducts}
