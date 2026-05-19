@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
 import React from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import Svg, { Defs, RadialGradient, Rect, Stop } from "react-native-svg";
@@ -10,10 +10,13 @@ interface RadialGradientBackgroundProps {
 }
 
 const RadialGradientBackground: React.FC<RadialGradientBackgroundProps> = ({
-  colors = [Colors.primary, Colors.primary],
+  colors: gradientColors,
   opacities = [0.3, 0.1],
   style,
 }) => {
+  const colors = useColors();
+  const stops = gradientColors ?? [colors.primary, colors.primary];
+
   return (
     <View style={[styles.container, style]}>
       <Svg height="100%" width="100%">
@@ -21,12 +24,12 @@ const RadialGradientBackground: React.FC<RadialGradientBackgroundProps> = ({
           <RadialGradient id="grad" cx="40%" cy="80%" r="50%" fx="50%" fy="50%">
             <Stop
               offset="0%"
-              stopColor={colors[0]}
+              stopColor={stops[0]}
               stopOpacity={opacities[0]}
             />
             <Stop
               offset="100%"
-              stopColor={colors[1]}
+              stopColor={stops[1]}
               stopOpacity={opacities[1]}
             />
           </RadialGradient>

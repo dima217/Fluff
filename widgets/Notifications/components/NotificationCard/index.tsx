@@ -1,4 +1,7 @@
-import { Colors } from "@/constants/design-tokens";
+
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Button from "@/shared/Buttons/Button";
 import Avatar from "@/shared/ui/Avatar";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -22,6 +25,7 @@ const NotificationCard = ({
   action2Text,
   createdAt,
 }: NotificationCardProps) => {
+  const styles = useThemedStyles(createstyles);
   const router = useRouter();
 
   const goHealth = useCallback(() => {
@@ -62,7 +66,7 @@ const NotificationCard = ({
 
 export default NotificationCard;
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   container: {
     width: "100%",
     flexDirection: "row",
@@ -75,7 +79,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    color: Colors.text,
+    color: colors.text,
     marginBottom: 4,
   },
   description: {

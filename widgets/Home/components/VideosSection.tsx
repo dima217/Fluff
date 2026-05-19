@@ -1,5 +1,8 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useGetRecipesQuery } from "@/api";
-import { Colors } from "@/constants/design-tokens";
+
 import { useTranslation } from "@/hooks/useTranslation";
 import MediaCarousel from "@/shared/MediaCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -11,6 +14,8 @@ import { StyleSheet, View } from "react-native";
 import { getRecipesData } from "../utils/data";
 
 const VideosSection = () => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   const router = useRouter();
   const { t } = useTranslation();
   const [lastVisitedIds, setLastVisitedIds] = useState<number[]>([]);
@@ -44,7 +49,7 @@ const VideosSection = () => {
           <ThemedText type="s">
             {t("homeSections.previoslyWatched")}
           </ThemedText>
-          <ThemedText type="xs" style={{ color: Colors.primary }}>
+          <ThemedText type="xs" style={{ color: colors.primary }}>
             {t("homeSections.seeAll")}
           </ThemedText>
         </View>
@@ -74,7 +79,7 @@ const VideosSection = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   section: {
     gap: 20,
     marginTop: "10%",

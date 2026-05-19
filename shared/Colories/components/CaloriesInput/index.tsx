@@ -1,7 +1,8 @@
 import { useAppSelector, useLazySearchRecipesQuery } from "@/api";
 import type { RecipeResponse } from "@/api/types";
-import { Colors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
 import { useIsCheatMealDay } from "@/hooks/useCheatMealDay";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Button from "@/shared/Buttons/Button";
 import CardsCarousel from "@/shared/CardCarousel";
 import TextInput from "@/shared/Inputs/TextInput";
@@ -16,7 +17,7 @@ import SearchInput from "@/widgets/Search/components/SearchInput";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useMemo, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
-import { styles } from "./styles";
+import { createCaloriesInputStyles } from "./styles";
 
 type InputMode = "manual" | "search";
 
@@ -25,6 +26,8 @@ interface CalorieInputProps {
 }
 
 const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createCaloriesInputStyles);
   const [mode, setMode] = useState<InputMode>("manual");
   const [foodName, setFoodName] = useState<string>("");
   const [calories, setCalories] = useState<string>("");
@@ -89,8 +92,8 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
           onPress={handleToggleMode}
           style={styles.toggleButton}
         >
-          <Ionicons name="repeat" size={16} color={Colors.primary} />
-          <ThemedText type="xs" style={{ color: Colors.primary }}>
+          <Ionicons name="repeat" size={16} color={colors.primary} />
+          <ThemedText type="xs" style={{ color: colors.primary }}>
             {mode === "manual" ? "Recipe from Fluff" : "Your own recipe"}
           </ThemedText>
         </TouchableOpacity>
@@ -108,7 +111,7 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
             <TextInput
               label="Calories"
               placeholder="Example: 95"
-              placeholderTextColor="#888"
+              placeholderTextColor={colors.secondary}
               keyboardType="numeric"
               value={calories}
               onChangeText={setCalories}

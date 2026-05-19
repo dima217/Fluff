@@ -1,4 +1,7 @@
-import { Colors } from "@/constants/design-tokens";
+
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useEffect, useRef } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 
@@ -7,6 +10,7 @@ type Props = {
 };
 
 export default function AnimatedProgressBar({ progress }: Props) {
+  const styles = useThemedStyles(createstyles);
   const anim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -29,16 +33,16 @@ export default function AnimatedProgressBar({ progress }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   track: {
     width: "30%",
     height: 8,
-    backgroundColor: Colors.inactive,
+    backgroundColor: colors.inactive,
     borderRadius: 10,
   },
   fill: {
     height: "100%",
-    backgroundColor: Colors.primary,
+    backgroundColor: colors.primary,
     borderRadius: 10,
   },
 });

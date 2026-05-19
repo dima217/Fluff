@@ -2,6 +2,8 @@
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import Bell from "@/assets/images/Bell.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -16,6 +18,27 @@ type HeaderProps = {
 
 const Header = ({ title, showExitConfirmation = false }: HeaderProps) => {
   const router = useRouter();
+  const colors = useColors();
+  const iconColor = colors.text;
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      container: {
+        width: "100%",
+        marginTop: 30,
+        backgroundColor: "transparent",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+      },
+      title: {
+        color: c.text,
+        position: "absolute",
+        left: 0,
+        right: 0,
+        textAlign: "center",
+      },
+    })
+  );
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleBackPress = () => {
@@ -38,7 +61,7 @@ const Header = ({ title, showExitConfirmation = false }: HeaderProps) => {
   return (
     <View style={styles.container}>
       <Circle
-        svg={<ArrowLeft />}
+        svg={<ArrowLeft stroke={iconColor} />}
         frostedGlass
         onPress={handleBackPress}
         size={CircleSizes.MEDIUM}
@@ -51,7 +74,7 @@ const Header = ({ title, showExitConfirmation = false }: HeaderProps) => {
       )}
 
       <Circle
-        svg={<Bell />}
+        svg={<Bell stroke={iconColor} />}
         frostedGlass
         onPress={() => {
           router.push("/notifications");
@@ -69,21 +92,3 @@ const Header = ({ title, showExitConfirmation = false }: HeaderProps) => {
 };
 
 export default Header;
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    marginTop: 30,
-    backgroundColor: "transparent",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  title: {
-    color: "#fff",
-    position: "absolute",
-    left: 0,
-    right: 0,
-    textAlign: "center",
-  },
-});

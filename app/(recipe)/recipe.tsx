@@ -1,10 +1,13 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import {
   useAddToFavoritesMutation,
   useGetRecipeByIdQuery,
   useMediaUrl,
   useRemoveFromFavoritesMutation,
 } from "@/api";
-import { Colors } from "@/constants/design-tokens";
+
 import { RecipeData } from "@/constants/types";
 import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
@@ -28,6 +31,8 @@ import {
 } from "react-native";
 
 export default function RecipeScreen() {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   const router = useRouter();
   const params = useLocalSearchParams();
   const { t } = useTranslation();
@@ -112,7 +117,7 @@ export default function RecipeScreen() {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -153,7 +158,7 @@ export default function RecipeScreen() {
           <Header />
         </RNView>
         <LinearGradient
-          colors={["transparent", Colors.background]}
+          colors={["transparent", colors.background]}
           style={styles.gradient}
         />
       </ImageBackground>
@@ -218,9 +223,9 @@ export default function RecipeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   mainContainer: {
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
     flex: 1,
   },
   innerContainer: {
@@ -252,17 +257,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   errorContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
     padding: 20,
   },
   errorText: {
-    color: "white",
+    color: colors.text,
     fontSize: 16,
     textAlign: "center",
   },

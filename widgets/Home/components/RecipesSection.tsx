@@ -1,5 +1,8 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useGetMyRecipesQuery, useGetRecipesByIdsQuery } from "@/api";
-import { Colors } from "@/constants/design-tokens";
+
 import { useTranslation } from "@/hooks/useTranslation";
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
@@ -12,6 +15,8 @@ import { StyleSheet, View } from "react-native";
 import { getRecipesAsMealData, getRecipesData } from "../utils/data";
 
 const RecipesSection = () => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   const { t } = useTranslation();
   const { data: recipesResponse, isLoading: isLoadingRecipes } =
     useGetMyRecipesQuery();
@@ -53,7 +58,7 @@ const RecipesSection = () => {
           <ThemedText type="s">
             {t("homeSections.previoslyWatched")}
           </ThemedText>
-          <ThemedText type="xs" style={{ color: Colors.primary }}>
+          <ThemedText type="xs" style={{ color: colors.primary }}>
             {t("homeSections.seeAll")}
           </ThemedText>
         </View>
@@ -83,7 +88,7 @@ const RecipesSection = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   section: {
     gap: 20,
     marginTop: "10%",

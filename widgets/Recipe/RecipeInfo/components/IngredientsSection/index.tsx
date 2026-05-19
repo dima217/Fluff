@@ -37,7 +37,7 @@ const IngredientsSection: React.FC<IngredientsSectionProps> = ({
 
   return (
     <View style={{ gap: 10 }}>
-      <ThemedText style={{ color: "#FFFFFF" }}>Ingredients</ThemedText>
+      <ThemedText>Ingredients</ThemedText>
       <FilterTags filters={ingredients} />
     </View>
   );

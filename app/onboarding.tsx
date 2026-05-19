@@ -1,4 +1,7 @@
-import { Colors } from "@/constants/design-tokens";
+
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import VideoSlider from "@/shared/LandingVideo";
 import Swiper from "@/shared/Swiper";
@@ -10,6 +13,7 @@ import Cutlery from "../assets/images/Cutlery.svg";
 const { height } = Dimensions.get("window");
 
 export default function OnboardingScreen() {
+  const styles = useThemedStyles(createstyles);
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -51,10 +55,10 @@ export default function OnboardingScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   videoSection: {
     height: height * 0.55,
@@ -75,7 +79,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   notionText: {
-    color: Colors.secondary,
+    color: colors.secondary,
     lineHeight: 22,
     opacity: 0.85,
   },

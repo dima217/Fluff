@@ -2,9 +2,9 @@ import { Text, TouchableOpacity } from "react-native";
 
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 
+import { useColors } from "@/contexts/ThemeContext";
 import ActivityIndicator from "../../ui/ActivityIndicator";
 
-import { Colors } from "@/constants/design-tokens";
 import { styles } from "./styles";
 
 interface ButtonProps {
@@ -28,6 +28,7 @@ const Button = ({
   style,
   textStyle,
 }: ButtonProps) => {
+  const colors = useColors();
   const isDisabled = disabled || loading;
 
   return (
@@ -35,20 +36,20 @@ const Button = ({
       disabled={isDisabled}
       style={[
         styles.container,
-        { backgroundColor: buttonColor ?? Colors.primary },
-        isDisabled && { backgroundColor: Colors.secondary },
+        { backgroundColor: buttonColor ?? colors.primary },
+        isDisabled && { backgroundColor: colors.secondary },
         style,
       ]}
       onPress={onPress}
     >
       {loading ? (
-        <ActivityIndicator size="small" color={Colors.inactive} />
+        <ActivityIndicator size="small" color={colors.inactive} />
       ) : (
         <Text
           style={[
             styles.buttonText,
-            { color: textColor ?? Colors.text },
-            isDisabled && { color: Colors.inactive },
+            { color: textColor ?? colors.text },
+            isDisabled && { color: colors.inactive },
             textStyle,
           ]}
         >

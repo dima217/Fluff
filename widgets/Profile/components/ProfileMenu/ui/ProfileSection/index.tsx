@@ -1,5 +1,8 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { CircleSizes } from "@/constants/components/CIrcle";
-import { Colors } from "@/constants/design-tokens";
+
 import GradientView from "@/shared/ui/GradientView";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
@@ -21,6 +24,8 @@ const ProfileSection = ({
   isNested,
   isLast,
 }: ProfileSectionProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   return (
     <TouchableOpacity
       style={[styles.container, !isLast ? styles.itemBorder : ""]}
@@ -35,13 +40,13 @@ const ProfileSection = ({
         <ThemedText>{title}</ThemedText>
       </View>
       {isNested && (
-        <Ionicons name="arrow-forward" size={24} color={Colors.border} />
+        <Ionicons name="arrow-forward" size={24} color={colors.border} />
       )}
     </TouchableOpacity>
   );
 };
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
@@ -61,7 +66,7 @@ const styles = StyleSheet.create({
   },
   itemBorder: {
     borderBottomWidth: 1,
-    borderColor: Colors.inactive,
+    borderColor: colors.inactive,
   },
   content: {
     flexDirection: "row",

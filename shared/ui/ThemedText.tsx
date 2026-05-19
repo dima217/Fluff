@@ -1,4 +1,6 @@
-import { Colors, Fonts } from "@/constants/design-tokens";
+import { AppColors, Fonts } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { StyleSheet, Text, type TextProps } from "react-native";
 
 export type ThemedTextProps = TextProps & {
@@ -8,7 +10,10 @@ export type ThemedTextProps = TextProps & {
   fontFamilyType?: "sans" | "serif" | "rounded" | "mono";
 };
 
-const getStylesByType = (type: ThemedTextProps["type"]) => {
+const getStylesByType = (
+  type: ThemedTextProps["type"],
+  styles: ReturnType<typeof createThemedTextStyles>
+) => {
   switch (type) {
     case "title":
       return styles.title;
@@ -35,8 +40,10 @@ export function ThemedText({
   fontFamilyType = "sans",
   ...rest
 }: ThemedTextProps) {
-  const color = Colors.text;
-  const baseStyle = getStylesByType(type);
+  const colors = useColors();
+  const styles = useThemedStyles(createThemedTextStyles);
+  const color = colors.text;
+  const baseStyle = getStylesByType(type, styles);
 
   const text =
     typeof children === "number" || typeof children === "string"
@@ -65,7 +72,7 @@ export function ThemedText({
         {restText}{" "}
         <Text
           style={{
-            color: Colors.primary,
+            color: colors.primary,
             fontFamily: Fonts[fontFamilyType],
           }}
         >
@@ -90,35 +97,35 @@ export function ThemedText({
   );
 }
 
-const styles = StyleSheet.create({
-  default: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: "#8B868F",
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "400",
-    lineHeight: 32,
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  mini: {
-    fontSize: 14,
-  },
-  s: {
-    fontSize: 16,
-  },
-  xs: {
-    fontSize: 12,
-    color: "#8B868F",
-  },
-  notion: {
-    fontSize: 14,
-    color: "#8B868F",
-    fontWeight: "100",
-    opacity: 0.5,
-  },
-});
+const createThemedTextStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    default: {
+      fontSize: 16,
+      lineHeight: 24,
+      color: colors.secondary,
+    },
+    title: {
+      fontSize: 32,
+      fontWeight: "400",
+      lineHeight: 32,
+    },
+    subtitle: {
+      fontSize: 20,
+      fontWeight: "bold",
+    },
+    mini: {
+      fontSize: 14,
+    },
+    s: {
+      fontSize: 16,
+    },
+    xs: {
+      fontSize: 12,
+      color: colors.secondary,
+    },
+    notion: {
+      fontSize: 14,
+      color: colors.iconMuted,
+      fontWeight: "100",
+    },
+  });

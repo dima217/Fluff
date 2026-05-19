@@ -1,54 +1,56 @@
+import { AppColors } from "@/constants/design-tokens";
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#1E1E1E',
-    paddingHorizontal: 20,
-  },
-  closeButton: {
-    alignSelf: 'flex-end',
-    marginBottom: 10,
-  },
-  content: {
-    flex: 1,
-  },
-  section: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  tag: {
-    color: 'gray',
-    fontSize: 14,
-  },
-  popularTag: {
-    backgroundColor: '#333333',
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-  },
-  selectedTag: {
-    backgroundColor: 'white',
-  },
-  selectedTagText: {
-    color: 'black',
-  },
-  tagText: {
-    color: 'white',
-  },
-  separator: {
-    height: 1,
-    backgroundColor: 'transparent',
-    marginVertical: 10,
-  },
-});
+export const createSearchScreenStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+    },
+    closeButton: {
+      alignSelf: "flex-end",
+      marginBottom: 10,
+    },
+    content: {
+      flex: 1,
+    },
+    section: {
+      marginBottom: 20,
+    },
+    sectionTitle: {
+      color: colors.text,
+      fontSize: 18,
+      fontWeight: "bold",
+      marginBottom: 10,
+    },
+    tagsContainer: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: 8,
+    },
+    tag: {
+      color: colors.secondary,
+      fontSize: 14,
+    },
+    popularTag: {
+      backgroundColor: colors.inactive,
+      borderRadius: 20,
+      paddingHorizontal: 15,
+      paddingVertical: 8,
+    },
+    selectedTag: {
+      backgroundColor: colors.text,
+    },
+    selectedTagText: {
+      color: colors.background,
+    },
+    tagText: {
+      color: colors.text,
+    },
+    separator: {
+      height: 1,
+      backgroundColor: "transparent",
+      marginVertical: 10,
+    },
+  });

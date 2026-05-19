@@ -1,4 +1,7 @@
-import { Colors } from "@/constants/design-tokens";
+
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
@@ -9,6 +12,8 @@ interface TimeLabelProps {
 }
 
 const TimeLabel = ({ localText = "Local time" }: TimeLabelProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   const [time, setTime] = useState(getCurrentTime());
 
   useEffect(() => {
@@ -24,7 +29,7 @@ const TimeLabel = ({ localText = "Local time" }: TimeLabelProps) => {
       <Ionicons
         name="time-outline"
         size={12}
-        color={Colors.border}
+        color={colors.iconMuted}
         style={styles.icon}
       />
       <ThemedText type="xs">{time + ", " + localText}</ThemedText>
@@ -42,7 +47,7 @@ function getCurrentTime() {
   return `${hours}:${minutesStr} ${ampm}`;
 }
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",

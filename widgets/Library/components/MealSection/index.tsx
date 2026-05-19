@@ -1,3 +1,6 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { cardSurface } from "@/shared/styles/cardSurface";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -32,6 +35,60 @@ const CheatMealCard = ({
   showLock,
   isUnlocked = true,
 }: CheatMealCardProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      card: {
+        ...cardSurface(c),
+        borderRadius: 16,
+        overflow: "hidden",
+        flex: 1,
+        justifyContent: "flex-start",
+      },
+      cardLocked: {
+        opacity: 0.85,
+      },
+      lockIcon: {
+        position: "absolute",
+        top: 12,
+        right: 12,
+        zIndex: 15,
+      },
+      content: {
+        padding: 16,
+        gap: 10,
+        zIndex: 10,
+        flex: 1,
+      },
+      title: {
+        color: c.text,
+        fontSize: 20,
+        fontWeight: "700",
+        marginBottom: 8,
+      },
+      textHint: {
+        color: c.secondary,
+        fontSize: 14,
+        lineHeight: 18,
+      },
+      overlayImageContainer: {
+        alignSelf: "flex-end",
+        width: 92,
+        height: 65,
+        zIndex: 5,
+      },
+      backgroundImage: {
+        height: 98,
+        width: 140,
+        position: "absolute",
+        right: 0,
+        bottom: 0,
+      },
+      overlayImage: {
+        opacity: 0.2,
+      },
+    })
+  );
   const locked = showLock && !isUnlocked;
   const handlePress = locked ? undefined : onPress;
 
@@ -70,57 +127,5 @@ const CheatMealCard = ({
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#1E1E1E",
-    borderRadius: 16,
-    overflow: "hidden",
-    flex: 1,
-    justifyContent: "flex-start",
-  },
-  cardLocked: {
-    opacity: 0.85,
-  },
-  lockIcon: {
-    position: "absolute",
-    top: 12,
-    right: 12,
-    zIndex: 15,
-  },
-  content: {
-    padding: 16,
-    gap: 10,
-    zIndex: 10,
-    flex: 1,
-  },
-  title: {
-    color: "#FFFFFF",
-    fontSize: 20,
-    fontWeight: "700",
-    marginBottom: 8,
-  },
-  textHint: {
-    color: "rgba(255, 255, 255, 0.7)",
-    fontSize: 14,
-    lineHeight: 18,
-  },
-  overlayImageContainer: {
-    alignSelf: "flex-end",
-    width: 92,
-    height: 65,
-    zIndex: 5,
-  },
-  backgroundImage: {
-    height: 98,
-    width: 140,
-    position: "absolute",
-    right: 0,
-    bottom: 0,
-  },
-  overlayImage: {
-    opacity: 0.2,
-  },
-});
 
 export default CheatMealCard;

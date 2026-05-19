@@ -1,3 +1,5 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import React from "react";
 import {
   TextInput as RNTextInput,
@@ -8,29 +10,29 @@ import {
 type BorderlessTextInputProps = TextInputProps;
 
 const BorderlessTextInput: React.FC<BorderlessTextInputProps> = (props) => {
+  const colors = useColors();
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      input: {
+        borderWidth: 0,
+        backgroundColor: "transparent",
+        padding: 0,
+        margin: 0,
+        color: c.text,
+        fontSize: 32,
+        fontWeight: "600",
+        includeFontPadding: false,
+      },
+    })
+  );
+
   return (
     <RNTextInput
       {...props}
       style={[styles.input, props.style]}
-      placeholderTextColor="#8B868F"
+      placeholderTextColor={colors.secondary}
     />
   );
 };
 
 export default BorderlessTextInput;
-
-const styles = StyleSheet.create({
-  input: {
-    borderWidth: 0,
-    backgroundColor: "transparent",
-
-    padding: 0,
-    margin: 0,
-
-    color: "#fff",
-    fontSize: 32,
-    fontWeight: "600",
-
-    includeFontPadding: false,
-  },
-});

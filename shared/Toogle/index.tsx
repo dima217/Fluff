@@ -1,8 +1,9 @@
-import { Colors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { memo } from "react";
 import { TouchableOpacity, View, ViewStyle } from "react-native";
 import { ThemedText } from "../ui/ThemedText";
-import { styles } from "./styles";
+import { createToggleStyles } from "./styles";
 
 type Props = {
   options: string[];
@@ -19,9 +20,12 @@ const ToggleButtons = ({
   style,
   containerStyle,
 }: Props) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createToggleStyles);
+
   return (
     <View style={[styles.container, containerStyle]}>
-      {options.map((option, index) => {
+      {options.map((option) => {
         const isActive = selected === option;
 
         return (
@@ -30,16 +34,15 @@ const ToggleButtons = ({
             style={[
               styles.button,
               {
-                backgroundColor: isActive ? Colors.purple : Colors.inactive,
+                backgroundColor: isActive ? colors.purple : colors.inactive,
               },
-
               style,
             ]}
             onPress={() => onSelect(option)}
             activeOpacity={0.8}
           >
             <ThemedText
-              style={{ color: isActive ? Colors.text : "#8B868F" }}
+              style={{ color: isActive ? colors.text : colors.secondary }}
               type="xs"
             >
               {option}

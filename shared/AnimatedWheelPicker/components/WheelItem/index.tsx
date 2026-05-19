@@ -1,3 +1,4 @@
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { formatDate } from "@/shared/utils/formatDate";
 import { memo, useMemo } from "react";
 import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native";
@@ -25,6 +26,25 @@ export const WheelItem = memo(function FlexibleWheelItem({
   style,
   animationType = "fixed",
 }: FlexibleWheelItemProps) {
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      itemContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+      },
+      itemText: {
+        fontSize: 20,
+        color: c.text,
+        fontWeight: "500",
+      },
+      customContentWrapper: {
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+    })
+  );
   const isHorizontal = orientation === "horizontal";
 
   const fixedStyle = useInterpolateScaleFixed({
@@ -59,22 +79,4 @@ export const WheelItem = memo(function FlexibleWheelItem({
       </Animated.View>
     </Animated.View>
   );
-});
-
-const styles = StyleSheet.create({
-  itemContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  itemText: {
-    fontSize: 20,
-    color: "#fff",
-    fontWeight: "500",
-  },
-  customContentWrapper: {
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
 });

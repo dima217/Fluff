@@ -1,4 +1,5 @@
 import { useTranslation } from "@/hooks/useTranslation";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import {
   AnimatedWheelPicker,
   WheelItemData,
@@ -22,6 +23,21 @@ const weightsData: WheelItemData<string>[] = Array.from(
 );
 
 const Weight = () => {
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      stepContainer: {
+        flex: 1,
+        gap: 30,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        paddingTop: 80,
+      },
+      animatedWheelPicker: { width: "60%" },
+      selectorContainer: { height: 56 },
+      title: { marginBottom: 20 },
+      currentValueText: { fontSize: 16, color: c.secondary },
+    })
+  );
   const { control } = useFormContext();
   const { t } = useTranslation();
 
@@ -65,26 +81,3 @@ const Weight = () => {
 };
 
 export default Weight;
-
-const styles = StyleSheet.create({
-  stepContainer: {
-    flex: 1,
-    gap: 30,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingTop: 80,
-  },
-  animatedWheelPicker: {
-    width: "60%",
-  },
-  selectorContainer: {
-    height: 56,
-  },
-  title: {
-    marginBottom: 20,
-  },
-  currentValueText: {
-    fontSize: 16,
-    color: "#aaa",
-  },
-});

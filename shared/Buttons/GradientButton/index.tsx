@@ -3,13 +3,12 @@ import { Text, TouchableOpacity } from "react-native";
 
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 
-import { Colors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 
 import ActivityIndicator from "@/shared/ui/ActivityIndicator";
 
-import styles from "./styles";
-
-const disabledGradient = [Colors.inactive, Colors.secondary] as const;
+import { createGradientButtonStyles } from "./styles";
 
 interface GradientButtonProps {
   title: string;
@@ -32,9 +31,12 @@ const GradientButton = ({
   gradientStyle,
   textStyle,
 }: GradientButtonProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createGradientButtonStyles);
   const isDisabled = disabled || loading;
 
-  const gradientColors = isDisabled ? disabledGradient : Colors.gradient;
+  const disabledGradient = [colors.inactive, colors.secondary] as const;
+  const gradientColors = isDisabled ? disabledGradient : colors.gradient;
 
   return (
     <TouchableOpacity
@@ -49,14 +51,14 @@ const GradientButton = ({
         end={{ x: 0.5, y: 1 }}
       >
         {loading ? (
-          <ActivityIndicator size="small" color={Colors.inactive} />
+          <ActivityIndicator size="small" color={colors.inactive} />
         ) : (
           <Text
             style={[
               styles.buttonText,
               {
                 color:
-                  textColor ?? (isDisabled ? Colors.inactive : Colors.text),
+                  textColor ?? (isDisabled ? colors.inactive : colors.text),
               },
               textStyle,
             ]}

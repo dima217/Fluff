@@ -1,7 +1,8 @@
 import { useFavoriteToggle } from "@/api/hooks/useFavoriteToggle";
 import type { RecipeResponse, TrackingResponse } from "@/api/types";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import MealCardItem from "@/shared/CardCarousel/Cards";
-import { styles } from "@/shared/CardCarousel/Cards/MealCard/styles";
+import { createMealCardStyles } from "@/shared/CardCarousel/Cards/MealCard/styles";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { getRecipesAsMealData } from "@/widgets/Home/utils/data";
 import { Image, TouchableOpacity, View } from "react-native";
@@ -14,8 +15,8 @@ interface TrackingItemProps {
 }
 
 const TrackingItem: React.FC<TrackingItemProps> = ({ record, onPress }) => {
+  const styles = useThemedStyles(createMealCardStyles);
   const { toggleFavorite } = useFavoriteToggle();
-  console.log(record?.calories);
 
   const imageSource = require("@/assets/images/FoodAva.png");
 

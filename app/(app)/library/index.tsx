@@ -1,4 +1,7 @@
-import { Colors } from "@/constants/design-tokens";
+
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { DragContext, useDrag } from "@/contexts/DragContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import Toogle from "@/shared/Toogle";
@@ -11,6 +14,7 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 const LibraryScreen = () => {
+  const styles = useThemedStyles(createstyles);
   const { t } = useTranslation();
   const [toogle, setToogle] = useState<string>(t("library.recipes"));
   const router = useRouter();
@@ -62,9 +66,9 @@ const LibraryScreen = () => {
 
 export default LibraryScreen;
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   mainContainer: {
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
     flex: 1,
   },
   toogleContainer: {

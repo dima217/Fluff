@@ -1,4 +1,5 @@
-import { Colors } from "@/constants/design-tokens";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -9,6 +10,7 @@ interface SignUpPromptProps {
 
 const SignUpPrompt: React.FC<SignUpPromptProps> = ({ onPressSignUp }) => {
   const { t } = useTranslation();
+  const styles = useThemedStyles(createSignUpPromptStyles);
 
   return (
     <View style={styles.container}>
@@ -20,24 +22,25 @@ const SignUpPrompt: React.FC<SignUpPromptProps> = ({ onPressSignUp }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 10,
-    backgroundColor: "transparent",
-    display: "flex",
-    flexDirection: "row",
-  },
-  baseText: {
-    fontSize: 12,
-    color: Colors.secondary,
-    fontWeight: "200",
-  },
-  highlightText: {
-    fontSize: 12,
-    color: Colors.primary,
-    fontWeight: "300",
-    paddingHorizontal: 2,
-  },
-});
+const createSignUpPromptStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    container: {
+      paddingTop: 10,
+      backgroundColor: "transparent",
+      display: "flex",
+      flexDirection: "row",
+    },
+    baseText: {
+      fontSize: 12,
+      color: colors.secondary,
+      fontWeight: "200",
+    },
+    highlightText: {
+      fontSize: 12,
+      color: colors.primary,
+      fontWeight: "300",
+      paddingHorizontal: 2,
+    },
+  });
 
 export default SignUpPrompt;

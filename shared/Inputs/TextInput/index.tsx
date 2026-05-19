@@ -8,7 +8,8 @@ import type {
   ViewStyle,
 } from "react-native";
 
-import styles from "./styles";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { createTextInputStyles } from "./styles";
 
 export interface TextInputProps extends Omit<RNTextInputProps, "style"> {
   label?: string;
@@ -31,6 +32,7 @@ const TextInput = ({
   editable = true,
   ...rest
 }: TextInputProps) => {
+  const styles = useThemedStyles(createTextInputStyles);
   const hasError = Boolean(errorMessage);
 
   return (

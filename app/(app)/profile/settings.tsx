@@ -1,4 +1,7 @@
-import { Colors } from "@/constants/design-tokens";
+
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { Language } from "@/contexts/LocalizationContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
@@ -7,6 +10,7 @@ import View from "@/shared/View";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
 const Settings = () => {
+  const styles = useThemedStyles(createstyles);
   const { t, language, setLanguage } = useTranslation();
 
   const languages: { code: Language; label: string }[] = [
@@ -49,14 +53,14 @@ const Settings = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   content: {
     paddingTop: 30,
     paddingHorizontal: 20,
   },
   label: {
     marginBottom: 20,
-    color: Colors.text,
+    color: colors.text,
   },
   languageOption: {
     flexDirection: "row",
@@ -68,23 +72,23 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     borderWidth: 1,
-    borderColor: Colors.inactive,
+    borderColor: colors.inactive,
   },
   languageOptionActive: {
     backgroundColor: "rgba(255, 255, 255, 0.1)",
-    borderColor: Colors.primary,
+    borderColor: colors.primary,
   },
   languageText: {
     fontSize: 16,
-    color: Colors.text,
+    color: colors.text,
   },
   languageTextActive: {
-    color: Colors.primary,
+    color: colors.primary,
     fontWeight: "600",
   },
   checkmark: {
     fontSize: 20,
-    color: Colors.primary,
+    color: colors.primary,
     fontWeight: "bold",
   },
 });

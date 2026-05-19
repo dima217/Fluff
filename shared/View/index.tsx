@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import React from "react";
 import {
   View as RNView,
@@ -7,6 +7,7 @@ import {
   ViewProps,
   ViewStyle,
 } from "react-native";
+import { AppColors } from "@/constants/design-tokens";
 
 interface CustomViewProps extends ViewProps {
   style?: StyleProp<ViewStyle>;
@@ -14,6 +15,8 @@ interface CustomViewProps extends ViewProps {
 }
 
 const View: React.FC<CustomViewProps> = ({ style, children, ...rest }) => {
+  const styles = useThemedStyles(createViewStyles);
+
   return (
     <RNView style={[styles.container, style]} {...rest}>
       {children}
@@ -21,13 +24,14 @@ const View: React.FC<CustomViewProps> = ({ style, children, ...rest }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-    paddingHorizontal: 20,
-    paddingVertical: 32,
-  },
-});
+const createViewStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 20,
+      paddingVertical: 32,
+    },
+  });
 
 export default View;

@@ -1,7 +1,8 @@
 import { useTranslation } from "@/hooks/useTranslation";
 import { View } from "react-native";
 import SexOption from "./SexOption";
-import { styles } from "./styles";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { createSexPickerStyles } from "./styles";
 
 type Gender = "male" | "female" | null;
 
@@ -11,6 +12,7 @@ interface SexPickerProps {
 }
 
 const SexPicker = ({ selectedSex, onSelect }: SexPickerProps) => {
+  const styles = useThemedStyles(createSexPickerStyles);
   const { t } = useTranslation();
 
   return (

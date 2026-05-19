@@ -1,5 +1,7 @@
+import { AppColors } from "@/constants/design-tokens";
 import { CircleSizes } from "@/constants/components/CIrcle";
-import { Colors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { StyleSheet, Text, View } from "react-native";
 import Circle from "../ui/Circle";
 
@@ -9,6 +11,7 @@ function getDayOfWeekLetter(date: Date): string {
 }
 
 function getStatusColor(
+  colors: AppColors,
   status:
     | "cheatMeal"
     | "notTracked"
@@ -18,15 +21,15 @@ function getStatusColor(
 ): string {
   switch (status) {
     case "cheatMeal":
-      return Colors.cheatMeal;
+      return colors.cheatMeal;
     case "notTracked":
-      return Colors.notTracked;
+      return colors.notTracked;
     case "strongExcess":
-      return Colors.strongExcess;
+      return colors.strongExcess;
     case "insufficientIntake":
-      return Colors.insufficientIntake;
+      return colors.insufficientIntake;
     default:
-      return Colors.green;
+      return colors.green;
   }
 }
 
@@ -48,15 +51,19 @@ interface DateWheelItemContentProps {
   size?: number;
   isSelected?: boolean;
 }
+
 export function DateWheelItem({ date, data, size }: DateWheelItemContentProps) {
+  const colors = useColors();
+  const styles = useThemedStyles(createDateWheelItemStyles);
+
   if (!date || !data) return null;
 
   const { isToday, isSelected, dayStatus } = data;
   const dayOfWeekLetter = getDayOfWeekLetter(date);
   const shouldShowCircle = isSelected || isToday;
   const circleColor = shouldShowCircle
-    ? getStatusColor(dayStatus || null)
-    : Colors.green;
+    ? getStatusColor(colors, dayStatus || null)
+    : colors.green;
 
   const toggleStyle = [
     styles.toggleBase,
@@ -81,42 +88,43 @@ export function DateWheelItem({ date, data, size }: DateWheelItemContentProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    paddingTop: 10,
-  },
-  topMarker: {
-    height: 30,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  dayOfWeekText: {
-    fontSize: 16,
-    color: "#FF0077",
-    fontWeight: "500",
-  },
-  toggleContainer: {
-    width: "80%",
-    paddingVertical: 10,
-    backgroundColor: "#242424",
-    justifyContent: "flex-start",
-    borderRadius: 30,
-    height: 100,
-    alignItems: "center",
-  },
-  toggleBase: {
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  toggleInactive: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.15)",
-  },
-  toggleActive: {
-    backgroundColor: "#FFFFFF",
-  },
-});
+const createDateWheelItemStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: "center",
+      paddingTop: 10,
+    },
+    topMarker: {
+      height: 30,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    dayOfWeekText: {
+      fontSize: 16,
+      color: colors.primary,
+      fontWeight: "500",
+    },
+    toggleContainer: {
+      width: "80%",
+      paddingVertical: 10,
+      backgroundColor: colors.inactive,
+      justifyContent: "flex-start",
+      borderRadius: 30,
+      height: 100,
+      alignItems: "center",
+    },
+    toggleBase: {
+      borderRadius: 30,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    toggleInactive: {
+      backgroundColor: colors.overlaySubtle,
+      borderWidth: 1,
+      borderColor: colors.overlayMedium,
+    },
+    toggleActive: {
+      backgroundColor: colors.text,
+    },
+  });

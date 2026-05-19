@@ -1,3 +1,4 @@
+import { useColors } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 
 import { useToggle } from "@/hooks/useToggle";
@@ -5,7 +6,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 
 import TextInput from "../TextInput";
 
-import { Colors } from "@/constants/design-tokens";
+
 import type { TextInputProps } from "../TextInput";
 
 interface PasswordInputProps extends TextInputProps {
@@ -13,6 +14,7 @@ interface PasswordInputProps extends TextInputProps {
 }
 
 const PasswordInput = ({ label, placeholder, ...rest }: PasswordInputProps) => {
+  const colors = useColors();
   const { state: visible, toggle } = useToggle();
   const { t } = useTranslation();
 
@@ -27,7 +29,7 @@ const PasswordInput = ({ label, placeholder, ...rest }: PasswordInputProps) => {
         <Ionicons
           name={iconName}
           size={20}
-          color={Colors.secondary}
+          color={colors.secondary}
           onPress={toggle}
         />
       }

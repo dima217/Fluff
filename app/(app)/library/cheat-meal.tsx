@@ -1,9 +1,12 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import {
   useAppSelector,
   useGetRecipesByIdsQuery,
   useUpdateProfileMutation,
 } from "@/api";
-import { Colors } from "@/constants/design-tokens";
+
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
 import { DeleteRecipeCardAction } from "@/shared/CardCarousel/cardActions";
@@ -15,6 +18,7 @@ import { useCallback, useMemo } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
 export default function CheatMealScreen() {
+  const styles = useThemedStyles(createstyles);
   const router = useRouter();
 
   const cheatMealIds = useAppSelector(
@@ -85,10 +89,10 @@ export default function CheatMealScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
   },
   scroll: {
     flex: 1,

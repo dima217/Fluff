@@ -1,4 +1,7 @@
-import { Colors } from "@/constants/design-tokens";
+
+import { AppColors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Circle from "@/shared/ui/Circle";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
@@ -31,6 +34,8 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   onPress,
   isLiked = false,
 }) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.header}>
@@ -47,32 +52,38 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
               <Ionicons
                 name={isLiked ? "heart" : "heart-outline"}
                 size={24}
-                color={isLiked ? Colors.primary : "#aaa"}
+                color={isLiked ? colors.primary : colors.iconMuted}
               />
             }
-            color={Colors.inactive}
+            color={colors.inactive}
           />
           <Circle
             onPress={onMenu}
-            svg={<MaterialIcons name="more-vert" size={24} color="#aaa" />}
-            color={Colors.inactive}
+            svg={
+              <MaterialIcons
+                name="more-vert"
+                size={24}
+                color={colors.iconMuted}
+              />
+            }
+            color={colors.inactive}
           />
         </View>
       </View>
 
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>
-          <FontAwesome name="star" size={16} color={Colors.primary} />
+          <FontAwesome name="star" size={16} color={colors.primary} />
           <Text style={styles.infoText}>{rating.toFixed(1)}</Text>
         </View>
         <View style={styles.divider} />
         <View style={styles.infoItem}>
-          <Ionicons name="time-outline" size={16} color={Colors.primary} />
+          <Ionicons name="time-outline" size={16} color={colors.primary} />
           <Text style={styles.infoText}>{time}</Text>
         </View>
         <View style={styles.divider} />
         <View style={styles.infoItem}>
-          <Ionicons name="fast-food-outline" size={16} color={Colors.purple} />
+          <Ionicons name="fast-food-outline" size={16} color={colors.purple} />
           <Text style={styles.infoText}>{calories} Ccal</Text>
         </View>
       </View>
@@ -82,7 +93,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   card: {
     borderRadius: 16,
     width: "100%",
@@ -94,12 +105,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   title: {
-    color: "white",
+    color: colors.text,
     fontSize: 20,
     fontWeight: "bold",
   },
   subtitle: {
-    color: "#aaa",
+    color: colors.secondary,
     fontSize: 14,
     marginTop: 2,
   },
@@ -118,7 +129,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   infoText: {
-    color: Colors.purple,
+    color: colors.purple,
     marginLeft: 4,
     fontSize: 14,
   },
@@ -129,7 +140,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
   },
   description: {
-    color: "#ccc",
+    color: colors.secondary,
     fontSize: 14,
     lineHeight: 20,
   },

@@ -1,5 +1,8 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import SerchLight from "@/assets/images/SearchLight.svg";
-import { Colors } from "@/constants/design-tokens";
+
 import TextInput from "@/shared/Inputs/TextInput";
 import Circle from "@/shared/ui/Circle";
 import { useEffect, useState } from "react";
@@ -19,6 +22,8 @@ interface NoteListProps {
 }
 
 const NoteList = ({ notes }: NoteListProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   const [search, setSearch] = useState("");
   const [filteredNotes, setFilteredNotes] = useState<NoteListItem[]>(notes);
 
@@ -38,7 +43,7 @@ const NoteList = ({ notes }: NoteListProps) => {
     <View style={styles.listContainer}>
       <TextInput
         placeholder="Search"
-        placeholderTextColor={Colors.text}
+        placeholderTextColor={colors.text}
         style={styles.searchInput}
         inputContainerStyle={styles.searchInputContainer}
         right={<Circle onPress={() => {}} svg={<SerchLight />} />}
@@ -58,7 +63,7 @@ const NoteList = ({ notes }: NoteListProps) => {
 
 export default NoteList;
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flex: 1,
   },

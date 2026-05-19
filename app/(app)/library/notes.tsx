@@ -1,4 +1,7 @@
-import { Colors } from "@/constants/design-tokens";
+
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Header from "@/shared/Header";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import View from "@/shared/View";
@@ -10,6 +13,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Pressable, View as RNView, StyleSheet } from "react-native";
 
 const Notes = () => {
+  const styles = useThemedStyles(createstyles);
   const router = useRouter();
   const [notes, setNotes] = useState<Note[]>([]);
 
@@ -66,14 +70,14 @@ const Notes = () => {
 
 export default Notes;
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   container: {
     paddingTop: 20,
     flex: 1,
   },
   createBtn: {
     width: "30%",
-    backgroundColor: Colors.primary,
+    backgroundColor: colors.primary,
     paddingVertical: 14,
     borderRadius: 29,
     alignItems: "center",

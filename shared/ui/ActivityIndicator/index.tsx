@@ -1,12 +1,17 @@
+import { useColors } from "@/contexts/ThemeContext";
 import { ActivityIndicator as NativeActivityIndicator } from "react-native";
 
 import type { ActivityIndicatorProps } from "react-native";
 
-import { Colors } from "@/constants/design-tokens";
+const ActivityIndicator = ({ color, ...rest }: ActivityIndicatorProps) => {
+  const colors = useColors();
 
-const ActivityIndicator = ({ ...rest }: ActivityIndicatorProps) => {
   return (
-    <NativeActivityIndicator size="large" color={Colors.secondary} {...rest} />
+    <NativeActivityIndicator
+      size="large"
+      color={color ?? colors.secondary}
+      {...rest}
+    />
   );
 };
 

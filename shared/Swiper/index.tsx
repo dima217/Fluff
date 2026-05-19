@@ -1,5 +1,7 @@
 import ArrowRight from "@/assets/images/ArrowRight.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions, View } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
@@ -12,7 +14,7 @@ import Animated, {
 import AnimatedArrows from "../ui/Animated/AnimatedArrows";
 import AnimatedText from "../ui/Animated/AnimatedText";
 import Circle from "../ui/Circle";
-import { styles } from "./styles";
+import { createSwiperStyles } from "./styles";
 
 export interface SwiperProps {
   onSwipeEnd: () => void;
@@ -23,6 +25,8 @@ const PADDING = 5;
 const THRESHOLD = SWIPER_WIDTH - CircleSizes.SMALL - PADDING * 4;
 
 const Swiper = ({ onSwipeEnd }: SwiperProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createSwiperStyles);
   const isPressed = useSharedValue(false);
   const translateX = useSharedValue(0);
 
@@ -67,7 +71,7 @@ const Swiper = ({ onSwipeEnd }: SwiperProps) => {
     <View style={styles.container}>
       <Animated.View style={[styles.swiperBar, animatedSwiperStyle]}>
         <LinearGradient
-          colors={["#242424", "#1A1A1A"]}
+          colors={[...colors.gradient]}
           start={[0.5, 0]}
           end={[0.5, 1]}
           style={styles.background}

@@ -1,7 +1,7 @@
 import { store } from "@/api/store";
-import { Colors } from "@/constants/design-tokens";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LocalizationProvider } from "@/contexts/LocalizationContext";
+import { ThemeProvider, useColors } from "@/contexts/ThemeContext";
 import { DragProvider } from "@/providers/DragProvider";
 import { PushNotificationsController } from "@/providers/PushNotificationsController";
 import { Stack } from "expo-router";
@@ -12,6 +12,33 @@ import "react-native-reanimated";
 import { Provider } from "react-redux";
 
 const storage = new MMKV();
+
+function RootStack() {
+  const colors = useColors();
+
+  return (
+    <>
+      <Stack
+        screenOptions={{
+          contentStyle: {
+            backgroundColor: colors.background,
+          },
+          presentation: "transparentModal",
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="(app)" />
+        <Stack.Screen name="(search)" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(recipe)" />
+        <Stack.Screen name="onboarding" />
+        <Stack.Screen name="notifications" />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+      <StatusBar style="auto" />
+    </>
+  );
+}
 
 export default function RootLayout() {
   /* const isFirstLaunch = storage.getBoolean('hasLaunch') ?? true;
@@ -32,31 +59,15 @@ export default function RootLayout() {
     <Provider store={store}>
       <PushNotificationsController />
       <LocalizationProvider>
-        <AuthProvider>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <DragProvider>
-              <Stack
-                screenOptions={{
-                  contentStyle: {
-                    backgroundColor: Colors.background,
-                  },
-                  presentation: "transparentModal",
-                  headerShown: false,
-                }}
-              >
-                <Stack.Screen name="(app)" />
-                <Stack.Screen name="(search)" />
-                <Stack.Screen name="(auth)" />
-                <Stack.Screen name="(recipe)" />
-                <Stack.Screen name="onboarding" />
-                <Stack.Screen name="notifications" />
-                <Stack.Screen name="+not-found" />
-              </Stack>
-
-              <StatusBar style="auto" />
-            </DragProvider>
-          </GestureHandlerRootView>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <DragProvider>
+                <RootStack />
+              </DragProvider>
+            </GestureHandlerRootView>
+          </AuthProvider>
+        </ThemeProvider>
       </LocalizationProvider>
     </Provider>
   );

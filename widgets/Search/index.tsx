@@ -1,6 +1,8 @@
 import type { ProductResponse, RecipeResponse } from "@/api/types";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { CircleSizes } from "@/constants/components/CIrcle";
-import { Colors } from "@/constants/design-tokens";
+
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
 import { searchStorage } from "@/utils/searchStorage";
@@ -49,6 +51,7 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
   hasSearchResults = false,
   onSearchFromHistory,
 }) => {
+  const overlayStyles = useThemedStyles(createSearchOverlayStyles);
   const router = useRouter();
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [lastVisitedIds, setLastVisitedIds] = useState<number[]>([]);
@@ -201,54 +204,55 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
   );
 };
 
-const overlayStyles = StyleSheet.create({
-  scrollContainer: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  contentContainer: {
-    alignItems: "center",
-    paddingBottom: 40,
-  },
-  historySection: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-  },
-  sectionTitle: {
-    alignSelf: "flex-start",
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "white",
-    marginTop: 30,
-    marginBottom: 15,
-  },
-  historyContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
-    alignItems: "center",
-    alignSelf: "flex-start",
-  },
-  historyText: {
-    color: "white",
-    fontSize: 16,
-    marginRight: 10,
-    marginBottom: 10,
-  },
-  historyItem: {
-    color: "white",
-  },
-  loadingText: {
-    color: "white",
-    textAlign: "center",
-    marginTop: 30,
-  },
-  emptyText: {
-    color: "gray",
-    textAlign: "center",
-    marginTop: 30,
-  },
-});
+const createSearchOverlayStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    scrollContainer: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    contentContainer: {
+      alignItems: "center",
+      paddingBottom: 40,
+    },
+    historySection: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
+    },
+    sectionTitle: {
+      alignSelf: "flex-start",
+      fontSize: 18,
+      fontWeight: "bold",
+      color: colors.text,
+      marginTop: 30,
+      marginBottom: 15,
+    },
+    historyContainer: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: 8,
+      alignItems: "center",
+      alignSelf: "flex-start",
+    },
+    historyText: {
+      color: colors.text,
+      fontSize: 16,
+      marginRight: 10,
+      marginBottom: 10,
+    },
+    historyItem: {
+      color: colors.text,
+    },
+    loadingText: {
+      color: colors.text,
+      textAlign: "center",
+      marginTop: 30,
+    },
+    emptyText: {
+      color: colors.secondary,
+      textAlign: "center",
+      marginTop: 30,
+    },
+  });
 
 export default SearchOverlayContent;

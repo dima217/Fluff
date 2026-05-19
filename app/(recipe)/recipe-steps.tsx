@@ -1,4 +1,4 @@
-import { useMediaUrl, useRateRecipeMutation } from "@/api";
+﻿import { useMediaUrl, useRateRecipeMutation } from "@/api";
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import { RecipeData } from "@/constants/types";
 import { useTranslation } from "@/hooks/useTranslation";

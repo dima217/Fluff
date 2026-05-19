@@ -68,12 +68,14 @@ const ProfileCard = () => {
             ? { source: { uri: photoUrl, ...(photoHeaders && { headers: photoHeaders }) } }
             : { title: getInitials() } )}
         />
+        <View style={styles.buttonContainer}>
         <Button
           style={styles.button}
           textStyle={styles.buttonText}
           title={t("common.edit")}
           onPress={() => router.push("/(app)/profile/settings")}
         />
+        </View>
       </View>
       <View style={styles.profileInfoColumn}>
         <TimeLabel />
@@ -113,13 +115,17 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   button: {
-    width: 64,
     height: 30,
-    paddingHorizontal: 2,
+    paddingHorizontal: 4,
     paddingVertical: 2,
   },
   buttonText: {
     fontSize: 12,
+  },
+  buttonContainer: {
+    flex: 0,
+    minWidth: 64,
+    maxWidth: 100,
   },
 });
 

@@ -1,5 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Colors } from "@/constants/design-tokens";
+
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect } from "react";
@@ -16,6 +19,8 @@ interface AnimatedTextProps {
 }
 
 const AnimatedText = ({ text }: AnimatedTextProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   const sharedValue = useSharedValue(0);
 
   useEffect(() => {
@@ -37,7 +42,7 @@ const AnimatedText = ({ text }: AnimatedTextProps) => {
       <View style={styles.gradientContainer}>
         <Animated.View style={animatedStyle}>
           <LinearGradient
-            colors={[Colors.text, Colors.secondary]}
+            colors={[colors.text, colors.secondary]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.gradient}
@@ -48,7 +53,7 @@ const AnimatedText = ({ text }: AnimatedTextProps) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   maskedView: {
     height: 20,
     width: 100,

@@ -141,6 +141,14 @@ export const translations = {
       howOldAreYou: "Сколько вам лет?",
       whatsYourHeight: "Какой у вас рост?",
       whatsYourWeight: "Какой у вас вес?",
+      cheatMealDay: "День читмила",
+      cheatMealDayDescription:
+        "Читмил длится только один день, но в это время вам разрешено есть все ваши любимые продукты, которые были запрещены во время диеты.",
+      cheatMealDayStartLabel:
+        "Выберите текущий день месяца или свою дату начала отсчёта дней",
+      cheatMealPeriodLabel: "Выберите период времени в днях",
+      dayUnit: "день",
+      skip: "Пропустить",
       selected: "Выбрано",
       continue: "Продолжить",
       processCompleted: "Процесс завершен!",
@@ -294,6 +302,14 @@ export const translations = {
       howOldAreYou: "Колькі вам гадоў?",
       whatsYourHeight: "Які ў вас рост?",
       whatsYourWeight: "Якая ў вас вага?",
+      cheatMealDay: "Дзень чытміла",
+      cheatMealDayDescription:
+        "Чытміл доўжыцца толькі адзін дзень, але ў гэты час вам дазволена есці ўсе вашы любімыя прадукты, якія былі забаронены падчас дыеты.",
+      cheatMealDayStartLabel:
+        "Выберыце бягучы дзень месяца або сваю дату пачатку адліку дзён",
+      cheatMealPeriodLabel: "Выберыце перыяд часу ў днях",
+      dayUnit: "дзень",
+      skip: "Прапусціць",
       selected: "Выбрана",
       continue: "Працягнуць",
       processCompleted: "Працэс завершаны!",
@@ -490,6 +506,14 @@ export const translations = {
       whatsYourHeight: "What's your height?",
       whatsYourWeight: "What's your weight?",
       whatsYourSportActivity: "Specify your lifestyle",
+      cheatMealDay: "Cheat meal Day",
+      cheatMealDayDescription:
+        "The cheat meal lasts only one day, but during this time you are allowed to eat all your favorite foods that were prohibited during the diet.",
+      cheatMealDayStartLabel:
+        "Select the current day of the month or your own start date for counting days",
+      cheatMealPeriodLabel: "Select a time period of days",
+      dayUnit: "day",
+      skip: "Skip",
       selected: "Selected",
       continue: "Continue",
       processCompleted: "Process completed!",

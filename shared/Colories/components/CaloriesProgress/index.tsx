@@ -6,7 +6,8 @@ import { ThemedText } from "@/shared/ui/ThemedText";
 import React from "react";
 import { Text, View } from "react-native";
 import ProgressBar from "../../../ui/Animated/ProgressBar";
-import { styles } from "./styles";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { createCaloriesProgressStyles } from "./styles";
 
 interface CalorieProgressProps {
   currentCalories: number;
@@ -19,6 +20,7 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
   dailyGoal,
   onEditPress,
 }) => {
+  const styles = useThemedStyles(createCaloriesProgressStyles);
   const progress = dailyGoal > 0 ? (currentCalories / dailyGoal) * 100 : 0;
 
   return (

@@ -1,11 +1,12 @@
 import { CircleSizes } from "@/constants/components/CIrcle";
-import { Colors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Circle from "@/shared/ui/Circle";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
-import { styles } from "./styles";
+import { createFilterTagsStyles } from "./styles";
 
 interface FilterTagsProps {
   filters: string[];
@@ -20,6 +21,9 @@ const FilterTags: React.FC<FilterTagsProps> = ({
   onTagPress,
   variant = "default",
 }) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createFilterTagsStyles);
+
   if (filters.length === 0) {
     return null;
   }
@@ -46,8 +50,8 @@ const FilterTags: React.FC<FilterTagsProps> = ({
               style={styles.removeIconWrapper}
             >
               <Circle
-                svg={<Ionicons name="close" size={14} color={Colors.border} />}
-                color={Colors.purple}
+                svg={<Ionicons name="close" size={14} color={colors.border} />}
+                color={colors.purple}
                 size={CircleSizes.S}
               />
             </TouchableOpacity>

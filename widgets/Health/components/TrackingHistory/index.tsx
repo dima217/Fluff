@@ -1,6 +1,9 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useGetRecipesByIdsQuery } from "@/api";
 import type { TrackingResponse } from "@/api/types";
-import { Colors } from "@/constants/design-tokens";
+
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { getGroupedTrackingRecords } from "../../utils";
@@ -15,6 +18,7 @@ const TrackingHistory: React.FC<TrackingHistoryProps> = ({
   records,
   onPress,
 }) => {
+  const styles = useThemedStyles(createstyles);
   const recipeIds = [
     ...new Set(
       records
@@ -63,7 +67,7 @@ const TrackingHistory: React.FC<TrackingHistoryProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   container: {
     width: "100%",
     marginTop: 20,
@@ -76,18 +80,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   headerTitle: {
-    color: Colors.text,
+    color: colors.text,
     fontSize: 18,
     fontWeight: "bold",
   },
   editButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: Colors.tab,
+    backgroundColor: colors.tab,
     borderRadius: 8,
   },
   editText: {
-    color: Colors.text,
+    color: colors.text,
   },
   timeSection: {
     gap: 12,
@@ -101,15 +105,15 @@ const styles = StyleSheet.create({
   timeLine: {
     width: 2,
     height: 20,
-    backgroundColor: Colors.border,
+    backgroundColor: colors.border,
   },
   timeText: {
-    color: Colors.secondary,
+    color: colors.secondary,
     fontSize: 12,
   },
   card: {
     flexDirection: "row",
-    backgroundColor: Colors.tab,
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 12,
     gap: 12,
@@ -120,7 +124,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 8,
     overflow: "hidden",
-    backgroundColor: Colors.inactive,
+    backgroundColor: colors.inactive,
   },
   image: {
     width: "100%",
@@ -131,12 +135,12 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   title: {
-    color: Colors.text,
+    color: colors.text,
     fontSize: 14,
     fontWeight: "500",
   },
   calories: {
-    color: Colors.text,
+    color: colors.text,
     fontSize: 12,
   },
   sourceContainer: {
@@ -145,7 +149,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   source: {
-    color: Colors.secondary,
+    color: colors.secondary,
     fontSize: 12,
   },
   iconContainer: {

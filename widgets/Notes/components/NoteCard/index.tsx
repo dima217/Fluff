@@ -1,4 +1,7 @@
-import { Colors } from "@/constants/design-tokens";
+
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import GradientView from "@/shared/ui/GradientView";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,6 +16,8 @@ interface NoteCardProps {
 }
 
 const NoteCard = ({ createdAt, title, onPress, onDelete }: NoteCardProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   return (
     <GradientView style={styles.gradientContainer}>
         <View style={styles.header}>
@@ -21,7 +26,7 @@ const NoteCard = ({ createdAt, title, onPress, onDelete }: NoteCardProps) => {
             <ThemedText type="s">{title}</ThemedText>
         </TouchableOpacity>
         <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
-          <Ionicons name="trash-outline" size={16} color={Colors.secondary} />
+          <Ionicons name="trash-outline" size={16} color={colors.secondary} />
         </TouchableOpacity>
         </View>
     </GradientView>
@@ -30,7 +35,7 @@ const NoteCard = ({ createdAt, title, onPress, onDelete }: NoteCardProps) => {
 
 export default NoteCard;
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",

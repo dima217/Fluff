@@ -1,9 +1,10 @@
-import { Colors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { ResizeMode, Video } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
 import { Dimensions, FlatList, View } from "react-native";
-import { styles } from "./styles";
+import { createLandingVideoStyles } from "./styles";
 
 const videos = [
   { id: "1", source: require("../../assets/videos/landing-1.mp4") },
@@ -14,6 +15,8 @@ const videos = [
 type VideoRef = { [key: string]: Video | null };
 
 export default function VideoSlider() {
+  const colors = useColors();
+  const styles = useThemedStyles(createLandingVideoStyles);
   const [activeIndex, setActiveIndex] = useState(0);
   const screenWidth = Dimensions.get("window").width;
   const flatListRef = useRef<FlatList>(null);
@@ -64,7 +67,7 @@ export default function VideoSlider() {
               }}
             />
             <LinearGradient
-              colors={["transparent", Colors.background]}
+              colors={["transparent", colors.background]}
               style={{
                 position: "absolute",
                 bottom: 0,

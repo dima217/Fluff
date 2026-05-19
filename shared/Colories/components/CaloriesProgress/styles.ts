@@ -1,53 +1,57 @@
-import { Colors } from "@/constants/design-tokens";
+import { AppColors, ColorPalette } from "@/constants/design-tokens";
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    backgroundColor: Colors.background,
-    borderRadius: 15,
-    padding: 20,
-    marginHorizontal: 15,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  headerText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  editButton: {
-    backgroundColor: Colors.primary,
-    borderRadius: 50,
-    padding: 8,
-  },
-  progressContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 8,
-  },
-  progressLabel: {
-    color: "white",
-  },
-  progressText: {
-    color: Colors.primary,
-    fontSize: 12,
-  },
-  calorieCountContainer: {
-    flexDirection: "row",
-    alignItems: "baseline",
-    marginTop: 20,
-  },
-  calorieCountText: {
-    color: "white",
-    fontSize: 40,
-  },
-  calorieGoalText: {
-    color: "gray",
-    fontSize: 24,
-  },
-});
+export const createCaloriesProgressStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    container: {
+      width: "100%",
+      backgroundColor:
+        colors.background === ColorPalette.light.background
+          ? colors.card
+          : colors.background,
+      borderRadius: 15,
+      padding: 20,
+      marginHorizontal: 15,
+    },
+    header: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 20,
+    },
+    headerText: {
+      color: colors.text,
+      fontSize: 18,
+      fontWeight: "bold",
+    },
+    editButton: {
+      backgroundColor: colors.primary,
+      borderRadius: 50,
+      padding: 8,
+    },
+    progressContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginBottom: 8,
+    },
+    progressLabel: {
+      color: colors.text,
+    },
+    progressText: {
+      color: colors.primary,
+      fontSize: 12,
+    },
+    calorieCountContainer: {
+      flexDirection: "row",
+      alignItems: "baseline",
+      marginTop: 20,
+    },
+    calorieCountText: {
+      color: colors.text,
+      fontSize: 40,
+    },
+    calorieGoalText: {
+      color: colors.secondary,
+      fontSize: 24,
+    },
+  });

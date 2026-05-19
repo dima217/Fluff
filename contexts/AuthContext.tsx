@@ -2,7 +2,9 @@ import { useAppDispatch, useAppSelector } from "@/api/hooks";
 import { useGetProfileQuery } from "@/api/slices/profileApi";
 import { clearUser, setProfile } from "@/api/slices/userSlice";
 import { tokenStorage } from "@/api/utils/tokenStorage";
-import { Colors } from "@/constants/design-tokens";
+import { AppColors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useRouter, useSegments } from "expo-router";
@@ -34,6 +36,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const router = useRouter();
   const segments = useSegments();
   const { t } = useTranslation();
+  const colors = useColors();
+  const styles = useThemedStyles(createAuthStyles);
   const [isInitializing, setIsInitializing] = useState(true);
   const [hasToken, setHasToken] = useState<boolean | null>(null);
 
@@ -108,7 +112,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   if (isInitializing || (hasToken === true && isLoadingProfile)) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size="large" color={colors.primary} />
         <ThemedText type="default" style={styles.loadingText}>
           {t("common.loading")}
         </ThemedText>
@@ -119,15 +123,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: Colors.background,
-    gap: 20,
-  },
-  loadingText: {
-    color: Colors.text,
-  },
-});
+const createAuthStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    loadingContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: colors.background,
+      gap: 20,
+    },
+    loadingText: {
+      color: colors.text,
+    },
+  });

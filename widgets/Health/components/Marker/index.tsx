@@ -1,5 +1,8 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { CircleSizes } from "@/constants/components/CIrcle";
-import { Colors } from "@/constants/design-tokens";
+
 import Circle from "@/shared/ui/Circle";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { StyleSheet, View } from "react-native";
@@ -9,10 +12,12 @@ interface MarkerProps {
   text?: string;
 }
 
-const Marker = ({ color = Colors.primary, text = "1" }: MarkerProps) => {
+const Marker = ({ color, text = "1" }: MarkerProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   return (
     <View style={styles.container}>
-      <Circle size={CircleSizes.MARKER} color={color} />
+      <Circle size={CircleSizes.MARKER} color={color ?? colors.primary} />
       <ThemedText type="xs">{text}</ThemedText>
     </View>
   );
@@ -20,7 +25,7 @@ const Marker = ({ color = Colors.primary, text = "1" }: MarkerProps) => {
 
 export default Marker;
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",

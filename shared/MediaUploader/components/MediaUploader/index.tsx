@@ -1,4 +1,5 @@
-import { Colors } from "@/constants/design-tokens";
+import { AppColors, ColorPalette } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useMediaPicker } from "../../hooks/useMediaPicker";
@@ -16,11 +17,11 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
   type,
   onChange,
 }) => {
+  const styles = useThemedStyles(createMediaUploaderStyles);
   const { pickMedia, clearMedia } = useMediaPicker();
 
   const handleRemove = () => {
     onChange?.(undefined);
-    console.log(value);
     clearMedia();
   };
 
@@ -52,20 +53,25 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
 
 export default MediaUploader;
 
-const styles = StyleSheet.create({
-  uploadArea: {
-    width: "100%",
-    height: 250,
-    borderRadius: 15,
-    borderWidth: 1,
-    borderColor: Colors.purple,
-    borderStyle: "dashed",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#000",
-    overflow: "hidden",
-  },
-  uploadAreaWithMedia: {
-    borderWidth: 0,
-  },
-});
+const createMediaUploaderStyles = (colors: AppColors) => {
+  const isLight = colors.background === ColorPalette.light.background;
+
+  return StyleSheet.create({
+    uploadArea: {
+      width: "100%",
+      height: 250,
+      borderRadius: 15,
+      borderWidth: 1,
+      borderColor: isLight ? colors.border : colors.purple,
+      borderStyle: "dashed",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: colors.videoBackground,
+      overflow: "hidden",
+    },
+    uploadAreaWithMedia: {
+      borderWidth: 0,
+      backgroundColor: isLight ? colors.card : colors.videoBackground,
+    },
+  });
+};

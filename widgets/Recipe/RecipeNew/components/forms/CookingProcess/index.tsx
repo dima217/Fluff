@@ -1,5 +1,8 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
-import { Colors } from "@/constants/design-tokens";
+
 import { useTranslation } from "@/hooks/useTranslation";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import LongTextInput from "@/shared/Inputs/LongTextInput";
@@ -12,6 +15,8 @@ import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 const CookingProcess = ({ onBack }: { onBack: () => void }) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   const { control, getValues } = useFormContext();
   const { t } = useTranslation();
 
@@ -72,7 +77,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
                         }
                       }}
                     >
-                      <Feather name="x" size={20} color={Colors.secondary} />
+                      <Feather name="x" size={20} color={colors.secondary} />
                     </TouchableOpacity>
                   }
                 />
@@ -121,7 +126,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   innerContainer: {
     gap: 6,
     marginVertical: 30,

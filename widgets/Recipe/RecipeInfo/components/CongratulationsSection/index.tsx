@@ -1,5 +1,8 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Fluffy from "@/assets/images/Fluffy.svg";
-import { Colors } from "@/constants/design-tokens";
+
 import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Feather } from "@expo/vector-icons";
@@ -21,6 +24,8 @@ const CongratulationsSection = ({
   stars = 0,
   onRate,
 }: CongratulationsSectionProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   const { t } = useTranslation();
 
   const handleRate = (value: number) => {
@@ -52,7 +57,7 @@ const CongratulationsSection = ({
                   <Feather
                     name={filled ? "star" : "star"}
                     size={28}
-                    color={filled ? Colors.primary : Colors.secondary}
+                    color={filled ? colors.primary : colors.secondary}
                   />
                 </TouchableOpacity>
               );
@@ -69,7 +74,7 @@ const CongratulationsSection = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   mainContainer: {
     flex: 1,
   },
@@ -89,7 +94,7 @@ const styles = StyleSheet.create({
   },
   description: {
     textAlign: "center",
-    color: Colors.secondary,
+    color: colors.secondary,
   },
   starsRow: {
     flexDirection: "row",
@@ -98,7 +103,7 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     marginTop: 8,
-    color: Colors.secondary,
+    color: colors.secondary,
   },
 });
 

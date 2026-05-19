@@ -7,6 +7,8 @@ import {
   usePrepareVideoUploadMutation,
 } from "@/api/slices/recipesApi";
 import { Recipe } from "@/constants/types";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
 import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
@@ -32,6 +34,38 @@ import {
 } from "react-native";
 
 const CreateRecipeScreen = () => {
+  const colors = useColors();
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      scroll: { flex: 1 },
+      progressWrapper: {
+        width: "100%",
+        marginTop: 20,
+        marginBottom: 40,
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      scrollContent: { flexGrow: 1 },
+      fullScreenContent: { flex: 1 },
+      progressText: {
+        fontSize: 14,
+        color: c.secondary,
+        marginBottom: 8,
+      },
+      button: { marginTop: 30 },
+      loadingOverlay: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: c.overlay,
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      },
+    })
+  );
   const { step, setStep, setTotalSteps, resetForm } = useRecipeFormContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -117,7 +151,7 @@ const CreateRecipeScreen = () => {
 
           {isSubmitting && (
             <RNView style={styles.loadingOverlay}>
-              <ActivityIndicator size="large" color="#fff" />
+              <ActivityIndicator size="large" color={colors.onPrimary} />
             </RNView>
           )}
 
@@ -135,41 +169,3 @@ const CreateRecipeScreen = () => {
 };
 
 export default CreateRecipeScreen;
-
-const styles = StyleSheet.create({
-  scroll: {
-    flex: 1,
-  },
-  progressWrapper: {
-    width: "100%",
-    marginTop: 20,
-    marginBottom: 40,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  scrollContent: {
-    flexGrow: 1,
-  },
-  fullScreenContent: {
-    flex: 1,
-  },
-  progressText: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 8,
-  },
-  button: {
-    marginTop: 30,
-  },
-  loadingOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
-  },
-});

@@ -1,3 +1,5 @@
+import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { cardSurface } from "@/shared/styles/cardSurface";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import {
   Image,
@@ -24,6 +26,39 @@ const FoodUploadCard = ({
   onPress,
   style,
 }: FoodUploadCardProps) => {
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      card: {
+        ...cardSurface(c),
+        borderRadius: 16,
+        padding: 16,
+        overflow: "hidden",
+        flex: 1,
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+      },
+      title: {
+        color: c.text,
+        fontSize: 20,
+        fontWeight: "700",
+        zIndex: 10,
+      },
+      imageContainer: {
+        width: 126,
+        height: 146,
+        paddingTop: 60,
+        zIndex: 5,
+      },
+      backgroundImage: {
+        height: 133,
+        width: 130,
+        position: "absolute",
+        left: 0,
+        bottom: 0,
+      },
+    })
+  );
+
   return (
     <TouchableOpacity onPress={onPress} style={[styles.card, style]}>
       <View style={styles.backgroundImage}>
@@ -38,36 +73,5 @@ const FoodUploadCard = ({
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#1E1E1E",
-    borderRadius: 16,
-    padding: 16,
-    overflow: "hidden",
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-  },
-  title: {
-    color: "#FFFFFF",
-    fontSize: 20,
-    fontWeight: "700",
-    zIndex: 10,
-  },
-  imageContainer: {
-    width: 126,
-    height: 146,
-    paddingTop: 60,
-    zIndex: 5,
-  },
-  backgroundImage: {
-    height: 133,
-    width: 130,
-    position: "absolute",
-    left: 0,
-    bottom: 0,
-  },
-});
 
 export default FoodUploadCard;

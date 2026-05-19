@@ -1,4 +1,8 @@
 import Search from "@/assets/images/Search.svg";
+import SearchLight from "@/assets/images/SearchLight.svg";
+import { ColorPalette } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import Circle from "@/shared/ui/Circle";
 import React from "react";
@@ -13,7 +17,7 @@ import {
 
 import FilterBig from "@/assets/images/Filter_big.svg";
 import FilterTags from "../FilterTags";
-import { styles } from "./styles";
+import { createSearchInputStyles } from "./styles";
 
 interface SearchInputProps {
   isFiltering?: boolean;
@@ -26,8 +30,8 @@ interface SearchInputProps {
   onFilterRemove?: (filter: string) => void;
   onFocus?: () => void;
   onBlur?: () => void;
-  onPress?: () => void; // For navigation to search screen
-  isPlaceholder?: boolean; // If true, shows as a button instead of input
+  onPress?: () => void;
+  isPlaceholder?: boolean;
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
@@ -43,9 +47,13 @@ const SearchInput: React.FC<SearchInputProps> = ({
   onPress,
   isPlaceholder = false,
 }) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createSearchInputStyles);
   const { t } = useTranslation();
+  const isLightTheme =
+    colors.background === ColorPalette.light.background;
+  const searchIcon = isLightTheme ? <SearchLight /> : <Search />;
 
-  // If it's a placeholder (button), show simple clickable view
   if (isPlaceholder) {
     return (
       <TouchableOpacity
@@ -59,14 +67,14 @@ const SearchInput: React.FC<SearchInputProps> = ({
             <RNTextInput
               style={styles.placeholderInput}
               placeholder={t("common.search")}
-              placeholderTextColor="gray"
+              placeholderTextColor={colors.secondary}
               editable={false}
               pointerEvents="none"
             />
           </View>
         </View>
         {onToggleFilter && (
-          <Circle onPress={onToggleFilter} frostedGlass svg={<Search />} />
+          <Circle onPress={onToggleFilter} frostedGlass svg={searchIcon} />
         )}
       </TouchableOpacity>
     );
@@ -93,7 +101,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           <RNTextInput
             style={[styles.input, { minWidth: 200 }]}
             placeholder={t("common.search")}
-            placeholderTextColor="gray"
+            placeholderTextColor={colors.secondary}
             defaultValue={searchText}
             onChangeText={onSearchChange}
             onFocus={onFocus}
@@ -107,7 +115,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           onPress={onToggleFilter}
           isSearchTriggered={isSearchTriggered}
           frostedGlass
-          svg={<Search />}
+          svg={searchIcon}
         />
       )}
     </View>

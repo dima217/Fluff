@@ -1,4 +1,7 @@
-import { Colors } from "@/constants/design-tokens";
+
+import { AppColors, ColorPalette } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { LinearGradient } from "expo-linear-gradient";
 import { ReactNode, useCallback, useEffect, useRef } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
@@ -48,6 +51,8 @@ export function AnimatedWheelPicker<
   orientation = "horizontal",
   noBackground = false,
 }: FlexibleWheelPickerProps<T>) {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   const isHorizontal = orientation === "horizontal";
   const scrollPosition = useSharedValue(initialIndex * itemSize);
 
@@ -121,6 +126,12 @@ export function AnimatedWheelPicker<
     ? { width: 60, height: "100%" as "100%" }
     : { height: 60, width: "100%" as "100%" };
 
+  const selectorBackgroundColor =
+    !isHorizontal &&
+    colors.background === ColorPalette.light.background
+      ? colors.overlayMedium
+      : "rgba(255, 255, 255, 0.1)";
+
   return (
     <View style={[styles.container, containerSizeStyle, containerStyle]}>
       <Animated.FlatList
@@ -165,7 +176,7 @@ export function AnimatedWheelPicker<
       {!noBackground && (
         <>
           <LinearGradient
-            colors={[Colors.background, "transparent"]}
+            colors={[colors.background, "transparent"]}
             start={gradientStart}
             end={gradientEnd}
             style={[
@@ -176,7 +187,7 @@ export function AnimatedWheelPicker<
             pointerEvents="none"
           />
           <LinearGradient
-            colors={["transparent", Colors.background]}
+            colors={["transparent", colors.background]}
             start={gradientStart}
             end={gradientEnd}
             style={[
@@ -191,7 +202,12 @@ export function AnimatedWheelPicker<
 
       {!noBackground && (
         <View
-          style={[styles.selector, selectorStyle, selectStyle]}
+          style={[
+            styles.selector,
+            selectorStyle,
+            selectStyle,
+            { backgroundColor: selectorBackgroundColor },
+          ]}
           pointerEvents="none"
         />
       )}
@@ -199,7 +215,7 @@ export function AnimatedWheelPicker<
   );
 }
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   container: {
     position: "relative",
     overflow: "hidden",
@@ -208,7 +224,6 @@ const styles = StyleSheet.create({
   selector: {
     position: "absolute",
     borderRadius: 30,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
   gradient: {
     position: "absolute",

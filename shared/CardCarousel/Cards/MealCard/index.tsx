@@ -3,10 +3,11 @@ import { Image, TouchableOpacity, View } from "react-native";
 import { useMediaUrl } from "@/api";
 import Heart from "@/assets/images/Heart.svg";
 import Check from "@/assets/images/Сheck.svg";
-import { Colors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import React from "react";
-import { styles } from "./styles";
+import { createMealCardStyles } from "./styles";
 
 interface RecipeCardProps {
   title: string;
@@ -25,7 +26,6 @@ const MealCard = ({
   title,
   calories,
   imageUrl,
-  status,
   onPress,
   onLikePress,
   variant,
@@ -33,6 +33,8 @@ const MealCard = ({
   isLiked = false,
   rightAction,
 }: RecipeCardProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createMealCardStyles);
   const isCarouselItem = variant === "carousel";
   const { url: mediaUrl, headers: mediaHeaders } = useMediaUrl(imageUrl, {
     skip: !imageUrl,
@@ -40,16 +42,14 @@ const MealCard = ({
 
   const handleLikePress = (e: any) => {
     e?.stopPropagation?.();
-    if (onLikePress) {
-      onLikePress();
-    }
+    onLikePress?.();
   };
 
   const renderActionIcon = () => {
     if (rightAction != null) return rightAction;
     if (isCarouselItem) {
-      const strokeColor = isLiked ? Colors.primary : "#8B868F";
-      const fillColor = isLiked ? Colors.primary : "none";
+      const strokeColor = isLiked ? colors.primary : colors.iconMuted;
+      const fillColor = isLiked ? colors.primary : "none";
 
       return (
         <TouchableOpacity onPress={handleLikePress} activeOpacity={0.7}>
@@ -58,7 +58,7 @@ const MealCard = ({
             height={24}
             stroke={strokeColor}
             fill={fillColor}
-            strokeWidth={fillColor === Colors.primary ? 0 : 1}
+            strokeWidth={fillColor === colors.primary ? 0 : 1}
           />
         </TouchableOpacity>
       );
@@ -101,14 +101,14 @@ const MealCard = ({
         ]}
       >
         <View style={styles.textDetails}>
-          <ThemedText type="xs" style={{ color: "#FFFFFF", fontSize: 12 }}>
+          <ThemedText type="xs" style={styles.title}>
             {title}
           </ThemedText>
           <View style={styles.recipeStatusTextContainer}>
             <ThemedText type="xs">{calories}</ThemedText>
             {isFluff && (
               <View style={styles.statusContainer}>
-                <ThemedText style={{ color: Colors.text }} type="xs">
+                <ThemedText style={{ color: colors.text }} type="xs">
                   Fluff
                 </ThemedText>
                 <Check width={14} height={14} />

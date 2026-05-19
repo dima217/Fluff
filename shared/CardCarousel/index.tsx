@@ -1,5 +1,6 @@
 import { useUpdateProfileMutation } from "@/api";
 import { useDrag } from "@/contexts/DragContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import MealCardItem from "@/shared/CardCarousel/Cards";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
@@ -42,6 +43,28 @@ const CardsCarousel = ({
   isDraggable = false,
   renderCardRightAction,
 }: CardsScrollProps) => {
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      container: {
+        alignSelf: "stretch",
+        zIndex: 1,
+      },
+      sectionTitle: {
+        color: c.text,
+        fontSize: 20,
+        fontWeight: "bold",
+        marginLeft: 15,
+        marginBottom: 10,
+      },
+      carouselList: {
+        gap: 15,
+      },
+      verticalList: {
+        gap: 10,
+        paddingBottom: 20,
+      },
+    })
+  );
   const isCarouselVariant = variant === "featured";
 
   const { dropZoneLayout, setIsOverDropZone } = useDrag();
@@ -116,27 +139,5 @@ const CardsCarousel = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    alignSelf: "stretch",
-    zIndex: 1,
-    elevation: 1,
-  },
-  sectionTitle: {
-    color: "white",
-    fontSize: 20,
-    fontWeight: "bold",
-    marginLeft: 15,
-    marginBottom: 10,
-  },
-  carouselList: {
-    gap: 15,
-  },
-  verticalList: {
-    gap: 10,
-    paddingBottom: 20,
-  },
-});
 
 export default CardsCarousel;

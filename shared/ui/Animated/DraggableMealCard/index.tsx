@@ -52,8 +52,6 @@ export const DraggableMealCard: React.FC<DraggableMealCardProps> = ({
   const isHovering = useSharedValue(0);
 
   const scale = useSharedValue(1);
-  const shadowOpacity = useSharedValue(0);
-  const shadowRadius = useSharedValue(0);
 
   const gesture = Gesture.Pan()
     .activateAfterLongPress(500)
@@ -75,10 +73,6 @@ export const DraggableMealCard: React.FC<DraggableMealCardProps> = ({
 
       scale.value = withSpring(inside ? 1.04 : 1);
 
-      shadowOpacity.value = withTiming(inside ? 0.25 : 0);
-
-      shadowRadius.value = withTiming(inside ? 18 : 0);
-
       runOnJS(setIsOverDropZone)(inside);
     })
     .onEnd((e) => {
@@ -97,10 +91,6 @@ export const DraggableMealCard: React.FC<DraggableMealCardProps> = ({
       isHovering.value = withTiming(0);
 
       scale.value = withSpring(1);
-
-      shadowOpacity.value = withTiming(0);
-
-      shadowRadius.value = withTiming(0);
 
       runOnJS(setIsOverDropZone)(false);
     });
@@ -134,11 +124,6 @@ export const DraggableMealCard: React.FC<DraggableMealCardProps> = ({
       borderRadius: 20,
 
       zIndex: 999,
-
-      shadowOpacity: shadowOpacity.value,
-      shadowRadius: shadowRadius.value,
-
-      elevation: isHovering.value ? 12 : 0,
     };
   });
 

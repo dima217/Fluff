@@ -1,4 +1,5 @@
 import { CircleSizes } from "@/constants/components/CIrcle";
+import { useColors } from "@/contexts/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, ViewStyle } from "react-native";
 import Animated, {
@@ -17,6 +18,7 @@ interface AnimetedArrowProps {
 }
 
 const AnimatedArrows = ({ style }: AnimetedArrowProps) => {
+  const colors = useColors();
   const arrowPhase = useSharedValue(0);
 
   arrowPhase.value = withRepeat(
@@ -32,19 +34,19 @@ const AnimatedArrows = ({ style }: AnimetedArrowProps) => {
     const color = interpolateColor(
       arrowPhase.value,
       [0, 1],
-      ["#FFFFFF", "#494242"]
+      [colors.onPrimary, colors.secondary]
     );
     return { color };
-  });
+  }, [colors]);
 
   const animatedArrowStyleRight = useAnimatedStyle(() => {
     const color = interpolateColor(
       arrowPhase.value,
       [0, 1],
-      ["#494242", "#FFFFFF"]
+      [colors.secondary, colors.onPrimary]
     );
     return { color };
-  });
+  }, [colors]);
 
   return (
     <Animated.View style={[styles.blinkingArrowsContainer, style]}>

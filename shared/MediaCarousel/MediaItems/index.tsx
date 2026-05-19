@@ -1,5 +1,8 @@
 import { useMediaUrl } from "@/api";
+import { AppColors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
 import { CircleSizes } from "@/constants/components/CIrcle";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Avatar from "@/shared/ui/Avatar";
 import Circle from "@/shared/ui/Circle";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -38,11 +41,12 @@ const MediaCarouselItem = ({
   title,
   author,
   imageUrl,
-  videoUrl,
   onPress,
   style,
   variant = "short",
 }: MediaCarouselItemProps) => {
+  const colors = useColors();
+  const styles = useThemedStyles(createMediaCarouselItemStyles);
   const isLongVariant = variant === "long";
   const { url: mediaUrl, headers: mediaHeaders } = useMediaUrl(imageUrl, {
     skip: !imageUrl,
@@ -60,6 +64,7 @@ const MediaCarouselItem = ({
     <TouchableOpacity
       style={[
         styles.cardContainer,
+        isLongVariant && styles.cardContainerLong,
         style,
         { width: cardWidth, height: isLongVariant ? "auto" : cardHeight },
       ]}
@@ -85,29 +90,33 @@ const MediaCarouselItem = ({
           >
             <View style={styles.playButtonContainer}>
               <Circle
-                svg={<Ionicons name="play" size={24} color="#FFF" />}
+                svg={<Ionicons name="play" size={24} color={colors.onPrimary} />}
                 frostedGlass
                 onPress={onPress}
               />
             </View>
-            {/* Text for short variant */}
             {!isLongVariant && (
               <View style={styles.textContainerShort}>
-                <ThemedText type="s">{title}</ThemedText>
-                <ThemedText type="xs">{author}</ThemedText>
+                <ThemedText type="s" style={styles.overlayTitle}>
+                  {title}
+                </ThemedText>
+                <ThemedText type="xs" style={styles.overlayAuthor}>
+                  {author}
+                </ThemedText>
               </View>
             )}
           </LinearGradient>
         </ImageBackground>
       </View>
 
-      {/* Text for long variant */}
       {isLongVariant && (
         <View style={styles.longContainer}>
           <Avatar size={CircleSizes.MINI} title="K" />
           <View style={styles.textContainerLong}>
-            <ThemedText type="mini">{title}</ThemedText>
-            <ThemedText type="xs" style={{ fontSize: 8 }}>
+            <ThemedText type="mini" style={styles.longTitle}>
+              {title}
+            </ThemedText>
+            <ThemedText type="xs" style={styles.longAuthor}>
               {author}
             </ThemedText>
           </View>
@@ -119,53 +128,71 @@ const MediaCarouselItem = ({
 
 export default memo(MediaCarouselItem);
 
-const styles = StyleSheet.create({
-  cardContainer: {
-    borderRadius: 16,
-    overflow: "hidden",
-  },
-  imageWrapper: {
-    overflow: "hidden",
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-  },
-  imageBackground: {
-    flex: 1,
-  },
-  image: {
-    borderRadius: 16,
-  },
-  gradientOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    padding: 15,
-    borderRadius: 16,
-    overflow: "hidden",
-  },
-  playButtonContainer: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1,
-  },
-  textContainerShort: {
-    flexDirection: "column",
-    alignSelf: "flex-start",
-    gap: 4,
-  },
-  longContainer: {
-    paddingLeft: 10,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  textContainerLong: {
-    flexDirection: "column",
-    alignSelf: "flex-start",
-    gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
-  },
-});
+const createMediaCarouselItemStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    cardContainer: {
+      borderRadius: 16,
+      overflow: "hidden",
+    },
+    cardContainerLong: {
+      backgroundColor: colors.card,
+    },
+    imageWrapper: {
+      overflow: "hidden",
+      borderTopLeftRadius: 16,
+      borderTopRightRadius: 16,
+    },
+    imageBackground: {
+      flex: 1,
+    },
+    image: {
+      borderRadius: 16,
+    },
+    gradientOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: "flex-end",
+      alignItems: "center",
+      padding: 15,
+      borderRadius: 16,
+      overflow: "hidden",
+    },
+    playButtonContainer: {
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1,
+    },
+    textContainerShort: {
+      flexDirection: "column",
+      alignSelf: "flex-start",
+      gap: 4,
+    },
+    overlayTitle: {
+      color: colors.onPrimary,
+    },
+    overlayAuthor: {
+      color: colors.onPrimary,
+      opacity: 0.85,
+    },
+    longContainer: {
+      paddingLeft: 10,
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    textContainerLong: {
+      flexDirection: "column",
+      alignSelf: "flex-start",
+      gap: 4,
+      paddingHorizontal: 10,
+      paddingVertical: 10,
+      borderBottomLeftRadius: 16,
+      borderBottomRightRadius: 16,
+    },
+    longTitle: {
+      color: colors.text,
+    },
+    longAuthor: {
+      color: colors.secondary,
+      fontSize: 8,
+    },
+  });

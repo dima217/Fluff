@@ -1,6 +1,9 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useAppDispatch } from "@/api/hooks";
 import { setAuth } from "@/api/slices/userSlice";
-import { Colors } from "@/constants/design-tokens";
+
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { useTranslation } from "@/hooks/useTranslation";
 import GradientButton from "@/shared/Buttons/GradientButton";
@@ -15,6 +18,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Fluff from "../../assets/images/Fluff.svg";
 
 const Login = () => {
+  const styles = useThemedStyles(createstyles);
   const router = useRouter();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -84,9 +88,9 @@ const Login = () => {
 
 export default Login;
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   mainContainer: {
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
     flex: 1,
     alignItems: "center",
   },
@@ -117,6 +121,6 @@ const styles = StyleSheet.create({
   },
   recoveryLinkText: {
     textDecorationLine: "underline",
-    color: Colors.primary,
+    color: colors.primary,
   },
 });

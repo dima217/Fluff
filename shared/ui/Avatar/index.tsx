@@ -1,6 +1,7 @@
 import { ImageSourcePropType } from "react-native";
 import { Avatar as RNAvatar } from "react-native-elements";
-import { styles } from "./styles";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { createAvatarStyles } from "./styles";
 
 interface AvatarProps {
   size?: "small" | "medium" | "large" | number;
@@ -10,6 +11,8 @@ interface AvatarProps {
 }
 
 const Avatar = ({ size, uri, source, title }: AvatarProps) => {
+  const styles = useThemedStyles(createAvatarStyles);
+
   if (source) {
     return <RNAvatar rounded source={source} size={size} />;
   }

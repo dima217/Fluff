@@ -3,7 +3,9 @@ import {
   useCreateTrackingMutation,
   useGetCalendarQuery,
 } from "@/api";
-import { Colors } from "@/constants/design-tokens";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
+
 import { getAge } from "@/services/equation/age";
 import { calculateDailyCalories } from "@/services/equation/calories";
 import AccountDetails from "@/shared/AccountDetails";
@@ -20,6 +22,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 
 const Health = () => {
+  const styles = useThemedStyles(createstyles);
   const { data: calendar, refetch: refetchCalendar } = useGetCalendarQuery();
 
   const router = useRouter();
@@ -140,6 +143,7 @@ const Health = () => {
           containerStyle={styles.animatedWheelPicker}
           selectStyle={styles.selectContainer}
           data={pickerData.data}
+          noBackground
           visibleCount={7}
           initialIndex={selectedDateIndex}
           onValueChange={handleValueChange}
@@ -166,9 +170,9 @@ const Health = () => {
 
 export default Health;
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   mainContainer: {
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
     flex: 1,
   },
   scrollContent: {

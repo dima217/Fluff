@@ -8,6 +8,8 @@ import {
 } from "@/api/slices/recipesApi";
 import type { RecipeResponse } from "@/api/types";
 import { Recipe } from "@/constants/types";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
 import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
@@ -37,6 +39,35 @@ import {
 } from "react-native";
 
 function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
+  const colors = useColors();
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      scroll: { flex: 1 },
+      progressWrapper: {
+        width: "100%",
+        marginTop: 20,
+        marginBottom: 40,
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      loadingOverlay: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: c.overlay,
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      },
+      centered: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      },
+    })
+  );
   const { step, setStep, setTotalSteps } = useRecipeFormContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -115,7 +146,7 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
 
         {isSubmitting && (
           <RNView style={styles.loadingOverlay}>
-            <ActivityIndicator size="large" color="#fff" />
+            <ActivityIndicator size="large" color={colors.onPrimary} />
           </RNView>
         )}
 
@@ -132,6 +163,15 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
 }
 
 export default function EditRecipeScreen() {
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      centered: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      },
+    })
+  );
   const { recipeId } = useLocalSearchParams<{ recipeId: string }>();
   const id = recipeId ? Number(recipeId) : NaN;
 
@@ -176,32 +216,3 @@ export default function EditRecipeScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  scroll: {
-    flex: 1,
-  },
-  progressWrapper: {
-    width: "100%",
-    marginTop: 20,
-    marginBottom: 40,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  loadingOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
-  },
-  centered: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

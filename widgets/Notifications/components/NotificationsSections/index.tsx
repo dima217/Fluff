@@ -1,9 +1,12 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { NotificationResponse } from "@/api";
 import {
   useGetNotificationQuery,
   useMarkNotificationsAsReadMutation,
 } from "@/api/slices/authApi";
-import { Colors } from "@/constants/design-tokens";
+
 import { ThemedText } from "@/shared/ui/ThemedText";
 import NotificationCard from "@/widgets/Notifications/components/NotificationCard";
 import { useFocusEffect } from "@react-navigation/native";
@@ -12,6 +15,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { groupNotifications } from "../../utils";
 
 const NotificationsSections = () => {
+  const styles = useThemedStyles(createstyles);
   const { data, isLoading } = useGetNotificationQuery();
   const [markAsRead] = useMarkNotificationsAsReadMutation();
   const grouped = groupNotifications(data || []);
@@ -70,7 +74,7 @@ const NotificationsSections = () => {
 
 export default NotificationsSections;
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -79,7 +83,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontWeight: "bold",
-    color: Colors.primary,
+    color: colors.primary,
     fontSize: 12,
     marginBottom: 6,
   },

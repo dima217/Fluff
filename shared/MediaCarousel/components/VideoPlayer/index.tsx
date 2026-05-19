@@ -1,3 +1,5 @@
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { ResizeMode, Video } from "expo-av";
 import { useRef } from "react";
@@ -9,6 +11,21 @@ type VideoPlayerProps = {
 };
 
 export default function VideoPlayer({ videoUrl, onClose }: VideoPlayerProps) {
+  const colors = useColors();
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      container: {
+        flex: 1,
+        backgroundColor: c.videoBackground,
+      },
+      closeBtn: {
+        position: "absolute",
+        top: 50,
+        right: 20,
+        zIndex: 10,
+      },
+    })
+  );
   const source = typeof videoUrl === "string" ? { uri: videoUrl } : videoUrl;
 
   const videoRef = useRef<Video>(null);
@@ -24,21 +41,8 @@ export default function VideoPlayer({ videoUrl, onClose }: VideoPlayerProps) {
         useNativeControls
       />
       <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-        <Ionicons name="close" size={36} color="#fff" />
+        <Ionicons name="close" size={36} color={colors.onPrimary} />
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-  },
-  closeBtn: {
-    position: "absolute",
-    top: 50,
-    right: 20,
-    zIndex: 10,
-  },
-});

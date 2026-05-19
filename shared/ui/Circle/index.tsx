@@ -1,4 +1,5 @@
-import { Colors } from "@/constants/design-tokens";
+import { ColorPalette } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
 import { BlurView } from "expo-blur";
 import { ReactNode } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
@@ -17,7 +18,7 @@ interface CircleProps {
 }
 
 const Circle = ({
-  color = Colors.primary,
+  color,
   size = 50,
   gesture,
   isSearchTriggered,
@@ -26,16 +27,21 @@ const Circle = ({
   text,
   frostedGlass = false,
 }: CircleProps) => {
+  const colors = useColors();
+  const isLightTheme =
+    colors.background === ColorPalette.light.background;
+  const circleColor = color ?? colors.primary;
+
   const circleStyle = {
     width: size,
     height: size,
     borderRadius: size / 2,
-    backgroundColor: color,
+    backgroundColor: circleColor,
   };
 
   const glowStyle = isSearchTriggered
     ? {
-        shadowColor: "#fff",
+        shadowColor: colors.text,
         shadowOpacity: 0.8,
         shadowRadius: 12,
         shadowOffset: { width: 0, height: 0 },
@@ -49,7 +55,7 @@ const Circle = ({
       return (
         <TouchableOpacity onPress={onPress}>
           <BlurView
-            intensity={isSearchTriggered ? 60 : 20}
+            intensity={isSearchTriggered ? 60 : isLightTheme ? 40 : 20}
             tint="dark"
             style={[
               styles.glassCircle,
@@ -57,6 +63,12 @@ const Circle = ({
                 width: circleStyle.width,
                 height: circleStyle.height,
                 borderRadius: circleStyle.borderRadius,
+                backgroundColor: isLightTheme
+                  ? "rgba(0, 0, 0, 0.2)"
+                  : colors.overlayMedium,
+                borderColor: isLightTheme
+                  ? "rgba(0, 0, 0, 0.14)"
+                  : colors.overlayMedium,
               },
               glowStyle,
             ]}
@@ -93,17 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.5)",
-  },
-  glow: {
-    position: "absolute",
-    backgroundColor: "rgba(255,255,255,0.2)",
-    shadowColor: "#fff",
-    shadowOpacity: 0.9,
-    shadowRadius: 20,
-    elevation: 15,
   },
 });
 

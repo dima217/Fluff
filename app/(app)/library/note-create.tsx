@@ -1,11 +1,14 @@
-import { Colors } from "@/constants/design-tokens";
+
+import { AppColors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Header from "@/shared/Header";
 import AutoGrowingTextInput from "@/shared/Inputs/AutoGrowingTextInput";
 import BorderlessTextInput from "@/shared/Inputs/BorderlessTextInput";
 import View from "@/shared/View";
 import { notesStorage } from "@/utils/notesStorage";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,11 +17,18 @@ import {
 } from "react-native";
 
 const NoteCreate = () => {
+  const colors = useColors();
+  const styles = useThemedStyles(createstyles);
   const { id } = useLocalSearchParams<{ id?: string }>();
   const isEdit = Boolean(id);
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const titleRef = useRef(title);
+  const contentRef = useRef(content);
+
+  titleRef.current = title;
+  contentRef.current = content;
 
   useEffect(() => {
     if (id) {
@@ -32,36 +42,30 @@ const NoteCreate = () => {
 
   const canEditContent = title.trim().length > 0;
 
-  const saveNote = () => {
-    const trimmedTitle = title.trim();
-    const trimmedContent = content.trim();
-
-    if (!isEdit && !trimmedTitle) return;
-
-    if (isEdit && id) {
-      const existing = notesStorage.getById(id);
-
-      if (!existing) return;
-
-      notesStorage.update(id, {
-        title: trimmedTitle || existing.title,
-        content: trimmedContent,
-      });
-    } else {
-      notesStorage.add({
-        title: trimmedTitle,
-        content: trimmedContent,
-      });
-    }
-  };
-
   useFocusEffect(
     useCallback(() => {
       return () => {
-        saveNote();
+        const trimmedTitle = titleRef.current.trim();
+        const trimmedContent = contentRef.current.trim();
+
+        if (!isEdit && !trimmedTitle) return;
+
+        if (isEdit && id) {
+          const existing = notesStorage.getById(id);
+          if (!existing) return;
+
+          notesStorage.update(id, {
+            title: trimmedTitle || existing.title,
+            content: trimmedContent,
+          });
+        } else {
+          notesStorage.add({
+            title: trimmedTitle,
+            content: trimmedContent,
+          });
+        }
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [title, content])
+    }, [id, isEdit])
   );
 
   return (
@@ -76,7 +80,7 @@ const NoteCreate = () => {
         <RNView style={styles.card}>
           <BorderlessTextInput
             placeholder="Note title..."
-            placeholderTextColor={Colors.border}
+            placeholderTextColor={colors.border}
             value={title}
             onChangeText={setTitle}
           />
@@ -85,7 +89,7 @@ const NoteCreate = () => {
             placeholder={
               canEditContent ? "Write your note..." : "Enter title first"
             }
-            placeholderTextColor={Colors.border}
+            placeholderTextColor={colors.border}
             value={content}
             onChangeText={setContent}
             editable={canEditContent}
@@ -99,7 +103,7 @@ const NoteCreate = () => {
 
 export default NoteCreate;
 
-const styles = StyleSheet.create({
+const createstyles = (colors: AppColors) => StyleSheet.create({
   keyboard: {
     paddingTop: 20,
     flex: 1,
@@ -113,7 +117,7 @@ const styles = StyleSheet.create({
 
   saveBtn: {
     marginTop: 24,
-    backgroundColor: Colors.primary,
+    backgroundColor: colors.primary,
     paddingVertical: 14,
     borderRadius: 29,
     alignItems: "center",
