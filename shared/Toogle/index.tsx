@@ -42,7 +42,7 @@ const ToggleButtons = ({
             activeOpacity={0.8}
           >
             <ThemedText
-              style={{ color: isActive ? colors.text : colors.secondary }}
+              style={{ color: isActive ? colors.onPrimary : colors.secondary }}
               type="xs"
             >
               {option}
