@@ -1,15 +1,9 @@
 import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
-import { ThemedText } from "@/shared/ui/ThemedText";
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import TextInput from "@/shared/Inputs/TextInput";
+import React, { useRef, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface TimeInputProps {
   onChange: (time24h: string | undefined) => void;
@@ -18,81 +12,76 @@ interface TimeInputProps {
 const TimeInput: React.FC<TimeInputProps> = ({ onChange }) => {
   const colors = useColors();
   const styles = useThemedStyles(createStyles);
-  const [hours, setHours] = useState("");
-  const [minutes, setMinutes] = useState("");
+  const [value, setValue] = useState("");
   const [period, setPeriod] = useState<"AM" | "PM">("AM");
+  const prevLenRef = useRef(0);
 
-  const notify = (h: string, m: string, p: "AM" | "PM") => {
-    if (!h || !m || m.length < 1) {
+  const notify = (raw: string, p: "AM" | "PM") => {
+    const parts = raw.split(":");
+    if (parts.length !== 2 || parts[0].length < 1 || parts[1].length < 2) {
       onChange(undefined);
       return;
     }
-    let h24 = parseInt(h, 10);
+    const h = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10);
+    if (isNaN(h) || isNaN(m) || h < 1 || h > 12 || m < 0 || m > 59) {
+      onChange(undefined);
+      return;
+    }
+    let h24 = h;
     if (p === "AM") {
       if (h24 === 12) h24 = 0;
     } else {
       if (h24 !== 12) h24 += 12;
     }
-    onChange(`${String(h24).padStart(2, "0")}:${m.padStart(2, "0")}`);
+    onChange(`${String(h24).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
   };
 
-  const handleHoursChange = (val: string) => {
-    const cleaned = val.replace(/[^0-9]/g, "").slice(0, 2);
-    const num = parseInt(cleaned, 10);
-    if (cleaned === "" || (num >= 1 && num <= 12)) {
-      setHours(cleaned);
-      notify(cleaned, minutes, period);
-    }
-  };
+  const handleChange = (text: string) => {
+    const digits = text.replace(/[^0-9]/g, "");
+    const isDeleting = text.length < prevLenRef.current;
+    prevLenRef.current = text.length;
 
-  const handleMinutesChange = (val: string) => {
-    const cleaned = val.replace(/[^0-9]/g, "").slice(0, 2);
-    const num = parseInt(cleaned, 10);
-    if (cleaned === "" || (num >= 0 && num <= 59)) {
-      setMinutes(cleaned);
-      notify(hours, cleaned, period);
+    let formatted = digits;
+    if (digits.length >= 3) {
+      const hPart = digits.slice(0, 2);
+      const mPart = digits.slice(2, 4);
+      const hNum = parseInt(hPart, 10);
+      if (hNum > 12) return;
+      formatted = `${hPart}:${mPart}`;
+    } else if (digits.length === 2 && !isDeleting) {
+      const hNum = parseInt(digits, 10);
+      if (hNum > 12) return;
+      formatted = `${digits}:`;
     }
+
+    setValue(formatted);
+    notify(formatted, period);
   };
 
   const handlePeriod = (p: "AM" | "PM") => {
     setPeriod(p);
-    notify(hours, minutes, p);
+    notify(value, p);
   };
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.labelContainer}>
-        <ThemedText type="xs" style={styles.label}>
-          Time
-        </ThemedText>
-      </View>
       <View style={styles.row}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[styles.timeInput, { color: colors.text }]}
-            value={hours}
-            onChangeText={handleHoursChange}
-            placeholder="11"
-            placeholderTextColor={colors.secondary}
-            keyboardType="numeric"
-            maxLength={2}
-          />
-          <Text style={[styles.separator, { color: colors.text }]}>:</Text>
-          <TextInput
-            style={[styles.timeInput, { color: colors.text }]}
-            value={minutes}
-            onChangeText={handleMinutesChange}
-            placeholder="30"
-            placeholderTextColor={colors.secondary}
-            keyboardType="numeric"
-            maxLength={2}
-          />
-        </View>
+        <TextInput
+          label="Time"
+          style={styles.inputWrapper}
+          inputStyle={styles.timeInput}
+          value={value}
+          onChangeText={handleChange}
+          placeholder="11:30"
+          placeholderTextColor={colors.secondary}
+          keyboardType="numeric"
+          maxLength={5}
+        />
         <View style={styles.periodToggle}>
           <TouchableOpacity
             style={[
               styles.periodBtn,
-              period === "AM" && styles.periodBtnActive,
             ]}
             onPress={() => handlePeriod("AM")}
             activeOpacity={0.8}
@@ -100,7 +89,7 @@ const TimeInput: React.FC<TimeInputProps> = ({ onChange }) => {
             <Text
               style={[
                 styles.periodText,
-                { color: period === "AM" ? colors.background : colors.text },
+                { color: period === "AM" ? colors.onPrimary : colors.label },
               ]}
             >
               AM
@@ -109,7 +98,6 @@ const TimeInput: React.FC<TimeInputProps> = ({ onChange }) => {
           <TouchableOpacity
             style={[
               styles.periodBtn,
-              period === "PM" && styles.periodBtnActive,
             ]}
             onPress={() => handlePeriod("PM")}
             activeOpacity={0.8}
@@ -117,7 +105,7 @@ const TimeInput: React.FC<TimeInputProps> = ({ onChange }) => {
             <Text
               style={[
                 styles.periodText,
-                { color: period === "PM" ? colors.background : colors.text },
+                { color: period === "PM" ? colors.onPrimary : colors.label },
               ]}
             >
               PM
@@ -136,53 +124,25 @@ const createStyles = (colors: AppColors) =>
     wrapper: {
       width: "100%",
     },
-    labelContainer: {
-      marginBottom: 4,
-    },
-    label: {
-      color: colors.secondary,
-      fontSize: 12,
-      marginLeft: 4,
-    },
     row: {
       flexDirection: "row",
       alignItems: "center",
       gap: 12,
     },
-    inputContainer: {
+    inputWrapper: {
       flex: 1,
-      flexDirection: "row",
-      alignItems: "center",
-      borderWidth: 1,
-      borderColor: colors.border,
-      backgroundColor: colors.card,
-      borderRadius: 26,
-      paddingHorizontal: 16,
-      height: 48,
     },
     timeInput: {
-      flex: 1,
-      fontSize: 16,
-      textAlign: "center",
-    },
-    separator: {
-      fontSize: 18,
-      fontWeight: "600",
-      marginHorizontal: 4,
     },
     periodToggle: {
       flexDirection: "row",
-      backgroundColor: colors.card,
-      borderRadius: 12,
       overflow: "hidden",
     },
     periodBtn: {
       paddingHorizontal: 16,
       paddingVertical: 12,
     },
-    periodBtnActive: {
-      backgroundColor: colors.text,
-    },
+
     periodText: {
       fontSize: 14,
       fontWeight: "600",
