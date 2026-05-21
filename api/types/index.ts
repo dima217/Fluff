@@ -351,6 +351,7 @@ export interface CreateTrackingRequest {
   name?: string; // Required if recipeId is not provided
   calories?: number; // Required if recipeId is not provided
   recipeId?: number; // Optional. If provided, name and calories will be taken from the recipe
+  created?: string; // ISO 8601. If not provided, server uses current time
 }
 
 export interface UpdateTrackingRequest {

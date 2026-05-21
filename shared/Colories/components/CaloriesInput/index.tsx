@@ -5,6 +5,7 @@ import { useIsCheatMealDay } from "@/hooks/useCheatMealDay";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Button from "@/shared/Buttons/Button";
 import CardsCarousel from "@/shared/CardCarousel";
+import TimeInput from "@/shared/Colories/components/TimeInput";
 import TextInput from "@/shared/Inputs/TextInput";
 import GradientView from "@/shared/ui/GradientView";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -15,14 +16,19 @@ import {
 } from "@/widgets/Home/utils/data";
 import SearchInput from "@/widgets/Search/components/SearchInput";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { createCaloriesInputStyles } from "./styles";
 
 type InputMode = "manual" | "search";
 
 interface CalorieInputProps {
-  onAdd: (foodName: string, calories: number, recipeId?: number) => void;
+  onAdd: (
+    foodName: string,
+    calories: number,
+    recipeId?: number,
+    time24h?: string
+  ) => void;
 }
 
 const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
@@ -33,6 +39,7 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
   const [calories, setCalories] = useState<string>("");
   const [searchText, setSearchText] = useState("");
   const [selectedRecipes, setSelectedRecipes] = useState<RecipeResponse[]>([]);
+  const timeRef = useRef<string | undefined>(undefined);
 
   const isCheatMealDay = useIsCheatMealDay();
   const cheatMealIds = useAppSelector((state) => state.user.profile?.cheatMeal);
@@ -43,20 +50,20 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
 
   const recipesArray = useMemo(() => {
     const normalized = normalizeRecipes(recipes);
-
     return filterCheatMealRecipes(normalized, cheatMealSet, isCheatMealDay);
   }, [recipes, cheatMealSet, isCheatMealDay]);
 
   const recipesAsMealData = getRecipesAsMealData(recipesArray);
 
   const handleAdd = () => {
+    const time = timeRef.current;
     if (mode === "manual" && foodName && calories) {
-      onAdd(foodName, parseInt(calories));
+      onAdd(foodName, parseInt(calories), undefined, time);
       setFoodName("");
       setCalories("");
     } else if (mode === "search" && selectedRecipes.length > 0) {
       selectedRecipes.forEach((recipe) => {
-        onAdd(recipe.name, recipe.calories, recipe.id);
+        onAdd(recipe.name, recipe.calories, recipe.id, time);
       });
       setSelectedRecipes([]);
       setSearchText("");
@@ -156,6 +163,8 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
             )}
           </>
         )}
+
+        <TimeInput onChange={(t) => { timeRef.current = t; }} />
       </View>
 
       <Button

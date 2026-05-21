@@ -106,15 +106,20 @@ const Health = () => {
   const handleAddFood = async (
     foodName: string,
     calories: number,
-    recipeId?: number
+    recipeId?: number,
+    time24h?: string
   ) => {
     try {
+      const created = time24h
+        ? new Date(`${formattedDate}T${time24h}:00`).toISOString()
+        : undefined;
+
       await createTracking({
         name: recipeId ? undefined : foodName,
         calories: recipeId ? undefined : calories,
         recipeId: recipeId,
+        created,
       }).unwrap();
-      // Refetch calendar after adding
       refetchCalendar();
     } catch (error) {
       console.error("Failed to create tracking:", error);
@@ -161,6 +166,7 @@ const Health = () => {
           <TrackingHistory
             onPress={handleTrackingCardPress}
             records={dayData.records}
+            onDeleteSuccess={refetchCalendar}
           />
         )}
       </View>
