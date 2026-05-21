@@ -73,7 +73,7 @@ const ProfileCard = () => {
           style={styles.button}
           textStyle={styles.buttonText}
           title={t("common.edit")}
-          onPress={() => router.push("/(app)/profile/settings")}
+          onPress={() => router.push("/(app)/profile/edit")}
         />
         </View>
       </View>

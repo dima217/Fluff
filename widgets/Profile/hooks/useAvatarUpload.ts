@@ -1,7 +1,6 @@
 import {
   useCreateMediaMutation,
-  useMarkMediaUploadedMutation,
-  useUpdateProfileMutation,
+  useUpdateProfileMutation
 } from "@/api";
 import {
   getFilenameFromUri,
@@ -29,7 +28,6 @@ export function useAvatarUpload() {
   const [error, setError] = useState<string | null>(null);
 
   const [createMedia] = useCreateMediaMutation();
-  const [markMediaUploaded] = useMarkMediaUploadedMutation();
   const [updateProfile] = useUpdateProfileMutation();
 
   const pickAvatar = useCallback(async (): Promise<string | null> => {
@@ -72,6 +70,8 @@ export function useAvatarUpload() {
           const size = await getFileSizeFromUri(avatarUri);
           const mediaType = getFileTypeFromUri(avatarUri);
 
+
+          console.log("filename", filename);
           const created = await createMedia({
             filename,
             size,
@@ -80,12 +80,13 @@ export function useAvatarUpload() {
             },
           }).unwrap();
 
+          console.log("created", created);
+
           await uploadFile({
             uploadUrl: created.uploadUrl,
             file: { uri: avatarUri } as ReactNativeFile,
             onProgress: (p) => setUploadProgress(Math.max(1, Math.floor(p))),
           });
-          await markMediaUploaded(created.mediaId).unwrap();
 
           photoUrl = created.url;
         }
@@ -97,13 +98,14 @@ export function useAvatarUpload() {
       } catch (e: any) {
         const msg =
           e?.data?.message || e?.message || "Failed to upload avatar";
+        console.log("error", e);
         setError(msg);
         return { success: false, error: msg };
       } finally {
         setIsUploading(false);
       }
     },
-    [createMedia, markMediaUploaded, updateProfile]
+    [createMedia, updateProfile]
   );
 
   const resetAvatarUploadState = useCallback(() => {

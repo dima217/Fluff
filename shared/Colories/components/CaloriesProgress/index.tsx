@@ -1,5 +1,6 @@
 import Edit from "@/assets/images/Edit_fill.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
+import { useColors } from "@/contexts/ThemeContext";
 import Circle from "@/shared/ui/Circle";
 import GradientView from "@/shared/ui/GradientView";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -20,6 +21,7 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
   dailyGoal,
   onEditPress,
 }) => {
+  const colors = useColors();
   const styles = useThemedStyles(createCaloriesProgressStyles);
   const progress = dailyGoal > 0 ? (currentCalories / dailyGoal) * 100 : 0;
 
@@ -30,7 +32,7 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
           Daily calorie intake
         </ThemedText>
 
-        <Circle size={CircleSizes.MINI} svg={<Edit />} onPress={onEditPress} />
+        <Circle size={CircleSizes.MINI} svg={<Edit fill={colors.onPrimary} />} onPress={onEditPress} />
       </View>
 
       <View style={styles.progressContainer}>

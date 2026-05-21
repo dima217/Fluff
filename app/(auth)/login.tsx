@@ -1,8 +1,7 @@
-import { useColors } from "@/contexts/ThemeContext";
-import { AppColors } from "@/constants/design-tokens";
-import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useAppDispatch } from "@/api/hooks";
 import { setAuth } from "@/api/slices/userSlice";
+import { AppColors } from "@/constants/design-tokens";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -14,8 +13,7 @@ import SignUpPrompt from "@/shared/ui/SignUpPrompt";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import Fluff from "../../assets/images/Fluff.svg";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 const Login = () => {
   const styles = useThemedStyles(createstyles);
@@ -52,7 +50,10 @@ const Login = () => {
     <View style={styles.mainContainer}>
       <View style={styles.container}>
         <View style={styles.iconContainer}>
-          <Fluff />
+          <Image
+            source={require("../../assets/images/adaptive-icon.png")}
+            style={styles.logo}
+          />
           <ThemedText>{t("auth.login")}</ThemedText>
         </View>
         <LoginForm />
@@ -106,6 +107,11 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
     alignItems: "center",
     gap: 15,
     marginBottom: 80,
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    borderRadius: 22,
   },
   innerContainer: {
     display: "flex",
