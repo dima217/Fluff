@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector, useLazyGetTicketMessagesQuery } from "@/api";
-import { SupportMessageAttachment, SupportMessageDto } from "@/api/types";
+import { useAppDispatch, useAppSelector, useGetSupportTicketsQuery, useLazyGetTicketMessagesQuery } from "@/api";
+import { SupportMessageAttachment, SupportMessageDto, SupportTicketStatus } from "@/api/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   buildInitialTicketContent,
@@ -11,6 +11,7 @@ import {
   consumePendingInitialTicket,
 } from "../lib/pendingInitialTicket";
 import { patchSupportTicketInCache } from "../lib/supportTicketCache";
+import { parseTicketEvent } from "../lib/supportTickets";
 import { supportWs } from "../lib/supportSocket";
 import { useSupportImageUpload } from "./useSupportImageUpload";
 
@@ -30,11 +31,29 @@ function parseMessagesResponse(res: unknown): SupportMessageDto[] {
     .filter((item): item is SupportMessageDto => item !== null);
 }
 
-export function useSupportChat(ticketId: number) {
+export function useSupportChat(ticketId: number, initialStatus?: SupportTicketStatus) {
   const dispatch = useAppDispatch();
   const [messages, setMessages] = useState<SupportMessageDto[]>([]);
   const [isAdminTyping, setIsAdminTyping] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const [ticketStatus, setTicketStatus] = useState<SupportTicketStatus>(
+    initialStatus ?? "open"
+  );
+
+  const { data: ticketsResponse } = useGetSupportTicketsQuery({
+    page: 1,
+    limit: 50,
+  });
+  const cachedTicket = ticketsResponse?.data.find((ticket) => ticket.id === ticketId);
+  const isTicketClosed = ticketStatus === "closed";
+  const ticketClosedRef = useRef(isTicketClosed);
+  ticketClosedRef.current = isTicketClosed;
+
+  useEffect(() => {
+    if (cachedTicket?.status) {
+      setTicketStatus(cachedTicket.status);
+    }
+  }, [cachedTicket?.status]);
 
   const profile = useAppSelector((s) => s.user.profile);
   const currentUserId = profile?.user?.id ? Number(profile.user.id) : 0;
@@ -55,7 +74,12 @@ export function useSupportChat(ticketId: number) {
     ) => {
       const trimmed = content.trim();
       const hasAttachments = Boolean(attachments?.length);
-      if ((!trimmed && !hasAttachments) || !ticketId || Number.isNaN(ticketId)) {
+      if (
+        ticketClosedRef.current ||
+        (!trimmed && !hasAttachments) ||
+        !ticketId ||
+        Number.isNaN(ticketId)
+      ) {
         return;
       }
 
@@ -122,6 +146,7 @@ export function useSupportChat(ticketId: number) {
   useEffect(() => {
     if (
       isLoadingMessages ||
+      isTicketClosed ||
       !ticketId ||
       Number.isNaN(ticketId) ||
       initialTicketSentRef.current ||
@@ -148,6 +173,7 @@ export function useSupportChat(ticketId: number) {
     messages.length,
     postMessage,
     ticketId,
+    isTicketClosed,
   ]);
 
   useEffect(() => {
@@ -157,6 +183,15 @@ export function useSupportChat(ticketId: number) {
     supportWs.send("support.read", { ticket_id: ticketId });
     patchSupportTicketInCache(dispatch, ticketId, {
       hasUnreadAdminMessage: false,
+    });
+
+    const offStatus = supportWs.on("support:ticket_status_updated", (data) => {
+      const { ticketId: eventTicketId, status } = parseTicketEvent(data);
+      if (eventTicketId !== ticketId || !status) return;
+
+      const nextStatus = status as SupportTicketStatus;
+      setTicketStatus(nextStatus);
+      patchSupportTicketInCache(dispatch, ticketId, { status: nextStatus });
     });
 
     const offMessage = supportWs.on("support.message", (data) => {
@@ -251,6 +286,7 @@ export function useSupportChat(ticketId: number) {
     return () => {
       offMessage();
       offRead();
+      offStatus();
       offEdit();
       offTyping();
       offAck();
@@ -261,6 +297,8 @@ export function useSupportChat(ticketId: number) {
 
   const sendMessage = useCallback(
     async (content: string, senderId: number, imageUris?: string[]) => {
+      if (ticketClosedRef.current) return false;
+
       let attachments: SupportMessageAttachment[] | undefined;
 
       if (imageUris?.length) {
@@ -279,7 +317,7 @@ export function useSupportChat(ticketId: number) {
 
   const notifyTyping = useCallback(
     (isTyping: boolean) => {
-      if (!ticketId || Number.isNaN(ticketId)) return;
+      if (ticketClosedRef.current || !ticketId || Number.isNaN(ticketId)) return;
       supportWs.send("support.typing", {
         ticket_id: ticketId,
         is_typing: isTyping,
@@ -293,6 +331,8 @@ export function useSupportChat(ticketId: number) {
     isAdminTyping,
     isLoadingMessages,
     isUploading,
+    isTicketClosed,
+    ticketStatus,
     sendMessage,
     notifyTyping,
   };

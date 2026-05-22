@@ -2,20 +2,23 @@ import { useAppSelector } from "@/api";
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Header from "@/shared/Header";
+import { ThemedText } from "@/shared/ui/ThemedText";
 import View from "@/shared/View";
 import ChatInput from "@/widgets/Support/components/ChatInput";
 import ChatMessageList, {
   ChatMessageListRef,
 } from "@/widgets/Support/components/ChatMessageList";
 import { useSupportChat } from "@/widgets/Support/hooks/useSupportChat";
+import { SupportTicketStatus } from "@/api/types";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback, useRef } from "react";
 import { Alert, KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 
 export default function SupportChatScreen() {
-  const { ticketId, subject } = useLocalSearchParams<{
+  const { ticketId, subject, status } = useLocalSearchParams<{
     ticketId: string;
     subject: string;
+    status?: SupportTicketStatus;
   }>();
 
   const styles = useThemedStyles(createStyles);
@@ -24,8 +27,8 @@ export default function SupportChatScreen() {
   const profile = useAppSelector((s) => s.user.profile);
   const currentUserId = profile?.user?.id ? Number(profile.user.id) : 0;
 
-  const { messages, isAdminTyping, isLoadingMessages, isUploading, sendMessage, notifyTyping } =
-    useSupportChat(Number(ticketId));
+  const { messages, isAdminTyping, isLoadingMessages, isUploading, isTicketClosed, sendMessage, notifyTyping } =
+    useSupportChat(Number(ticketId), status);
 
   const handleSend = useCallback(
     async (text: string, imageUris?: string[]) => {
@@ -56,11 +59,17 @@ export default function SupportChatScreen() {
           isAdminTyping={isAdminTyping}
         />
 
-        <ChatInput
-          onSend={handleSend}
-          onTypingChange={notifyTyping}
-          isSending={isUploading}
-        />
+        {isTicketClosed ? (
+          <ThemedText style={styles.closedNotice} type="xs">
+            This request has been closed by support. You can no longer send messages.
+          </ThemedText>
+        ) : (
+          <ChatInput
+            onSend={handleSend}
+            onTypingChange={notifyTyping}
+            isSending={isUploading}
+          />
+        )}
       </KeyboardAvoidingView>
     </View>
   );
@@ -74,5 +83,13 @@ const createStyles = (colors: AppColors) =>
     },
     flex: {
       flex: 1,
+    },
+    closedNotice: {
+      textAlign: "center",
+      color: colors.secondary,
+      paddingHorizontal: 20,
+      paddingVertical: 16,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
     },
   });

@@ -53,7 +53,11 @@ export default function Support() {
 
       router.push({
         pathname: "/(app)/support/chat",
-        params: { ticketId: String(ticket.id), subject: ticket.subject },
+        params: {
+          ticketId: String(ticket.id),
+          subject: ticket.subject,
+          status: ticket.status,
+        },
       });
     },
     [dispatch, router]
