@@ -1,7 +1,7 @@
-import { useColors } from "@/contexts/ThemeContext";
-import { AppColors } from "@/constants/design-tokens";
-import { useThemedStyles } from "@/hooks/useThemedStyles";
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
+import { AppColors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 
 import { useTranslation } from "@/hooks/useTranslation";
 import GradientButton from "@/shared/Buttons/GradientButton";
@@ -55,9 +55,9 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
         </ThemedText>
       </View>
 
-      <View style={{ gap: 30 }}>
+      <View style={styles.stepsContainer}>
         {fields.map((field, index) => (
-          <View key={field.id} style={{ gap: 12 }}>
+          <View key={field.id} style={styles.stepInputsContainer}>
             {/* Title */}
             <Controller
               control={control}
@@ -98,20 +98,18 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
               )}
             />
 
-            <View style={styles.mediaContainer}>
-              <Controller
-                control={control}
-                name={`steps.${index}.stepMediaUrl`}
-                render={({ field: { value, onChange } }) => (
-                  <MediaUploader
-                    key={`${fields[index].id}-${value || "empty"}`}
-                    value={value}
-                    onChange={onChange}
-                    type="image"
-                  />
-                )}
-              />
-            </View>
+            <Controller
+              control={control}
+              name={`steps.${index}.stepMediaUrl`}
+              render={({ field: { value, onChange } }) => (
+                <MediaUploader
+                  key={`${fields[index].id}-${value || "empty"}`}
+                  value={value}
+                  onChange={onChange}
+                  type="image"
+                />
+              )}
+            />
           </View>
         ))}
       </View>
@@ -131,8 +129,12 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
     gap: 6,
     marginVertical: 30,
   },
-  mediaContainer: {
-    marginBottom: 30,
+  stepsContainer: {
+    gap: 30,
+    marginBottom: 20,
+  },
+  stepInputsContainer: {
+    gap: 20,
   },
 });
 

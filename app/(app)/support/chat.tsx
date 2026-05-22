@@ -1,4 +1,5 @@
 import { useAppSelector } from "@/api";
+import { SupportTicketStatus } from "@/api/types";
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Header from "@/shared/Header";
@@ -8,11 +9,11 @@ import ChatInput from "@/widgets/Support/components/ChatInput";
 import ChatMessageList, {
   ChatMessageListRef,
 } from "@/widgets/Support/components/ChatMessageList";
+import { useAnimatedKeyboard } from "@/widgets/Support/hooks/useAnimatedKeyboard";
 import { useSupportChat } from "@/widgets/Support/hooks/useSupportChat";
-import { SupportTicketStatus } from "@/api/types";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback, useRef } from "react";
-import { Alert, KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import { Alert, Animated, StyleSheet } from "react-native";
 
 export default function SupportChatScreen() {
   const { ticketId, subject, status } = useLocalSearchParams<{
@@ -23,6 +24,7 @@ export default function SupportChatScreen() {
 
   const styles = useThemedStyles(createStyles);
   const messageListRef = useRef<ChatMessageListRef>(null);
+  const keyboardHeight = useAnimatedKeyboard();
 
   const profile = useAppSelector((s) => s.user.profile);
   const currentUserId = profile?.user?.id ? Number(profile.user.id) : 0;
@@ -37,7 +39,7 @@ export default function SupportChatScreen() {
         Alert.alert("Error", "Failed to upload photos. Please try again.");
         return false;
       }
-      setTimeout(() => messageListRef.current?.scrollToEnd(true), 100);
+      setTimeout(() => messageListRef.current?.scrollToEnd(false), 100);
       return true;
     },
     [sendMessage, currentUserId]
@@ -45,13 +47,11 @@ export default function SupportChatScreen() {
 
   return (
     <View style={styles.screen}>
-        <Header title={subject ?? "Support Chat"} />
+      <Header title={subject ?? "Support Chat"} />
 
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
-          style={styles.flex}
-        >
+      <Animated.View
+        style={[styles.flex, { paddingBottom: keyboardHeight }]}
+      >
         <ChatMessageList
           ref={messageListRef}
           messages={messages ?? []}
@@ -70,7 +70,7 @@ export default function SupportChatScreen() {
             isSending={isUploading}
           />
         )}
-      </KeyboardAvoidingView>
+      </Animated.View>
     </View>
   );
 }
@@ -79,7 +79,6 @@ const createStyles = (colors: AppColors) =>
   StyleSheet.create({
     screen: {
       flex: 1,
-      paddingBottom: 20,
     },
     flex: {
       flex: 1,

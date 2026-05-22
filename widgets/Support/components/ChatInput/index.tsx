@@ -168,45 +168,45 @@ const ChatInput: React.FC<ChatInputProps> = ({
         </ScrollView>
       ) : null}
 
-        <TextInput
-          value={text}
-          onChangeText={handleChangeText}
-          placeholder="Message..."
-          multiline
-          returnKeyType="default"
-          editable={!isSending}
-          style={styles.inputWrapper}
-          inputContainerStyle={styles.inputContainer}
-          inputStyle={styles.input}
-          left={
-            <TouchableOpacity
-              onPress={handlePickImages}
-              disabled={isSending}
-              activeOpacity={0.8}
-              hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
-            >
-              <Ionicons name="image-outline" size={20} color={colors.primary} />
-            </TouchableOpacity>
-          }
-          right={
-            <TouchableOpacity
-              style={[
-                styles.sendBtn,
-                { backgroundColor: canSend ? colors.primary : colors.inactive },
-              ]}
-              onPress={handleSend}
-              disabled={!canSend}
-              activeOpacity={0.8}
-            >
-              {isSending ? (
-                <ActivityIndicator size="small" color={colors.onPrimary} />
-              ) : (
-                <Ionicons
-                  name="send"
-                  size={18}
-                  color={canSend ? colors.onPrimary : colors.secondary}
-                />
-              )}
+      <TextInput
+        value={text}
+        onChangeText={handleChangeText}
+        placeholder="Message..."
+        multiline
+        returnKeyType="default"
+        editable={!isSending}
+        style={styles.inputWrapper}
+        inputContainerStyle={styles.inputContainer}
+        inputStyle={styles.input}
+        left={
+          <TouchableOpacity
+            onPress={handlePickImages}
+            disabled={isSending}
+            activeOpacity={0.8}
+            hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+          >
+            <Ionicons name="image-outline" size={20} color={colors.primary} />
+          </TouchableOpacity>
+        }
+        right={
+          <TouchableOpacity
+            style={[
+              styles.sendBtn,
+              { backgroundColor: canSend ? colors.primary : colors.inactive },
+            ]}
+            onPress={handleSend}
+            disabled={!canSend}
+            activeOpacity={0.8}
+          >
+            {isSending ? (
+              <ActivityIndicator size="small" color={colors.onPrimary} />
+            ) : (
+              <Ionicons
+                name="send"
+                size={18}
+                color={canSend ? colors.onPrimary : colors.secondary}
+              />
+            )}
           </TouchableOpacity>
         }
       />
@@ -255,6 +255,7 @@ const createStyles = (colors: AppColors) =>
       fontSize: 15,
       paddingVertical: 8,
       maxHeight: 100,
+      color: "white",
     },
     sendBtn: {
       width: 36,

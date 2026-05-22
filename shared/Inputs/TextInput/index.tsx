@@ -8,6 +8,7 @@ import type {
   ViewStyle,
 } from "react-native";
 
+import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { createTextInputStyles } from "./styles";
 
@@ -32,6 +33,7 @@ const TextInput = ({
   editable = true,
   ...rest
 }: TextInputProps) => {
+  const colors = useColors();
   const styles = useThemedStyles(createTextInputStyles);
   const hasError = Boolean(errorMessage);
 
@@ -56,6 +58,7 @@ const TextInput = ({
           editable={editable}
           enablesReturnKeyAutomatically
           textAlignVertical={rest.multiline ? "top" : "center"}
+          placeholderTextColor={colors.secondary}
           {...rest}
         />
         {right && <View style={styles.rightContainer}>{right}</View>}

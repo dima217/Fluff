@@ -6,8 +6,10 @@ import { ThemedText } from "@/shared/ui/ThemedText";
 import MessageBubble from "@/widgets/Support/components/MessageBubble";
 import {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
 } from "react";
 import {
@@ -34,27 +36,25 @@ const ChatMessageList = forwardRef<ChatMessageListRef, ChatMessageListProps>(
     const styles = useThemedStyles(createStyles);
     const flatListRef = useRef<FlatList<SupportMessageDto>>(null);
 
-    const scrollToEnd = (animated = false) => {
-      flatListRef.current?.scrollToEnd({ animated });
-    };
+    const invertedMessages = useMemo(
+      () => [...messages].reverse(),
+      [messages]
+    );
 
-    useImperativeHandle(ref, () => ({ scrollToEnd }), []);
+    const scrollToEnd = useCallback((animated = false) => {
+      flatListRef.current?.scrollToOffset({ offset: 0, animated });
+    }, []);
 
-    useEffect(() => {
-      if (messages.length > 0) {
-        scrollToEnd(false);
-      }
-    }, [messages.length]);
+    useImperativeHandle(ref, () => ({ scrollToEnd }), [scrollToEnd]);
 
     useEffect(() => {
       const event =
         Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
       const sub = Keyboard.addListener(event, () => {
-        requestAnimationFrame(() => scrollToEnd(true));
-        setTimeout(() => scrollToEnd(true), 100);
+        requestAnimationFrame(() => scrollToEnd(false));
       });
       return () => sub.remove();
-    }, []);
+    }, [scrollToEnd]);
 
     if (isLoading) {
       return (
@@ -69,10 +69,12 @@ const ChatMessageList = forwardRef<ChatMessageListRef, ChatMessageListProps>(
     return (
       <FlatList
         ref={flatListRef}
-        data={messages}
+        inverted 
+        data={invertedMessages}
+        showsVerticalScrollIndicator={false}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
-          <MessageBubble message={item} isOwn={item.senderType === "user"} />
+          <MessageBubble key={item.id} message={item} isOwn={item.senderType === "user"} />
         )}
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={
@@ -80,14 +82,13 @@ const ChatMessageList = forwardRef<ChatMessageListRef, ChatMessageListProps>(
             No messages yet. Send the first one!
           </ThemedText>
         }
-        ListFooterComponent={
+        ListHeaderComponent={
           isAdminTyping ? (
             <ThemedText style={styles.typing} type="xs">
               Support is typing…
             </ThemedText>
           ) : null
         }
-        onContentSizeChange={() => scrollToEnd(false)}
       />
     );
   }
@@ -103,19 +104,20 @@ const createStyles = (colors: AppColors) =>
       flex: 1,
     },
     listContent: {
-      paddingTop: 16,
-      paddingBottom: 20,
+      paddingTop: 20,
+      paddingBottom: 16,
       flexGrow: 1,
     },
     empty: {
       textAlign: "center",
       color: colors.secondary,
-      marginTop: 60,
+      transform: [{ scaleY: -1 }],
     },
     typing: {
       color: colors.secondary,
       paddingHorizontal: 20,
-      paddingBottom: 8,
+      paddingTop: 8,
       fontStyle: "italic",
+      transform: [{ scaleY: -1 }],
     },
   });

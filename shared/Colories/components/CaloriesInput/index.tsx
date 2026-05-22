@@ -113,6 +113,7 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
               label="Food Name"
               placeholder="Example: Banana, Chicken Breast"
               value={foodName}
+              placeholderTextColor={colors.secondary}
               onChangeText={setFoodName}
             />
             <TextInput

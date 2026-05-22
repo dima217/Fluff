@@ -27,9 +27,12 @@ export const createCaloriesInputStyles = (colors: AppColors) =>
       alignItems: "center",
       width: "100%",
       marginBottom: 15,
+      gap: 20,
     },
     searchInput: {
       borderWidth: 1,
       borderColor: colors.border,
+      marginTop: 0,
+      marginBottom: 0,
     },
   });

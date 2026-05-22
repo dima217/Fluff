@@ -35,8 +35,8 @@ const BaseInfo = () => {
         </ThemedText>
       </View>
 
-      {/* MEDIA */}
-      <View style={styles.mediaContainer}>
+      <View style={styles.inputsContainer}>
+        {/* MEDIA */}
         <Controller
           control={control}
           name="mediaUrl"
@@ -44,10 +44,8 @@ const BaseInfo = () => {
             <MediaUploader value={value} onChange={onChange} type="image" />
           )}
         />
-      </View>
 
-      {/* NAME */}
-      <View style={styles.inputWrapper}>
+        {/* NAME */}
         <Controller
           control={control}
           name="name"
@@ -61,10 +59,8 @@ const BaseInfo = () => {
             />
           )}
         />
-      </View>
 
-      {/* CCAL */}
-      <View style={styles.inputWrapper}>
+        {/* CCAL */}
         <Controller
           control={control}
           name="ccal"
@@ -91,10 +87,8 @@ const BaseInfo = () => {
             );
           }}
         />
-      </View>
 
-      {/* INGREDIENTS */}
-      <View style={styles.inputWrapper}>
+        {/* INGREDIENTS */}
         <Controller
           control={control}
           name="ingredients"
@@ -120,11 +114,8 @@ const styles = StyleSheet.create({
     gap: 6,
     marginBottom: 30,
   },
-  mediaContainer: {
-    marginBottom: 30,
-  },
-  inputWrapper: {
-    marginBottom: 10,
+  inputsContainer: {
+    gap: 20,
   },
   errorText: {
     color: "red",

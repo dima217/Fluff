@@ -122,6 +122,7 @@ const createStyles = (colors: AppColors) =>
   StyleSheet.create({
     wrapper: {
       width: "100%",
+      alignItems: "center",
     },
     row: {
       flexDirection: "row",
@@ -137,7 +138,6 @@ const createStyles = (colors: AppColors) =>
     },
     periodBtn: {
       paddingHorizontal: 16,
-      paddingVertical: 12,
     },
 
     periodText: {
