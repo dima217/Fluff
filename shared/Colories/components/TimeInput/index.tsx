@@ -70,7 +70,6 @@ const TimeInput: React.FC<TimeInputProps> = ({ onChange }) => {
         <TextInput
           label="Time"
           style={styles.inputWrapper}
-          inputStyle={styles.timeInput}
           value={value}
           onChangeText={handleChange}
           placeholder="11:30"
@@ -131,8 +130,6 @@ const createStyles = (colors: AppColors) =>
     },
     inputWrapper: {
       flex: 1,
-    },
-    timeInput: {
     },
     periodToggle: {
       flexDirection: "row",

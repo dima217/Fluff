@@ -77,7 +77,7 @@ export const useProfileMenuItems = (): {
       id: "support",
       title: t("profile.support"),
       icon: <Support />,
-      href: "/(app)/profile/support",
+      href: "/(app)/support",
       isNested: true,
     },
     {

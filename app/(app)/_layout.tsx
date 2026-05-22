@@ -11,6 +11,7 @@ import { CircleSizes } from "@/constants/components/CIrcle";
 import { useAppColorScheme, useColors } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import Circle from "@/shared/ui/Circle";
+import SupportTicketSync from "@/widgets/Support/components/SupportTicketSync";
 
 export default function TabLayout() {
   const router = useRouter();
@@ -19,7 +20,9 @@ export default function TabLayout() {
   const colorScheme = useAppColorScheme();
 
   return (
-    <Tabs
+    <>
+      <SupportTicketSync />
+      <Tabs
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
@@ -109,6 +112,14 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <UserTab width={28} height={28} />,
         }}
       />
+      <Tabs.Screen
+        name="support"
+        options={{
+          href: null,
+          tabBarStyle: { display: "none" },
+        }}
+      />
     </Tabs>
+    </>
   );
 }

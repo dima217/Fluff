@@ -1,8 +1,6 @@
 import { baseApi } from "../baseApi";
 import type {
   AuthResponse,
-  CreateTicketRequest,
-  CreateTicketResponse,
   LoginRequest,
   NotificationResponse,
   OAuthLoginRequest,
@@ -203,16 +201,6 @@ export const authApi = baseApi.injectEndpoints({
         }
       },
     }),
-    createSupportTicket: builder.mutation<
-      CreateTicketResponse,
-      CreateTicketRequest
-    >({
-      query: (body) => ({
-        url: "/support/tickets",
-        method: "POST",
-        body,
-      }),
-    }),
   }),
 });
 
@@ -227,5 +215,4 @@ export const {
   useRecoveryConfirmMutation,
   useOauthLoginMutation,
   useMarkNotificationsAsReadMutation,
-  useCreateSupportTicketMutation,
 } = authApi;

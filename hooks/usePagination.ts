@@ -19,6 +19,7 @@ const usePagination = ({
     data: response,
     isLoading,
     isFetching,
+    refetch,
   } = queryHook({
     page,
     limit,
@@ -68,6 +69,7 @@ const usePagination = ({
     isFetching,
     handleLoadMore,
     resetPagination,
+    refetch,
   };
 };
 

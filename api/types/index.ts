@@ -452,20 +452,53 @@ export interface CreateTicketRequest {
   screenshot?: Media;
 }
 
+export type SupportTicketStatus = "open" | "closed" | "pending";
+
 export interface Ticket {
   id: number;
   userId: number;
   subject: string;
   message: string;
-  status: "open" | "closed" | "pending";
+  status: SupportTicketStatus;
   adminResponse: string | null;
   createdAt: Date;
   updatedAt: Date;
+  adminSeen: boolean;
+  hasUnreadAdminMessage: boolean;
+}
+
+export interface SupportTicketsResponse {
+  tickets: Ticket[];
+  total: number;
+  limit: number;
+  offset: number;
 }
 
 export interface CreateTicketResponse {
   ticket: Ticket;
   media: CreateMediaResponse;
+}
+
+export interface SupportMessageAttachment {
+  url: string;
+  type?: "image" | "file";
+  name?: string;
+}
+
+export interface SupportMessageDto {
+  id: number;
+  ticketId: number;
+  senderId: number;
+  senderType: "user" | "admin";
+  content: string;
+  createdAt: string;
+  editedAt: string | null;
+  attachments?: SupportMessageAttachment[];
+}
+
+export interface SupportMessagesResponse {
+  messages: SupportMessageDto[];
+  total: number;
 }
 
 export interface RateRecipeRequest {

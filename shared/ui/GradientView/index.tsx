@@ -1,10 +1,10 @@
 import { useColors } from "@/contexts/ThemeContext";
 import { LinearGradient, LinearGradientProps } from "expo-linear-gradient";
-import { StyleSheet, ViewProps, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native";
 
-type GradientViewProps = ViewProps & {
+type GradientViewProps = Omit<ViewProps, "style"> & {
   colors?: LinearGradientProps["colors"];
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 };
 
 const GradientView = ({

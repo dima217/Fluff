@@ -37,9 +37,11 @@ const TextInput = ({
 
   return (
     <View style={[styles.container, style]}>
-      <View style={styles.labelContainer}>
-        <Text style={styles.label}>{label}</Text>
-      </View>
+      {label ? (
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>{label}</Text>
+        </View>
+      ) : null}
       <View
         style={[
           styles.inputContainer,
@@ -58,9 +60,11 @@ const TextInput = ({
         />
         {right && <View style={styles.rightContainer}>{right}</View>}
       </View>
-      <View style={styles.errorContainer}>
-        <Text style={styles.error}>{errorMessage}</Text>
-      </View>
+      {errorMessage ? (
+        <View style={styles.errorContainer}>
+          <Text style={styles.error}>{errorMessage}</Text>
+        </View>
+      ) : null}
     </View>
   );
 };

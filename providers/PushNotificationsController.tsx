@@ -98,6 +98,7 @@ export function PushNotificationsController() {
           if (!user.isAuthenticated) return;
           console.log("FCM SYNC")
           await syncFcmTokenToBackend(device.data);
+          console.log("FCM SYNC SUCCESS");
           lastSyncedToken.current = device.data;
         } catch (e) {
           console.warn("[FCM] token refresh sync failed", e);

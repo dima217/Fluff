@@ -12,6 +12,7 @@ import TextInput from "@/shared/Inputs/TextInput";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import BaseModal from "@/shared/Modals/BaseModal";
 import ErrorModal from "@/shared/Modals/ErrorModal";
+import { setPendingInitialTicket } from "@/widgets/Support/lib/pendingInitialTicket";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -38,6 +39,8 @@ const SupportRequest = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [createdTicketId, setCreatedTicketId] = useState<number | null>(null);
+  const [createdTicketSubject, setCreatedTicketSubject] = useState("");
 
   const router = useRouter();
 
@@ -69,14 +72,22 @@ const SupportRequest = () => {
         },
       }).unwrap();
 
-      // eslint-disable-next-line no-unused-expressions
-      response.media
-        ? await uploadFile({
-            uploadUrl: response.media.uploadUrl,
-            file: { uri: data.screenshot } as ReactNativeFile,
-          })
-        : {};
+      if (response.media) {
+        await uploadFile({
+          uploadUrl: response.media.uploadUrl,
+          file: { uri: data.screenshot } as ReactNativeFile,
+        });
+      }
 
+      setPendingInitialTicket({
+        ticketId: response.ticket.id,
+        subject: data.title,
+        message: data.description,
+        imageUrl: response.media?.url,
+      });
+
+      setCreatedTicketId(response.ticket.id);
+      setCreatedTicketSubject(data.title);
       setShowSuccessModal(true);
     } catch (error: any) {
       let errorMsg = t("auth.loginFailed") || "Не удалось войти в систему";
@@ -98,9 +109,17 @@ const SupportRequest = () => {
   };
 
   const handleSuccessClose = () => {
+    if (!createdTicketId) return;
+
     setShowSuccessModal(false);
-    reset(); // 💥 очищаем форму
-    router.navigate("/(app)/home");
+    reset();
+    router.replace({
+      pathname: "/(app)/support/chat",
+      params: {
+        ticketId: String(createdTicketId),
+        subject: createdTicketSubject,
+      },
+    });
   };
 
   return (
