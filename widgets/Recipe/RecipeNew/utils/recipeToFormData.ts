@@ -11,10 +11,15 @@ export function recipeResponseToFormData(recipe: RecipeResponse): Partial<Recipe
     stepMediaUrl: step.resources?.[0]?.source ?? "",
   }));
 
+  const ingredients =
+    recipe.customProducts?.length
+      ? recipe.customProducts.join(" ")
+      : recipe.description ?? "";
+
   return {
     name: recipe.name,
     ccal: recipe.calories,
-    ingredients: recipe.description ?? "",
+    ingredients,
     mediaUrl: recipe.image?.cover ?? recipe.image?.preview ?? "",
     videoUrl: recipe.promotionalVideo ?? "",
     steps: steps.length > 0 ? steps : [{ title: "", description: "", stepMediaUrl: "" }],

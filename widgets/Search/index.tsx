@@ -1,6 +1,7 @@
 import type { ProductResponse, RecipeResponse } from "@/api/types";
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import { CircleSizes } from "@/constants/components/CIrcle";
 
 import type { MealData } from "@/shared/CardCarousel";
@@ -51,6 +52,7 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
   hasSearchResults = false,
   onSearchFromHistory,
 }) => {
+  const { t } = useTranslation();
   const overlayStyles = useThemedStyles(createSearchOverlayStyles);
   const router = useRouter();
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
@@ -110,13 +112,15 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
       >
         {isLoading ? (
           <ThemedText type="xs" style={overlayStyles.loadingText}>
-            Поиск...
+            {t("search.searching")}
           </ThemedText>
         ) : hasSearchResults ? (
           <>
             {recipes.length > 0 && (
               <>
-                <Text style={overlayStyles.sectionTitle}>Рецепты</Text>
+                <Text style={overlayStyles.sectionTitle}>
+                  {t("search.recipes")}
+                </Text>
                 <CardsCarousel
                   products={recipesAsMealData}
                   onCardPress={handleRecipePress}
@@ -127,7 +131,9 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
 
             {products.length > 0 && (
               <>
-                <Text style={overlayStyles.sectionTitle}>Продукты</Text>
+                <Text style={overlayStyles.sectionTitle}>
+                  {t("search.products")}
+                </Text>
                 <CardsCarousel
                   products={productsAsMealData}
                   onCardPress={() => {}}
@@ -138,7 +144,7 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
           </>
         ) : (
           <ThemedText type="xs" style={overlayStyles.emptyText}>
-            Ничего не найдено
+            {t("search.noResults")}
           </ThemedText>
         )}
       </ScrollView>
@@ -151,7 +157,7 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
       contentContainerStyle={overlayStyles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={overlayStyles.sectionTitle}>Search History</Text>
+      <Text style={overlayStyles.sectionTitle}>{t("search.history")}</Text>
 
       {searchHistory.length > 0 ? (
         <View style={overlayStyles.historyContainer}>
@@ -170,11 +176,13 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
         </View>
       ) : (
         <ThemedText type="xs" style={overlayStyles.emptyText}>
-          Нет истории поиска
+          {t("search.noHistory")}
         </ThemedText>
       )}
 
-      <Text style={overlayStyles.sectionTitle}>Popular recipes</Text>
+      <Text style={overlayStyles.sectionTitle}>
+        {t("homeSections.popularRecipes")}
+      </Text>
 
       <FilterTags
         filters={popularProducts.map((p: ProductResponse) => p.name)}
@@ -189,7 +197,7 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
         }}
       />
 
-      <Text style={overlayStyles.sectionTitle}>Last Visited</Text>
+      <Text style={overlayStyles.sectionTitle}>{t("search.lastVisited")}</Text>
       {lastVisitedIds.length > 0 ? (
         <LastVisitedRecipes
           recipeIds={lastVisitedIds}
@@ -197,7 +205,7 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
         />
       ) : (
         <ThemedText type="xs" style={overlayStyles.emptyText}>
-          Нет посещенных рецептов
+          {t("search.noLastVisited")}
         </ThemedText>
       )}
     </ScrollView>

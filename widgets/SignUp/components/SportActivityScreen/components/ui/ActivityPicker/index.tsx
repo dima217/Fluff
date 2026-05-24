@@ -1,5 +1,6 @@
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import GradientView from "@/shared/ui/GradientView";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import React from "react";
@@ -24,6 +25,7 @@ const ActivityPicker: React.FC<ActivityPickerProps> = ({
   description,
 }) => {
   const styles = useThemedStyles(createActivityPickerStyles);
+  const { t } = useTranslation();
   const pickerStyle = isSelected ? styles.pickerActive : styles.pickerInactive;
 
   return (
@@ -40,7 +42,7 @@ const ActivityPicker: React.FC<ActivityPickerProps> = ({
               <ThemedText
                 highlightLastWord
                 type="xs"
-              >{`Training count: ${trainingCount}`}</ThemedText>
+              >{`${t("auth.trainingCount")}: ${trainingCount}`}</ThemedText>
               <ThemedText type="xs">{description}</ThemedText>
             </View>
           </GradientView>

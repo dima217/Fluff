@@ -48,7 +48,7 @@ const AccountDetails = () => {
           />        
           <View style={styles.infoContainer}>
           <ThemedText type="s">{getFirstName()}</ThemedText>
-          <ThemedText type="xs">{displayProfile?.user?.email || ""}</ThemedText>
+          <ThemedText type="xs">{ "katya485@gmail.com"}</ThemedText>
         </View>
       </View>
       <Circle

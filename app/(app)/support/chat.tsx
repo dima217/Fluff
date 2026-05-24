@@ -2,6 +2,7 @@ import { useAppSelector } from "@/api";
 import { SupportTicketStatus } from "@/api/types";
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import View from "@/shared/View";
@@ -16,6 +17,7 @@ import { useCallback, useRef } from "react";
 import { Alert, Animated, StyleSheet } from "react-native";
 
 export default function SupportChatScreen() {
+  const { t } = useTranslation();
   const { ticketId, subject, status } = useLocalSearchParams<{
     ticketId: string;
     subject: string;
@@ -47,7 +49,7 @@ export default function SupportChatScreen() {
 
   return (
     <View style={styles.screen}>
-      <Header title={subject ?? "Support Chat"} />
+      <Header title={subject ?? t("support.chatTitle")} />
 
       <Animated.View
         style={[styles.flex, { paddingBottom: keyboardHeight }]}

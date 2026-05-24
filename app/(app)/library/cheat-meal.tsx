@@ -1,6 +1,7 @@
 import { useColors } from "@/contexts/ThemeContext";
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import {
   useAppSelector,
   useGetRecipesByIdsQuery,
@@ -18,6 +19,7 @@ import { useCallback, useMemo } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
 export default function CheatMealScreen() {
+  const { t } = useTranslation();
   const styles = useThemedStyles(createstyles);
   const router = useRouter();
 
@@ -58,7 +60,7 @@ export default function CheatMealScreen() {
 
   return (
     <View style={styles.container}>
-      <Header title="Cheat Meal" />
+      <Header title={t("library.cheatMeal")} />
 
       <ScrollView
         style={styles.scroll}

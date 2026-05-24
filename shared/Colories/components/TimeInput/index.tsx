@@ -1,6 +1,7 @@
 import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import TextInput from "@/shared/Inputs/TextInput";
 import React, { useRef, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -12,6 +13,7 @@ interface TimeInputProps {
 const TimeInput: React.FC<TimeInputProps> = ({ onChange }) => {
   const colors = useColors();
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const [value, setValue] = useState("");
   const [period, setPeriod] = useState<"AM" | "PM">("AM");
   const prevLenRef = useRef(0);
@@ -68,11 +70,11 @@ const TimeInput: React.FC<TimeInputProps> = ({ onChange }) => {
     <View style={styles.wrapper}>
       <View style={styles.row}>
         <TextInput
-          label="Time"
+          label={t("health.time")}
           style={styles.inputWrapper}
           value={value}
           onChangeText={handleChange}
-          placeholder="11:30"
+          placeholder={t("health.timePlaceholder")}
           placeholderTextColor={colors.secondary}
           keyboardType="numeric"
           maxLength={5}

@@ -23,6 +23,7 @@ export const translations = {
       russian: "Русский",
       belarusian: "Беларуская",
       english: "English",
+      editProfile: "Редактировать профиль",
     },
     // Home
     home: {
@@ -105,6 +106,10 @@ export const translations = {
       cookIt: "Готовить",
       step: "Шаг",
       congratulations: "Поздравляем!",
+      congratulationsMessage:
+        "Отличная работа! Рецепт готов. Оцените блюдо, которое вы приготовили.",
+      finish: "Завершить",
+      noSteps: "Рецепт не содержит шагов",
       ingredients: "Ингредиенты",
       base: "Основное",
       baseHint: "Введите основную информацию о рецепте",
@@ -118,10 +123,54 @@ export const translations = {
       description: "Описание",
       title: "Заголовок",
       next: "Далее",
+      addNewRecipe: "Добавить рецепт",
+      editRecipe: "Редактировать рецепт",
+      review: "Просмотр",
+      reviewHint: "Проверьте данные перед публикацией",
+      makePublic: "Сделать рецепт публичным",
+      submitToSystem: "Отправить заявку на добавление в систему",
+    },
+    mediaUploader: {
+      addPhoto: "Добавить фото",
+      addVideo: "Добавить видео",
+      imageFormatsHint: "PNG, JPG до 100 МБ",
+      videoFormatsHint: "MP4, MOV до 100 МБ",
+      photoUploaded: "Фото загружено",
+      videoUploaded: "Видео загружено",
+      addMedia: "Добавить медиа",
+      fileTooLargeTitle: "Слишком большой файл",
+      fileTooLargeMessage: "Максимальный размер — 100 МБ.",
+      noPermissionTitle: "Нет доступа",
+      noPermissionMessage: "Разрешите доступ к медиатеке.",
+      requestPermissionsError: "Не удалось запросить разрешения.",
+      invalidMediaTypeTitle: "Неверный тип файла",
+      expectedImage: "Ожидалось изображение.",
+      expectedVideo: "Ожидалось видео.",
+      openLibraryError: "Не удалось открыть медиатеку.",
     },
     // Health
     health: {
       title: "Здоровье",
+      dailyCalorieIntake: "Дневное потребление калорий",
+      progress: "Прогресс",
+      complete: "выполнено",
+      dailyMenu: "Меню дня",
+      markers: {
+        cheatMeal: "Читмил",
+        notTracked: "Не отслежено",
+        strongExcess: "Сильный перебор",
+        insufficientIntake: "Недостаточное потребление",
+      },
+      foodName: "Название",
+      foodNamePlaceholder: "Например: банан, куриная грудка",
+      calories: "Калории",
+      caloriesPlaceholder: "Например: 95",
+      caloriesUnit: "ккал",
+      add: "Добавить",
+      recipeFromFluff: "Рецепт из Fluff",
+      yourOwnRecipe: "Свой рецепт",
+      time: "Время",
+      timePlaceholder: "11:30",
     },
     // Library
     library: {
@@ -134,6 +183,19 @@ export const translations = {
       favourites: "Избранное",
       recipes: "Рецепты",
       products: "Продукты",
+      notes: "Заметки",
+      newNote: "Новая заметка",
+      editNote: "Редактировать заметку",
+      notesHint: "Записывайте идеи, списки продуктов и заметки к рецептам",
+      noteTitlePlaceholder: "Название заметки...",
+      noteContentPlaceholder: "Текст заметки...",
+      noteEnterTitleFirst: "Сначала введите название",
+      notesEmpty: "Заметок пока нет",
+    },
+    support: {
+      chatTitle: "Чат поддержки",
+      reportProblem: "Сообщить о проблеме",
+      submitRequest: "Отправить обращение",
     },
     // SignUp
     signUp: {
@@ -154,6 +216,29 @@ export const translations = {
       processCompleted: "Процесс завершен!",
       male: "Мужской",
       female: "Женский",
+      whatsYourSportActivity: "Укажите ваш образ жизни",
+      sportActivities: {
+        sedentary: {
+          label: "Малоподвижный образ жизни",
+          description: "Практически нет тренировок, сидячая работа.",
+        },
+        light: {
+          label: "Лёгкая активность",
+          description: "1–3 тренировки в неделю, лёгкие нагрузки.",
+        },
+        normal: {
+          label: "Умеренная активность",
+          description: "3–5 тренировок в неделю, средние нагрузки.",
+        },
+        regular: {
+          label: "Регулярные тренировки",
+          description: "5–7 тренировок в неделю, интенсивные нагрузки.",
+        },
+        hard: {
+          label: "Высокая активность",
+          description: "Ежедневные тренировки, высокие нагрузки.",
+        },
+      },
     },
     // Home sections
     homeSections: {
@@ -168,10 +253,17 @@ export const translations = {
     search: {
       pancakes: "Блины",
       recipes: "Рецепты",
+      products: "Продукты",
       eggs: "Яйца",
       milk: "Молоко",
       whiteBread: "Белый хлеб",
       caloriesBase: "База калорий",
+      searching: "Поиск...",
+      noResults: "Ничего не найдено",
+      history: "История поиска",
+      noHistory: "Нет истории поиска",
+      lastVisited: "Недавно просмотренные",
+      noLastVisited: "Нет просмотренных рецептов",
     },
     // Modal
     modal: {
@@ -205,6 +297,7 @@ export const translations = {
       russian: "Русский",
       belarusian: "Беларуская",
       english: "English",
+      editProfile: "Рэдагаваць профіль",
     },
     // Home
     home: {
@@ -283,6 +376,26 @@ export const translations = {
     // Health
     health: {
       title: "Здароўе",
+      dailyCalorieIntake: "Суточнае спажыванне калорый",
+      progress: "Прагрэс",
+      complete: "выканана",
+      dailyMenu: "Меню дня",
+      markers: {
+        cheatMeal: "Чытміл",
+        notTracked: "Не адслежана",
+        strongExcess: "Моцны перабор",
+        insufficientIntake: "Недастатковае спажыванне",
+      },
+      foodName: "Назва",
+      foodNamePlaceholder: "Напрыклад: банан, кураная грудка",
+      calories: "Калоры",
+      caloriesPlaceholder: "Напрыклад: 95",
+      caloriesUnit: "ккал",
+      add: "Дадаць",
+      recipeFromFluff: "Рэцэпт з Fluff",
+      yourOwnRecipe: "Уласны рэцэпт",
+      time: "Час",
+      timePlaceholder: "11:30",
     },
     // Library
     library: {
@@ -295,6 +408,19 @@ export const translations = {
       favourites: "Выбранае",
       recipes: "Рэцэпты",
       products: "Прадукты",
+      notes: "Нататкі",
+      newNote: "Новая нататка",
+      editNote: "Рэдагаваць нататку",
+      notesHint: "Запісвайце ідэі, спісы прадуктаў і нататкі да рэцэптаў",
+      noteTitlePlaceholder: "Назва нататкі...",
+      noteContentPlaceholder: "Тэкст нататкі...",
+      noteEnterTitleFirst: "Спачатку ўвядзіце назву",
+      notesEmpty: "Нататак пакуль няма",
+    },
+    support: {
+      chatTitle: "Чат падтрымкі",
+      reportProblem: "Паведаміць пра праблему",
+      submitRequest: "Адправіць зварот",
     },
     // SignUp
     signUp: {
@@ -315,6 +441,29 @@ export const translations = {
       processCompleted: "Працэс завершаны!",
       male: "Мужчынскі",
       female: "Жаночы",
+      whatsYourSportActivity: "Пазначце ваш лад жыцця",
+      sportActivities: {
+        sedentary: {
+          label: "Малападвижны лад жыцця",
+          description: "Практычна няма трэнаў, сядзячая работа.",
+        },
+        light: {
+          label: "Лёгкая актыўнасць",
+          description: "1–3 трэніровкі ў тыдзень, лёгкія нагрузкі.",
+        },
+        normal: {
+          label: "Умераная актыўнасць",
+          description: "3–5 трэніровак у тыдзень, сярэднія нагрузкі.",
+        },
+        regular: {
+          label: "Рэгулярныя трэніровкі",
+          description: "5–7 трэніровак у тыдзень, інтэнсіўныя нагрузкі.",
+        },
+        hard: {
+          label: "Высокая актыўнасць",
+          description: "Штодзённыя трэніровкі, высокія нагрузкі.",
+        },
+      },
     },
     // Recipe
     recipe: {
@@ -324,6 +473,10 @@ export const translations = {
       cookIt: "Гатаваць",
       step: "Крок",
       congratulations: "Віншуем!",
+      congratulationsMessage:
+        "Выдатная работа! Рэцэпт готовы. Ацаніце страву, якую вы прыгатавалі.",
+      finish: "Завершыць",
+      noSteps: "Рэцэпт не змяшчае крокаў",
       ingredients: "Інгрэдыенты",
       base: "Асноўнае",
       baseHint: "Увядзіце асноўную інфармацыю пра рэцэпт",
@@ -337,6 +490,30 @@ export const translations = {
       description: "Апісанне",
       title: "Загаловак",
       next: "Далей",
+      addNewRecipe: "Дадаць рэцэпт",
+      editRecipe: "Рэдагаваць рэцэпт",
+      review: "Прагляд",
+      reviewHint: "Праверце даныя перад публікацыяй",
+      makePublic: "Зрабіць рэцэпт публічным",
+      submitToSystem: "Адправіць заявку на даданне ў сістэму",
+    },
+    mediaUploader: {
+      addPhoto: "Дадаць фота",
+      addVideo: "Дадаць відэа",
+      imageFormatsHint: "PNG, JPG да 100 МБ",
+      videoFormatsHint: "MP4, MOV да 100 МБ",
+      photoUploaded: "Фота загружана",
+      videoUploaded: "Відэа загружана",
+      addMedia: "Дадаць медыя",
+      fileTooLargeTitle: "Занадта вялікі файл",
+      fileTooLargeMessage: "Максімальны памер — 100 МБ.",
+      noPermissionTitle: "Няма доступу",
+      noPermissionMessage: "Дазволіце доступ да медыятэкі.",
+      requestPermissionsError: "Не атрымалася запытаць дазволы.",
+      invalidMediaTypeTitle: "Няверны тып файла",
+      expectedImage: "Чакалася выява.",
+      expectedVideo: "Чакалася відэа.",
+      openLibraryError: "Не атрымалася адкрыць медыятэку.",
     },
     // Home sections
     homeSections: {
@@ -351,10 +528,17 @@ export const translations = {
     search: {
       pancakes: "Бліны",
       recipes: "Рэцэпты",
+      products: "Прадукты",
       eggs: "Яйкі",
       milk: "Малако",
       whiteBread: "Белы хлеб",
       caloriesBase: "База калорый",
+      searching: "Пошук...",
+      noResults: "Нічога не знайдена",
+      history: "Гісторыя пошуку",
+      noHistory: "Няма гісторыі пошуку",
+      lastVisited: "Нядаўна прагледжаныя",
+      noLastVisited: "Няма прагледжаных рэцэптаў",
     },
     // Modal
     modal: {
@@ -388,6 +572,7 @@ export const translations = {
       russian: "Русский",
       belarusian: "Беларуская",
       english: "English",
+      editProfile: "Edit Profile",
     },
     // Home
     home: {
@@ -469,6 +654,10 @@ export const translations = {
       cookIt: "Cook it",
       step: "Step",
       congratulations: "Congratulations!",
+      congratulationsMessage:
+        "You did a great job! The recipe is now complete. Please rate the dish you made.",
+      finish: "Finish",
+      noSteps: "Recipe has no steps",
       ingredients: "Ingredients",
       base: "Base",
       baseHint: "Enter basic information about the recipe",
@@ -482,10 +671,54 @@ export const translations = {
       description: "Description",
       title: "Title",
       next: "Next",
+      addNewRecipe: "Add New Recipe",
+      editRecipe: "Edit Recipe",
+      review: "Review",
+      reviewHint: "Review your recipe before publishing",
+      makePublic: "Make the recipe public",
+      submitToSystem: "Submit a request to be added to the system",
+    },
+    mediaUploader: {
+      addPhoto: "Add a Photo",
+      addVideo: "Add a Video",
+      imageFormatsHint: "PNG, JPG up to 100MB",
+      videoFormatsHint: "MP4, MOV up to 100MB",
+      photoUploaded: "Photo uploaded",
+      videoUploaded: "Video uploaded",
+      addMedia: "Add media",
+      fileTooLargeTitle: "File too large",
+      fileTooLargeMessage: "Maximum size is 100MB.",
+      noPermissionTitle: "No permission",
+      noPermissionMessage: "Please allow access to your media library.",
+      requestPermissionsError: "Failed to request permissions.",
+      invalidMediaTypeTitle: "Invalid media type",
+      expectedImage: "Expected an image.",
+      expectedVideo: "Expected a video.",
+      openLibraryError: "Failed to open media library.",
     },
     // Health
     health: {
       title: "Health",
+      dailyCalorieIntake: "Daily calorie intake",
+      progress: "Progress",
+      complete: "Complete",
+      dailyMenu: "Daily menu",
+      markers: {
+        cheatMeal: "Cheat Meal",
+        notTracked: "Not Tracked",
+        strongExcess: "Strong Excess",
+        insufficientIntake: "Insufficient Intake",
+      },
+      foodName: "Food Name",
+      foodNamePlaceholder: "Example: Banana, Chicken Breast",
+      calories: "Calories",
+      caloriesPlaceholder: "Example: 95",
+      caloriesUnit: "kcal",
+      add: "Add",
+      recipeFromFluff: "Recipe from Fluff",
+      yourOwnRecipe: "Your own recipe",
+      time: "Time",
+      timePlaceholder: "11:30",
     },
     // Library
     library: {
@@ -498,6 +731,19 @@ export const translations = {
       favourites: "Favourites",
       recipes: "Recipes",
       products: "Products",
+      notes: "Notes",
+      newNote: "New note",
+      editNote: "Edit note",
+      notesHint: "Save ideas, grocery lists, and recipe notes",
+      noteTitlePlaceholder: "Note title...",
+      noteContentPlaceholder: "Write your note...",
+      noteEnterTitleFirst: "Enter title first",
+      notesEmpty: "No notes yet",
+    },
+    support: {
+      chatTitle: "Support Chat",
+      reportProblem: "Report a Problem",
+      submitRequest: "Submit Request",
     },
     // SignUp
     signUp: {
@@ -519,6 +765,28 @@ export const translations = {
       processCompleted: "Process completed!",
       male: "Male",
       female: "Female",
+      sportActivities: {
+        sedentary: {
+          label: "Sedentary lifestyle",
+          description: "Little to no exercise, mostly desk work.",
+        },
+        light: {
+          label: "Light physical activity",
+          description: "1–3 workouts per week, light intensity.",
+        },
+        normal: {
+          label: "Moderate physical activity",
+          description: "3–5 workouts per week, moderate intensity.",
+        },
+        regular: {
+          label: "Regular training",
+          description: "5–7 workouts per week, high intensity.",
+        },
+        hard: {
+          label: "Hard physical activity",
+          description: "Daily workouts, very high intensity.",
+        },
+      },
     },
     // Home sections
     homeSections: {
@@ -533,10 +801,17 @@ export const translations = {
     search: {
       pancakes: "Pancakes",
       recipes: "Recipes",
+      products: "Products",
       eggs: "Eggs",
       milk: "Milk",
       whiteBread: "White Bread",
       caloriesBase: "Calories Base",
+      searching: "Searching...",
+      noResults: "Nothing found",
+      history: "Search history",
+      noHistory: "No search history",
+      lastVisited: "Last visited",
+      noLastVisited: "No visited recipes",
     },
     // Modal
     modal: {

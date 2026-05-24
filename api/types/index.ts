@@ -163,6 +163,7 @@ export interface UpdateRecipeRequest {
   promotionalVideo?: string | null;
   description?: string | null;
   productIds?: number[];
+  customProducts?: string[];
   calories?: number;
   cookAt?: number;
   stepsConfig?: RecipeStepsConfig;

@@ -20,12 +20,12 @@ export const SportActivityList = ({ value, onChange }: SportActivityListProps) =
       <View style={styles.activityList}>
         {activityOptions.map((item) => (
           <ActivityPicker
-            key={item.label}
+            key={item.id}
             isSelected={value === item.trainingCount}
             onPress={() => onChange(item.trainingCount)}
-            label={item.label}
+            label={t(`signUp.sportActivities.${item.id}.label`)}
             trainingCount={item.trainingCount}
-            description={item.description}
+            description={t(`signUp.sportActivities.${item.id}.description`)}
           />
         ))}
       </View>

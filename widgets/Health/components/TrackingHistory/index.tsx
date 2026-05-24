@@ -3,6 +3,7 @@ import type { TrackingResponse } from "@/api/types";
 import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
@@ -24,6 +25,7 @@ const TrackingHistory: React.FC<TrackingHistoryProps> = ({
 }) => {
   const styles = useThemedStyles(createstyles);
   const colors = useColors();
+  const { t } = useTranslation();
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [deleteTracking] = useDeleteTrackingMutation();
@@ -79,7 +81,7 @@ const TrackingHistory: React.FC<TrackingHistoryProps> = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <ThemedText type="s" style={styles.headerTitle}>
-          Daily menu
+          {t("health.dailyMenu")}
         </ThemedText>
 
         {isEditMode ? (
@@ -99,7 +101,7 @@ const TrackingHistory: React.FC<TrackingHistoryProps> = ({
             </TouchableOpacity>
             <View style={styles.saveButtonContainer}>
               <Button
-                title="Save"
+                title={t("common.save")}
                 onPress={handleSaveEdit}
                 style={styles.saveButton}
                 textStyle={styles.saveButtonText}
@@ -112,7 +114,7 @@ const TrackingHistory: React.FC<TrackingHistoryProps> = ({
             onPress={handleEnterEdit}
           >
             <ThemedText type="xs" style={styles.editText}>
-              Edit
+              {t("common.edit")}
             </ThemedText>
           </TouchableOpacity>
         )}

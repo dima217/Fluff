@@ -1,4 +1,5 @@
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
+import { useColors } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -6,13 +7,14 @@ import { Controller, useFormContext } from "react-hook-form";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 const Tutorial = ({ onBack }: { onBack: () => void }) => {
+  const colors = useColors();
   const { control } = useFormContext();
   const { t } = useTranslation();
 
   return (
     <View>
       <TouchableOpacity onPress={onBack}>
-        <ArrowLeft />
+        <ArrowLeft color={colors.text} />
       </TouchableOpacity>
 
       <View style={styles.innerContainer}>

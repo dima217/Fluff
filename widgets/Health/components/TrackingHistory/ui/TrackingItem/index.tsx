@@ -2,6 +2,7 @@ import { useFavoriteToggle } from "@/api/hooks/useFavoriteToggle";
 import type { RecipeResponse, TrackingResponse } from "@/api/types";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import MealCardItem from "@/shared/CardCarousel/Cards";
 import { createMealCardStyles } from "@/shared/CardCarousel/Cards/MealCard/styles";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -60,6 +61,7 @@ const TrackingItem: React.FC<TrackingItemProps> = ({
   onToggleSelect,
 }) => {
   const styles = useThemedStyles(createMealCardStyles);
+  const { t } = useTranslation();
   const { toggleFavorite } = useFavoriteToggle();
 
   const imageSource = require("@/assets/images/FoodAva.png");
@@ -111,7 +113,7 @@ const TrackingItem: React.FC<TrackingItemProps> = ({
         <ThemedText type="xs" style={styles.title}>
           {record.name}
         </ThemedText>
-        <ThemedText type="xs">{`${record.calories} ккал`}</ThemedText>
+        <ThemedText type="xs">{`${record.calories} ${t("health.caloriesUnit")}`}</ThemedText>
       </View>
 
       {isEditMode && (

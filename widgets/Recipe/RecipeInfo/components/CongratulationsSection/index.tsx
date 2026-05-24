@@ -65,8 +65,7 @@ const CongratulationsSection = ({
           </View>
 
           <ThemedText type="notion" style={styles.description}>
-            You did a great job! The recipe is now complete. Please rate the
-            dish you made.
+            {t("recipe.congratulationsMessage")}
           </ThemedText>
         </View>
       </ImageBackground>

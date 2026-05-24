@@ -42,7 +42,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
   return (
     <View>
       <TouchableOpacity onPress={onBack}>
-        <ArrowLeft />
+        <ArrowLeft color={colors.text} />
       </TouchableOpacity>
 
       <View style={styles.innerContainer}>

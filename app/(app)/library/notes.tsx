@@ -1,10 +1,11 @@
 
-import { useColors } from "@/contexts/ThemeContext";
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import View from "@/shared/View";
+import { getAppLocale } from "@/utils/locale";
 import { notesStorage, type Note } from "@/utils/notesStorage";
 import NoteList from "@/widgets/Notes/components/NoteList";
 import { getNoteItems } from "@/widgets/Notes/utils";
@@ -13,6 +14,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Pressable, View as RNView, StyleSheet } from "react-native";
 
 const Notes = () => {
+  const { t, language } = useTranslation();
   const styles = useThemedStyles(createstyles);
   const router = useRouter();
   const [notes, setNotes] = useState<Note[]>([]);
@@ -47,20 +49,20 @@ const Notes = () => {
       getNoteItems(notes, {
         onPress: handleNotePress,
         onDelete: handleDelete,
-      }),
-    [notes, handleNotePress, handleDelete]
+      }, getAppLocale(language)),
+    [notes, handleNotePress, handleDelete, language]
   );
 
   return (
     <View>
-      <Header title="Notes" />
+      <Header title={t("library.notes")} />
 
       <RNView style={styles.container}>
         <NoteList notes={noteItems} />
 
         <RNView style={styles.createBtnContainer}>
           <Pressable onPress={handleCreate} style={styles.createBtn}>
-            <ThemedText type="s">New note</ThemedText>
+            <ThemedText type="s">{t("library.newNote")}</ThemedText>
           </Pressable>
         </RNView>
       </RNView>
@@ -76,7 +78,7 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
     flex: 1,
   },
   createBtn: {
-    width: "30%",
+    paddingHorizontal: 20,
     backgroundColor: colors.primary,
     paddingVertical: 14,
     borderRadius: 29,

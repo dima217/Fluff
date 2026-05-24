@@ -17,6 +17,7 @@ import {
   uploadFile,
 } from "@/api/utils/fileUpload";
 import { Recipe } from "@/constants/types";
+import { parseCustomProducts } from "./parseCustomProducts";
 
 function isNewLocalMedia(uri: string | undefined): boolean {
   if (!uri) return false;
@@ -203,13 +204,18 @@ export async function updateRecipeWorkflow(
       stepsConfig.steps = existingRecipe.stepsConfig.steps;
     }
 
+    const ingredientsText =
+      recipeData.ingredients ?? existingRecipe.description ?? "";
+    const customProducts = parseCustomProducts(ingredientsText);
+
     const updatePayload: UpdateRecipeRequest = {
       name: recipeData.name ?? existingRecipe.name,
       recipeTypeId: existingRecipe.type.id,
       image: { cover: coverUrl, preview: previewUrl },
       promotionalVideo,
-      description: recipeData.ingredients ?? existingRecipe.description ?? null,
-      productIds: existingRecipe.products,
+      description: ingredientsText || null,
+      productIds: existingRecipe.products?.map((p) => p.id),
+      customProducts,
       calories: recipeData.ccal ?? existingRecipe.calories,
       cookAt: existingRecipe.cookAt,
       stepsConfig,

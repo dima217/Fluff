@@ -1,3 +1,4 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import * as ImagePicker from "expo-image-picker";
 import * as VideoThumbnails from "expo-video-thumbnails";
 import { useState } from "react";
@@ -14,6 +15,7 @@ export interface MediaFile {
 const MAX_FILE_MB = 100;
 
 export const useMediaPicker = () => {
+  const { t } = useTranslation();
   const [media, setMedia] = useState<MediaFile | null>(null);
 
   const showError = (title: string, message: string) => {
@@ -25,8 +27,8 @@ export const useMediaPicker = () => {
     console.log("[validateFile] sizeMB:", sizeMB);
     if (sizeMB > MAX_FILE_MB) {
       showError(
-        "Слишком большой файл",
-        `Максимальный размер — ${MAX_FILE_MB}MB.`
+        t("mediaUploader.fileTooLargeTitle"),
+        t("mediaUploader.fileTooLargeMessage")
       );
       return false;
     }
@@ -41,15 +43,15 @@ export const useMediaPicker = () => {
       console.log("[requestPermissions] Permissions status:", status);
       if (status !== "granted") {
         showError(
-          "No permission",
-          "Please allow access to your media library."
+          t("mediaUploader.noPermissionTitle"),
+          t("mediaUploader.noPermissionMessage")
         );
         return false;
       }
       return true;
     } catch (e) {
       console.error("[requestPermissions] Failed to request permissions:", e);
-      showError("Error", "Failed to request permissions.");
+      showError(t("auth.error"), t("mediaUploader.requestPermissionsError"));
       return false;
     }
   };
@@ -106,10 +108,10 @@ export const useMediaPicker = () => {
           "[pickMedia] Picked media type does not match expected type"
         );
         showError(
-          "Invalid media type",
-          `Expected ${allowedType === "image" ? "image" : "video"}, but got ${
-            asset.type === "image" ? "image" : "video"
-          }.`
+          t("mediaUploader.invalidMediaTypeTitle"),
+          allowedType === "image"
+            ? t("mediaUploader.expectedImage")
+            : t("mediaUploader.expectedVideo")
         );
         return;
       }
@@ -140,7 +142,7 @@ export const useMediaPicker = () => {
       return picked;
     } catch (e) {
       console.error("[pickMedia] Error while picking media:", e);
-      showError("Error", "Failed to open media library");
+      showError(t("auth.error"), t("mediaUploader.openLibraryError"));
     }
   };
 
@@ -151,9 +153,9 @@ export const useMediaPicker = () => {
 
   const labelByType = media
     ? media.type === "image"
-      ? "Photo uploaded"
-      : "Video uploaded"
-    : "Add media";
+      ? t("mediaUploader.photoUploaded")
+      : t("mediaUploader.videoUploaded")
+    : t("mediaUploader.addMedia");
 
   return {
     media,

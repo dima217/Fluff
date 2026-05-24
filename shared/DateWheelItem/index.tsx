@@ -2,12 +2,17 @@ import { AppColors } from "@/constants/design-tokens";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
+import { getAppLocale } from "@/utils/locale";
 import { StyleSheet, Text, View } from "react-native";
 import Circle from "../ui/Circle";
 
-function getDayOfWeekLetter(date: Date): string {
-  const days = ["S", "M", "T", "W", "T", "F", "S"];
-  return days[date.getDay()];
+function getDayOfWeekLetter(date: Date, locale: string): string {
+  return date
+    .toLocaleString(locale, { weekday: "narrow" })
+    .replace(".", "")
+    .charAt(0)
+    .toUpperCase();
 }
 
 function getStatusColor(
@@ -55,11 +60,12 @@ interface DateWheelItemContentProps {
 export function DateWheelItem({ date, data, size }: DateWheelItemContentProps) {
   const colors = useColors();
   const styles = useThemedStyles(createDateWheelItemStyles);
+  const { language } = useTranslation();
 
   if (!date || !data) return null;
 
   const { isToday, isSelected, dayStatus } = data;
-  const dayOfWeekLetter = getDayOfWeekLetter(date);
+  const dayOfWeekLetter = getDayOfWeekLetter(date, getAppLocale(language));
   const shouldShowCircle = isSelected || isToday;
   const circleColor = shouldShowCircle
     ? getStatusColor(colors, dayStatus || null)

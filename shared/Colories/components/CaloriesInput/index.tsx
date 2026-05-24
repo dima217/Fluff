@@ -3,6 +3,7 @@ import type { RecipeResponse } from "@/api/types";
 import { useColors } from "@/contexts/ThemeContext";
 import { useIsCheatMealDay } from "@/hooks/useCheatMealDay";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import CardsCarousel from "@/shared/CardCarousel";
 import TimeInput from "@/shared/Colories/components/TimeInput";
@@ -34,6 +35,7 @@ interface CalorieInputProps {
 const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
   const colors = useColors();
   const styles = useThemedStyles(createCaloriesInputStyles);
+  const { t } = useTranslation();
   const [mode, setMode] = useState<InputMode>("manual");
   const [foodName, setFoodName] = useState<string>("");
   const [calories, setCalories] = useState<string>("");
@@ -94,14 +96,16 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
   return (
     <GradientView style={styles.container}>
       <View style={styles.header}>
-        <ThemedText type="xs">Daily calorie intake</ThemedText>
+        <ThemedText type="xs">{t("health.dailyCalorieIntake")}</ThemedText>
         <TouchableOpacity
           onPress={handleToggleMode}
           style={styles.toggleButton}
         >
           <Ionicons name="repeat" size={16} color={colors.primary} />
           <ThemedText type="xs" style={{ color: colors.primary }}>
-            {mode === "manual" ? "Recipe from Fluff" : "Your own recipe"}
+            {mode === "manual"
+              ? t("health.recipeFromFluff")
+              : t("health.yourOwnRecipe")}
           </ThemedText>
         </TouchableOpacity>
       </View>
@@ -110,15 +114,15 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
         {mode === "manual" ? (
           <>
             <TextInput
-              label="Food Name"
-              placeholder="Example: Banana, Chicken Breast"
+              label={t("health.foodName")}
+              placeholder={t("health.foodNamePlaceholder")}
               value={foodName}
               placeholderTextColor={colors.secondary}
               onChangeText={setFoodName}
             />
             <TextInput
-              label="Calories"
-              placeholder="Example: 95"
+              label={t("health.calories")}
+              placeholder={t("health.caloriesPlaceholder")}
               placeholderTextColor={colors.secondary}
               keyboardType="numeric"
               value={calories}
@@ -171,7 +175,7 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
       <Button
         style={{ zIndex: 1, elevation: 1 }}
         onPress={handleAdd}
-        title={"Add"}
+        title={t("health.add")}
         disabled={
           (mode === "manual" && (!foodName || !calories)) ||
           (mode === "search" && selectedRecipes.length === 0)

@@ -61,7 +61,7 @@ const Header = ({ title, showExitConfirmation = false }: HeaderProps) => {
   return (
     <View style={styles.container}>
       <Circle
-        svg={<ArrowLeft stroke={iconColor} />}
+        svg={<ArrowLeft color="white" />}
         frostedGlass
         onPress={handleBackPress}
         size={CircleSizes.MEDIUM}

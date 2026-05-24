@@ -14,6 +14,8 @@ import CalorieInput from "@/shared/Colories/components/CaloriesInput";
 import CalorieProgress from "@/shared/Colories/components/CaloriesProgress";
 import { useDayPickerData } from "@/shared/DateWheelItem/utils";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { useTranslation } from "@/hooks/useTranslation";
+import { getAppLocale } from "@/utils/locale";
 import MarkerContainer from "@/widgets/Health/components/MarkerContainer";
 import TrackingHistory from "@/widgets/Health/components/TrackingHistory";
 import { useRouter } from "expo-router";
@@ -23,6 +25,7 @@ import { useSelector } from "react-redux";
 
 const Health = () => {
   const styles = useThemedStyles(createstyles);
+  const { language } = useTranslation();
   const { data: calendar, refetch: refetchCalendar } = useGetCalendarQuery();
 
   const router = useRouter();
@@ -126,10 +129,12 @@ const Health = () => {
     }
   };
 
-  const label =
-    new Date().toLocaleString("en-US", { month: "long" }) +
-    " " +
-    (selectedDateIndex + 1).toString();
+  const label = useMemo(() => {
+    const month = selectedDate.toLocaleString(getAppLocale(language), {
+      month: "long",
+    });
+    return `${month} ${selectedDate.getDate()}`;
+  }, [language, selectedDate]);
 
   return (
     <ScrollView

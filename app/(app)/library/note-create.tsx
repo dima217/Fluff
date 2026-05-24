@@ -2,6 +2,7 @@
 import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
 import AutoGrowingTextInput from "@/shared/Inputs/AutoGrowingTextInput";
 import BorderlessTextInput from "@/shared/Inputs/BorderlessTextInput";
@@ -17,6 +18,7 @@ import {
 } from "react-native";
 
 const NoteCreate = () => {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useThemedStyles(createstyles);
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -70,7 +72,7 @@ const NoteCreate = () => {
 
   return (
     <View>
-      <Header title={isEdit ? "Edit note" : "New note"} />
+      <Header title={isEdit ? t("library.editNote") : t("library.newNote")} />
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -79,7 +81,7 @@ const NoteCreate = () => {
         {/* CARD CONTAINER */}
         <RNView style={styles.card}>
           <BorderlessTextInput
-            placeholder="Note title..."
+            placeholder={t("library.noteTitlePlaceholder")}
             placeholderTextColor={colors.border}
             value={title}
             onChangeText={setTitle}
@@ -87,7 +89,9 @@ const NoteCreate = () => {
 
           <AutoGrowingTextInput
             placeholder={
-              canEditContent ? "Write your note..." : "Enter title first"
+              canEditContent
+                ? t("library.noteContentPlaceholder")
+                : t("library.noteEnterTitleFirst")
             }
             placeholderTextColor={colors.border}
             value={content}

@@ -4,6 +4,7 @@ import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
 import usePagination from "@/hooks/usePagination";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import Header from "@/shared/Header";
 import { ThemedText } from "@/shared/ui/ThemedText";
@@ -18,6 +19,7 @@ import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
 const LIMIT = 20;
 
 export default function Support() {
+  const { t } = useTranslation();
   const styles = useThemedStyles(createStyles);
   const colors = useColors();
   const router = useRouter();
@@ -91,7 +93,7 @@ export default function Support() {
 
   return (
     <View>
-      <Header title="Support" />
+      <Header title={t("profile.support")} />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
@@ -101,7 +103,7 @@ export default function Support() {
       >
         <Button
           style={styles.reportButton}
-          title="Report a Problem"
+          title={t("support.reportProblem")}
           onPress={() => router.push("/(app)/support/create")}
         />
 

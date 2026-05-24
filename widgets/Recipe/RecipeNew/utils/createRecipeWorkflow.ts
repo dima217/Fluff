@@ -17,6 +17,7 @@ import {
   uploadFile,
 } from "@/api/utils/fileUpload";
 import { Recipe } from "@/constants/types";
+import { parseCustomProducts } from "./parseCustomProducts";
 
 function isLocalMediaUri(uri: string | undefined): boolean {
   if (!uri) return false;
@@ -237,14 +238,7 @@ export async function createRecipeWorkflow(
       }),
     };
 
-    // Parse ingredients string into customProducts array
-    // Split by comma, newline, or semicolon, then trim and filter empty strings
-    const customProducts = recipeData.ingredients
-      ? recipeData.ingredients
-          .split(/[,\n;]/)
-          .map((item) => item.trim())
-          .filter((item) => item.length > 0)
-      : [];
+    const customProducts = parseCustomProducts(recipeData.ingredients);
 
     const createRecipeResult = await createRecipeWithMediaIds({
       name: recipeData.name!,

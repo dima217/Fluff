@@ -1,12 +1,14 @@
 import { useColors } from "@/contexts/ThemeContext";
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import SerchLight from "@/assets/images/SearchLight.svg";
 
 import TextInput from "@/shared/Inputs/TextInput";
 import Circle from "@/shared/ui/Circle";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { ThemedText } from "@/shared/ui/ThemedText";
 import NoteCard from "../NoteCard";
 
 export interface NoteListItem {
@@ -22,6 +24,7 @@ interface NoteListProps {
 }
 
 const NoteList = ({ notes }: NoteListProps) => {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useThemedStyles(createstyles);
   const [search, setSearch] = useState("");
@@ -42,7 +45,7 @@ const NoteList = ({ notes }: NoteListProps) => {
   return (
     <View style={styles.listContainer}>
       <TextInput
-        placeholder="Search"
+        placeholder={t("common.search")}
         placeholderTextColor={colors.text}
         style={styles.searchInput}
         inputContainerStyle={styles.searchInputContainer}
@@ -51,11 +54,19 @@ const NoteList = ({ notes }: NoteListProps) => {
         defaultValue={search}
       />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {filteredNotes.map((note) => (
-          <View key={note.id} style={styles.noteCardContainer}>
-            <NoteCard key={note.id} {...note} />
-          </View>
-        ))}
+        {filteredNotes.length > 0 ? (
+          filteredNotes.map((note) => (
+            <View key={note.id} style={styles.noteCardContainer}>
+              <NoteCard key={note.id} {...note} />
+            </View>
+          ))
+        ) : (
+          <ThemedText type="xs" style={styles.emptyText}>
+            {search.trim().length > 0
+              ? t("search.noResults")
+              : t("library.notesEmpty")}
+          </ThemedText>
+        )}
       </ScrollView>
     </View>
   );
@@ -81,5 +92,10 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
   searchInputContainer: {
     borderWidth: 0,
     paddingRight: 6,
+  },
+  emptyText: {
+    color: colors.secondary,
+    textAlign: "center",
+    marginTop: 24,
   },
 });

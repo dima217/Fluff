@@ -1,5 +1,7 @@
 import { RootState } from "@/api";
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
+import { useColors } from "@/contexts/ThemeContext";
+import { useTranslation } from "@/hooks/useTranslation";
 import CheckBox from "@/shared/CheckBox";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import IngredientsSection from "@/widgets/Recipe/RecipeInfo/components/IngredientsSection";
@@ -8,71 +10,111 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 
 const Preview = ({ onBack }: { onBack: () => void }) => {
+  const { t } = useTranslation();
+  const colors = useColors();
   const { getValues, control } = useFormContext();
   const allValues = getValues();
   const profile = useSelector((state: RootState) => state.user.profile);
 
-  return (
-    <View>
-      <TouchableOpacity style={styles.touchableContainer} onPress={onBack}>
-        <ArrowLeft />
-      </TouchableOpacity>
-      <Image
-        style={styles.tinyLogo}
-        source={{
-          uri: allValues.mediaUrl,
-        }}
-      />
-      <View style={styles.checkboxGroup}>
-        <View>
-          <ThemedText type="subtitle">{allValues.name}</ThemedText>
-          <ThemedText>
-            {profile?.user.firstName + " " + profile?.user.lastName}
-          </ThemedText>
-        </View>
-        <ThemedText>{allValues.description}</ThemedText>
-        <IngredientsSection products={allValues.ingredients} />
-        <Controller
-          control={control}
-          name="makePublic"
-          render={({ field: { value, onChange } }) => (
-            <CheckBox
-              title="Make the recipe public"
-              checked={value}
-              setChecked={onChange}
-            />
-          )}
-        />
+  const authorName = [profile?.user.firstName, profile?.user.lastName]
+    .filter(Boolean)
+    .join(" ");
+  const description = allValues.description?.trim();
 
-        <Controller
-          control={control}
-          name="submitToSystem"
-          render={({ field: { value, onChange } }) => (
-            <CheckBox
-              title="Submit a request to be added to the system"
-              checked={value}
-              allowNull
-              setChecked={onChange}
-            />
-          )}
-        />
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={onBack}>
+        <ArrowLeft color={colors.text} />
+      </TouchableOpacity>
+
+      <View style={styles.header}>
+        <ThemedText type="subtitle">{t("recipe.review")}</ThemedText>
+        <ThemedText type="xs">{t("recipe.reviewHint")}</ThemedText>
+      </View>
+
+      <Image
+        style={styles.coverImage}
+        source={{ uri: allValues.mediaUrl }}
+      />
+
+      <View style={styles.details}>
+        <View style={styles.titleBlock}>
+          <ThemedText type="subtitle">{allValues.name}</ThemedText>
+          {authorName ? (
+            <ThemedText type="xs" style={styles.author}>
+              {authorName}
+            </ThemedText>
+          ) : null}
+        </View>
+
+        {description ? (
+          <ThemedText style={styles.description}>{description}</ThemedText>
+        ) : null}
+
+        <IngredientsSection products={allValues.ingredients} dense />
+
+        <View style={styles.checkboxes}>
+          <Controller
+            control={control}
+            name="makePublic"
+            render={({ field: { value, onChange } }) => (
+              <CheckBox
+                title={t("recipe.makePublic")}
+                checked={value}
+                setChecked={onChange}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="submitToSystem"
+            render={({ field: { value, onChange } }) => (
+              <CheckBox
+                title={t("recipe.submitToSystem")}
+                checked={value}
+                allowNull
+                setChecked={onChange}
+              />
+            )}
+          />
+        </View>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  touchableContainer: {
+  container: {
+    paddingBottom: 8,
+  },
+  backButton: {
     paddingBottom: 10,
   },
-  tinyLogo: {
+  header: {
+    gap: 6,
+    marginBottom: 16,
+  },
+  coverImage: {
     width: "100%",
-    height: "40%",
+    aspectRatio: 16 / 9,
     borderRadius: 16,
   },
-  checkboxGroup: {
-    marginTop: 10,
-    gap: 20,
+  details: {
+    marginTop: 12,
+  },
+  titleBlock: {
+    gap: 8,
+  },
+  author: {
+    opacity: 0.7,
+  },
+  description: {
+    marginTop: 8,
+  },
+  checkboxes: {
+    marginTop: 20,
+    gap: 16,
   },
 });
 

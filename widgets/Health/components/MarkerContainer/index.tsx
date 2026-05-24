@@ -1,18 +1,23 @@
 import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import { StyleSheet, View } from "react-native";
 import Marker from "../Marker";
 
 const MarkerContainer = () => {
   const colors = useColors();
   const styles = useThemedStyles(createMarkerContainerStyles);
+  const { t } = useTranslation();
 
   const markerData = [
-    { text: "Cheat Meal", color: colors.cheatMeal },
-    { text: "Not Tracked", color: colors.notTracked },
-    { text: "Strong Excess", color: colors.strongExcess },
-    { text: "Insufficient Intake", color: colors.insufficientIntake },
+    { text: t("health.markers.cheatMeal"), color: colors.cheatMeal },
+    { text: t("health.markers.notTracked"), color: colors.notTracked },
+    { text: t("health.markers.strongExcess"), color: colors.strongExcess },
+    {
+      text: t("health.markers.insufficientIntake"),
+      color: colors.insufficientIntake,
+    },
   ];
 
   const firstRow = markerData.slice(0, 2);
@@ -22,7 +27,7 @@ const MarkerContainer = () => {
     <View style={styles.container}>
       <View style={styles.row}>
         {firstRow.map((item, index) => (
-          <View key={item.text} style={styles.markerColumn}>
+          <View key={item.text + index} style={styles.markerColumn}>
             <Marker text={item.text} color={item.color} />
             <Marker
               text={secondRow[index]?.text || ""}

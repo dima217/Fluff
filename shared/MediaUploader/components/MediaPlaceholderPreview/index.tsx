@@ -1,6 +1,7 @@
 import { AppColors, ColorPalette } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
@@ -12,6 +13,7 @@ interface MediaUploaderProps {
 const MediaPlaceholder = ({ type = "image" }: MediaUploaderProps) => {
   const colors = useColors();
   const styles = useThemedStyles(createMediaPlaceholderStyles);
+  const { t } = useTranslation();
   const isLight =
     colors.background === ColorPalette.light.background;
 
@@ -26,12 +28,16 @@ const MediaPlaceholder = ({ type = "image" }: MediaUploaderProps) => {
 
       <View style={styles.button}>
         <ThemedText type="mini" style={styles.buttonLabel}>
-          {type === "image" ? "Add a Photo" : "Add a Video"}
+          {type === "image"
+            ? t("mediaUploader.addPhoto")
+            : t("mediaUploader.addVideo")}
         </ThemedText>
       </View>
 
       <ThemedText type="xs" style={styles.hint}>
-        {type === "image" ? "PNG, JPG up to 100MB" : "MP4, MOV up to 100MB"}
+        {type === "image"
+          ? t("mediaUploader.imageFormatsHint")
+          : t("mediaUploader.videoFormatsHint")}
       </ThemedText>
     </View>
   );

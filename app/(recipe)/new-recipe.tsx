@@ -9,6 +9,7 @@ import {
 import { Recipe } from "@/constants/types";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
 import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
@@ -34,6 +35,7 @@ import {
 } from "react-native";
 
 const CreateRecipeScreen = () => {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useThemedStyles((c) =>
     StyleSheet.create({
@@ -45,7 +47,7 @@ const CreateRecipeScreen = () => {
         alignItems: "center",
         justifyContent: "center",
       },
-      scrollContent: { flexGrow: 1 },
+      scrollContent: { flexGrow: 1, paddingBottom: 24 },
       fullScreenContent: { flex: 1 },
       progressText: {
         fontSize: 14,
@@ -142,8 +144,13 @@ const CreateRecipeScreen = () => {
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-          <Header title={"Add New Recipe"} showExitConfirmation />
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <Header title={t("recipe.addNewRecipe")} showExitConfirmation />
 
           <RNView style={styles.progressWrapper}>
             <AnimatedProgressBar progress={(step + 1) / 4} />

@@ -1,5 +1,6 @@
 import { useGetMyRecipesQuery } from "@/api";
 import type { RecipeResponse } from "@/api/types";
+import { useTranslation } from "@/hooks/useTranslation";
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
 import { EditRecipeCardAction } from "@/shared/CardCarousel/cardActions";
@@ -11,6 +12,7 @@ import { useMemo } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
 export default function MyUploadsScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { data: recipes, isLoading } = useGetMyRecipesQuery();
 
@@ -47,7 +49,7 @@ export default function MyUploadsScreen() {
 
   return (
     <View>
-      <Header title="My Uploads" />
+      <Header title={t("library.myUploads")} />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}

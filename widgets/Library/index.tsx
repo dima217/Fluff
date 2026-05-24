@@ -65,8 +65,8 @@ const Library = () => {
 
         {/* NOTES */}
         <CheatMealCard
-          title={t("library.scanner")}
-          textHint={t("library.scannerHint")}
+          title={t("library.notes")}
+          textHint={t("library.notesHint")}
           overlayImage={phoneImage}
           backgroundImage={qrImage}
           onPress={() => router.push("/(app)/library/notes")}

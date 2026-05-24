@@ -159,7 +159,7 @@ const SupportRequest = () => {
           name="description"
           render={({ field: { value, onChange } }) => (
             <LongTextInput
-              label={"Description"}
+              label={t("recipe.description")}
               placeholder={t("common.enter")}
               value={value}
               onChangeText={onChange}
@@ -181,7 +181,7 @@ const SupportRequest = () => {
       </View>
 
       <Button
-        title={t("auth.send")}
+        title={t("support.submitRequest")}
         onPress={handleSubmit(onSubmit)}
         //disabled={isLoading}
         //loading={isLoading}

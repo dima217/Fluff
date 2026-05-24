@@ -8,6 +8,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import ProgressBar from "../../../ui/Animated/ProgressBar";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import { createCaloriesProgressStyles } from "./styles";
 
 interface CalorieProgressProps {
@@ -23,23 +24,24 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
 }) => {
   const colors = useColors();
   const styles = useThemedStyles(createCaloriesProgressStyles);
+  const { t } = useTranslation();
   const progress = dailyGoal > 0 ? (currentCalories / dailyGoal) * 100 : 0;
 
   return (
     <GradientView style={styles.container}>
       <View style={styles.header}>
         <ThemedText type="xs" style={styles.progressLabel}>
-          Daily calorie intake
+          {t("health.dailyCalorieIntake")}
         </ThemedText>
 
         <Circle size={CircleSizes.MINI} svg={<Edit fill={colors.onPrimary} />} onPress={onEditPress} />
       </View>
 
       <View style={styles.progressContainer}>
-        <ThemedText type="xs">Progress</ThemedText>
+        <ThemedText type="xs">{t("health.progress")}</ThemedText>
 
         <Text style={styles.progressText}>
-          {Math.round(progress)}% Complete
+          {Math.round(progress)}% {t("health.complete")}
         </Text>
       </View>
 

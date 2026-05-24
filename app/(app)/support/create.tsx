@@ -1,12 +1,15 @@
+import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
 import SupportRequest from "@/widgets/Support/forms/SupportRequest";
 import { ScrollView, StyleSheet } from "react-native";
 
 const SupportCreate = () => {
+  const { t } = useTranslation();
+
   return (
     <View>
-      <Header title="Report a Problem" />
+      <Header title={t("support.reportProblem")} />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}

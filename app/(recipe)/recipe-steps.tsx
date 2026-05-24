@@ -1,6 +1,9 @@
 ﻿import { useMediaUrl, useRateRecipeMutation } from "@/api";
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import { RecipeData } from "@/constants/types";
+import { AppColors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import Header from "@/shared/Header";
@@ -23,6 +26,8 @@ const RecipeSteps = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { t } = useTranslation();
+  const colors = useColors();
+  const styles = useThemedStyles(createStyles);
 
   const [rateRecipe] = useRateRecipeMutation();
 
@@ -85,7 +90,7 @@ const RecipeSteps = () => {
   if (!recipe || !recipe.steps || recipe.steps.length === 0) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Рецепт не содержит шагов</Text>
+        <Text style={styles.errorText}>{t("recipe.noSteps")}</Text>
       </View>
     );
   }
@@ -128,11 +133,11 @@ const RecipeSteps = () => {
         <RNView style={styles.stepCard}>
           {stepIndex > 0 && (
             <TouchableOpacity onPress={handlePrev}>
-              <ArrowLeft />
+              <ArrowLeft color={colors.text} />
             </TouchableOpacity>
           )}
           <Text style={styles.stepNumber}>
-            {currentStep.title || `Step ${currentStep.id}`}
+            {currentStep.title || `${t("recipe.step")} ${currentStep.id}`}
           </Text>
           {currentStep.image && (
             <Image
@@ -156,7 +161,10 @@ const RecipeSteps = () => {
       </ScrollView>
 
       <View style={styles.fixedButtonContainer}>
-        <Button title={isLast ? "Finish" : "Next"} onPress={handleNext} />
+        <Button
+          title={isLast ? t("recipe.finish") : t("recipe.next")}
+          onPress={handleNext}
+        />
       </View>
     </View>
   );
@@ -164,69 +172,71 @@ const RecipeSteps = () => {
 
 export default RecipeSteps;
 
-const styles = StyleSheet.create({
-  scroll: {
-    flex: 1,
-  },
-  congratulationContainer: {
-    paddingHorizontal: 0,
-  },
-  progressWrapper: {
-    width: "100%",
-    marginTop: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonsContainer: {
-    position: "absolute",
-    bottom: 40,
-  },
-  content: {
-    paddingBottom: 140,
-  },
-  fixedButtonContainer: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 30,
-    paddingHorizontal: 20,
-  },
-  title: {
-    color: "#fff",
-    fontSize: 28,
-    fontWeight: "700",
-    marginBottom: 25,
-  },
-  stepCard: {
-    gap: 16,
-    borderRadius: 16,
-    marginTop: 45,
-  },
-  stepNumber: {
-    color: "#fff",
-    fontSize: 22,
-    fontWeight: "600",
-    marginBottom: 10,
-  },
-  stepDescription: {
-    color: "#ccc",
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  stepImage: {
-    width: "100%",
-    height: 240,
-    borderRadius: 12,
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  errorText: {
-    color: "#fff",
-    fontSize: 16,
-    textAlign: "center",
-  },
-});
+const createStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    scroll: {
+      flex: 1,
+    },
+    congratulationContainer: {
+      paddingHorizontal: 0,
+    },
+    progressWrapper: {
+      width: "100%",
+      marginTop: 20,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    buttonsContainer: {
+      position: "absolute",
+      bottom: 40,
+    },
+    content: {
+      paddingBottom: 140,
+    },
+    fixedButtonContainer: {
+      position: "absolute",
+      left: 0,
+      right: 0,
+      bottom: 30,
+      paddingHorizontal: 20,
+    },
+    title: {
+      color: colors.text,
+      fontSize: 28,
+      fontWeight: "700",
+      marginBottom: 25,
+    },
+    stepCard: {
+      gap: 16,
+      borderRadius: 16,
+      marginTop: 45,
+    },
+    stepNumber: {
+      color: colors.text,
+      fontSize: 22,
+      fontWeight: "600",
+      marginBottom: 10,
+    },
+    stepDescription: {
+      color: colors.text,
+      fontSize: 16,
+      lineHeight: 22,
+      opacity: 0.85,
+    },
+    stepImage: {
+      width: "100%",
+      height: 240,
+      borderRadius: 12,
+    },
+    errorContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+    },
+    errorText: {
+      color: colors.text,
+      fontSize: 16,
+      textAlign: "center",
+    },
+  });

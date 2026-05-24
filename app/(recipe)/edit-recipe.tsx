@@ -10,6 +10,7 @@ import type { RecipeResponse } from "@/api/types";
 import { Recipe } from "@/constants/types";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
 import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
@@ -39,10 +40,12 @@ import {
 } from "react-native";
 
 function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
+  const { t } = useTranslation();
   const colors = useColors();
   const styles = useThemedStyles((c) =>
     StyleSheet.create({
       scroll: { flex: 1 },
+      scrollContent: { flexGrow: 1, paddingBottom: 24 },
       progressWrapper: {
         width: "100%",
         marginTop: 20,
@@ -137,8 +140,13 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
 
   return (
     <>
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Header title="Редактировать рецепт" showExitConfirmation />
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Header title={t("recipe.editRecipe")} showExitConfirmation />
 
         <RNView style={styles.progressWrapper}>
           <AnimatedProgressBar progress={(step + 1) / 4} />
@@ -163,6 +171,7 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
 }
 
 export default function EditRecipeScreen() {
+  const { t } = useTranslation();
   const styles = useThemedStyles((c) =>
     StyleSheet.create({
       centered: {
@@ -182,7 +191,7 @@ export default function EditRecipeScreen() {
   if (!Number.isInteger(id) || id < 1) {
     return (
       <View>
-        <Header title="Редактировать рецепт" />
+        <Header title={t("recipe.editRecipe")} />
         <RNView style={styles.centered}>
           <ActivityIndicator size="large" />
         </RNView>
@@ -193,7 +202,7 @@ export default function EditRecipeScreen() {
   if (isLoading || !recipe) {
     return (
       <View>
-        <Header title="Редактировать рецепт" />
+        <Header title={t("recipe.editRecipe")} />
         <RNView style={styles.centered}>
           <ActivityIndicator size="large" />
         </RNView>

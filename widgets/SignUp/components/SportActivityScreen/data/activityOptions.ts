@@ -1,33 +1,35 @@
 export type ActivityOption = {
-  label: string;
+  id: keyof typeof ACTIVITY_OPTION_IDS;
   trainingCount: string;
-  description: string;
 };
+
+export const ACTIVITY_OPTION_IDS = {
+  sedentary: "sedentary",
+  light: "light",
+  normal: "normal",
+  regular: "regular",
+  hard: "hard",
+} as const;
 
 export const activityOptions: ActivityOption[] = [
   {
-    label: "Sedentary lifestyle",
+    id: "sedentary",
     trainingCount: "0-1",
-    description: "Sedentary lifestyle is a great way to stay in shape.",
   },
   {
-    label: "Light physical activity",
+    id: "light",
     trainingCount: "1-3",
-    description: "Light physical activity is a great way to stay in shape.",
   },
   {
-    label: "Normal physical activity",
+    id: "normal",
     trainingCount: "3-5",
-    description: "Normal physical activity is a great way to stay in shape.",
   },
   {
-    label: "Regular training",
+    id: "regular",
     trainingCount: "5-7",
-    description: "Regular training is a great way to stay in shape.",
   },
   {
-    label: "Hard physical activity",
+    id: "hard",
     trainingCount: "7-9",
-    description: "Hard physical activity is a great way to stay in shape.",
   },
 ];

@@ -1,16 +1,20 @@
 import type { ProductResponse } from "@/api/types";
+import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import FilterTags from "@/widgets/Search/components/FilterTags";
 import React, { useMemo } from "react";
 import { View } from "react-native";
 
 interface IngredientsSectionProps {
-  products?: ProductResponse[] | string | string[]; 
+  products?: ProductResponse[] | string | string[];
+  dense?: boolean;
 }
 
 const IngredientsSection: React.FC<IngredientsSectionProps> = ({
   products,
+  dense = false,
 }) => {
+  const { t } = useTranslation();
   const ingredients = useMemo(() => {
     if (!products) return [];
     
@@ -36,8 +40,8 @@ const IngredientsSection: React.FC<IngredientsSectionProps> = ({
   }
 
   return (
-    <View style={{ gap: 10 }}>
-      <ThemedText>Ingredients</ThemedText>
+    <View style={{ gap: dense ? 6 : 10, marginTop: dense ? 6 : 0 }}>
+      <ThemedText>{t("recipe.ingredients")}</ThemedText>
       <FilterTags filters={ingredients} />
     </View>
   );
