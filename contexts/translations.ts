@@ -24,6 +24,7 @@ export const translations = {
       belarusian: "Беларуская",
       english: "English",
       editProfile: "Редактировать профиль",
+      localTime: "Местное время",
     },
     // Home
     home: {
@@ -331,6 +332,7 @@ export const translations = {
       belarusian: "Беларуская",
       english: "English",
       editProfile: "Рэдагаваць профіль",
+      localTime: "Мясцовае час",
     },
     // Home
     home: {
@@ -639,6 +641,7 @@ export const translations = {
       belarusian: "Беларуская",
       english: "English",
       editProfile: "Edit Profile",
+      localTime: "Local time",
     },
     // Home
     home: {

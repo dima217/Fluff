@@ -81,7 +81,7 @@ const ProfileCard = () => {
         <TimeLabel />
         <ThemedText type="subtitle">{getFullName()}</ThemedText>
         <ThemedText type="notion">
-          {displayProfile?.user?.email || ""}
+          {displayProfile?.user?.email || "katya485@gmail.com"}
         </ThemedText>
       </View>
     </GradientView>

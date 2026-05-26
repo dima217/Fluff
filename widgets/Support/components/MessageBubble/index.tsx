@@ -20,6 +20,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn }) => {
   const styles = useThemedStyles(createMessageBubbleStyles);
   const { title, body } = parseMessageContent(message.content);
   const attachments = message.attachments ?? [];
+  const textColor = isOwn ? colors.onPrimary : colors.text;
 
   const content = (
     <View>
@@ -28,7 +29,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn }) => {
           <ThemedText
             style={[
               styles.title,
-              { color: colors.onPrimary },
+              { color: textColor },
             ]}
           >
             {title}
@@ -39,7 +40,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn }) => {
           <ThemedText
             style={[
               styles.content,
-              { color: colors.onPrimary },
+              { color: textColor },
               title ? styles.contentWithTitle : undefined,
             ]}
           >
