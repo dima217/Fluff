@@ -98,6 +98,39 @@ export const translations = {
       close: "Закрыть",
       enter: "Введите",
     },
+    pushNotifications: {
+      trackingReminder: {
+        title: "Недостаточно калорий сегодня",
+        body: "Вам ещё нужно около {caloriesLeft} ккал сегодня. Добавьте ещё один приём пищи, чтобы оставаться в норме.",
+      },
+      trackingReminderImmediate: {
+        title: "Недостаточно калорий сегодня",
+        body: "При таком темпе ты сам станешь как мой стебель. Съешь ещё!",
+      },
+      supportTicketReply: {
+        title: "Ответ от поддержки",
+        bodyWithSubject: "Получен ответ по обращению «{subject}»",
+      },
+      actions: {
+        addMeal: "Добавить приём пищи",
+        openTicket: "Открыть обращение",
+      },
+    },
+    notificationsScreen: {
+      sections: {
+        new: "Новые",
+        today: "Сегодня",
+        yesterday: "Вчера",
+        last7Days: "Последние 7 дней",
+        last30Days: "Последние 30 дней",
+        older: "Ранее",
+      },
+      time: {
+        justNow: "только что",
+        minutes: "{count} мин",
+        hours: "{count} ч",
+      },
+    },
     // Recipe
     recipe: {
       newRecipe: "Новый рецепт",
@@ -373,6 +406,39 @@ export const translations = {
       enter: "Увядзіце",
       loading: "Загрузка...",
     },
+    pushNotifications: {
+      trackingReminder: {
+        title: "Сёння не хапае калорый",
+        body: "Вам яшчэ трэба каля {caloriesLeft} ккал сёння. Дадайце яшчэ адзін прыём ежы, каб заставацца ў норме.",
+      },
+      trackingReminderImmediate: {
+        title: "Сёння не хапае калорый",
+        body: "Пры такім тэмпе ты сам станеш як мой сцябель. З'еш яшчэ!",
+      },
+      supportTicketReply: {
+        title: "Адказ ад падтрымкі",
+        bodyWithSubject: "Атрыманы адказ па звароце «{subject}»",
+      },
+      actions: {
+        addMeal: "Дадаць прыём ежы",
+        openTicket: "Адкрыць зварот",
+      },
+    },
+    notificationsScreen: {
+      sections: {
+        new: "Новыя",
+        today: "Сёння",
+        yesterday: "Учора",
+        last7Days: "Апошнія 7 дзён",
+        last30Days: "Апошнія 30 дзён",
+        older: "Раней",
+      },
+      time: {
+        justNow: "толькі што",
+        minutes: "{count} хв",
+        hours: "{count} г",
+      },
+    },
     // Health
     health: {
       title: "Здароўе",
@@ -645,6 +711,39 @@ export const translations = {
       close: "Close",
       enter: "Enter",
       loading: "Loading...",
+    },
+    pushNotifications: {
+      trackingReminder: {
+        title: "Not enough calories today",
+        body: "You still need around {caloriesLeft} kcal today. Add one more meal to stay on track.",
+      },
+      trackingReminderImmediate: {
+        title: "Not enough calories today",
+        body: "At this rate, you yourself will become like my stem. Have another meal!",
+      },
+      supportTicketReply: {
+        title: "Support reply",
+        bodyWithSubject: "Reply received for ticket «{subject}»",
+      },
+      actions: {
+        addMeal: "Add a meal",
+        openTicket: "Open ticket",
+      },
+    },
+    notificationsScreen: {
+      sections: {
+        new: "New",
+        today: "Today",
+        yesterday: "Yesterday",
+        last7Days: "Last 7 Days",
+        last30Days: "Last 30 Days",
+        older: "Older",
+      },
+      time: {
+        justNow: "just now",
+        minutes: "{count} min",
+        hours: "{count}h",
+      },
     },
     // Recipe
     recipe: {

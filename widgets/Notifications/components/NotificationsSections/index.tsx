@@ -1,4 +1,3 @@
-import { useColors } from "@/contexts/ThemeContext";
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { NotificationResponse } from "@/api";
@@ -6,6 +5,7 @@ import {
   useGetNotificationQuery,
   useMarkNotificationsAsReadMutation,
 } from "@/api/slices/authApi";
+import { useTranslation } from "@/hooks/useTranslation";
 
 import { ThemedText } from "@/shared/ui/ThemedText";
 import NotificationCard from "@/widgets/Notifications/components/NotificationCard";
@@ -16,6 +16,7 @@ import { groupNotifications } from "../../utils";
 
 const NotificationsSections = () => {
   const styles = useThemedStyles(createstyles);
+  const { t } = useTranslation();
   const { data, isLoading } = useGetNotificationQuery();
   const [markAsRead] = useMarkNotificationsAsReadMutation();
   const grouped = groupNotifications(data || []);
@@ -49,7 +50,7 @@ const NotificationsSections = () => {
         <ThemedText style={styles.sectionTitle}>{title}</ThemedText>
         {notifications.map((n) => (
           <View key={n.id} style={styles.cardWrapper}>
-            <NotificationCard {...n} />
+            <NotificationCard notification={n} />
           </View>
         ))}
       </View>
@@ -62,12 +63,21 @@ const NotificationsSections = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {renderSection("New", grouped.new)}
-      {renderSection("Today", grouped.today)}
-      {renderSection("Yesterday", grouped.yesterday)}
-      {renderSection("Last 7 Days", grouped.last7Days)}
-      {renderSection("Last 30 Days", grouped.last30Days)}
-      {renderSection("Older", grouped.older)}
+      {renderSection(t("notificationsScreen.sections.new"), grouped.new)}
+      {renderSection(t("notificationsScreen.sections.today"), grouped.today)}
+      {renderSection(
+        t("notificationsScreen.sections.yesterday"),
+        grouped.yesterday
+      )}
+      {renderSection(
+        t("notificationsScreen.sections.last7Days"),
+        grouped.last7Days
+      )}
+      {renderSection(
+        t("notificationsScreen.sections.last30Days"),
+        grouped.last30Days
+      )}
+      {renderSection(t("notificationsScreen.sections.older"), grouped.older)}
     </ScrollView>
   );
 };

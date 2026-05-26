@@ -2,7 +2,7 @@ import type { RootState } from "@/api/store";
 import { store } from "@/api/store";
 import {
   ANDROID_NOTIFICATION_CHANNEL_ID,
-  PushNotificationDataType,
+  PushNotificationType,
 } from "@/constants/pushNotifications";
 import { getNativeFcmToken } from "@/services/push/getNativeFcmToken";
 import { invalidateNotifications } from "@/services/push/invalidateNotifications";
@@ -29,15 +29,25 @@ function navigateFromPushData(
   data: Record<string, unknown> | undefined
 ) {
   if (!data || typeof data !== "object") return;
+
   const type = data.type;
-  const roomId = data.roomId;
-  if (
-    type === PushNotificationDataType.TRACKING_REMINDER &&
-    typeof roomId === "string" &&
-    roomId.length > 0
-  ) {
-    router.push(`/(app)/health`);
+  if (type === PushNotificationType.TRACKING_REMINDER) {
+    router.push("/(app)/health");
     return;
+  }
+
+  if (type === PushNotificationType.SUPPORT_TICKET_REPLY) {
+    const ticketId = data.ticketId;
+    if (typeof ticketId !== "string" || ticketId.length === 0) return;
+
+    router.push({
+      pathname: "/(app)/support/chat",
+      params: {
+        ticketId,
+        status: typeof data.status === "string" ? data.status : "",
+        subject: typeof data.subject === "string" ? data.subject : "",
+      },
+    });
   }
 }
 
@@ -96,7 +106,7 @@ export function PushNotificationsController() {
         try {
           const { user } = store.getState();
           if (!user.isAuthenticated) return;
-          console.log("FCM SYNC")
+          console.log("FCM SYNC");
           await syncFcmTokenToBackend(device.data);
           console.log("FCM SYNC SUCCESS");
           lastSyncedToken.current = device.data;
@@ -143,19 +153,13 @@ export function PushNotificationsController() {
 
   useEffect(() => {
     if (Platform.OS === "web") return;
-  
+
     const notificationListener = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        
+      () => {
         invalidateNotifications();
-        
-        const data = notification.request.content.data as Record<string, unknown>;
-        if (data?.type === PushNotificationDataType.TRACKING_REMINDER) {
-          //TODO
-        }
       }
     );
-  
+
     return () => {
       notificationListener.remove();
     };
@@ -163,4 +167,3 @@ export function PushNotificationsController() {
 
   return null;
 }
-

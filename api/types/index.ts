@@ -425,19 +425,25 @@ export interface MediaResponse {
   blob: Blob;
 }
 
+export interface NotificationData {
+  type?: string;
+  date?: string;
+  caloriesLeft?: string;
+  targetCalories?: string;
+  consumedCalories?: string;
+  ticketId?: string;
+  status?: string;
+  subject?: string;
+  messagePreview?: string;
+}
+
 export interface NotificationResponse {
   id: number;
   userId: number;
   type: string;
   title: string;
   body: string;
-  data: {
-    date: string;
-    type: string;
-    caloriesLeft: string;
-    targetCalories: string;
-    consumedCalories: string;
-  };
+  data: NotificationData;
   isRead: boolean;
   createdAt: string;
 }

@@ -1,6 +1,12 @@
 import { NotificationResponse } from "@/api";
+import { PushNotificationType } from "@/constants/pushNotifications";
+import { Language } from "@/contexts/LocalizationContext";
+import { translate } from "@/utils/i18n";
 
-export function renderTime(createdAt: Date | string) {
+export function renderTime(
+  createdAt: Date | string,
+  language: Language
+): string | null {
   if (!createdAt) return null;
 
   const createdDate = new Date(createdAt);
@@ -8,9 +14,19 @@ export function renderTime(createdAt: Date | string) {
   const diffMs = now.getTime() - createdDate.getTime();
   const diffMinutes = Math.floor(diffMs / 1000 / 60);
 
-  if (diffMinutes < 1) return "just now";
-  if (diffMinutes < 60) return `${diffMinutes} min`;
-  if (diffMinutes < 1440) return `${Math.floor(diffMinutes / 60)}h`;
+  if (diffMinutes < 1) {
+    return translate(language, "notificationsScreen.time.justNow");
+  }
+  if (diffMinutes < 60) {
+    return translate(language, "notificationsScreen.time.minutes", {
+      count: diffMinutes,
+    });
+  }
+  if (diffMinutes < 1440) {
+    return translate(language, "notificationsScreen.time.hours", {
+      count: Math.floor(diffMinutes / 60),
+    });
+  }
   return createdDate.toLocaleDateString();
 }
 
@@ -30,9 +46,7 @@ export const groupNotifications = (notifications: NotificationResponse[]) => {
   last30DaysStart.setDate(last30DaysStart.getDate() - 30);
 
   return {
-    new: notifications.filter(
-      (n) => n.isRead == false
-    ),
+    new: notifications.filter((n) => n.isRead == false),
     today: notifications.filter(
       (n) => new Date(n.createdAt) >= todayStart && new Date(n.createdAt) <= now
     ),
@@ -54,3 +68,21 @@ export const groupNotifications = (notifications: NotificationResponse[]) => {
     older: notifications.filter((n) => new Date(n.createdAt) < last30DaysStart),
   };
 };
+
+export function getNotificationActionRoute(notification: NotificationResponse) {
+  if (notification.type === PushNotificationType.SUPPORT_TICKET_REPLY) {
+    const ticketId = notification.data?.ticketId;
+    if (!ticketId) return null;
+
+    return {
+      pathname: "/(app)/support/chat" as const,
+      params: {
+        ticketId,
+        status: notification.data?.status ?? "",
+        subject: notification.data?.subject ?? "",
+      },
+    };
+  }
+
+  return "/(app)/health" as const;
+}

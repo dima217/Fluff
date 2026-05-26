@@ -1,64 +1,80 @@
 
-import { useColors } from "@/contexts/ThemeContext";
+import { NotificationResponse } from "@/api";
 import { AppColors } from "@/constants/design-tokens";
+import { PushNotificationType } from "@/constants/pushNotifications";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
+import { getLocalizedPushContent } from "@/services/push/getLocalizedPushContent";
 import Button from "@/shared/Buttons/Button";
 import Avatar from "@/shared/ui/Avatar";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useRouter } from "expo-router";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { StyleSheet, View } from "react-native";
-import { renderTime } from "../../utils";
+import { getNotificationActionRoute, renderTime } from "../../utils";
 
 interface NotificationCardProps {
-  title?: string;
-  body?: string;
-  actionText?: string;
-  action2Text?: string;
-  createdAt?: Date | string;
+  notification: NotificationResponse;
 }
 
-const NotificationCard = ({
-  title = "Not enough calories today",
-  body = "At this rate, you yourself will become like my stem. Have another meal!",
-  actionText = "Add a meal",
-  action2Text,
-  createdAt,
-}: NotificationCardProps) => {
+const NotificationCard = ({ notification }: NotificationCardProps) => {
   const styles = useThemedStyles(createstyles);
   const router = useRouter();
+  const { language } = useTranslation();
 
-  const goHealth = useCallback(() => {
-    router.replace("/(app)/health");
-  }, [router]);
+  const content = useMemo(
+    () =>
+      getLocalizedPushContent(
+        language,
+        notification.type,
+        notification.data,
+        {
+          title: notification.title,
+          body: notification.body,
+        }
+      ),
+    [language, notification]
+  );
+
+  const handleAction = useCallback(() => {
+    const route = getNotificationActionRoute(notification);
+    if (!route) return;
+
+    if (typeof route === "string") {
+      router.replace(route);
+      return;
+    }
+
+    router.push(route);
+  }, [notification, router]);
+
+  const showAction =
+    notification.type === PushNotificationType.TRACKING_REMINDER ||
+    notification.type === PushNotificationType.SUPPORT_TICKET_REPLY;
 
   return (
     <View style={styles.container}>
       <Avatar size="medium" source={require("@/assets/images/Fluffy.png")} />
       <View style={styles.content}>
-        <ThemedText style={styles.title}>{title}</ThemedText>
+        <ThemedText style={styles.title}>{content.title}</ThemedText>
         <ThemedText type="mini" style={styles.description}>
-          {body}
+          {content.body}
         </ThemedText>
-        <View style={styles.buttons}>
-          <Button
-            title={actionText}
-            style={styles.button}
-            textStyle={styles.buttonText}
-            onPress={goHealth}
-          />
-          {action2Text && (
+        {showAction && content.actionText && (
+          <View style={styles.buttons}>
             <Button
-              title={action2Text}
+              title={content.actionText}
               style={styles.button}
               textStyle={styles.buttonText}
-              onPress={goHealth}
+              onPress={handleAction}
             />
-          )}
-        </View>
+          </View>
+        )}
       </View>
-      {createdAt && (
-        <ThemedText style={styles.time}>{renderTime(createdAt)}</ThemedText>
+      {notification.createdAt && (
+        <ThemedText style={styles.time}>
+          {renderTime(notification.createdAt, language)}
+        </ThemedText>
       )}
     </View>
   );
@@ -96,7 +112,8 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
     justifyContent: "space-between",
   },
   button: {
-    width: "45%",
+    minWidth: "45%",
+    maxWidth: "65%",
     height: 30,
     paddingHorizontal: 2,
     paddingVertical: 2,
