@@ -1,7 +1,7 @@
 import { AppColors, ColorPalette } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMediaPicker } from "../../hooks/useMediaPicker";
 import MediaPlaceholder from "../MediaPlaceholderPreview";
 import MediaPreview from "../MediaPreview";
@@ -10,15 +10,18 @@ interface MediaUploaderProps {
   value?: string;
   type: "image" | "video";
   onChange?: (media: string | undefined) => void;
+  errorMessage?: string;
 }
 
 const MediaUploader: React.FC<MediaUploaderProps> = ({
   value,
   type,
   onChange,
+  errorMessage,
 }) => {
   const styles = useThemedStyles(createMediaUploaderStyles);
   const { pickMedia, clearMedia } = useMediaPicker();
+  const hasError = Boolean(errorMessage);
 
   const handleRemove = () => {
     onChange?.(undefined);
@@ -33,9 +36,13 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <TouchableOpacity
-        style={[styles.uploadArea, value ? styles.uploadAreaWithMedia : null]}
+        style={[
+          styles.uploadArea,
+          value ? styles.uploadAreaWithMedia : null,
+          hasError && styles.uploadAreaError,
+        ]}
         activeOpacity={value ? 1 : 0.85}
         onPress={() => {
           if (!value) handlePick();
@@ -47,6 +54,11 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
           <MediaPlaceholder type={type} />
         )}
       </TouchableOpacity>
+      {errorMessage ? (
+        <View style={styles.errorContainer}>
+          <Text style={styles.error}>{errorMessage}</Text>
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -57,6 +69,10 @@ const createMediaUploaderStyles = (colors: AppColors) => {
   const isLight = colors.background === ColorPalette.light.background;
 
   return StyleSheet.create({
+    container: {
+      width: "100%",
+      gap: 4,
+    },
     uploadArea: {
       width: "100%",
       height: 250,
@@ -72,6 +88,17 @@ const createMediaUploaderStyles = (colors: AppColors) => {
     uploadAreaWithMedia: {
       borderWidth: 0,
       backgroundColor: isLight ? colors.card : colors.videoBackground,
+    },
+    uploadAreaError: {
+      borderColor: colors.reject,
+    },
+    errorContainer: {
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+    },
+    error: {
+      fontSize: 10,
+      color: colors.reject,
     },
   });
 };

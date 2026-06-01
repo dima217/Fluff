@@ -9,6 +9,7 @@ import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { getFormError } from "@/widgets/Recipe/RecipeNew/utils/getFormError";
 import { Feather } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
@@ -17,8 +18,10 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 const CookingProcess = ({ onBack }: { onBack: () => void }) => {
   const colors = useColors();
   const styles = useThemedStyles(createstyles);
-  const { control, getValues } = useFormContext();
+  const { control, formState: { errors } } = useFormContext();
   const { t } = useTranslation();
+
+  const getErrorMessage = (field: string) => getFormError(errors, field);
 
   const { fields, append, remove, replace } = useFieldArray({
     control,
@@ -63,6 +66,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
                   placeholder={t("common.enter")}
                   value={value}
                   onChangeText={onChange}
+                  errorMessage={getErrorMessage(`steps.${index}.title`)}
                   right={
                     <TouchableOpacity
                       onPress={() => {
@@ -89,6 +93,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
                   placeholder={t("common.enter")}
                   value={value}
                   onChangeText={onChange}
+                  errorMessage={getErrorMessage(`steps.${index}.description`)}
                 />
               )}
             />
@@ -108,6 +113,12 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
           </View>
         ))}
       </View>
+
+      {getErrorMessage("steps") ? (
+        <ThemedText type="xs" style={styles.stepsError}>
+          {getErrorMessage("steps")}
+        </ThemedText>
+      ) : null}
 
       <GradientButton
         title={t("recipe.addStep")}
@@ -130,6 +141,10 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
   },
   stepInputsContainer: {
     gap: 20,
+  },
+  stepsError: {
+    color: colors.reject,
+    marginBottom: 12,
   },
 });
 

@@ -11,24 +11,23 @@ import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import View from "@/shared/View";
 import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
 import CookingProcess from "@/widgets/Recipe/RecipeNew/components/forms/CookingProcess";
 import Preview from "@/widgets/Recipe/RecipeNew/components/forms/Preview";
 import Tutorial from "@/widgets/Recipe/RecipeNew/components/forms/Tutorial";
 import RecipeFormWrapper from "@/widgets/Recipe/RecipeNew/components/FormWrapper";
-import { stepsConfig } from "@/widgets/Recipe/RecipeNew/components/validation/validationSchemas";
+import { createRecipeStepsConfig } from "@/widgets/Recipe/RecipeNew/components/validation/validationSchemas";
 import { useRecipeFormContext } from "@/widgets/Recipe/RecipeNew/hooks/useRecipeFormContext";
 import { createRecipeWorkflow } from "@/widgets/Recipe/RecipeNew/utils/createRecipeWorkflow";
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   BackHandler,
-  KeyboardAvoidingView,
-  Platform,
   View as RNView,
   ScrollView,
   StyleSheet,
@@ -71,6 +70,7 @@ const CreateRecipeScreen = () => {
   const { step, setStep, setTotalSteps, resetForm } = useRecipeFormContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const validationSchemas = useMemo(() => createRecipeStepsConfig(t), [t]);
 
   const [prepareRecipeUpload] = usePrepareRecipeUploadMutation();
   const [prepareStepResourcesUpload] = usePrepareStepResourcesUploadMutation();
@@ -140,10 +140,7 @@ const CreateRecipeScreen = () => {
 
   return (
     <View>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
+      <KeyboardAwareView style={{ flex: 1 }}>
         <ScrollView
           style={styles.scroll}
           contentContainerStyle={styles.scrollContent}
@@ -165,12 +162,12 @@ const CreateRecipeScreen = () => {
           <RecipeFormWrapper
             key={step}
             onFinalSubmit={handleFinalSubmit}
-            validationSchemas={stepsConfig}
+            validationSchemas={validationSchemas}
           >
             {renderStep()}
           </RecipeFormWrapper>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardAwareView>
     </View>
   );
 };

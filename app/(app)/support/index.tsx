@@ -130,7 +130,7 @@ export default function Support() {
           </>
         ) : (
           <ThemedText type="xs" style={styles.empty}>
-            No support requests yet.
+            {t("support.requestsEmpty")}
           </ThemedText>
         )}
       </ScrollView>

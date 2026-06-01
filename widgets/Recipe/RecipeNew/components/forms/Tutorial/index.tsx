@@ -3,13 +3,16 @@ import { useColors } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { getFormError } from "@/widgets/Recipe/RecipeNew/utils/getFormError";
 import { Controller, useFormContext } from "react-hook-form";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 const Tutorial = ({ onBack }: { onBack: () => void }) => {
   const colors = useColors();
-  const { control } = useFormContext();
+  const { control, formState: { errors } } = useFormContext();
   const { t } = useTranslation();
+
+  const getErrorMessage = (field: string) => getFormError(errors, field);
 
   return (
     <View>
@@ -27,7 +30,12 @@ const Tutorial = ({ onBack }: { onBack: () => void }) => {
           control={control}
           name="videoUrl"
           render={({ field: { value, onChange } }) => (
-            <MediaUploader value={value} onChange={onChange} type="video" />
+            <MediaUploader
+              value={value}
+              onChange={onChange}
+              type="video"
+              errorMessage={getErrorMessage("videoUrl")}
+            />
           )}
         />
       </View>

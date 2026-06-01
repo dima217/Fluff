@@ -4,6 +4,7 @@ import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import Header from "@/shared/Header";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import TextInput from "@/shared/Inputs/TextInput";
 import ErrorModal from "@/shared/Modals/ErrorModal";
 import View from "@/shared/View";
@@ -11,7 +12,7 @@ import AvatarUploader from "@/widgets/Profile/components/AvatarUploader";
 import { useAvatarUpload } from "@/widgets/Profile/hooks/useAvatarUpload";
 import { Tabs, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
 const EditProfile = () => {
   const styles = useThemedStyles(createStyles);
@@ -68,10 +69,7 @@ const EditProfile = () => {
     <View>
       <Tabs.Screen options={{ tabBarStyle: { display: "none" } }} />
       <Header title={t("profile.editProfile")} />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={styles.keyboardView}
-      >
+      <KeyboardAwareView style={styles.keyboardView}>
         <ScrollView
           contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}
@@ -103,7 +101,7 @@ const EditProfile = () => {
           loading={loading}
           style={styles.saveButton}
         />
-      </KeyboardAvoidingView>
+      </KeyboardAwareView>
 
       <ErrorModal
         isVisible={showError}

@@ -4,6 +4,7 @@ import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { useTranslation } from "@/hooks/useTranslation";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import ErrorModal from "@/shared/Modals/ErrorModal";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import VerificationCodeModal from "@/shared/Modals/VerificationCodeModal";
 import View from "@/shared/View";
 import ProgressDots from "@/shared/ui/ProgressDots";
@@ -20,8 +21,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   BackHandler,
-  KeyboardAvoidingView,
-  Platform,
   View as RNView,
   StyleSheet,
 } from "react-native";
@@ -98,10 +97,7 @@ const RegisterScreenContent: React.FC = () => {
   }, [isGoogleSignUp, setTotalSteps]);
 
   return (
-    <KeyboardAvoidingView
-      style={styles.keyboardAvoid}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
+    <KeyboardAwareView style={styles.keyboardAvoid}>
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
@@ -147,7 +143,7 @@ const RegisterScreenContent: React.FC = () => {
           setShowErrorModal(false);
         }}
       />
-    </KeyboardAvoidingView>
+    </KeyboardAwareView>
   );
 };
 

@@ -167,6 +167,21 @@ export const translations = {
       reviewHint: "Проверьте данные перед публикацией",
       makePublic: "Сделать рецепт публичным",
       submitToSystem: "Отправить заявку на добавление в систему",
+      validation: {
+        nameRequired: "Название рецепта обязательно",
+        nameMin: "Минимум 3 символа",
+        nameMax: "Максимум 100 символов",
+        ccalRequired: "Укажите калорийность",
+        ingredientsRequired: "Ингредиенты обязательны",
+        ingredientsMin: "Минимум 3 символа",
+        ingredientsMax: "Максимум 100 символов",
+        photoRequired: "Добавьте фото",
+        videoRequired: "Добавьте видео",
+        stepTitleRequired: "Укажите заголовок шага",
+        stepDescriptionRequired: "Укажите описание шага",
+        stepsMin: "Добавьте хотя бы один шаг",
+        stepsRequired: "Шаги приготовления обязательны",
+      },
     },
     mediaUploader: {
       addPhoto: "Добавить фото",
@@ -234,6 +249,7 @@ export const translations = {
       chatTitle: "Чат поддержки",
       reportProblem: "Сообщить о проблеме",
       submitRequest: "Отправить обращение",
+      requestsEmpty: "Обращений пока нет",
     },
     // SignUp
     signUp: {
@@ -493,6 +509,7 @@ export const translations = {
       chatTitle: "Чат падтрымкі",
       reportProblem: "Паведаміць пра праблему",
       submitRequest: "Адправіць зварот",
+      requestsEmpty: "Звяртанняў пакуль няма",
     },
     // SignUp
     signUp: {
@@ -571,6 +588,21 @@ export const translations = {
       reviewHint: "Праверце даныя перад публікацыяй",
       makePublic: "Зрабіць рэцэпт публічным",
       submitToSystem: "Адправіць заявку на даданне ў сістэму",
+      validation: {
+        nameRequired: "Назва рэцэпта абавязковая",
+        nameMin: "Мінімум 3 сімвалы",
+        nameMax: "Максімум 100 сімвалаў",
+        ccalRequired: "Пазначце каларыйнасць",
+        ingredientsRequired: "Інгрэдыенты абавязковыя",
+        ingredientsMin: "Мінімум 3 сімвалы",
+        ingredientsMax: "Максімум 100 сімвалаў",
+        photoRequired: "Дадайце фота",
+        videoRequired: "Дадайце відэа",
+        stepTitleRequired: "Пазначце загаловак кроку",
+        stepDescriptionRequired: "Пазначце апісанне кроку",
+        stepsMin: "Дадайце хаця б адзін крок",
+        stepsRequired: "Крокі прыгатавання абавязковыя",
+      },
     },
     mediaUploader: {
       addPhoto: "Дадаць фота",
@@ -789,6 +821,21 @@ export const translations = {
       reviewHint: "Review your recipe before publishing",
       makePublic: "Make the recipe public",
       submitToSystem: "Submit a request to be added to the system",
+      validation: {
+        nameRequired: "Recipe name is required",
+        nameMin: "Minimum 3 characters",
+        nameMax: "Maximum 100 characters",
+        ccalRequired: "Calories are required",
+        ingredientsRequired: "Ingredients are required",
+        ingredientsMin: "Minimum 3 characters",
+        ingredientsMax: "Maximum 100 characters",
+        photoRequired: "Photo is required",
+        videoRequired: "Video is required",
+        stepTitleRequired: "Step title is required",
+        stepDescriptionRequired: "Step description is required",
+        stepsMin: "Add at least one cooking step",
+        stepsRequired: "Cooking steps are required",
+      },
     },
     mediaUploader: {
       addPhoto: "Add a Photo",
@@ -856,6 +903,7 @@ export const translations = {
       chatTitle: "Support Chat",
       reportProblem: "Report a Problem",
       submitRequest: "Submit Request",
+      requestsEmpty: "No support requests yet.",
     },
     // SignUp
     signUp: {

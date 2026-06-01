@@ -1,6 +1,7 @@
 import { useAppSelector } from "@/api/hooks";
 import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import ErrorModal from "@/shared/Modals/ErrorModal";
 import View from "@/shared/View";
 import ProgressDots from "@/shared/ui/ProgressDots";
@@ -17,8 +18,6 @@ import { Tabs, useRouter } from "expo-router";
 import { useEffect, useMemo } from "react";
 import {
   BackHandler,
-  KeyboardAvoidingView,
-  Platform,
   View as RNView,
   StyleSheet,
 } from "react-native";
@@ -63,10 +62,7 @@ const BiometryScreenContent = () => {
       <Tabs.Screen options={{ tabBarStyle: { display: "none" } }} />
       <Header title={t("profile.biometryData")} />
 
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoid}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
+      <KeyboardAwareView style={styles.keyboardAvoid}>
         <ScrollView
           style={styles.scroll}
           contentContainerStyle={styles.scrollContent}
@@ -88,7 +84,7 @@ const BiometryScreenContent = () => {
             </BiometryFormWrapper>
           </RNView>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardAwareView>
 
       <ErrorModal
         isVisible={showErrorModal}

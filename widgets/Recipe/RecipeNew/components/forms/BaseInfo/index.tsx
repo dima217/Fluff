@@ -3,6 +3,7 @@ import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { getFormError } from "@/widgets/Recipe/RecipeNew/utils/getFormError";
 import { Controller, useFormContext } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 
@@ -13,15 +14,7 @@ const BaseInfo = () => {
   } = useFormContext();
   const { t } = useTranslation();
 
-  const getErrorMessage = (field: string): string | undefined => {
-    const error = errors[field];
-
-    if (error && error.message) {
-      return String(error.message);
-    }
-
-    return undefined;
-  };
+  const getErrorMessage = (field: string) => getFormError(errors, field);
 
   return (
     <View>
@@ -36,7 +29,12 @@ const BaseInfo = () => {
           control={control}
           name="mediaUrl"
           render={({ field: { value, onChange } }) => (
-            <MediaUploader value={value} onChange={onChange} type="image" />
+            <MediaUploader
+              value={value}
+              onChange={onChange}
+              type="image"
+              errorMessage={getErrorMessage("mediaUrl")}
+            />
           )}
         />
 

@@ -5,6 +5,7 @@ import {
 } from "@/api";
 
 import View from "@/shared/View";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import SearchOverlayContent from "@/widgets/Search";
 import SearchInput from "@/widgets/Search/components/SearchInput";
 
@@ -138,19 +139,21 @@ const SearchScreen = () => {
         onFilterRemove={handleFilterRemove}
       />
 
-      <SearchOverlayContent
-        onSelectTag={handleTagSelect}
-        selectedProductIds={selectedProductIds}
-        isSearchTriggered={isSearchTriggered}
-        searchText={searchText}
-        selectedIds={selectedProductIds}
-        recipes={recipesArray}
-        products={products}
-        allProducts={allProducts}
-        isLoading={isLoading}
-        hasSearchResults={hasSearchResults}
-        onSearchFromHistory={handleHistoryItemPress}
-      />
+      <KeyboardAwareView style={{ flex: 1 }}>
+        <SearchOverlayContent
+          onSelectTag={handleTagSelect}
+          selectedProductIds={selectedProductIds}
+          isSearchTriggered={isSearchTriggered}
+          searchText={searchText}
+          selectedIds={selectedProductIds}
+          recipes={recipesArray}
+          products={products}
+          allProducts={allProducts}
+          isLoading={isLoading}
+          hasSearchResults={hasSearchResults}
+          onSearchFromHistory={handleHistoryItemPress}
+        />
+      </KeyboardAwareView>
     </View>
   );
 };

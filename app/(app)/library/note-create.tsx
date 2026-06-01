@@ -4,6 +4,7 @@ import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import AutoGrowingTextInput from "@/shared/Inputs/AutoGrowingTextInput";
 import BorderlessTextInput from "@/shared/Inputs/BorderlessTextInput";
 import View from "@/shared/View";
@@ -11,8 +12,6 @@ import { notesStorage } from "@/utils/notesStorage";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  KeyboardAvoidingView,
-  Platform,
   View as RNView,
   StyleSheet,
 } from "react-native";
@@ -74,10 +73,7 @@ const NoteCreate = () => {
     <View>
       <Header title={isEdit ? t("library.editNote") : t("library.newNote")} />
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.keyboard}
-      >
+      <KeyboardAwareView style={styles.keyboard}>
         {/* CARD CONTAINER */}
         <RNView style={styles.card}>
           <BorderlessTextInput
@@ -100,7 +96,7 @@ const NoteCreate = () => {
             minHeight={120}
           />
         </RNView>
-      </KeyboardAvoidingView>
+      </KeyboardAwareView>
     </View>
   );
 };

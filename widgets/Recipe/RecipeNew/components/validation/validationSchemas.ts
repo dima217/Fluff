@@ -1,46 +1,23 @@
 import * as yup from "yup";
 
-export const baseInfoSchema = yup.object({
-  name: yup
-    .string()
-    .required("Recipe name is required")
-    .min(3, "Minimum 3 characters")
-    .max(100, "Maximum 100 characters"),
-  ccal: yup.number().required("Calories are required"),
-  ingredients: yup
-    .string()
-    .required("Ingredients are required")
-    .min(3, "Minimum 3 characters")
-    .max(100, "Maximum 100 characters"),
-  mediaUrl: yup.string().required("Media file is required"),
-});
+type TranslateFn = (key: string) => string;
 
-export const cookingProcessSchema = yup.object({
-  steps: yup
-    .array()
-    .of(
-      yup.object({
-        title: yup.string().required("Step title is required"),
-        description: yup.string().required("Step description is required"),
-        stepMediaUrl: yup.string(),
-      })
-    )
-    .min(1, "Add at least one cooking step")
-    .required("Cooking steps are required"),
-});
-
-export const tutorialSchema = yup.object({
-  videoUrl: yup.string().required("Video is required"),
-});
-
-export const previewSchema = yup.object({
-  makePublic: yup.boolean().required(),
-  submitToSystem: yup.boolean().nullable()
-});
-
-export const stepsConfig = [
+export const createRecipeStepsConfig = (t: TranslateFn) => [
   {
-    schema: baseInfoSchema,
+    schema: yup.object({
+      name: yup
+        .string()
+        .required(t("recipe.validation.nameRequired"))
+        .min(3, t("recipe.validation.nameMin"))
+        .max(100, t("recipe.validation.nameMax")),
+      ccal: yup.number().required(t("recipe.validation.ccalRequired")),
+      ingredients: yup
+        .string()
+        .required(t("recipe.validation.ingredientsRequired"))
+        .min(3, t("recipe.validation.ingredientsMin"))
+        .max(100, t("recipe.validation.ingredientsMax")),
+      mediaUrl: yup.string().required(t("recipe.validation.photoRequired")),
+    }),
     defaultValues: {
       name: "",
       ccal: 0,
@@ -49,19 +26,40 @@ export const stepsConfig = [
     },
   },
   {
-    schema: cookingProcessSchema,
+    schema: yup.object({
+      steps: yup
+        .array()
+        .of(
+          yup.object({
+            title: yup
+              .string()
+              .required(t("recipe.validation.stepTitleRequired")),
+            description: yup
+              .string()
+              .required(t("recipe.validation.stepDescriptionRequired")),
+            stepMediaUrl: yup.string(),
+          })
+        )
+        .min(1, t("recipe.validation.stepsMin"))
+        .required(t("recipe.validation.stepsRequired")),
+    }),
     defaultValues: {
       steps: [{ title: "", description: "", stepMediaUrl: "" }],
     },
   },
   {
-    schema: tutorialSchema,
+    schema: yup.object({
+      videoUrl: yup.string().required(t("recipe.validation.videoRequired")),
+    }),
     defaultValues: {
       videoUrl: "",
     },
   },
   {
-    schema: previewSchema,
+    schema: yup.object({
+      makePublic: yup.boolean().required(),
+      submitToSystem: yup.boolean().nullable(),
+    }),
     defaultValues: {
       makePublic: false,
       submitToSystem: false,

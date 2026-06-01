@@ -1,5 +1,6 @@
 import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import View from "@/shared/View";
 import SupportRequest from "@/widgets/Support/forms/SupportRequest";
 import { ScrollView, StyleSheet } from "react-native";
@@ -10,18 +11,24 @@ const SupportCreate = () => {
   return (
     <View>
       <Header title={t("support.reportProblem")} />
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        <SupportRequest />
-      </ScrollView>
+      <KeyboardAwareView style={styles.keyboard}>
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <SupportRequest />
+        </ScrollView>
+      </KeyboardAwareView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  keyboard: {
+    flex: 1,
+  },
   scroll: {
     flex: 1,
     paddingTop: 20,

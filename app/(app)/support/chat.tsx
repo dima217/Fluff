@@ -4,17 +4,17 @@ import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import View from "@/shared/View";
 import ChatInput from "@/widgets/Support/components/ChatInput";
 import ChatMessageList, {
   ChatMessageListRef,
 } from "@/widgets/Support/components/ChatMessageList";
-import { useAnimatedKeyboard } from "@/widgets/Support/hooks/useAnimatedKeyboard";
 import { useSupportChat } from "@/widgets/Support/hooks/useSupportChat";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback, useRef } from "react";
-import { Alert, Animated, StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 
 export default function SupportChatScreen() {
   const { t } = useTranslation();
@@ -26,7 +26,6 @@ export default function SupportChatScreen() {
 
   const styles = useThemedStyles(createStyles);
   const messageListRef = useRef<ChatMessageListRef>(null);
-  const keyboardHeight = useAnimatedKeyboard();
 
   const profile = useAppSelector((s) => s.user.profile);
   const currentUserId = profile?.user?.id ? Number(profile.user.id) : 0;
@@ -51,9 +50,7 @@ export default function SupportChatScreen() {
     <View style={styles.screen}>
       <Header title={subject ?? t("support.chatTitle")} />
 
-      <Animated.View
-        style={[styles.flex, { paddingBottom: keyboardHeight }]}
-      >
+      <KeyboardAwareView style={styles.flex}>
         <ChatMessageList
           ref={messageListRef}
           messages={messages ?? []}
@@ -72,7 +69,7 @@ export default function SupportChatScreen() {
             isSending={isUploading}
           />
         )}
-      </Animated.View>
+      </KeyboardAwareView>
     </View>
   );
 }

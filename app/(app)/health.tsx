@@ -12,6 +12,7 @@ import AccountDetails from "@/shared/AccountDetails";
 import { AnimatedWheelPicker } from "@/shared/AnimatedWheelPicker";
 import CalorieInput from "@/shared/Colories/components/CaloriesInput";
 import CalorieProgress from "@/shared/Colories/components/CaloriesProgress";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import { useDayPickerData } from "@/shared/DateWheelItem/utils";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -137,51 +138,57 @@ const Health = () => {
   }, [language, selectedDate]);
 
   return (
-    <ScrollView
-      style={styles.mainContainer}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-      nestedScrollEnabled
-    >
-      <View style={[styles.container]}>
-        <AccountDetails />
-        <ThemedText type="s" style={{ paddingTop: 30 }}>
-          {label}
-        </ThemedText>
-        <AnimatedWheelPicker
-          itemSize={60}
-          containerStyle={styles.animatedWheelPicker}
-          selectStyle={styles.selectContainer}
-          data={pickerData.data}
-          noBackground
-          visibleCount={7}
-          initialIndex={selectedDateIndex}
-          onValueChange={handleValueChange}
-        />
-        <View style={styles.markerContainerWrapper}>
-          <MarkerContainer />
-        </View>
-        <CalorieProgress
-          currentCalories={currentCalories}
-          dailyGoal={dailyGoal ?? 1000}
-          onEditPress={() => {}}
-        />
-        <CalorieInput onAdd={handleAddFood} />
-        {dayData?.records && dayData.records.length > 0 && (
-          <TrackingHistory
-            onPress={handleTrackingCardPress}
-            records={dayData.records}
-            onDeleteSuccess={refetchCalendar}
+    <KeyboardAwareView style={styles.wrapper}>
+      <ScrollView
+        style={styles.mainContainer}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={[styles.container]}>
+          <AccountDetails />
+          <ThemedText type="s" style={{ paddingTop: 30 }}>
+            {label}
+          </ThemedText>
+          <AnimatedWheelPicker
+            itemSize={60}
+            containerStyle={styles.animatedWheelPicker}
+            selectStyle={styles.selectContainer}
+            data={pickerData.data}
+            noBackground
+            visibleCount={7}
+            initialIndex={selectedDateIndex}
+            onValueChange={handleValueChange}
           />
-        )}
-      </View>
-    </ScrollView>
+          <View style={styles.markerContainerWrapper}>
+            <MarkerContainer />
+          </View>
+          <CalorieProgress
+            currentCalories={currentCalories}
+            dailyGoal={dailyGoal ?? 1000}
+            onEditPress={() => {}}
+          />
+          <CalorieInput onAdd={handleAddFood} />
+          {dayData?.records && dayData.records.length > 0 && (
+            <TrackingHistory
+              onPress={handleTrackingCardPress}
+              records={dayData.records}
+              onDeleteSuccess={refetchCalendar}
+            />
+          )}
+        </View>
+      </ScrollView>
+    </KeyboardAwareView>
   );
 };
 
 export default Health;
 
 const createstyles = (colors: AppColors) => StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
   mainContainer: {
     backgroundColor: colors.background,
     flex: 1,

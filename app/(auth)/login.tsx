@@ -7,6 +7,7 @@ import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { useTranslation } from "@/hooks/useTranslation";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import LoginForm from "@/shared/Forms/LoginForm";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import ErrorModal from "@/shared/Modals/ErrorModal";
 import WelcomeModal from "@/shared/Modals/WelcomeModal";
 import SignUpPrompt from "@/shared/ui/SignUpPrompt";
@@ -47,7 +48,7 @@ const Login = () => {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <KeyboardAwareView style={styles.mainContainer}>
       <View style={styles.container}>
         <View style={styles.iconContainer}>
           <Image
@@ -83,7 +84,7 @@ const Login = () => {
         message={errorMessage}
         onClose={() => setShowErrorModal(false)}
       />
-    </View>
+    </KeyboardAwareView>
   );
 };
 

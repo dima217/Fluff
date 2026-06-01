@@ -1,8 +1,8 @@
 import { useRecoveryConfirmMutation, useRecoveryInitMutation } from "@/api";
 import { useTranslation } from "@/hooks/useTranslation";
 import ErrorModal from "@/shared/Modals/ErrorModal";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import VerificationCodeModal from "@/shared/Modals/VerificationCodeModal";
-import View from "@/shared/View";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -146,7 +146,7 @@ const RecoveryScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareView style={styles.container}>
       <RNView style={styles.content}>
         <ThemedText type="subtitle" style={styles.title}>
           {step === "init"
@@ -255,7 +255,7 @@ const RecoveryScreen = () => {
         message={errorMessage}
         onClose={() => setShowErrorModal(false)}
       />
-    </View>
+    </KeyboardAwareView>
   );
 };
 

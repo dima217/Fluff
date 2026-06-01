@@ -12,13 +12,14 @@ import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import View from "@/shared/View";
 import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
 import CookingProcess from "@/widgets/Recipe/RecipeNew/components/forms/CookingProcess";
 import Preview from "@/widgets/Recipe/RecipeNew/components/forms/Preview";
 import Tutorial from "@/widgets/Recipe/RecipeNew/components/forms/Tutorial";
 import RecipeFormWrapper from "@/widgets/Recipe/RecipeNew/components/FormWrapper";
-import { stepsConfig } from "@/widgets/Recipe/RecipeNew/components/validation/validationSchemas";
+import { createRecipeStepsConfig } from "@/widgets/Recipe/RecipeNew/components/validation/validationSchemas";
 import {
   RecipeFormProvider,
   useRecipeFormContext,
@@ -27,13 +28,11 @@ import { recipeResponseToFormData } from "@/widgets/Recipe/RecipeNew/utils/recip
 import { updateRecipeWorkflow } from "@/widgets/Recipe/RecipeNew/utils/updateRecipeWorkflow";
 import AnimatedProgressBar from "@/widgets/Recipe/shared/ProgreeBar";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   BackHandler,
-  KeyboardAvoidingView,
-  Platform,
   View as RNView,
   ScrollView,
   StyleSheet,
@@ -74,6 +73,7 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
   const { step, setStep, setTotalSteps } = useRecipeFormContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const validationSchemas = useMemo(() => createRecipeStepsConfig(t), [t]);
 
   useEffect(() => {
     const onBackPress = () => {
@@ -161,7 +161,7 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
         <RecipeFormWrapper
           key={step}
           onFinalSubmit={handleFinalSubmit}
-          validationSchemas={stepsConfig}
+          validationSchemas={validationSchemas}
         >
           {renderStep()}
         </RecipeFormWrapper>
@@ -214,14 +214,11 @@ export default function EditRecipeScreen() {
 
   return (
     <View>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
+      <KeyboardAwareView style={{ flex: 1 }}>
         <RecipeFormProvider initialFormData={initialFormData}>
           <EditRecipeForm recipe={recipe} />
         </RecipeFormProvider>
-      </KeyboardAvoidingView>
+      </KeyboardAwareView>
     </View>
   );
 }
