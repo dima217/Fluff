@@ -12,6 +12,7 @@ import SearchInput from "@/widgets/Search/components/SearchInput";
 import { normalizeApiArray } from "@/utils/normalizeApiArray";
 
 import { tryAddMatchedProduct } from "@/widgets/Search/utils/tryAddMatchedProduct";
+import { searchStorage } from "@/utils/searchStorage";
 import { useCallback, useMemo, useState } from "react";
 
 const SearchScreen = () => {
@@ -105,6 +106,12 @@ const SearchScreen = () => {
       setIsSearchTriggered(false);
       return;
     }
+
+    const trimmedQuery = searchText.trim();
+    if (trimmedQuery.length > 0) {
+      searchStorage.addToSearchHistory(trimmedQuery);
+    }
+
     searchRecipes({ q: searchText, productIds: selectedProductIds });
     searchProducts({ q: searchText });
     setIsSearchTriggered(true);

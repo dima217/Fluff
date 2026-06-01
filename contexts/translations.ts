@@ -244,6 +244,8 @@ export const translations = {
       noteContentPlaceholder: "Текст заметки...",
       noteEnterTitleFirst: "Сначала введите название",
       notesEmpty: "Заметок пока нет",
+      recipesEmpty: "Избранных рецептов пока нет",
+      productsEmpty: "Избранных продуктов пока нет",
     },
     support: {
       chatTitle: "Чат поддержки",
@@ -504,6 +506,8 @@ export const translations = {
       noteContentPlaceholder: "Тэкст нататкі...",
       noteEnterTitleFirst: "Спачатку ўвядзіце назву",
       notesEmpty: "Нататак пакуль няма",
+      recipesEmpty: "Абраных рэцэптаў пакуль няма",
+      productsEmpty: "Абраных прадуктаў пакуль няма",
     },
     support: {
       chatTitle: "Чат падтрымкі",
@@ -898,6 +902,8 @@ export const translations = {
       noteContentPlaceholder: "Write your note...",
       noteEnterTitleFirst: "Enter title first",
       notesEmpty: "No notes yet",
+      recipesEmpty: "No favorite recipes yet",
+      productsEmpty: "No favorite products yet",
     },
     support: {
       chatTitle: "Support Chat",

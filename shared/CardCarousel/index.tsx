@@ -8,7 +8,6 @@ import { StyleSheet, View, ViewProps } from "react-native";
 import { useMealLikes } from "./hooks/useMealLikes";
 import { useMealsData } from "./hooks/useMealsData";
 import MealsFlatList from "./MealsFlatList";
-import { featuredRecipes, mealsToday } from "./mock";
 
 export interface MealData {
   id: string;
@@ -69,8 +68,7 @@ const CardsCarousel = ({
 
   const { dropZoneLayout, setIsOverDropZone } = useDrag();
 
-  const mockData = isCarouselVariant ? featuredRecipes : mealsToday;
-  const finalData = products && products.length > 0 ? products : mockData;
+  const finalData = products ?? [];
   const [updateProfile] = useUpdateProfileMutation();
 
   const { likes, toggleLike } = useMealLikes(finalData);

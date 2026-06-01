@@ -11,6 +11,13 @@ export function setPendingInitialTicket(data: PendingInitialTicket) {
   pendingInitialTicket = data;
 }
 
+export function peekPendingInitialTicket(
+  ticketId: number
+): PendingInitialTicket | null {
+  if (pendingInitialTicket?.ticketId !== ticketId) return null;
+  return pendingInitialTicket;
+}
+
 export function consumePendingInitialTicket(
   ticketId: number
 ): PendingInitialTicket | null {

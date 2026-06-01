@@ -219,6 +219,7 @@ export async function updateRecipeWorkflow(
       calories: recipeData.ccal ?? existingRecipe.calories,
       cookAt: existingRecipe.cookAt,
       stepsConfig,
+      submitToSystem: recipeData.submitToSystem ?? null,
     };
 
     const updated = await updateRecipe({ id: recipeId, data: updatePayload }).unwrap();

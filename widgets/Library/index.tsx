@@ -1,5 +1,4 @@
 import {
-  useCheatMealSettings,
   useIsCheatMealDay,
 } from "@/hooks/useCheatMealDay";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -22,9 +21,7 @@ const Library = () => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const settings = useCheatMealSettings();
   const isCheatMealDay = useIsCheatMealDay();
-  const showCheatMealLock = settings.configured === true;
 
   const { dropZoneLayout } = useDrag();
   const dropZoneRef = useRef<View>(null);
@@ -59,7 +56,7 @@ const Library = () => {
           backgroundImage={burgerBackgroundImage}
           onPress={() => router.push("/(app)/library/cheat-meal")}
           style={styles.bottomRightCard}
-          showLock={showCheatMealLock}
+          showLock
           isUnlocked={isCheatMealDay}
         />
 

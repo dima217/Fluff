@@ -3,12 +3,15 @@ import { SupportMessageAttachment, SupportMessageDto, SupportTicketStatus } from
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   buildInitialTicketContent,
+  buildPendingInitialMessage,
   mergeSupportMessages,
   normalizeSupportMessage,
+  pendingMessageExistsInList,
 } from "../lib/supportMessages";
 import {
   clearPendingInitialTicket,
   consumePendingInitialTicket,
+  peekPendingInitialTicket,
 } from "../lib/pendingInitialTicket";
 import { patchSupportTicketInCache } from "../lib/supportTicketCache";
 import { parseTicketEvent } from "../lib/supportTickets";
@@ -118,21 +121,71 @@ export function useSupportChat(ticketId: number, initialStatus?: SupportTicketSt
 
     initialTicketSentRef.current = false;
     let cancelled = false;
-    setMessages([]);
+
+    const pending = peekPendingInitialTicket(ticketId);
+    if (pending) {
+      setMessages([
+        buildPendingInitialMessage(pending, ticketId, currentUserId || 0),
+      ]);
+    } else {
+      setMessages([]);
+    }
+
     setIsLoadingMessages(true);
 
     fetchMessagesRef.current({ ticketId })
       .unwrap()
       .then((res) => {
         if (cancelled) return;
+
         const parsed = parseMessagesResponse(res);
-        if (parsed.length > 0) {
+        const activePending = peekPendingInitialTicket(ticketId);
+
+        if (activePending && pendingMessageExistsInList(activePending, parsed)) {
           clearPendingInitialTicket(ticketId);
+          setMessages(parsed);
+          return;
         }
+
+        if (parsed.length === 0 && activePending) {
+          setMessages((prev) =>
+            prev.length > 0
+              ? prev
+              : [
+                  buildPendingInitialMessage(
+                    activePending,
+                    ticketId,
+                    currentUserId || 0
+                  ),
+                ]
+          );
+          return;
+        }
+
+        if (activePending && !pendingMessageExistsInList(activePending, parsed)) {
+          const optimistic = buildPendingInitialMessage(
+            activePending,
+            ticketId,
+            currentUserId || 0
+          );
+          setMessages(
+            parsed.reduce(
+              (acc, message) => mergeSupportMessages(acc, message),
+              [optimistic]
+            )
+          );
+          return;
+        }
+
         setMessages(parsed);
       })
       .catch(() => {
-        if (!cancelled) setMessages([]);
+        if (!cancelled) {
+          const pendingOnError = peekPendingInitialTicket(ticketId);
+          if (!pendingOnError) {
+            setMessages([]);
+          }
+        }
       })
       .finally(() => {
         if (!cancelled) setIsLoadingMessages(false);
@@ -141,7 +194,7 @@ export function useSupportChat(ticketId: number, initialStatus?: SupportTicketSt
     return () => {
       cancelled = true;
     };
-  }, [ticketId]);
+  }, [ticketId, currentUserId]);
 
   useEffect(() => {
     if (
@@ -150,27 +203,34 @@ export function useSupportChat(ticketId: number, initialStatus?: SupportTicketSt
       !ticketId ||
       Number.isNaN(ticketId) ||
       initialTicketSentRef.current ||
-      messages.length > 0 ||
       !currentUserId
     ) {
       return;
     }
 
-    const pending = consumePendingInitialTicket(ticketId);
+    const pending = peekPendingInitialTicket(ticketId);
     if (!pending) return;
+
+    if (pendingMessageExistsInList(pending, messages)) {
+      clearPendingInitialTicket(ticketId);
+      return;
+    }
+
+    const consumed = consumePendingInitialTicket(ticketId);
+    if (!consumed) return;
 
     initialTicketSentRef.current = true;
 
-    const content = buildInitialTicketContent(pending.subject, pending.message);
-    const attachments = pending.imageUrl
-      ? [{ url: pending.imageUrl, type: "image" as const }]
+    const content = buildInitialTicketContent(consumed.subject, consumed.message);
+    const attachments = consumed.imageUrl
+      ? [{ url: consumed.imageUrl, type: "image" as const }]
       : undefined;
 
     postMessage(content, currentUserId, attachments);
   }, [
     currentUserId,
     isLoadingMessages,
-    messages.length,
+    messages,
     postMessage,
     ticketId,
     isTicketClosed,

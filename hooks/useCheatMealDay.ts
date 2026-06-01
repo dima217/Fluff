@@ -1,27 +1,37 @@
+import { useAppSelector } from "@/api";
 import { cheatMealSettingsStorage } from "@/utils/cheatMealSettingsStorage";
 import { cheatMealStorage } from "@/utils/cheatMealStorage";
 import { useMemo } from "react";
 
 /**
  * Returns user's cheat meal settings (day of month + period).
- * Reads from local storage (set after signup).
+ * Prefers profile from API, falls back to local storage.
  */
 export function useCheatMealSettings() {
-  return useMemo(() => cheatMealSettingsStorage.get(), []);
+  const profile = useAppSelector((state) => state.user.profile);
+
+  return useMemo(() => {
+    const stored = cheatMealSettingsStorage.get();
+    const cheatMealDay = profile?.cheatMealDay ?? stored.cheatMealDay;
+    const periodOfDays = profile?.periodOfDays ?? stored.periodOfDays;
+    const configured =
+      Boolean(profile?.cheatMealDay && profile?.periodOfDays) ||
+      stored.configured === true;
+
+    return { cheatMealDay, periodOfDays, configured };
+  }, [profile?.cheatMealDay, profile?.periodOfDays]);
 }
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
 /**
  * Returns true if today is a cheat meal day based on user settings.
- * Logic: first cheat day = REFERENCE_DATE + (cheatMealDay - 1) days;
- * then every periodOfDays days. Today is cheat day if (daysSinceFirstCheat % periodOfDays) === 0.
  */
 export function useIsCheatMealDay(): boolean {
   const settings = useCheatMealSettings();
 
   return useMemo(() => {
     const cheatDay = parseInt(settings.cheatMealDay, 10) || 1;
-    console.log("cheatDay", cheatDay);
     const period = parseInt(settings.periodOfDays, 10) || 7;
 
     const today = new Date();
@@ -54,17 +64,22 @@ export function useIsCheatMealDay(): boolean {
 }
 
 /**
- * When today is a cheat meal day, returns the set of recipe IDs that are in the user's cheat meal list.
- * Use this to exclude those recipes from the calorie tracker search on health screen so they don't appear there.
- * When today is not a cheat meal day, returns an empty set.
+ * When today is not a cheat meal day, returns recipe IDs in the user's cheat meal list.
  */
 export function useExcludeCheatMealRecipeIds(): Set<number> {
   const isCheatMealDay = useIsCheatMealDay();
+  const profileCheatMealIds = useAppSelector(
+    (state) => state.user.profile?.cheatMeal
+  );
+
   return useMemo(() => {
-    console.log("isCheatMealDay", isCheatMealDay);
     if (isCheatMealDay) return new Set<number>();
+
+    if (profileCheatMealIds?.length) {
+      return new Set(profileCheatMealIds);
+    }
+
     const items = cheatMealStorage.getAll();
-    console.log("items", items);
     return new Set(items.map((item) => item.id));
-  }, [isCheatMealDay]);
+  }, [isCheatMealDay, profileCheatMealIds]);
 }

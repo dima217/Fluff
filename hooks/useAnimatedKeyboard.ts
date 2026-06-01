@@ -19,17 +19,27 @@ export function useAnimatedKeyboard() {
       }).start();
     };
 
+    const resetKeyboard = () => {
+      keyboardHeight.stopAnimation();
+      keyboardHeight.setValue(0);
+    };
+
     const showSub = Keyboard.addListener(KEYBOARD_SHOW_EVENT, (event) => {
       animateKeyboard(event.endCoordinates.height, event);
     });
 
-    const hideSub = Keyboard.addListener(KEYBOARD_HIDE_EVENT, (event) => {
-      animateKeyboard(0, event);
-    });
+    const hideSub = Keyboard.addListener(KEYBOARD_HIDE_EVENT, resetKeyboard);
+
+    // Android: keyboardDidHide fires after dismiss — reset earlier when possible
+    const willHideSub =
+      Platform.OS === "android"
+        ? Keyboard.addListener("keyboardWillHide", resetKeyboard)
+        : null;
 
     return () => {
       showSub.remove();
       hideSub.remove();
+      willHideSub?.remove();
     };
   }, [keyboardHeight]);
 

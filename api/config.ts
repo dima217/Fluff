@@ -7,6 +7,7 @@ const DEV_BACKEND_HOST = "backend-production-9803a.up.railway.app";
 const DEV_MEDIA_HOST = "media-service-5zxp-production.up.railway.app";
 
 const PROD_API_ORIGIN = "https://backend-production-9803a.up.railway.app";
+const PROD_MEDIA_ORIGIN = "https://media-service-5zxp-production.up.railway.app";
 
 const BACKEND_URLS = {
   development: {
@@ -15,7 +16,7 @@ const BACKEND_URLS = {
   },
   production: {
     api: PROD_API_ORIGIN,
-    media: PROD_API_ORIGIN,
+    media: PROD_MEDIA_ORIGIN,
   },
 } as const;
 

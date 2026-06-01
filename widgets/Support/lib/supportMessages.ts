@@ -12,6 +12,45 @@ export function buildInitialTicketContent(
   return `${subject.trim()}${TITLE_SEPARATOR}${message.trim()}`;
 }
 
+export function buildPendingInitialMessage(
+  pending: { subject: string; message: string; imageUrl?: string },
+  ticketId: number,
+  senderId: number
+): SupportMessageDto {
+  return {
+    id: -Date.now(),
+    ticketId,
+    senderId,
+    senderType: "user",
+    content: buildInitialTicketContent(pending.subject, pending.message),
+    createdAt: new Date().toISOString(),
+    editedAt: null,
+    attachments: pending.imageUrl
+      ? [{ url: pending.imageUrl, type: "image" }]
+      : undefined,
+  };
+}
+
+export function pendingMessageExistsInList(
+  pending: { subject: string; message: string },
+  messages: SupportMessageDto[]
+): boolean {
+  const expectedContent = buildInitialTicketContent(
+    pending.subject,
+    pending.message
+  );
+  const trimmedMessage = pending.message.trim();
+
+  return messages
+    .filter((message) => message.id > 0)
+    .some(
+      (message) =>
+        message.senderType === "user" &&
+        (message.content.trim() === expectedContent ||
+          message.content.includes(trimmedMessage))
+    );
+}
+
 export function parseMessageContent(content: string): {
   title: string | null;
   body: string;

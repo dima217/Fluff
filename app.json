@@ -27,7 +27,8 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.fluff.fluffMobile",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "usesCleartextTraffic": true
     },
     "plugins": [
       "expo-router",

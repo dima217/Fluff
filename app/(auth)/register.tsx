@@ -4,7 +4,6 @@ import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { useTranslation } from "@/hooks/useTranslation";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import ErrorModal from "@/shared/Modals/ErrorModal";
-import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import VerificationCodeModal from "@/shared/Modals/VerificationCodeModal";
 import View from "@/shared/View";
 import ProgressDots from "@/shared/ui/ProgressDots";
@@ -97,7 +96,7 @@ const RegisterScreenContent: React.FC = () => {
   }, [isGoogleSignUp, setTotalSteps]);
 
   return (
-    <KeyboardAwareView style={styles.keyboardAvoid}>
+    <RNView style={styles.keyboardAvoid}>
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
@@ -143,7 +142,7 @@ const RegisterScreenContent: React.FC = () => {
           setShowErrorModal(false);
         }}
       />
-    </KeyboardAwareView>
+    </RNView>
   );
 };
 

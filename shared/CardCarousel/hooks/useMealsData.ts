@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { CardsScrollVariant, MealData } from "..";
-import { featuredRecipes, mealsToday } from "../mock";
 
 export const useMealsData = (
   products?: MealData[],
@@ -8,8 +7,7 @@ export const useMealsData = (
   likes?: Record<string, boolean>
 ) => {
   return useMemo(() => {
-    const base = variant === "featured" ? featuredRecipes : mealsToday;
-    const final = products?.length ? products : base;
+    const final = products ?? [];
 
     return final.map((item) => {
       const key = item.productId

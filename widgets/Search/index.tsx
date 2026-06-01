@@ -64,6 +64,13 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
   }, []);
 
   useEffect(() => {
+    if (!isSearchTriggered) {
+      setSearchHistory(searchStorage.getSearchHistory());
+      setLastVisitedIds(searchStorage.getLastVisited());
+    }
+  }, [isSearchTriggered]);
+
+  useEffect(() => {
     if (searchText.trim().length === 0) {
       setSearchHistory(searchStorage.getSearchHistory());
       setLastVisitedIds(searchStorage.getLastVisited());

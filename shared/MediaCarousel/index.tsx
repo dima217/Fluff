@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import VideoPlayer from "./components/VideoPlayer";
 import MediaItem from "./MediaItems";
-import { MOCK_VIDEO_DATA } from "./mock";
 import RecipeFetchCard from "./RecipeFetchCard";
 
 export type VideoData = {
@@ -38,7 +37,7 @@ const VideoCarousel = ({
 }: VideoCarouselProps) => {
   const isLongVariant = variant === "long";
   const useRecipeIds = recipeIds && recipeIds.length > 0;
-  const finalData = useRecipeIds ? [] : (data || MOCK_VIDEO_DATA);
+  const finalData = useRecipeIds ? [] : (data ?? []);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | number>("");

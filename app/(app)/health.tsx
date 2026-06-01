@@ -6,16 +6,16 @@ import {
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 
+import { useTranslation } from "@/hooks/useTranslation";
 import { getAge } from "@/services/equation/age";
 import { calculateDailyCalories } from "@/services/equation/calories";
 import AccountDetails from "@/shared/AccountDetails";
 import { AnimatedWheelPicker } from "@/shared/AnimatedWheelPicker";
 import CalorieInput from "@/shared/Colories/components/CaloriesInput";
 import CalorieProgress from "@/shared/Colories/components/CaloriesProgress";
-import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import { useDayPickerData } from "@/shared/DateWheelItem/utils";
+import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import { ThemedText } from "@/shared/ui/ThemedText";
-import { useTranslation } from "@/hooks/useTranslation";
 import { getAppLocale } from "@/utils/locale";
 import MarkerContainer from "@/widgets/Health/components/MarkerContainer";
 import TrackingHistory from "@/widgets/Health/components/TrackingHistory";
@@ -188,6 +188,7 @@ export default Health;
 const createstyles = (colors: AppColors) => StyleSheet.create({
   wrapper: {
     flex: 1,
+    backgroundColor: colors.background,
   },
   mainContainer: {
     backgroundColor: colors.background,

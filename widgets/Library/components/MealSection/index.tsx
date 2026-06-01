@@ -89,7 +89,7 @@ const CheatMealCard = ({
       },
     })
   );
-  const locked = showLock && !isUnlocked;
+  const locked = showLock === true && !isUnlocked;
   const handlePress = locked ? undefined : onPress;
 
   return (
@@ -104,7 +104,7 @@ const CheatMealCard = ({
           <Ionicons
             name={isUnlocked ? "lock-open-outline" : "lock-closed-outline"}
             size={20}
-            color="rgba(255,255,255,0.9)"
+            color={colors.text}
           />
         </View>
       )}

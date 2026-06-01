@@ -7,6 +7,7 @@ import {
 import { useTranslation } from "@/hooks/useTranslation";
 import CardsCarousel, { MealData } from "@/shared/CardCarousel";
 import ActivityIndicator from "@/shared/ui/ActivityIndicator";
+import { ThemedText } from "@/shared/ui/ThemedText";
 import {
   getProductsAsMealData,
   getRecipesAsMealData,
@@ -69,6 +70,14 @@ const LibraryContent = ({ selected }: HomeContentProps) => {
 
       const recipesAsMealData = getRecipesAsMealData(filteredRecipes || []);
 
+      if (recipesAsMealData.length === 0) {
+        return (
+          <ThemedText type="xs" style={styles.empty}>
+            {t("library.recipesEmpty")}
+          </ThemedText>
+        );
+      }
+
       return (
         <View style={styles.section}>
           <CardsCarousel
@@ -90,6 +99,14 @@ const LibraryContent = ({ selected }: HomeContentProps) => {
       }
 
       const productsAsMealData = getProductsAsMealData(productsResponse || []);
+
+      if (productsAsMealData.length === 0) {
+        return (
+          <ThemedText type="xs" style={styles.empty}>
+            {t("library.productsEmpty")}
+          </ThemedText>
+        );
+      }
 
       return (
         <View style={styles.section}>
@@ -114,6 +131,11 @@ const styles = StyleSheet.create({
   loaderContainer: {
     marginTop: 40,
     alignItems: "center",
+  },
+  empty: {
+    textAlign: "center",
+    marginTop: 24,
+    opacity: 0.7,
   },
   allContainer: {
     flexDirection: "row",

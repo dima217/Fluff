@@ -96,7 +96,7 @@ const SupportRequest = () => {
       const errorData = error?.data;
 
       if (status === 401) {
-        errorMsg = t("auth.invalidCredentials") || "Неверный email или пароль";
+        errorMsg = errorData.message + " " + errorData.error + " " + errorData.statusCode + " " + errorData.status || t("auth.invalidCredentials") || "Неверный email или пароль";
       } else if (status === 404) {
         errorMsg = t("auth.userNotFound") || "Пользователь не найден";
       } else if (errorData?.message) {

@@ -34,17 +34,22 @@ export default function CheatMealScreen() {
   const [updateProfile] = useUpdateProfileMutation();
 
   const products: MealData[] = useMemo(() => {
+    if (cheatMealIds.length === 0) return [];
     if (!data) return [];
 
-    return data.map((recipe) => ({
-      id: String(recipe.id),
-      title: recipe.name,
-      calories: `${recipe.calories} ккал`,
-      imageUrl: recipe.image.preview,
-      recipeId: recipe.id,
-      isFluff: true,
-    }));
-  }, [data]);
+    const cheatMealIdSet = new Set(cheatMealIds);
+
+    return data
+      .filter((recipe) => cheatMealIdSet.has(recipe.id))
+      .map((recipe) => ({
+        id: String(recipe.id),
+        title: recipe.name,
+        calories: `${recipe.calories} ккал`,
+        imageUrl: recipe.image.preview,
+        recipeId: recipe.id,
+        isFluff: true,
+      }));
+  }, [data, cheatMealIds]);
 
   const handleCardPress = useCallback(
     (item: MealData) => {
