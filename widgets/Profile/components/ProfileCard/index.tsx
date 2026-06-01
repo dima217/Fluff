@@ -52,7 +52,7 @@ const ProfileCard = () => {
   if (isLoading && !displayProfile) {
     return (
       <GradientView style={styles.container}>
-        <ThemedText>{t("common.loading") || "Загрузка..."}</ThemedText>
+        <ThemedText>{t("common.loading")}</ThemedText>
       </GradientView>
     );
   }

@@ -1,33 +1,29 @@
 import { baseApi } from "../baseApi";
-import { getMediaBaseUrl } from "../config";
+import { buildMediaApiUrl, MEDIA_API_PATHS } from "../config";
 import type { CreateMediaRequest, CreateMediaResponse } from "../types";
 
 export const mediaApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Create generic media upload (avatar, etc)
     createMedia: builder.mutation<CreateMediaResponse, CreateMediaRequest>({
       query: (body) => ({
-        url: `${getMediaBaseUrl()}/media/create`,
+        url: buildMediaApiUrl(MEDIA_API_PATHS.create),
         method: "POST",
         body,
       }),
       invalidatesTags: ["Media"],
     }),
 
-    // Mark media as uploaded
     markMediaUploaded: builder.mutation<{ success: boolean }, string>({
       query: (mediaId) => ({
-        url: `${getMediaBaseUrl()}/media/mark-uploaded/${mediaId}`,
+        url: buildMediaApiUrl(MEDIA_API_PATHS.markUploaded(mediaId)),
         method: "POST",
       }),
       invalidatesTags: (result, error, mediaId) => [{ type: "Media", id: mediaId }],
     }),
 
-    // Get media file by mediaId (proxy to media service)
-    // Requires JWT token in Authorization header
     getMediaById: builder.query<Blob, string>({
       query: (mediaId) => ({
-        url: `${getMediaBaseUrl()}/media/${mediaId}`,
+        url: buildMediaApiUrl(MEDIA_API_PATHS.byId(mediaId)),
         responseHandler: async (response) => {
           if (!response.ok) {
             throw new Error(`Failed to fetch media: ${response.statusText}`);

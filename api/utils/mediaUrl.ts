@@ -1,4 +1,8 @@
-import { getMediaBaseUrl } from "../config";
+import {
+  buildMediaApiUrl,
+  buildMediaDownloadUrl,
+  isMediaServerOrigin,
+} from "../config";
 
 export type MediaUrlType = "direct" | "path" | "invalid";
 
@@ -19,9 +23,8 @@ function rewriteLocalhostToMediaHost(url: string): string {
     const parsed = new URL(url);
     const host = parsed.hostname.toLowerCase();
     if (host !== "localhost" && host !== "127.0.0.1") return url;
-    const base = getMediaBaseUrl().replace(/\/$/, "");
     const pathAndSearch = `${parsed.pathname}${parsed.search}`;
-    return `${base}${pathAndSearch.startsWith("/") ? "" : "/"}${pathAndSearch}`;
+    return buildMediaApiUrl(pathAndSearch);
   } catch {
     return url;
   }
@@ -40,7 +43,7 @@ export function getMediaUrlType(url: string | null | undefined): MediaUrlType {
 /**
  * Нормализует URL для использования в Image/Video:
  * - http(s) — возвращаем как есть (localhost подменяем на mediaBaseUrl).
- * - путь (/3/xxx.mp4 и т.д.) — собираем URL стрима: ourip:3002/media/download?url=<path>.
+ * - путь (/3/xxx.mp4 и т.д.) — собираем URL стрима через media service.
  */
 export function normalizeMediaUrl(
   url: string | null | undefined
@@ -54,8 +57,7 @@ export function normalizeMediaUrl(
   }
 
   if (urlType === "path") {
-    const base = getMediaBaseUrl().replace(/\/$/, "");
-    return `${base}/media/download?url=${encodeURIComponent(url)}`;
+    return buildMediaDownloadUrl(url);
   }
 
   return null;
@@ -79,11 +81,9 @@ export function getFullMediaUrl(proxyUrl: string): string {
   return normalizeMediaUrl(proxyUrl) ?? proxyUrl;
 }
 
-/** URL ведёт на наш медиа-сервер (3002) — для таких запросов нужен Authorization. */
+/** URL ведёт на наш медиа-сервер — для таких запросов нужен Authorization. */
 export function isMediaServerUrl(
   resolvedUrl: string | null | undefined
 ): boolean {
-  if (!resolvedUrl) return false;
-  const base = getMediaBaseUrl().replace(/\/$/, "");
-  return resolvedUrl === base || resolvedUrl.startsWith(base + "/");
+  return isMediaServerOrigin(resolvedUrl);
 }

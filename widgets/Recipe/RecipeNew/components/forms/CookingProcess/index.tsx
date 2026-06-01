@@ -47,12 +47,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
 
       <View style={styles.innerContainer}>
         <ThemedText type="subtitle">{t("recipe.cookingProcess")}</ThemedText>
-        <ThemedText type="xs">
-          Break the chocolate into pieces and melt it with the butter in a
-          double boiler, stirring constantly with a spatula or wooden spoon.
-          Remove the resulting thick chocolate sauce from the boiler and let it
-          cool.
-        </ThemedText>
+        <ThemedText type="xs">{t("recipe.cookingProcessHint")}</ThemedText>
       </View>
 
       <View style={styles.stepsContainer}>

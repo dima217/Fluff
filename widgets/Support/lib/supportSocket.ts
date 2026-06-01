@@ -1,4 +1,4 @@
-import { getBaseUrl } from "@/api/config";
+import { getSocketUrl } from "@/api/config";
 import { tokenStorage } from "@/api/utils/tokenStorage";
 import { io, Socket } from "socket.io-client";
 
@@ -103,7 +103,7 @@ class SupportSocket {
         this.socket = null;
       }
 
-      this.socket = io(getBaseUrl(), {
+      this.socket = io(getSocketUrl(), {
         auth: { token: `Bearer ${token}` },
         transports: ["websocket"],
         reconnection: true,

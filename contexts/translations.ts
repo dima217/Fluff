@@ -98,6 +98,7 @@ export const translations = {
       edit: "Редактировать",
       close: "Закрыть",
       enter: "Введите",
+      loading: "Загрузка...",
     },
     pushNotifications: {
       trackingReminder: {
@@ -146,11 +147,14 @@ export const translations = {
       noSteps: "Рецепт не содержит шагов",
       ingredients: "Ингредиенты",
       base: "Основное",
-      baseHint: "Введите основную информацию о рецепте",
+      baseHint:
+        "Пора блистать! Загрузите классное фото, придумайте аппетитное название и добавьте пару слов о том, почему этот рецепт стоит приготовить.",
       cookingProcess: "Процесс приготовления",
-      cookingProcessHint: "Опишите шаги приготовления",
+      cookingProcessHint:
+        "Поделитесь пошаговым процессом. Подробное описание и ваши кулинарные секреты помогут другим повторить этот шедевр.",
       addTutorial: "Добавить туториал",
-      tutorialHint: "Добавьте видео или фото инструкцию",
+      tutorialHint:
+        "Лучше один раз увидеть! Загрузите видео процесса приготовления, чтобы другие повара могли почувствовать все нюансы и текстуры.",
       addStep: "Добавить шаг",
       name: "Название",
       ccal: "Ккал",
@@ -547,11 +551,14 @@ export const translations = {
       noSteps: "Рэцэпт не змяшчае крокаў",
       ingredients: "Інгрэдыенты",
       base: "Асноўнае",
-      baseHint: "Увядзіце асноўную інфармацыю пра рэцэпт",
+      baseHint:
+        "Час бліскаць! Загрузіце класнае фота, прыдумайце апетытную назву і дадайце пару слоў пра тое, чаму варта гатаваць гэты рэцэпт.",
       cookingProcess: "Працэс прыгатавання",
-      cookingProcessHint: "Апішыце крокі прыгатавання",
+      cookingProcessHint:
+        "Падзяліцеся пакрокавым працэсам. Падрабязнае апісанне і вашы кулінарныя сакрэты дапамогуць іншым паўтарыць гэты шэдэўр.",
       addTutorial: "Дадаць туторыял",
-      tutorialHint: "Дадайце відэа або фота інструкцыю",
+      tutorialHint:
+        "Лепш адной раз убачыць! Загрузіце відэа працэсу прыгатавання, каб іншыя кухары маглі адчуць усе нюансы і тэкстуры.",
       addStep: "Дадаць крок",
       name: "Назва",
       ccal: "Ккал",
@@ -762,11 +769,14 @@ export const translations = {
       noSteps: "Recipe has no steps",
       ingredients: "Ingredients",
       base: "Base",
-      baseHint: "Enter basic information about the recipe",
+      baseHint:
+        "It's time to show off! Upload a cool photo, write a mouth-watering title, and add a few words about why this recipe is worth making.",
       cookingProcess: "Cooking Process",
-      cookingProcessHint: "Describe the cooking steps",
+      cookingProcessHint:
+        "Share your step-by-step process. A detailed description and your culinary secrets will help others create the same masterpiece.",
       addTutorial: "Add a tutorial",
-      tutorialHint: "Add a video or photo instruction",
+      tutorialHint:
+        "Seeing is believing! Upload a video of your cooking process so other cooks can experience all the subtleties and textures firsthand.",
       addStep: "Add a Step",
       name: "Name",
       ccal: "Ccal",

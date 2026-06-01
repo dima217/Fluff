@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import { MMKV } from "react-native-mmkv";
-import { translations } from "./translations";
+import { getTranslation } from "@/utils/i18n";
 
 export type Language = "ru" | "be" | "en";
 
@@ -38,29 +38,7 @@ export const LocalizationProvider: React.FC<{ children: ReactNode }> = ({
     storage.set(LANGUAGE_KEY, lang);
   };
 
-  const t = (key: string): string => {
-    const keys = key.split(".");
-    let value: any = translations[language];
-
-    for (const k of keys) {
-      if (value && typeof value === "object" && k in value) {
-        value = value[k];
-      } else {
-        // Fallback to English if key not found
-        value = translations.en;
-        for (const fallbackKey of keys) {
-          if (value && typeof value === "object" && fallbackKey in value) {
-            value = value[fallbackKey];
-          } else {
-            return key; // Return key if translation not found
-          }
-        }
-        return key;
-      }
-    }
-
-    return typeof value === "string" ? value : key;
-  };
+  const t = (key: string): string => getTranslation(language, key);
 
   return (
     <LocalizationContext.Provider value={{ language, setLanguage, t }}>
