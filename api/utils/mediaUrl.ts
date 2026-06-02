@@ -15,6 +15,20 @@ export function isDirectHttpUrl(url: string | null | undefined): boolean {
 }
 
 /**
+ * Убирает query/hash (всё с «?») — presigned-параметры MinIO/S3 ломают плеер,
+ * файл доступен по origin + pathname.
+ */
+export function stripUrlQuery(url: string): string {
+  try {
+    const parsed = new URL(url);
+    return `${parsed.origin}${parsed.pathname}`;
+  } catch {
+    const qIndex = url.indexOf("?");
+    return qIndex === -1 ? url : url.slice(0, qIndex);
+  }
+}
+
+/**
  * Если хост localhost/127.0.0.1 — подменяем на наш медиа-хост (IP), чтобы с телефона запрос уходил на сервер.
  */
 function rewriteLocalhostToMediaHost(url: string): string {
@@ -23,8 +37,7 @@ function rewriteLocalhostToMediaHost(url: string): string {
     const parsed = new URL(url);
     const host = parsed.hostname.toLowerCase();
     if (host !== "localhost" && host !== "127.0.0.1") return url;
-    const pathAndSearch = `${parsed.pathname}${parsed.search}`;
-    return buildMediaApiUrl(pathAndSearch);
+    return buildMediaApiUrl(parsed.pathname);
   } catch {
     return url;
   }
@@ -42,7 +55,7 @@ export function getMediaUrlType(url: string | null | undefined): MediaUrlType {
 
 /**
  * Нормализует URL для использования в Image/Video:
- * - http(s) — возвращаем как есть (localhost подменяем на mediaBaseUrl).
+ * - http(s) — без query (?X-Amz-...), localhost подменяем на mediaBaseUrl.
  * - путь (/3/xxx.mp4 и т.д.) — собираем URL стрима через media service.
  */
 export function normalizeMediaUrl(
@@ -53,7 +66,7 @@ export function normalizeMediaUrl(
   const urlType = getMediaUrlType(url);
 
   if (urlType === "direct") {
-    return rewriteLocalhostToMediaHost(url);
+    return stripUrlQuery(rewriteLocalhostToMediaHost(url));
   }
 
   if (urlType === "path") {
