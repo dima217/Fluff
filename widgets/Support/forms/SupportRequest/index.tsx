@@ -147,7 +147,7 @@ const SupportRequest = () => {
           control={control}
           name="screenshot"
           render={({ field: { value, onChange } }) => (
-            <MediaUploader value={value} onChange={onChange} type="image" />
+            <MediaUploader control={control} value={value} name="screenshot" onChange={onChange} type="image" />
           )}
         />
       </View>

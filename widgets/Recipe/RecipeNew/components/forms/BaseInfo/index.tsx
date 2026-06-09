@@ -30,6 +30,8 @@ const BaseInfo = () => {
           name="mediaUrl"
           render={({ field: { value, onChange } }) => (
             <MediaUploader
+              name="mediaUrl"
+              control={control}
               value={value}
               onChange={onChange}
               type="image"

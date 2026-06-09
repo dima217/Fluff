@@ -31,6 +31,8 @@ const Tutorial = ({ onBack }: { onBack: () => void }) => {
           name="videoUrl"
           render={({ field: { value, onChange } }) => (
             <MediaUploader
+              name="videoUrl"
+              control={control}
               value={value}
               onChange={onChange}
               type="video"

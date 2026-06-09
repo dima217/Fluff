@@ -1,12 +1,15 @@
 import { AppColors, ColorPalette } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import React from "react";
+import { Control, useWatch } from "react-hook-form";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useMediaPicker } from "../../hooks/useMediaPicker";
 import MediaPlaceholder from "../MediaPlaceholderPreview";
 import MediaPreview from "../MediaPreview";
 
 interface MediaUploaderProps {
+  name?: string;
+  control?: Control<any>;
   value?: string;
   type: "image" | "video";
   onChange?: (media: string | undefined) => void;
@@ -14,6 +17,8 @@ interface MediaUploaderProps {
 }
 
 const MediaUploader: React.FC<MediaUploaderProps> = ({
+  name,
+  control,
   value,
   type,
   onChange,
@@ -35,21 +40,26 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
     }
   };
 
+  const watchValue = useWatch({
+    name: name as string,
+    control: control,
+  })
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={[
           styles.uploadArea,
-          value ? styles.uploadAreaWithMedia : null,
+          watchValue ? styles.uploadAreaWithMedia : null,
           hasError && styles.uploadAreaError,
         ]}
-        activeOpacity={value ? 1 : 0.85}
+        activeOpacity={watchValue ? 1 : 0.85}
         onPress={() => {
-          if (!value) handlePick();
+          if (!watchValue) handlePick();
         }}
       >
-        {value ? (
-          <MediaPreview media={{ uri: value, type }} onRemove={handleRemove} />
+        {watchValue ? (
+          <MediaPreview media={{ uri: watchValue ?? "", type }} onRemove={handleRemove} />
         ) : (
           <MediaPlaceholder type={type} />
         )}

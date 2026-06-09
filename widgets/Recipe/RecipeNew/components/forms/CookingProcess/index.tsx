@@ -18,12 +18,12 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 const CookingProcess = ({ onBack }: { onBack: () => void }) => {
   const colors = useColors();
   const styles = useThemedStyles(createstyles);
-  const { control, formState: { errors } } = useFormContext();
+  const { control, formState: { errors }, watch } = useFormContext();
   const { t } = useTranslation();
 
   const getErrorMessage = (field: string) => getFormError(errors, field);
 
-  const { fields, append, remove, replace } = useFieldArray({
+  const { fields, append, replace } = useFieldArray({
     control,
     name: "steps",
   });
@@ -34,13 +34,13 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
     }
   }, []);
 
-  const renumberSteps = (currentFields: typeof fields) => {
-    const renumbered = currentFields.map((step, index) => ({
-      ...step,
-      title: `Step ${index + 1}`,
-    }));
-    replace(renumbered);
-  };
+  const watchFieldArray = watch("steps");
+  const controlledFields = fields.map((field, index) => {
+    return {
+      ...field,
+      ...watchFieldArray[index]
+    };
+  });
 
   return (
     <View>
@@ -54,12 +54,12 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
       </View>
 
       <View style={styles.stepsContainer}>
-        {fields.map((field, index) => (
+        {controlledFields.map((field, index) => (
           <View key={field.id} style={styles.stepInputsContainer}>
             {/* Title */}
             <Controller
               control={control}
-              name={`steps.${index}.title`}
+              name={`steps.${index}.title` as const}
               render={({ field: { value, onChange } }) => (
                 <TextInput
                   label={t("recipe.title")}
@@ -71,8 +71,14 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
                     <TouchableOpacity
                       onPress={() => {
                         if (fields.length > 1) {
-                          remove(index);
-                          renumberSteps(fields.filter((_, i) => i !== index));
+                          const updated = fields
+                            .filter((_, i) => i !== index)
+                            .map((step, idx) => ({
+                              ...step,
+                              title: `Step ${idx + 1}`,
+                            }));
+                      
+                          replace(updated);
                         }
                       }}
                     >
@@ -86,7 +92,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
             {/* Description */}
             <Controller
               control={control}
-              name={`steps.${index}.description`}
+              name={`steps.${index}.description` as const}
               render={({ field: { value, onChange } }) => (
                 <LongTextInput
                   label={t("recipe.description")}
@@ -100,10 +106,12 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
 
             <Controller
               control={control}
-              name={`steps.${index}.stepMediaUrl`}
+              name={`steps.${index}.stepMediaUrl` as const}
               render={({ field: { value, onChange } }) => (
                 <MediaUploader
-                  key={`${fields[index].id}-${value || "empty"}`}
+                  name={`steps.${index}.stepMediaUrl`}
+                  control={control}
+                  key={field.id}
                   value={value}
                   onChange={onChange}
                   type="image"
@@ -123,7 +131,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
       <GradientButton
         title={t("recipe.addStep")}
         onPress={() => {
-          append({ title: `Step ${fields.length + 1}`, description: "" });
+          append({ title: `Step ${controlledFields.length + 1}`, description: "" });
         }}
       />
     </View>
