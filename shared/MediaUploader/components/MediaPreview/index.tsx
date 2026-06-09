@@ -24,12 +24,14 @@ const MediaPreview: React.FC<Props> = ({ media, onRemove }) => {
     !media.uri.startsWith("https://") &&
     !media.uri.startsWith("/");
 
-  const isVideo =
-    media.uri?.endsWith(".mp4") ||
-    media.uri?.endsWith(".mov") ||
-    media.uri?.includes("video");
+  const uriWithoutQuery = media.uri?.split("?")[0] ?? "";
 
-  const { url: mediaUrl } = useMediaUrl(media.uri, {
+  const isVideo =
+    uriWithoutQuery.includes(".mp4") ||
+    uriWithoutQuery.includes(".mov") ||
+    uriWithoutQuery.includes("video");
+
+  const { url: mediaUrl } = useMediaUrl(uriWithoutQuery, {
     skip: !media.uri || isLocalMedia,
   });
 
@@ -51,6 +53,8 @@ const MediaPreview: React.FC<Props> = ({ media, onRemove }) => {
 
     generateThumbnail();
   }, [isVideo, media.uri]);
+
+  console.log("isVideo", isVideo);
 
   return (
     <View style={styles.wrapper}>
