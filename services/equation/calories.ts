@@ -1,3 +1,5 @@
+import { calorieGoalStorage } from "@/storage/calorieGoal/calorieGoalStorage";
+
 export function calculateDailyCalories({
     weight,  
     height, 
@@ -11,6 +13,10 @@ export function calculateDailyCalories({
     gender: 'male' | 'female' | 'other';
     activity: string | null;
   }): number | null {
+    const calorieGoal = calorieGoalStorage.get();
+    if (calorieGoal) {
+      return Number(calorieGoal);
+    }
     if (!weight || !height || !age) return null;
   
     let bmr: number;

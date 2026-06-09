@@ -8,7 +8,7 @@ import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import AutoGrowingTextInput from "@/shared/Inputs/AutoGrowingTextInput";
 import BorderlessTextInput from "@/shared/Inputs/BorderlessTextInput";
 import View from "@/shared/View";
-import { notesStorage } from "@/utils/notesStorage";
+import { notesStorage } from "@/storage/notes/notesData";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {

@@ -1,7 +1,5 @@
 import { RecipeResponse } from "@/api/types";
-import { MMKV } from "react-native-mmkv";
-
-const storage = new MMKV();
+import { storage } from "../config";
 
 const SEARCH_HISTORY_KEY = "search_history";
 const LAST_VISITED_KEY = "last_visited_recipes";
@@ -9,7 +7,6 @@ const MAX_HISTORY_ITEMS = 10;
 const MAX_LAST_VISITED = 10;
 
 export const searchStorage = {
-  // Search history
   getSearchHistory(): string[] {
     try {
       const history = storage.getString(SEARCH_HISTORY_KEY);
@@ -26,9 +23,8 @@ export const searchStorage = {
     if (!query || query.trim().length === 0) return;
 
     const history = this.getSearchHistory();
-    // Remove duplicate and add to beginning
     const filtered = history.filter(
-      (item) => item.toLowerCase() !== query.toLowerCase()
+      (item) => item.toLowerCase() !== query.toLowerCase(),
     );
     const updated = [query, ...filtered].slice(0, MAX_HISTORY_ITEMS);
 
@@ -43,7 +39,6 @@ export const searchStorage = {
     storage.delete(SEARCH_HISTORY_KEY);
   },
 
-  // Last visited recipes
   getLastVisited(): number[] {
     try {
       const visited = storage.getString(LAST_VISITED_KEY);
@@ -59,7 +54,10 @@ export const searchStorage = {
   getLastVisitedRecipes(availableRecipes: RecipeResponse[]): RecipeResponse[] {
     const visited = this.getLastVisited();
     if (!visited.length) return [];
-    return visited.map((id) => availableRecipes.find((recipe) => recipe.id === id)).filter((recipe) => recipe !== undefined);
+
+    return visited
+      .map((id) => availableRecipes.find((recipe) => recipe.id === id))
+      .filter((recipe) => recipe !== undefined);
   },
 
   addToLastVisited(recipeId: number): void {
@@ -76,7 +74,7 @@ export const searchStorage = {
       console.error("Error saving last visited:", error);
     }
   },
-  
+
   clearLastVisited(): void {
     storage.delete(LAST_VISITED_KEY);
   },

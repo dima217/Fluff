@@ -4,7 +4,7 @@ import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
 import MediaCarousel from "@/shared/MediaCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";
-import { searchStorage } from "@/utils/searchStorage";
+import { searchStorage } from "@/storage/search/searchStorage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";

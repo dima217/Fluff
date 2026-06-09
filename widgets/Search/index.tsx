@@ -6,7 +6,7 @@ import { CircleSizes } from "@/constants/components/CIrcle";
 
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
-import { searchStorage } from "@/utils/searchStorage";
+import { searchStorage } from "@/storage/search/searchStorage";
 import { useRouter } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
 import {

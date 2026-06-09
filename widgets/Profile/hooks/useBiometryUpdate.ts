@@ -1,5 +1,6 @@
 import { useUpdateProfileMutation } from "@/api/slices/profileApi";
 import { useTranslation } from "@/hooks/useTranslation";
+import { calorieGoalStorage } from "@/storage/calorieGoal/calorieGoalStorage";
 import { BiometryFormData } from "@/widgets/Profile/wrappers/BiometryFormWrapper";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -41,6 +42,8 @@ export function useBiometryUpdate() {
         height: parseFloat(finalData.height),
         weight: parseFloat(finalData.weight),
       }).unwrap();
+
+      calorieGoalStorage.remove();
 
       router.back();
     } catch (error: any) {

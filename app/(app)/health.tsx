@@ -15,7 +15,9 @@ import CalorieInput from "@/shared/Colories/components/CaloriesInput";
 import CalorieProgress from "@/shared/Colories/components/CaloriesProgress";
 import { useDayPickerData } from "@/shared/DateWheelItem/utils";
 import KeyboardAwareView from "@/shared/KeyboardAwareView";
+import EditDailyCalorieGoalModal from "@/shared/Modals/EditDailyCalorieGoalModal";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { calorieGoalStorage } from "@/storage/calorieGoal/calorieGoalStorage";
 import { getAppLocale } from "@/utils/locale";
 import MarkerContainer from "@/widgets/Health/components/MarkerContainer";
 import TrackingHistory from "@/widgets/Health/components/TrackingHistory";
@@ -28,7 +30,7 @@ const Health = () => {
   const styles = useThemedStyles(createstyles);
   const { language } = useTranslation();
   const { data: calendar, refetch: refetchCalendar } = useGetCalendarQuery();
-
+  const [isEditDailyCalorieGoalModalVisible, setIsEditDailyCalorieGoalModalVisible] = useState(false);
   const router = useRouter();
 
   const handleTrackingCardPress = useCallback(
@@ -130,6 +132,11 @@ const Health = () => {
     }
   };
 
+  const handleEditDailyCalorieGoalModalClose = (newDailyGoal: number) => {
+    setIsEditDailyCalorieGoalModalVisible(false);
+    calorieGoalStorage.set(newDailyGoal);
+  };
+
   const label = useMemo(() => {
     const month = selectedDate.toLocaleString(getAppLocale(language), {
       month: "long",
@@ -167,7 +174,7 @@ const Health = () => {
           <CalorieProgress
             currentCalories={currentCalories}
             dailyGoal={dailyGoal ?? 1000}
-            onEditPress={() => {}}
+            onEditPress={() => setIsEditDailyCalorieGoalModalVisible(true)}
           />
           <CalorieInput onAdd={handleAddFood} />
           {dayData?.records && dayData.records.length > 0 && (
@@ -179,6 +186,11 @@ const Health = () => {
           )}
         </View>
       </ScrollView>
+      <EditDailyCalorieGoalModal
+        isVisible={isEditDailyCalorieGoalModalVisible}
+        dailyGoal={dailyGoal ?? 1000}
+        onClose={handleEditDailyCalorieGoalModalClose}
+      />
     </KeyboardAwareView>
   );
 };

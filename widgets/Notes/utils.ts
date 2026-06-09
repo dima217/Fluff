@@ -1,4 +1,4 @@
-import { Note } from "@/utils/notesStorage";
+import { Note } from "@/storage/notes/notesData";
 
 export const getNoteItems = (
   notes: Note[],

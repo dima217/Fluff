@@ -225,6 +225,11 @@ export const translations = {
       time: "Время",
       timePlaceholder: "11:30",
     },
+    editDailyCalorieGoalModal: {
+      title: "Дневная норма калорий",
+      message: "Укажите вашу дневную норму потребления калорий",
+      dailyGoal: "Дневная норма",
+    },
     // Library
     library: {
       title: "Библиотека",
@@ -486,6 +491,11 @@ export const translations = {
       yourOwnRecipe: "Уласны рэцэпт",
       time: "Час",
       timePlaceholder: "11:30",
+    },
+    editDailyCalorieGoalModal: {
+      title: "Суточная норма калорый",
+      message: "Укажыце вашу суточную норму спажывання калорый",
+      dailyGoal: "Суточная норма",
     },
     // Library
     library: {
@@ -882,6 +892,11 @@ export const translations = {
       yourOwnRecipe: "Your own recipe",
       time: "Time",
       timePlaceholder: "11:30",
+    },
+    editDailyCalorieGoalModal: {
+      title: "Daily calorie goal",
+      message: "Enter your daily calorie intake goal",
+      dailyGoal: "Daily goal",
     },
     // Library
     library: {

@@ -1,8 +1,12 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
-import { MMKV } from "react-native-mmkv";
+import {
+  getStoredLanguage,
+  setStoredLanguage,
+  type Language,
+} from "@/storage/language/languageStorage";
 import { getTranslation } from "@/utils/i18n";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 
-export type Language = "ru" | "be" | "en";
+export type { Language };
 
 interface LocalizationContextType {
   language: Language;
@@ -14,28 +18,14 @@ const LocalizationContext = createContext<LocalizationContextType | undefined>(
   undefined
 );
 
-const storage = new MMKV();
-const LANGUAGE_KEY = "app_language";
-
 export const LocalizationProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [language, setLanguageState] = useState<Language>(() => {
-    const savedLanguage = storage.getString(LANGUAGE_KEY);
-    if (
-      savedLanguage &&
-      (savedLanguage === "ru" ||
-        savedLanguage === "be" ||
-        savedLanguage === "en")
-    ) {
-      return savedLanguage as Language;
-    }
-    return "en"; // Default language
-  });
+  const [language, setLanguageState] = useState<Language>(getStoredLanguage);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    storage.set(LANGUAGE_KEY, lang);
+    setStoredLanguage(lang);
   };
 
   const t = (key: string): string => getTranslation(language, key);

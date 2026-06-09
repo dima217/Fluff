@@ -7,7 +7,6 @@ import {
 import { setAuth, setProfile } from "@/api/slices/userSlice";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getDeviceTimeZone } from "@/services/timezone";
-import { cheatMealSettingsStorage } from "@/utils/cheatMealSettingsStorage";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { SignUpFormData } from "../wrappers/FormWrapper";
@@ -98,14 +97,6 @@ export const useSignUp = () => {
         timeZone: getDeviceTimeZone(),
       }).unwrap();
 
-      if (finalData.cheatMealDay != null || finalData.periodOfDays != null) {
-        cheatMealSettingsStorage.set({
-          cheatMealDay: finalData.cheatMealDay,
-          periodOfDays: finalData.periodOfDays,
-          configured: true,
-        });
-      }
-
       // Load user profile after successful registration
       try {
         const profileResult = await getProfile().unwrap();
@@ -158,13 +149,6 @@ export const useSignUp = () => {
       periodOfDays: finalData.periodOfDays,
     }).unwrap();
     const profileResult = await getProfile().unwrap();
-    if (finalData.cheatMealDay != null || finalData.periodOfDays != null) {
-      cheatMealSettingsStorage.set({
-        cheatMealDay: finalData.cheatMealDay,
-        periodOfDays: finalData.periodOfDays,
-        configured: true,
-      });
-    }
     if (profileResult) {
       dispatch(setProfile(profileResult));
     }

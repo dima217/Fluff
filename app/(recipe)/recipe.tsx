@@ -1,20 +1,19 @@
-import { useColors } from "@/contexts/ThemeContext";
-import { AppColors } from "@/constants/design-tokens";
-import { useThemedStyles } from "@/hooks/useThemedStyles";
 import {
   useAddToFavoritesMutation,
   useGetRecipeByIdQuery,
   useMediaUrl,
   useRemoveFromFavoritesMutation,
 } from "@/api";
+import { AppColors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 
 import { RecipeData } from "@/constants/types";
 import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
 import Header from "@/shared/Header";
 import View from "@/shared/View";
-import { cheatMealStorage } from "@/utils/cheatMealStorage";
-import { searchStorage } from "@/utils/searchStorage";
+import { searchStorage } from "@/storage/search/searchStorage";
 import IngredientsSection from "@/widgets/Recipe/RecipeInfo/components/IngredientsSection";
 import RecipeCard from "@/widgets/Recipe/RecipeInfo/components/RecipeCard";
 import { LinearGradient } from "expo-linear-gradient";
@@ -180,17 +179,7 @@ export default function RecipeScreen() {
           description={recipe.description || ""}
           onLike={handleLike}
           isLiked={recipe.favorite ?? false}
-          onMenu={() => {
-            cheatMealStorage.add({
-              id: recipe.id,
-              name: recipe.name,
-              calories: recipe.calories,
-              imageUrl: recipe.image?.cover ?? recipe.image?.preview ?? "",
-              author: recipe.user
-                ? `${recipe.user.firstName} ${recipe.user.lastName}`
-                : "Author",
-            });
-          }}
+          onMenu={() => {}}
           onPress={() => {
             router.push({
               pathname: "/recipe-steps",

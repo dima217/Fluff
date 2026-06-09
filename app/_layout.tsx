@@ -7,11 +7,8 @@ import { PushNotificationsController } from "@/providers/PushNotificationsContro
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { MMKV } from "react-native-mmkv";
 import "react-native-reanimated";
 import { Provider } from "react-redux";
-
-const storage = new MMKV();
 
 function RootStack() {
   const colors = useColors();

@@ -7,7 +7,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";
-import { searchStorage } from "@/utils/searchStorage";
+import { searchStorage } from "@/storage/search/searchStorage";
 import { useFocusEffect } from "@react-navigation/native";
 import { router } from "expo-router";
 import { useCallback, useMemo, useState } from "react";

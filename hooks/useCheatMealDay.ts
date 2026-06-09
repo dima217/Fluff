@@ -1,6 +1,4 @@
 import { useAppSelector } from "@/api";
-import { cheatMealSettingsStorage } from "@/utils/cheatMealSettingsStorage";
-import { cheatMealStorage } from "@/utils/cheatMealStorage";
 import { useMemo } from "react";
 
 /**
@@ -11,13 +9,10 @@ export function useCheatMealSettings() {
   const profile = useAppSelector((state) => state.user.profile);
 
   return useMemo(() => {
-    const stored = cheatMealSettingsStorage.get();
-    const cheatMealDay = profile?.cheatMealDay ?? stored.cheatMealDay;
-    const periodOfDays = profile?.periodOfDays ?? stored.periodOfDays;
+    const cheatMealDay = profile?.cheatMealDay;
+    const periodOfDays = profile?.periodOfDays;
     const configured =
-      Boolean(profile?.cheatMealDay && profile?.periodOfDays) ||
-      stored.configured === true;
-
+      Boolean(profile?.cheatMealDay && profile?.periodOfDays) ?? false;
     return { cheatMealDay, periodOfDays, configured };
   }, [profile?.cheatMealDay, profile?.periodOfDays]);
 }
@@ -28,11 +23,11 @@ const MS_PER_DAY = 24 * 60 * 60 * 1000;
  * Returns true if today is a cheat meal day based on user settings.
  */
 export function useIsCheatMealDay(): boolean {
-  const settings = useCheatMealSettings();
+  const profile = useAppSelector((state) => state.user.profile);
 
   return useMemo(() => {
-    const cheatDay = parseInt(settings.cheatMealDay, 10) || 1;
-    const period = parseInt(settings.periodOfDays, 10) || 7;
+    const cheatDay = parseInt(profile?.cheatMealDay ?? "1", 10) || 1;
+    const period = parseInt(profile?.periodOfDays ?? "7", 10) || 7;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -60,7 +55,7 @@ export function useIsCheatMealDay(): boolean {
     if (diffInDays < 0) return false;
 
     return diffInDays % period === 0;
-  }, [settings.cheatMealDay, settings.periodOfDays]);
+  }, [profile?.cheatMealDay, profile?.periodOfDays]);
 }
 
 /**
@@ -75,11 +70,7 @@ export function useExcludeCheatMealRecipeIds(): Set<number> {
   return useMemo(() => {
     if (isCheatMealDay) return new Set<number>();
 
-    if (profileCheatMealIds?.length) {
-      return new Set(profileCheatMealIds);
-    }
-
-    const items = cheatMealStorage.getAll();
-    return new Set(items.map((item) => item.id));
+    return new Set(profileCheatMealIds ?? []);
+    
   }, [isCheatMealDay, profileCheatMealIds]);
 }

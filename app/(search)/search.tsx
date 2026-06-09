@@ -12,7 +12,7 @@ import SearchInput from "@/widgets/Search/components/SearchInput";
 import { normalizeApiArray } from "@/utils/normalizeApiArray";
 
 import { tryAddMatchedProduct } from "@/widgets/Search/utils/tryAddMatchedProduct";
-import { searchStorage } from "@/utils/searchStorage";
+import { searchStorage } from "@/storage/search/searchStorage";
 import { useCallback, useMemo, useState } from "react";
 
 const SearchScreen = () => {

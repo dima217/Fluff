@@ -1,7 +1,7 @@
-import { Language } from "@/contexts/LocalizationContext";
-import { MMKV } from "react-native-mmkv";
+import { storage } from "../config";
 
-const storage = new MMKV();
+export type Language = "ru" | "be" | "en";
+
 const LANGUAGE_KEY = "app_language";
 
 export function getStoredLanguage(): Language {
@@ -14,4 +14,8 @@ export function getStoredLanguage(): Language {
     return savedLanguage;
   }
   return "en";
+}
+
+export function setStoredLanguage(lang: Language): void {
+  storage.set(LANGUAGE_KEY, lang);
 }

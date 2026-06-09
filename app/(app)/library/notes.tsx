@@ -6,7 +6,7 @@ import Header from "@/shared/Header";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import View from "@/shared/View";
 import { getAppLocale } from "@/utils/locale";
-import { notesStorage, type Note } from "@/utils/notesStorage";
+import { notesStorage, type Note } from "@/storage/notes/notesData";
 import NoteList from "@/widgets/Notes/components/NoteList";
 import { getNoteItems } from "@/widgets/Notes/utils";
 import { useFocusEffect, useRouter } from "expo-router";
