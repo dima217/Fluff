@@ -1,4 +1,4 @@
-import { RootState } from "@/api";
+import { RootState, useMediaUrl } from "@/api";
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import { useColors } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -15,6 +15,9 @@ const Preview = ({ onBack }: { onBack: () => void }) => {
   const { getValues, control } = useFormContext();
   const allValues = getValues();
   const profile = useSelector((state: RootState) => state.user.profile);
+  const { url: mediaUrlServer } = useMediaUrl(allValues.mediaUrl, {
+    skip: !allValues.mediaUrl,
+  });
 
   const authorName = [profile?.user.firstName, profile?.user.lastName]
     .filter(Boolean)
@@ -34,7 +37,7 @@ const Preview = ({ onBack }: { onBack: () => void }) => {
 
       <Image
         style={styles.coverImage}
-        source={{ uri: allValues.mediaUrl }}
+        source={{ uri: allValues.mediaUrl?.startsWith("file://") ? allValues.mediaUrl : mediaUrlServer ? mediaUrlServer : allValues.mediaUrl ?? "" }}
       />
 
       <View style={styles.details}>

@@ -115,6 +115,8 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
       updateRecipe,
     });
 
+    router.replace('/(app)/home');
+
     if (result.success) {
       Alert.alert("Готово", "Рецепт обновлён");
     } else {

@@ -20,6 +20,7 @@ import { Recipe } from "@/constants/types";
 import { parseCustomProducts } from "./parseCustomProducts";
 
 function isNewLocalMedia(uri: string | undefined): boolean {
+  if (uri?.startsWith("http") || uri?.startsWith("/")) return false;
   if (!uri) return false;
   return uri.startsWith("file://") || !uri.startsWith("http");
 }
