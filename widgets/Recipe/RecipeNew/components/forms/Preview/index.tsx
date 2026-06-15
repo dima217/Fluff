@@ -1,12 +1,13 @@
 import { RootState, useMediaUrl } from "@/api";
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
+import type { CustomProduct, SelectedProduct } from "@/constants/types";
 import { useColors } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import CheckBox from "@/shared/CheckBox";
 import { ThemedText } from "@/shared/ui/ThemedText";
-import IngredientsSection from "@/widgets/Recipe/RecipeInfo/components/IngredientsSection";
+import { Feather } from "@expo/vector-icons";
 import { Controller, useFormContext } from "react-hook-form";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 
 const Preview = ({ onBack }: { onBack: () => void }) => {
@@ -23,6 +24,8 @@ const Preview = ({ onBack }: { onBack: () => void }) => {
     .filter(Boolean)
     .join(" ");
   const description = allValues.description?.trim();
+  const selectedProducts: SelectedProduct[] = allValues.selectedProducts || [];
+  const customProducts: CustomProduct[] = allValues.customProducts || [];
 
   return (
     <View style={styles.container}>
@@ -54,7 +57,31 @@ const Preview = ({ onBack }: { onBack: () => void }) => {
           <ThemedText style={styles.description}>{description}</ThemedText>
         ) : null}
 
-        <IngredientsSection products={allValues.ingredients} dense />
+        {(selectedProducts.length > 0 || customProducts.length > 0) && (
+          <View style={styles.ingredientsBlock}>
+            <ThemedText type="s" style={styles.ingredientsTitle}>
+              {t("recipe.ingredients")}
+            </ThemedText>
+            <View style={styles.tagsList}>
+              {selectedProducts.map((p) => (
+                <View key={p.id} style={styles.tag}>
+                  <Text style={styles.tagText}>
+                    {p.name}
+                    {p.grams ? ` · ${p.grams} ${p.unit ?? "г"}` : ""}
+                  </Text>
+                </View>
+              ))}
+              {customProducts.map((cp, i) => (
+                <View key={`c-${i}`} style={[styles.tag, styles.tagCustom]}>
+                  <Text style={styles.tagText}>
+                    {cp.name}
+                    {cp.grams ? ` · ${cp.grams} ${cp.unit ?? "г"}` : ""}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
 
         <View style={styles.checkboxes}>
           <Controller
@@ -114,6 +141,32 @@ const styles = StyleSheet.create({
   },
   description: {
     marginTop: 8,
+  },
+  ingredientsBlock: {
+    marginTop: 12,
+    gap: 8,
+  },
+  ingredientsTitle: {
+    marginBottom: 2,
+  },
+  tagsList: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+  },
+  tag: {
+    backgroundColor: "#1E1E1E",
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  tagCustom: {
+    borderWidth: 1,
+    borderColor: "#5B5B5B",
+  },
+  tagText: {
+    color: "#E4E4E4",
+    fontSize: 13,
   },
   checkboxes: {
     marginTop: 20,

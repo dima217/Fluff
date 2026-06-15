@@ -18,10 +18,29 @@ export interface CreationStep {
   stepMediaUrl?: string;
 }
 
+export type ProductUnit = "г" | "шт";
+
+export interface SelectedProduct {
+  id: number;
+  name: string;
+  grams?: number;
+  unit?: ProductUnit;
+  calories?: number;
+  image?: { cover: string; preview: string } | null;
+}
+
+export interface CustomProduct {
+  name: string;
+  grams?: number;
+  unit?: ProductUnit;
+}
+
 export interface Recipe {
   name: string;
   ccal: number;
-  ingredients: string;
+  description?: string;
+  selectedProducts?: SelectedProduct[];
+  customProducts?: CustomProduct[];
   steps: CreationStep[];
   videoUrl: string;
   mediaUrl: string;

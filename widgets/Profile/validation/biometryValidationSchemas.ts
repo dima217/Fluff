@@ -2,6 +2,7 @@ import {
   ageSchema,
   heightSchema,
   sexSchema,
+  sportActivitySchema,
   weightSchema,
 } from "@/widgets/SignUp/validation/validationSchemas";
 
@@ -28,6 +29,12 @@ export const biometryStepsConfig = [
     schema: weightSchema,
     defaultValues: {
       weight: "70",
+    },
+  },
+  {
+    schema: sportActivitySchema,
+    defaultValues: {
+      sportActivity: null,
     },
   },
 ];

@@ -116,6 +116,17 @@ export interface RecipeStepsConfig {
   steps: RecipeStep[];
 }
 
+export interface RecipeProductResponse extends ProductResponse {
+  grams?: number;
+  unit?: string;
+}
+
+export interface RecipeCustomProductResponse {
+  name: string;
+  grams?: number;
+  unit?: string;
+}
+
 export interface RecipeResponse {
   id: number;
   user: {
@@ -130,13 +141,13 @@ export interface RecipeResponse {
   image: RecipeImage;
   promotionalVideo: string | null;
   description: string | null;
-  products?: ProductResponse[];
+  products?: RecipeProductResponse[];
   isFluff: boolean;
   calories: number;
   cookAt: number; // seconds
   stepsConfig: RecipeStepsConfig;
   createdAt: string;
-  customProducts?: string[];
+  customProducts?: RecipeCustomProductResponse[];
   updatedAt: string;
   userRating?: number | null;
 }
@@ -162,8 +173,8 @@ export interface UpdateRecipeRequest {
   image?: RecipeImage;
   promotionalVideo?: string | null;
   description?: string | null;
-  productIds?: number[];
-  customProducts?: string[];
+  products?: { id: number; grams?: number; unit?: string }[];
+  customProducts?: { name: string; grams?: number; unit?: string }[];
   calories?: number;
   cookAt?: number;
   stepsConfig?: RecipeStepsConfig;
@@ -243,8 +254,8 @@ export interface CreateRecipeWithMediaIdsRequest {
   };
   promotionalVideoMediaId?: string;
   description?: string;
-  productIds?: number[];
-  customProducts?: string[];
+  products?: { id: number; grams?: number; unit?: string }[];
+  customProducts?: { name: string; grams?: number; unit?: string }[];
   fluffAt?: string; // ISO 8601
   calories: number;
   cookAt: number;

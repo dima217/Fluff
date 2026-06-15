@@ -189,11 +189,8 @@ export default function RecipeScreen() {
         />
 
         <IngredientsSection
-          products={
-            recipe.products?.length !== 0
-              ? recipe.products
-              : recipe.customProducts
-          }
+          products={recipe.products}
+          customProducts={recipe.customProducts}
         />
 
         <Button

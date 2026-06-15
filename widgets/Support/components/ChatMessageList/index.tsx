@@ -2,6 +2,7 @@ import { SupportMessageDto } from "@/api/types";
 import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import MessageBubble from "@/widgets/Support/components/MessageBubble";
 import {
@@ -34,6 +35,7 @@ const ChatMessageList = forwardRef<ChatMessageListRef, ChatMessageListProps>(
   ({ messages, isLoading, isAdminTyping }, ref) => {
     const colors = useColors();
     const styles = useThemedStyles(createStyles);
+    const { t } = useTranslation();
     const flatListRef = useRef<FlatList<SupportMessageDto>>(null);
 
     const invertedMessages = useMemo(
@@ -79,13 +81,13 @@ const ChatMessageList = forwardRef<ChatMessageListRef, ChatMessageListProps>(
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={
           <ThemedText style={styles.empty} type="xs">
-            No messages yet. Send the first one!
+            {t("support.chatEmpty")}
           </ThemedText>
         }
         ListHeaderComponent={
           isAdminTyping ? (
             <ThemedText style={styles.typing} type="xs">
-              Support is typing…
+              {t("support.adminTyping")}
             </ThemedText>
           ) : null
         }
@@ -111,13 +113,11 @@ const createStyles = (colors: AppColors) =>
     empty: {
       textAlign: "center",
       color: colors.secondary,
-      transform: [{ scaleY: -1 }],
     },
     typing: {
       color: colors.secondary,
       paddingHorizontal: 20,
       paddingTop: 8,
       fontStyle: "italic",
-      transform: [{ scaleY: -1 }],
     },
   });

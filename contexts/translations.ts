@@ -77,6 +77,7 @@ export const translations = {
       toLogin: "к входу",
       recoveryFailed: "Не удалось восстановить пароль",
       invalidCode: "Неверный код восстановления",
+      home: "На главную",
     },
     // Onboarding
     onboarding: {
@@ -146,6 +147,20 @@ export const translations = {
       finish: "Завершить",
       noSteps: "Рецепт не содержит шагов",
       ingredients: "Ингредиенты",
+      ingredientsHint: "Добавьте продукты из базы или введите свои ингредиенты вручную.",
+      searchProducts: "Поиск продуктов",
+      addProduct: "Добавить",
+      addCustomProduct: "Добавить ингредиент",
+      customProductName: "Название ингредиента",
+      customProductGrams: "Количество (г)",
+      gramsInputTitle: "Введите количество (г)",
+      gramsInputMessage: "Введите количество продукта, необходимое для приготовления блюда",
+      gramsPlaceholder: "Например: 150",
+      gramsUnit: "г",
+      pcsUnit: "шт",
+      selectedProducts: "Выбранные продукты",
+      customProducts: "Свои ингредиенты",
+      noProductsFound: "Продукты не найдены",
       base: "Основное",
       baseHint:
         "Пора блистать! Загрузите классное фото, придумайте аппетитное название и добавьте пару слов о том, почему этот рецепт стоит приготовить.",
@@ -230,6 +245,12 @@ export const translations = {
       message: "Укажите вашу дневную норму потребления калорий",
       dailyGoal: "Дневная норма",
     },
+    calorieResultModal: {
+      title: "Ваша дневная норма составляет",
+      unit: "ккал",
+      message: "Или вы можете указать своё количество калорий в день",
+      yourGoal: "Ваша норма",
+    },
     // Library
     library: {
       title: "Библиотека",
@@ -257,6 +278,8 @@ export const translations = {
       reportProblem: "Сообщить о проблеме",
       submitRequest: "Отправить обращение",
       requestsEmpty: "Обращений пока нет",
+      chatEmpty: "Сообщений пока нет. Напишите первым!",
+      adminTyping: "Поддержка печатает…",
     },
     // SignUp
     signUp: {
@@ -412,6 +435,7 @@ export const translations = {
       toLogin: "да ўваходу",
       recoveryFailed: "Не ўдалося аднавіць пароль",
       invalidCode: "Няправільны код аднаўлення",
+      home: "На галоўную",
     },
     // Onboarding
     onboarding: {
@@ -497,6 +521,12 @@ export const translations = {
       message: "Укажыце вашу суточную норму спажывання калорый",
       dailyGoal: "Суточная норма",
     },
+    calorieResultModal: {
+      title: "Ваша суточная норма складае",
+      unit: "ккал",
+      message: "Або вы можаце ўказаць сваю колькасць калорый у дзень",
+      yourGoal: "Ваша норма",
+    },
     // Library
     library: {
       title: "Бібліятэка",
@@ -524,6 +554,8 @@ export const translations = {
       reportProblem: "Паведаміць пра праблему",
       submitRequest: "Адправіць зварот",
       requestsEmpty: "Звяртанняў пакуль няма",
+      chatEmpty: "Паведамленняў пакуль няма. Напішыце першым!",
+      adminTyping: "Падтрымка піша…",
     },
     // SignUp
     signUp: {
@@ -581,6 +613,20 @@ export const translations = {
       finish: "Завершыць",
       noSteps: "Рэцэпт не змяшчае крокаў",
       ingredients: "Інгрэдыенты",
+      ingredientsHint: "Дадайце прадукты з базы або ўвядзіце свае інгрэдыенты ўручную.",
+      searchProducts: "Пошук прадуктаў",
+      addProduct: "Дадаць",
+      addCustomProduct: "Дадаць інгрэдыент",
+      customProductName: "Назва інгрэдыента",
+      customProductGrams: "Колькасць (г)",
+      gramsInputTitle: "Увядзіце колькасць (г)",
+      gramsInputMessage: "Увядзіце колькасць прадукту, неабходнага для прыгатавання стравы",
+      gramsPlaceholder: "Напрыклад: 150",
+      gramsUnit: "г",
+      pcsUnit: "шт",
+      selectedProducts: "Выбраныя прадукты",
+      customProducts: "Свае інгрэдыенты",
+      noProductsFound: "Прадукты не знойдзены",
       base: "Асноўнае",
       baseHint:
         "Час бліскаць! Загрузіце класнае фота, прыдумайце апетытную назву і дадайце пару слоў пра тое, чаму варта гатаваць гэты рэцэпт.",
@@ -746,6 +792,7 @@ export const translations = {
       toLogin: "to login",
       recoveryFailed: "Failed to recover password",
       invalidCode: "Invalid recovery code",
+      home: "Go to Home",
     },
     // Onboarding
     onboarding: {
@@ -814,6 +861,20 @@ export const translations = {
       finish: "Finish",
       noSteps: "Recipe has no steps",
       ingredients: "Ingredients",
+      ingredientsHint: "Add products from the database or enter your own ingredients manually.",
+      searchProducts: "Search products",
+      addProduct: "Add",
+      addCustomProduct: "Add ingredient",
+      customProductName: "Ingredient name",
+      customProductGrams: "Amount (g)",
+      gramsInputTitle: "Enter amount (g)",
+      gramsInputMessage: "Enter the amount of product needed to prepare the dish",
+      gramsPlaceholder: "e.g. 150",
+      gramsUnit: "g",
+      pcsUnit: "pcs",
+      selectedProducts: "Selected products",
+      customProducts: "Custom ingredients",
+      noProductsFound: "No products found",
       base: "Base",
       baseHint:
         "It's time to show off! Upload a cool photo, write a mouth-watering title, and add a few words about why this recipe is worth making.",
@@ -898,6 +959,12 @@ export const translations = {
       message: "Enter your daily calorie intake goal",
       dailyGoal: "Daily goal",
     },
+    calorieResultModal: {
+      title: "Your Daily Intake is",
+      unit: "kcal",
+      message: "Or you can indicate your own number of calories you need per day",
+      yourGoal: "Your goal",
+    },
     // Library
     library: {
       title: "Library",
@@ -925,6 +992,8 @@ export const translations = {
       reportProblem: "Report a Problem",
       submitRequest: "Submit Request",
       requestsEmpty: "No support requests yet.",
+      chatEmpty: "No messages yet. Send the first one!",
+      adminTyping: "Support is typing…",
     },
     // SignUp
     signUp: {

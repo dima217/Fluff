@@ -3,6 +3,7 @@ import * as yup from "yup";
 type TranslateFn = (key: string) => string;
 
 export const createRecipeStepsConfig = (t: TranslateFn) => [
+  // Step 0: Base info
   {
     schema: yup.object({
       name: yup
@@ -10,21 +11,29 @@ export const createRecipeStepsConfig = (t: TranslateFn) => [
         .required(t("recipe.validation.nameRequired"))
         .min(3, t("recipe.validation.nameMin"))
         .max(100, t("recipe.validation.nameMax")),
-      ccal: yup.number().required(t("recipe.validation.ccalRequired")),
-      ingredients: yup
-        .string()
-        .required(t("recipe.validation.ingredientsRequired"))
-        .min(3, t("recipe.validation.ingredientsMin"))
-        .max(100, t("recipe.validation.ingredientsMax")),
+      ccal: yup.number().optional(),
+      description: yup.string().optional(),
       mediaUrl: yup.string().required(t("recipe.validation.photoRequired")),
     }),
     defaultValues: {
       name: "",
       ccal: 0,
-      ingredients: "",
+      description: "",
       mediaUrl: "",
     },
   },
+  // Step 1: Ingredients
+  {
+    schema: yup.object({
+      selectedProducts: yup.array().optional(),
+      customProducts: yup.array().optional(),
+    }),
+    defaultValues: {
+      selectedProducts: [],
+      customProducts: [],
+    },
+  },
+  // Step 2: Cooking process
   {
     schema: yup.object({
       steps: yup
@@ -47,6 +56,7 @@ export const createRecipeStepsConfig = (t: TranslateFn) => [
       steps: [{ title: "", description: "", stepMediaUrl: "" }],
     },
   },
+  // Step 3: Tutorial
   {
     schema: yup.object({
       videoUrl: yup.string().required(t("recipe.validation.videoRequired")),
@@ -55,6 +65,7 @@ export const createRecipeStepsConfig = (t: TranslateFn) => [
       videoUrl: "",
     },
   },
+  // Step 4: Preview
   {
     schema: yup.object({
       makePublic: yup.boolean().required(),

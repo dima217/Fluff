@@ -13,6 +13,7 @@ export interface BiometryFormData {
   age: string;
   height: string;
   weight: string;
+  sportActivity: string | null;
 }
 
 interface BiometryFormWrapperProps {

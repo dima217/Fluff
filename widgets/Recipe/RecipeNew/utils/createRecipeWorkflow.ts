@@ -17,7 +17,7 @@ import {
   uploadFile,
 } from "@/api/utils/fileUpload";
 import { Recipe } from "@/constants/types";
-import { parseCustomProducts } from "./parseCustomProducts";
+import { calcCaloriesFromProducts } from "./calcCaloriesFromProducts";
 
 function isLocalMediaUri(uri: string | undefined): boolean {
   if (!uri) return false;
@@ -238,22 +238,28 @@ export async function createRecipeWorkflow(
       }),
     };
 
-    const customProducts = parseCustomProducts(recipeData.ingredients);
+    const selectedProducts = recipeData.selectedProducts || [];
+    const products = selectedProducts.map((p) => ({ id: p.id, grams: p.grams, unit: p.unit }));
+    const customProducts = (recipeData.customProducts || []).map((cp) => ({
+      name: cp.name,
+      grams: cp.grams,
+      unit: cp.unit,
+    }));
+    const calories = calcCaloriesFromProducts(selectedProducts);
 
     const createRecipeResult = await createRecipeWithMediaIds({
       name: recipeData.name!,
-      recipeTypeId: 1, // TODO: Get from form or default
+      recipeTypeId: 1,
       imageMediaIds: {
         coverMediaId: prepareUploadResult.coverMediaId,
         previewMediaId: prepareUploadResult.previewMediaId,
       },
       promotionalVideoMediaId,
-      description: recipeData.ingredients, // Using ingredients as description for now
-      // TODO: Add support for productIds (products from database)
-      // productIds: [], // Will be implemented later
-      customProducts, // Using custom products from ingredients string
-      calories: recipeData.ccal || 0,
-      cookAt: 0, // TODO: Get from form
+      description: recipeData.description || undefined,
+      products: products.length > 0 ? products : undefined,
+      customProducts: customProducts.length > 0 ? customProducts : undefined,
+      calories,
+      cookAt: 0,
       stepsConfig,
       makePublic: recipeData.makePublic ?? false,
       submitToSystem: recipeData.submitToSystem ?? null,

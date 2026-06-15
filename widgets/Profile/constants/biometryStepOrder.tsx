@@ -1,6 +1,7 @@
 import Age from "@/widgets/SignUp/components/AgeScreen";
 import Height from "@/widgets/SignUp/components/HeightScreen";
 import Sex from "@/widgets/SignUp/components/SexScreen";
+import { SportActivityScreen } from "@/widgets/SignUp/components/SportActivityScreen";
 import Weight from "@/widgets/SignUp/components/WeightScreen";
 
 export const renderBiometryStepComponent = (step: number) => {
@@ -13,6 +14,8 @@ export const renderBiometryStepComponent = (step: number) => {
       return <Height />;
     case 3:
       return <Weight />;
+    case 4:
+      return <SportActivityScreen />;
     default:
       return null;
   }

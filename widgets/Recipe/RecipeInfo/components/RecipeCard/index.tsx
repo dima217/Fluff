@@ -42,7 +42,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         <View>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.subtitle}>
-            {category} • {restaurant}
+            {restaurant}
           </Text>
         </View>
         <View style={styles.headerIcons}>

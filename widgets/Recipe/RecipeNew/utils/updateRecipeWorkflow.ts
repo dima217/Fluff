@@ -17,7 +17,7 @@ import {
   uploadFile,
 } from "@/api/utils/fileUpload";
 import { Recipe } from "@/constants/types";
-import { parseCustomProducts } from "./parseCustomProducts";
+import { calcCaloriesFromProducts } from "./calcCaloriesFromProducts";
 
 function isNewLocalMedia(uri: string | undefined): boolean {
   if (uri?.startsWith("http") || uri?.startsWith("/")) return false;
@@ -205,19 +205,41 @@ export async function updateRecipeWorkflow(
       stepsConfig.steps = existingRecipe.stepsConfig.steps;
     }
 
-    const ingredientsText =
-      recipeData.ingredients ?? existingRecipe.description ?? "";
-    const customProducts = parseCustomProducts(ingredientsText);
+    const selectedProducts =
+      recipeData.selectedProducts && recipeData.selectedProducts.length > 0
+        ? recipeData.selectedProducts
+        : (existingRecipe.products ?? []);
+
+    const products = selectedProducts.map((p) => ({
+      id: p.id,
+      grams: (p as any).grams,
+      unit: (p as any).unit,
+    }));
+
+    const customProducts = (
+      recipeData.customProducts && recipeData.customProducts.length > 0
+        ? recipeData.customProducts
+        : (existingRecipe.customProducts ?? [])
+    ).map((cp) => ({
+      name: (cp as any).name,
+      grams: (cp as any).grams,
+      unit: (cp as any).unit,
+    }));
+
+    const calories =
+      recipeData.selectedProducts && recipeData.selectedProducts.length > 0
+        ? calcCaloriesFromProducts(recipeData.selectedProducts)
+        : existingRecipe.calories;
 
     const updatePayload: UpdateRecipeRequest = {
       name: recipeData.name ?? existingRecipe.name,
       recipeTypeId: existingRecipe.type.id,
       image: { cover: coverUrl, preview: previewUrl },
       promotionalVideo,
-      description: ingredientsText || null,
-      productIds: existingRecipe.products?.map((p) => p.id),
-      customProducts,
-      calories: recipeData.ccal ?? existingRecipe.calories,
+      description: recipeData.description ?? existingRecipe.description ?? null,
+      products: products.length > 0 ? products : undefined,
+      customProducts: customProducts.length > 0 ? customProducts : undefined,
+      calories,
       cookAt: existingRecipe.cookAt,
       stepsConfig,
       submitToSystem: recipeData.submitToSystem ?? null,

@@ -78,14 +78,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
     >
       <Pressable style={styles.backdrop} onPress={handleClose}>
         <View style={[styles.centerWrapper]}>
-          <Pressable
-            style={[
-              styles.container,
-              {
-                width: Number(width),
-              },
-            ]}
-          >
+          <Pressable style={[styles.container, { width: width as any }]}>
             <GradientView style={styles.modal}>
               <ScrollView
                 contentContainerStyle={styles.content}
@@ -154,9 +147,7 @@ const createBaseModalStyles = (colors: AppColors) =>
     },
     modal: {
       borderRadius: 14,
-      padding: 16,
-      paddingTop: 30,
-      width: "85%",
+      padding: 24,
       flex: 0,
     },
     content: {

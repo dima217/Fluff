@@ -23,5 +23,6 @@ export function mapProfileToBiometryFormData(
       profile.height != null ? String(Math.round(profile.height)) : "170",
     weight:
       profile.weight != null ? String(Math.round(profile.weight)) : "70",
+    sportActivity: profile.sportActivity ?? null,
   };
 }

@@ -55,8 +55,8 @@ const BaseInfo = () => {
           )}
         />
 
-        {/* CCAL */}
-        <Controller
+        {/* CCAL — temporarily hidden, calculated from ingredients */}
+        {/* <Controller
           control={control}
           name="ccal"
           render={({ field: { value, onChange } }) => {
@@ -81,19 +81,19 @@ const BaseInfo = () => {
               />
             );
           }}
-        />
+        /> */}
 
-        {/* INGREDIENTS */}
+        {/* DESCRIPTION */}
         <Controller
           control={control}
-          name="ingredients"
+          name="description"
           render={({ field: { value, onChange } }) => (
             <LongTextInput
-              label={t("recipe.ingredients")}
+              label={t("recipe.description")}
               placeholder={t("common.enter")}
               value={value}
               onChangeText={onChange}
-              errorMessage={getErrorMessage("ingredients")}
+              errorMessage={getErrorMessage("description")}
             />
           )}
         />

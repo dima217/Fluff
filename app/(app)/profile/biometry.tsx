@@ -2,6 +2,7 @@ import { useAppSelector } from "@/api/hooks";
 import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
 import KeyboardAwareView from "@/shared/KeyboardAwareView";
+import CalorieResultModal from "@/shared/Modals/CalorieResultModal";
 import ErrorModal from "@/shared/Modals/ErrorModal";
 import View from "@/shared/View";
 import ProgressDots from "@/shared/ui/ProgressDots";
@@ -36,6 +37,10 @@ const BiometryScreenContent = () => {
     showErrorModal,
     setShowErrorModal,
     errorMessage,
+    showCalorieModal,
+    calculatedCalories,
+    handleCalorieSave,
+    handleCalorieCancel,
   } = useBiometryUpdate();
 
   useEffect(() => {
@@ -85,6 +90,13 @@ const BiometryScreenContent = () => {
           </RNView>
         </ScrollView>
       </KeyboardAwareView>
+
+      <CalorieResultModal
+        isVisible={showCalorieModal}
+        calculatedCalories={calculatedCalories}
+        onSave={handleCalorieSave}
+        onCancel={handleCalorieCancel}
+      />
 
       <ErrorModal
         isVisible={showErrorModal}

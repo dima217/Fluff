@@ -16,6 +16,7 @@ import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import View from "@/shared/View";
 import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
 import CookingProcess from "@/widgets/Recipe/RecipeNew/components/forms/CookingProcess";
+import Ingredients from "@/widgets/Recipe/RecipeNew/components/forms/Ingredients";
 import Preview from "@/widgets/Recipe/RecipeNew/components/forms/Preview";
 import Tutorial from "@/widgets/Recipe/RecipeNew/components/forms/Tutorial";
 import RecipeFormWrapper from "@/widgets/Recipe/RecipeNew/components/FormWrapper";
@@ -97,7 +98,7 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
   const [updateRecipe] = useUpdateRecipeMutation();
 
   useEffect(() => {
-    setTotalSteps(4);
+    setTotalSteps(5);
   }, [setTotalSteps]);
 
   const handleFinalSubmit = async (finalData: Partial<Recipe>) => {
@@ -130,10 +131,12 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
       case 0:
         return <BaseInfo />;
       case 1:
-        return <CookingProcess onBack={() => setStep(step - 1)} />;
+        return <Ingredients onBack={() => setStep(step - 1)} />;
       case 2:
-        return <Tutorial onBack={() => setStep(step - 1)} />;
+        return <CookingProcess onBack={() => setStep(step - 1)} />;
       case 3:
+        return <Tutorial onBack={() => setStep(step - 1)} />;
+      case 4:
         return <Preview onBack={() => setStep(step - 1)} />;
       default:
         return null;
@@ -151,7 +154,7 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
         <Header title={t("recipe.editRecipe")} showExitConfirmation />
 
         <RNView style={styles.progressWrapper}>
-          <AnimatedProgressBar progress={(step + 1) / 4} />
+          <AnimatedProgressBar progress={(step + 1) / 5} />
         </RNView>
 
         {isSubmitting && (
