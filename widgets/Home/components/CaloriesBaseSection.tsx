@@ -8,9 +8,10 @@ import { useTranslation } from "@/hooks/useTranslation";
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { handleProductCardPress } from "@/utils/navigation/productNavigation";
 import { useEffect, useMemo } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { getProductsAsMealData } from "../utils/data";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 interface CaloriesBaseSectionProps {
   loadMoreSignal?: number;
@@ -59,7 +60,7 @@ const CaloriesBaseSection = ({
         <>
           <CardsCarousel
             products={productsAsMealData}
-            onCardPress={(item) => {}}
+            onCardPress={handleProductCardPress}
             variant="featured"
             onScrollToEnd={handleLoadMore}
           />

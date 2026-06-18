@@ -144,6 +144,9 @@ export interface RecipeResponse {
   products?: RecipeProductResponse[];
   isFluff: boolean;
   calories: number;
+  proteins?: number | null;
+  fats?: number | null;
+  carbs?: number | null;
   cookAt: number; // seconds
   stepsConfig: RecipeStepsConfig;
   createdAt: string;
@@ -293,6 +296,10 @@ export interface ProductResponse {
   favorite: boolean;
   isFluff: boolean;
   createdAt: string;
+  description?: string | null;
+  proteins?: number | null;
+  fats?: number | null;
+  carbs?: number | null;
 }
 
 export interface CreateProductRequest {

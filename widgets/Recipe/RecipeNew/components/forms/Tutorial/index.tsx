@@ -1,14 +1,24 @@
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
+import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { createFormStepStyles } from "@/widgets/Recipe/RecipeNew/styles/formStepStyles";
 import { getFormError } from "@/widgets/Recipe/RecipeNew/utils/getFormError";
 import { Controller, useFormContext } from "react-hook-form";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
+const createTutorialStyles = (colors: AppColors) =>
+  StyleSheet.create({
+    ...createFormStepStyles(colors),
+    mediaContainer: { marginBottom: 30 },
+  });
+
 const Tutorial = ({ onBack }: { onBack: () => void }) => {
   const colors = useColors();
+  const styles = useThemedStyles(createTutorialStyles);
   const { control, formState: { errors } } = useFormContext();
   const { t } = useTranslation();
 
@@ -20,7 +30,7 @@ const Tutorial = ({ onBack }: { onBack: () => void }) => {
         <ArrowLeft color={colors.text} />
       </TouchableOpacity>
 
-      <View style={styles.innerContainer}>
+      <View style={styles.header}>
         <ThemedText type="subtitle">{t("recipe.addTutorial")}</ThemedText>
         <ThemedText type="xs">{t("recipe.tutorialHint")}</ThemedText>
       </View>
@@ -46,13 +56,3 @@ const Tutorial = ({ onBack }: { onBack: () => void }) => {
 };
 
 export default Tutorial;
-
-const styles = StyleSheet.create({
-  innerContainer: {
-    gap: 6,
-    marginVertical: 30,
-  },
-  mediaContainer: {
-    marginBottom: 30,
-  },
-});

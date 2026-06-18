@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Feather from "@expo/vector-icons/Feather";
 import { ReactNode } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
+import { ThemedText } from "@/shared/ui/ThemedText";
 import type { MealData } from "./index";
 
 export function DefaultCardAction({
@@ -104,8 +105,45 @@ export function DeleteRecipeCardAction({
   );
 }
 
+interface AddProductCardActionProps {
+  label: string;
+  added?: boolean;
+  onAdd: () => void;
+}
+
+export function AddProductCardAction({
+  label,
+  added = false,
+  onAdd,
+}: AddProductCardActionProps): ReactNode {
+  const colors = useColors();
+
+  return (
+    <TouchableOpacity
+      onPress={(e) => {
+        e?.stopPropagation?.();
+        onAdd();
+      }}
+      activeOpacity={0.8}
+      style={[
+        styles.addBtn,
+        { backgroundColor: added ? colors.inactive : colors.primary },
+      ]}
+    >
+      <ThemedText type="xs" style={{ color: colors.onPrimary, fontWeight: "600" }}>
+        {label}
+      </ThemedText>
+    </TouchableOpacity>
+  );
+}
+
 const styles = StyleSheet.create({
   deleteAction: {
     marginLeft: 4,
+  },
+  addBtn: {
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
   },
 });

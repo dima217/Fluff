@@ -5,7 +5,7 @@ import Circle from "@/shared/ui/Circle";
 import GradientView from "@/shared/ui/GradientView";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import ProgressBar from "../../../ui/Animated/ProgressBar";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -15,12 +15,14 @@ interface CalorieProgressProps {
   currentCalories: number;
   dailyGoal: number;
   onEditPress: () => void;
+  onNutrientDetailsPress?: () => void;
 }
 
 const CalorieProgress: React.FC<CalorieProgressProps> = ({
   currentCalories,
   dailyGoal,
   onEditPress,
+  onNutrientDetailsPress,
 }) => {
   const colors = useColors();
   const styles = useThemedStyles(createCaloriesProgressStyles);
@@ -55,6 +57,18 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
           {dailyGoal}
         </Text>
       </View>
+
+      {onNutrientDetailsPress && (
+        <TouchableOpacity
+          style={styles.nutrientButton}
+          onPress={onNutrientDetailsPress}
+          activeOpacity={0.75}
+        >
+          <Text style={[styles.nutrientButtonText, { color: colors.onPrimary }]}>
+            {t("nutrition.nutrientDetails")}
+          </Text>
+        </TouchableOpacity>
+      )}
     </GradientView>
   );
 };

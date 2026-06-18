@@ -93,6 +93,12 @@ export const recipesApi = baseApi.injectEndpoints({
         if (params.productIds && params.productIds.length > 0) {
           queryParams.productIds = params.productIds.join(",");
         }
+        if (params.page) {
+          queryParams.page = params.page;
+        }
+        if (params.limit) {
+          queryParams.limit = params.limit;
+        }
 
         return {
           url: "/recipes/search",

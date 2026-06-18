@@ -7,6 +7,7 @@ import { CircleSizes } from "@/constants/components/CIrcle";
 import type { MealData } from "@/shared/CardCarousel";
 import CardsCarousel from "@/shared/CardCarousel";
 import { searchStorage } from "@/storage/search/searchStorage";
+import { handleProductCardPress } from "@/utils/navigation/productNavigation";
 import { useRouter } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -80,13 +81,14 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
   const handleRecipePress = (item: MealData) => {
     if (item.recipeId) {
       searchStorage.addToLastVisited(item.recipeId);
-      console.log(item.recipeId);
       router.push({
         pathname: "/(recipe)/recipe",
         params: { recipeId: item.recipeId.toString() },
       });
     }
   };
+
+  const handleProductPress = handleProductCardPress;
 
   const handleHistoryItemPress = (query: string) => {
     if (onSearchFromHistory) {
@@ -143,7 +145,7 @@ const SearchOverlayContent: React.FC<SearchOverlayContentProps> = ({
                 </Text>
                 <CardsCarousel
                   products={productsAsMealData}
-                  onCardPress={() => {}}
+                  onCardPress={handleProductPress}
                   variant="featured"
                 />
               </>

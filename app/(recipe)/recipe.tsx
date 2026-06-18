@@ -1,133 +1,80 @@
 import {
-  useAddToFavoritesMutation,
   useGetRecipeByIdQuery,
   useMediaUrl,
-  useRemoveFromFavoritesMutation,
 } from "@/api";
-import { AppColors } from "@/constants/design-tokens";
+import { useFavoriteToggle } from "@/api/hooks/useFavoriteToggle";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
-
-import { RecipeData } from "@/constants/types";
 import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
-import Header from "@/shared/Header";
 import View from "@/shared/View";
 import { searchStorage } from "@/storage/search/searchStorage";
+import DetailHero from "@/widgets/Recipe/RecipeInfo/components/DetailHero";
+import DetailScreenState from "@/widgets/Recipe/RecipeInfo/components/DetailScreenState";
 import IngredientsSection from "@/widgets/Recipe/RecipeInfo/components/IngredientsSection";
+import NutritionSection from "@/widgets/Recipe/RecipeInfo/components/NutritionSection";
 import RecipeCard from "@/widgets/Recipe/RecipeInfo/components/RecipeCard";
-import { LinearGradient } from "expo-linear-gradient";
+import { createDetailScreenStyles } from "@/widgets/Recipe/RecipeInfo/utils/detailScreenStyles";
+import { formatCookTime } from "@/widgets/Recipe/RecipeInfo/utils/formatCookTime";
+import { getRecipeAuthor } from "@/widgets/Recipe/RecipeInfo/utils/getRecipeAuthor";
+import { mapRecipeToRecipeData } from "@/widgets/Recipe/RecipeInfo/utils/mapRecipeToRecipeData";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo } from "react";
-
-import {
-  ActivityIndicator,
-  ImageBackground,
-  View as RNView,
-  ScrollView,
-  StyleSheet,
-  Text,
-} from "react-native";
+import { ScrollView } from "react-native";
 
 export default function RecipeScreen() {
   const colors = useColors();
-  const styles = useThemedStyles(createstyles);
+  const styles = useThemedStyles(createDetailScreenStyles);
   const router = useRouter();
   const params = useLocalSearchParams();
   const { t } = useTranslation();
+  const { toggleFavorite } = useFavoriteToggle();
 
-  const recipeId = params.recipeId ? parseInt(params.recipeId as string) : null;
+  const recipeId = params.recipeId ? parseInt(params.recipeId as string, 10) : null;
 
-  const {
-    data: recipe,
-    isLoading,
-    error,
-  } = useGetRecipeByIdQuery(recipeId!, {
+  const { data: recipe, isLoading, error } = useGetRecipeByIdQuery(recipeId!, {
     skip: !recipeId,
   });
 
   useEffect(() => {
-    if (recipeId) {
-      searchStorage.addToLastVisited(recipeId);
-    }
+    if (recipeId) searchStorage.addToLastVisited(recipeId);
   }, [recipeId]);
 
   const { url: coverMediaUrl, headers: coverMediaHeaders } = useMediaUrl(
     recipe?.image?.cover,
-    { skip: !recipe?.image?.cover }
+    { skip: !recipe?.image?.cover },
   );
 
-  const [addToFavorites] = useAddToFavoritesMutation();
-  const [removeFromFavorites] = useRemoveFromFavoritesMutation();
+  const recipeData = useMemo(
+    () => (recipe ? mapRecipeToRecipeData(recipe) : null),
+    [recipe],
+  );
 
-  const handleLike = useCallback(async () => {
+  const navigateToSteps = useCallback(() => {
+    if (!recipeData) return;
+    router.push({
+      pathname: "/recipe-steps",
+      params: { data: JSON.stringify(recipeData) },
+    });
+  }, [recipeData, router]);
+
+  const handleLike = useCallback(() => {
     if (!recipeId || !recipe) return;
-
-    const newLikedState = !recipe.favorite;
-
-    try {
-      if (newLikedState) {
-        await addToFavorites({ type: "recipe", id: recipeId }).unwrap();
-      } else {
-        await removeFromFavorites({ type: "recipe", id: recipeId }).unwrap();
-      }
-    } catch (error) {
-      console.error("Failed to toggle favorite:", error);
-    }
-  }, [recipe, recipeId, addToFavorites, removeFromFavorites]);
-
-  const recipeData: RecipeData | null = useMemo(() => {
-    if (!recipe) return null;
-
-    const steps =
-      recipe.stepsConfig?.steps?.map((step, index) => {
-        const imageResource = step.resources?.find((r) => r.type === "image");
-        const imageUrl = imageResource?.source;
-
-        return {
-          id: index + 1,
-          title: step.name || `Step ${index + 1}`,
-          description: step.description,
-          image: imageUrl ? { uri: imageUrl } : undefined,
-        };
-      }) || [];
-
-    return {
-      title: recipe.name,
-      id: recipe.id,
-      steps,
-      userRating: recipe.userRating,
-    };
-  }, [recipe]);
-
-  const formatCookTime = (seconds: number) => {
-    if (seconds < 60) return `${seconds}м`;
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    if (hours > 0) {
-      const remainingMinutes = minutes % 60;
-      return remainingMinutes > 0
-        ? `${hours}ч ${remainingMinutes}м`
-        : `${hours}ч`;
-    }
-    return `${minutes}м`;
-  };
+    toggleFavorite({ id: recipeId, isFavorite: recipe.favorite, type: "recipe" });
+  }, [recipe, recipeId, toggleFavorite]);
 
   if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
+    return <DetailScreenState styles={styles} colors={colors} variant="loading" />;
   }
 
   if (error || !recipe || !recipeData) {
     return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>
-          {error ? "Ошибка загрузки рецепта" : "Рецепт не найден"}
-        </Text>
-      </View>
+      <DetailScreenState
+        styles={styles}
+        colors={colors}
+        variant="error"
+        message={error ? t("recipe.loadError") : t("recipe.notFound")}
+      />
     );
   }
 
@@ -139,40 +86,19 @@ export default function RecipeScreen() {
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
     >
-      <ImageBackground
-        source={
-          coverMediaUrl
-            ? {
-                uri: coverMediaUrl,
-                ...(coverMediaHeaders && { headers: coverMediaHeaders }),
-              }
-            : recipe.image?.cover
-              ? { uri: recipe.image.cover }
-              : require("@/assets/images/Cake.png")
-        }
-        style={styles.background}
-        resizeMode="cover"
-      >
-        <RNView style={styles.backgroundContent}>
-          <Header />
-        </RNView>
-        <LinearGradient
-          colors={["transparent", colors.background]}
-          style={styles.gradient}
-        />
-      </ImageBackground>
+      <DetailHero
+        coverUrl={coverMediaUrl}
+        coverHeaders={coverMediaHeaders}
+        fallbackUri={recipe.image?.cover}
+        colors={colors}
+        styles={styles}
+      />
 
       <View style={styles.innerContainer}>
         <RecipeCard
           title={recipe.name}
           category={recipe.type?.name || "Recipe"}
-          restaurant={
-            recipe.isFluff
-              ? "Fluff"
-              : recipe.user
-                ? `${recipe.user.firstName} ${recipe.user.lastName}`
-                : "Unknown"
-          }
+          restaurant={getRecipeAuthor(recipe)}
           rating={recipe.average || 0}
           time={formatCookTime(recipe.cookAt)}
           calories={recipe.calories}
@@ -180,12 +106,14 @@ export default function RecipeScreen() {
           onLike={handleLike}
           isLiked={recipe.favorite ?? false}
           onMenu={() => {}}
-          onPress={() => {
-            router.push({
-              pathname: "/recipe-steps",
-              params: { data: JSON.stringify(recipeData) },
-            });
-          }}
+          onPress={navigateToSteps}
+        />
+
+        <NutritionSection
+          proteins={recipe.proteins}
+          fats={recipe.fats}
+          carbs={recipe.carbs}
+          calories={recipe.calories}
         />
 
         <IngredientsSection
@@ -193,68 +121,8 @@ export default function RecipeScreen() {
           customProducts={recipe.customProducts}
         />
 
-        <Button
-          title={t("recipe.cookIt")}
-          onPress={() => {
-            if (recipeData) {
-              router.push({
-                pathname: "/recipe-steps",
-                params: { data: JSON.stringify(recipeData) },
-              });
-            }
-          }}
-        />
+        <Button title={t("recipe.cookIt")} onPress={navigateToSteps} />
       </View>
     </ScrollView>
   );
 }
-
-const createstyles = (colors: AppColors) => StyleSheet.create({
-  mainContainer: {
-    backgroundColor: colors.background,
-    flex: 1,
-  },
-  innerContainer: {
-    width: "100%",
-    display: "flex",
-    flex: 1,
-    flexDirection: "column",
-    gap: 40,
-  },
-  background: {
-    width: "100%",
-    height: 500,
-  },
-  backgroundContent: {
-    padding: 20,
-  },
-  scrollContent: {
-    alignItems: "center",
-    paddingBottom: 30,
-  },
-  gradient: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 200,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.background,
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.background,
-    padding: 20,
-  },
-  errorText: {
-    color: colors.text,
-    fontSize: 16,
-    textAlign: "center",
-  },
-});

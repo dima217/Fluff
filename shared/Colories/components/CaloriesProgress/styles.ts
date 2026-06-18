@@ -54,4 +54,19 @@ export const createCaloriesProgressStyles = (colors: AppColors) =>
       color: colors.secondary,
       fontSize: 24,
     },
+    nutrientButton: {
+      marginTop: 16,
+      borderRadius: 10,
+      paddingVertical: 10,
+      paddingHorizontal: 16,
+      alignItems: "center",
+      backgroundColor: "rgba(255, 255, 255, 0.12)",
+      borderWidth: 1,
+      borderColor: "rgba(255, 255, 255, 0.18)",
+    },
+    nutrientButtonText: {
+      fontSize: 13,
+      fontWeight: "600",
+      letterSpacing: 0.3,
+    },
   });

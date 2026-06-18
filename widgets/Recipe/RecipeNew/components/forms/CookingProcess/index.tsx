@@ -1,23 +1,22 @@
 import ArrowLeft from "@/assets/images/ArrowLeft.svg";
-import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
-
 import { useTranslation } from "@/hooks/useTranslation";
 import GradientButton from "@/shared/Buttons/GradientButton";
 import LongTextInput from "@/shared/Inputs/LongTextInput";
 import TextInput from "@/shared/Inputs/TextInput";
 import MediaUploader from "@/shared/MediaUploader/components/MediaUploader";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { createFormStepStyles } from "@/widgets/Recipe/RecipeNew/styles/formStepStyles";
 import { getFormError } from "@/widgets/Recipe/RecipeNew/utils/getFormError";
 import { Feather } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 const CookingProcess = ({ onBack }: { onBack: () => void }) => {
   const colors = useColors();
-  const styles = useThemedStyles(createstyles);
+  const styles = useThemedStyles(createFormStepStyles);
   const { control, formState: { errors }, watch } = useFormContext();
   const { t } = useTranslation();
 
@@ -38,7 +37,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
   const controlledFields = fields.map((field, index) => {
     return {
       ...field,
-      ...watchFieldArray[index]
+      ...watchFieldArray[index],
     };
   });
 
@@ -48,15 +47,14 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
         <ArrowLeft color={colors.text} />
       </TouchableOpacity>
 
-      <View style={styles.innerContainer}>
+      <View style={styles.header}>
         <ThemedText type="subtitle">{t("recipe.cookingProcess")}</ThemedText>
         <ThemedText type="xs">{t("recipe.cookingProcessHint")}</ThemedText>
       </View>
 
       <View style={styles.stepsContainer}>
         {controlledFields.map((field, index) => (
-          <View key={field.id} style={styles.stepInputsContainer}>
-            {/* Title */}
+          <View key={field.id} style={styles.fieldsContainer}>
             <Controller
               control={control}
               name={`steps.${index}.title` as const}
@@ -77,7 +75,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
                               ...step,
                               title: `Step ${idx + 1}`,
                             }));
-                      
+
                           replace(updated);
                         }
                       }}
@@ -89,7 +87,6 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
               )}
             />
 
-            {/* Description */}
             <Controller
               control={control}
               name={`steps.${index}.description` as const}
@@ -123,7 +120,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
       </View>
 
       {getErrorMessage("steps") ? (
-        <ThemedText type="xs" style={styles.stepsError}>
+        <ThemedText type="xs" style={styles.fieldError}>
           {getErrorMessage("steps")}
         </ThemedText>
       ) : null}
@@ -137,23 +134,5 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
     </View>
   );
 };
-
-const createstyles = (colors: AppColors) => StyleSheet.create({
-  innerContainer: {
-    gap: 6,
-    marginVertical: 30,
-  },
-  stepsContainer: {
-    gap: 30,
-    marginBottom: 20,
-  },
-  stepInputsContainer: {
-    gap: 20,
-  },
-  stepsError: {
-    color: colors.reject,
-    marginBottom: 12,
-  },
-});
 
 export default CookingProcess;

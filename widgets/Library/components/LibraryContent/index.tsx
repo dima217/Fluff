@@ -12,6 +12,7 @@ import {
   getProductsAsMealData,
   getRecipesAsMealData,
 } from "@/widgets/Home/utils/data";
+import { handleProductCardPress } from "@/utils/navigation/productNavigation";
 import { router } from "expo-router";
 import { useCallback, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
@@ -112,7 +113,7 @@ const LibraryContent = ({ selected }: HomeContentProps) => {
         <View style={styles.section}>
           <CardsCarousel
             products={productsAsMealData}
-            onCardPress={(item) => {}}
+            onCardPress={handleProductCardPress}
             variant="featured"
           />
         </View>

@@ -25,8 +25,18 @@ export const createRecipeStepsConfig = (t: TranslateFn) => [
   // Step 1: Ingredients
   {
     schema: yup.object({
-      selectedProducts: yup.array().optional(),
-      customProducts: yup.array().optional(),
+      selectedProducts: yup
+        .array()
+        .default([])
+        .test(
+          "at-least-one-ingredient",
+          t("recipe.validation.ingredientsMin"),
+          function (value) {
+            const custom = this.parent.customProducts as unknown[] | undefined;
+            return (value?.length ?? 0) + (custom?.length ?? 0) > 0;
+          },
+        ),
+      customProducts: yup.array().default([]),
     }),
     defaultValues: {
       selectedProducts: [],

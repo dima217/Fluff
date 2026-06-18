@@ -9,6 +9,7 @@ import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getAge } from "@/services/equation/age";
 import { calculateDailyCalories } from "@/services/equation/calories";
+import { calculateDailyNutrients } from "@/services/equation/nutrients";
 import AccountDetails from "@/shared/AccountDetails";
 import { AnimatedWheelPicker } from "@/shared/AnimatedWheelPicker";
 import CalorieInput from "@/shared/Colories/components/CaloriesInput";
@@ -16,6 +17,7 @@ import CalorieProgress from "@/shared/Colories/components/CaloriesProgress";
 import { useDayPickerData } from "@/shared/DateWheelItem/utils";
 import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import EditDailyCalorieGoalModal from "@/shared/Modals/EditDailyCalorieGoalModal";
+import NutrientDetailsModal from "@/shared/Modals/NutrientDetailsModal";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { calorieGoalStorage } from "@/storage/calorieGoal/calorieGoalStorage";
 import { getAppLocale } from "@/utils/locale";
@@ -31,6 +33,7 @@ const Health = () => {
   const { language } = useTranslation();
   const { data: calendar, refetch: refetchCalendar } = useGetCalendarQuery();
   const [isEditDailyCalorieGoalModalVisible, setIsEditDailyCalorieGoalModalVisible] = useState(false);
+  const [isNutrientDetailsVisible, setIsNutrientDetailsVisible] = useState(false);
   const router = useRouter();
 
   const handleTrackingCardPress = useCallback(
@@ -132,6 +135,11 @@ const Health = () => {
     }
   };
 
+  const dailyNutrientNorms = useMemo(
+    () => (dailyGoal ? calculateDailyNutrients(dailyGoal) : null),
+    [dailyGoal],
+  );
+
   const handleEditDailyCalorieGoalModalClose = (newDailyGoal: number) => {
     setIsEditDailyCalorieGoalModalVisible(false);
     calorieGoalStorage.set(newDailyGoal);
@@ -175,6 +183,7 @@ const Health = () => {
             currentCalories={currentCalories}
             dailyGoal={dailyGoal ?? 1000}
             onEditPress={() => setIsEditDailyCalorieGoalModalVisible(true)}
+            onNutrientDetailsPress={() => setIsNutrientDetailsVisible(true)}
           />
           <CalorieInput onAdd={handleAddFood} />
           {dayData?.records && dayData.records.length > 0 && (
@@ -190,6 +199,11 @@ const Health = () => {
         isVisible={isEditDailyCalorieGoalModalVisible}
         dailyGoal={dailyGoal ?? 1000}
         onClose={handleEditDailyCalorieGoalModalClose}
+      />
+      <NutrientDetailsModal
+        isVisible={isNutrientDetailsVisible}
+        norms={dailyNutrientNorms}
+        onClose={() => setIsNutrientDetailsVisible(false)}
       />
     </KeyboardAwareView>
   );
