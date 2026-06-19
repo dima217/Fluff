@@ -2,6 +2,7 @@ import {
   RootState,
   useCreateTrackingMutation,
   useGetCalendarQuery,
+  useGetRecipesByIdsQuery,
 } from "@/api";
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
@@ -9,10 +10,11 @@ import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getAge } from "@/services/equation/age";
 import { calculateDailyCalories } from "@/services/equation/calories";
+import { calculateConsumedNutrients } from "@/services/equation/consumedNutrients";
 import { calculateDailyNutrients } from "@/services/equation/nutrients";
 import AccountDetails from "@/shared/AccountDetails";
 import { AnimatedWheelPicker } from "@/shared/AnimatedWheelPicker";
-import CalorieInput from "@/shared/Colories/components/CaloriesInput";
+import CalorieInput, { TrackingAddParams } from "@/shared/Colories/components/CaloriesInput";
 import CalorieProgress from "@/shared/Colories/components/CaloriesProgress";
 import { useDayPickerData } from "@/shared/DateWheelItem/utils";
 import KeyboardAwareView from "@/shared/KeyboardAwareView";
@@ -52,7 +54,7 @@ const Health = () => {
   );
 
   const profile = useSelector((state: RootState) => state.user.profile);
-  let dailyGoal;
+  let dailyGoal: number | null = null;
 
   if (
     profile?.weight != null &&
@@ -106,18 +108,38 @@ const Health = () => {
     return calendar?.[formattedDate];
   }, [calendar, formattedDate]);
 
+  const recipeIds = useMemo(
+    () =>
+      [
+        ...new Set(
+          (dayData?.records ?? [])
+            .map((record) => record.recipeId)
+            .filter((id): id is number => id != null),
+        ),
+      ],
+    [dayData?.records],
+  );
+
+  const { data: trackedRecipes = [] } = useGetRecipesByIdsQuery(recipeIds, {
+    skip: recipeIds.length === 0,
+  });
+
   const currentCalories = dayData?.totalCalories || 0;
 
   const handleValueChange = (_value: any, index: number) => {
     setSelectedDateIndex(index);
   };
 
-  const handleAddFood = async (
-    foodName: string,
-    calories: number,
-    recipeId?: number,
-    time24h?: string
-  ) => {
+  const handleAddFood = async ({
+    foodName,
+    calories,
+    recipeId,
+    time24h,
+    grams,
+    proteins,
+    fats,
+    carbs,
+  }: TrackingAddParams) => {
     try {
       const created = time24h
         ? new Date(`${formattedDate}T${time24h}:00`).toISOString()
@@ -126,7 +148,11 @@ const Health = () => {
       await createTracking({
         name: recipeId ? undefined : foodName,
         calories: recipeId ? undefined : calories,
-        recipeId: recipeId,
+        recipeId,
+        grams,
+        proteins: recipeId ? undefined : proteins,
+        fats: recipeId ? undefined : fats,
+        carbs: recipeId ? undefined : carbs,
         created,
       }).unwrap();
       refetchCalendar();
@@ -139,6 +165,14 @@ const Health = () => {
     () => (dailyGoal ? calculateDailyNutrients(dailyGoal) : null),
     [dailyGoal],
   );
+
+  const consumedNutrients = useMemo(() => {
+    const consumed = calculateConsumedNutrients(dayData?.records ?? [], trackedRecipes);
+    return {
+      ...consumed,
+      calories: currentCalories,
+    };
+  }, [currentCalories, dayData?.records, trackedRecipes]);
 
   const handleEditDailyCalorieGoalModalClose = (newDailyGoal: number) => {
     setIsEditDailyCalorieGoalModalVisible(false);
@@ -203,6 +237,7 @@ const Health = () => {
       <NutrientDetailsModal
         isVisible={isNutrientDetailsVisible}
         norms={dailyNutrientNorms}
+        consumed={consumedNutrients}
         onClose={() => setIsNutrientDetailsVisible(false)}
       />
     </KeyboardAwareView>

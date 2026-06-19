@@ -66,6 +66,7 @@ const Ingredients = ({ onBack }: { onBack: () => void }) => {
   const handleSaveProduct = () => {
     if (!modalProduct) return;
     const qty = gramsInput.trim() ? parseInt(gramsInput, 10) : undefined;
+    if (!qty || qty <= 0) return;
     const entry: SelectedProduct = {
       id: modalProduct.id,
       name: modalProduct.name,

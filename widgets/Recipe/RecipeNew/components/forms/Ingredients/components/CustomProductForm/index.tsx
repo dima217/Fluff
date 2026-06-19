@@ -3,7 +3,7 @@ import type { CustomProduct, ProductUnit } from "@/constants/types";
 import { useColors } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import TextInput from "@/shared/Inputs/TextInput";
-import ProductAmountModal from "@/shared/Modals/ProductAmountModal";
+import CustomProductModal from "@/shared/Modals/CustomProductModal";
 import Circle from "@/shared/ui/Circle";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import FilterTags from "@/widgets/Search/components/FilterTags";
@@ -28,10 +28,16 @@ const CustomProductForm = ({
 }: CustomProductFormProps) => {
   const colors = useColors();
   const { t } = useTranslation();
+
   const [name, setName] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+
   const [gramsInput, setGramsInput] = useState("");
   const [selectedUnit, setSelectedUnit] = useState<ProductUnit>(DEFAULT_PRODUCT_UNIT);
+  const [caloriesInput, setCaloriesInput] = useState("");
+  const [proteinsInput, setProteinsInput] = useState("");
+  const [fatsInput, setFatsInput] = useState("");
+  const [carbsInput, setCarbsInput] = useState("");
 
   const formatCustomLabel = (cp: CustomProduct) =>
     `${cp.name}${cp.grams ? ` · ${cp.grams} ${getProductUnitLabel(cp.unit ?? DEFAULT_PRODUCT_UNIT, t)}` : ""}`;
@@ -41,6 +47,10 @@ const CustomProductForm = ({
   const openModal = () => {
     setGramsInput("");
     setSelectedUnit(DEFAULT_PRODUCT_UNIT);
+    setCaloriesInput("");
+    setProteinsInput("");
+    setFatsInput("");
+    setCarbsInput("");
     setModalVisible(true);
   };
 
@@ -48,8 +58,24 @@ const CustomProductForm = ({
 
   const handleSave = () => {
     if (!canAdd) return;
+
     const parsedGrams = gramsInput.trim() ? parseInt(gramsInput, 10) : undefined;
-    onAdd({ name: name.trim(), grams: parsedGrams, unit: selectedUnit });
+    if (!parsedGrams || parsedGrams <= 0) return;
+    const parsedCalories = caloriesInput.trim() ? parseFloat(caloriesInput) : undefined;
+    const parsedProteins = proteinsInput.trim() ? parseFloat(proteinsInput) : undefined;
+    const parsedFats = fatsInput.trim() ? parseFloat(fatsInput) : undefined;
+    const parsedCarbs = carbsInput.trim() ? parseFloat(carbsInput) : undefined;
+
+    onAdd({
+      name: name.trim(),
+      grams: parsedGrams,
+      unit: selectedUnit,
+      calories: parsedCalories,
+      proteins: parsedProteins,
+      fats: parsedFats,
+      carbs: parsedCarbs,
+    });
+
     setName("");
     closeModal();
   };
@@ -63,8 +89,8 @@ const CustomProductForm = ({
         value={name}
         onChangeText={setName}
         label={t("recipe.customProductName")}
-        inputContainerStyle={[{paddingRight: 4}]}
-        right={ 
+        inputContainerStyle={[{ paddingRight: 4 }]}
+        right={
           <Circle
             color={canAdd ? colors.primary : colors.inactive}
             onPress={canAdd ? openModal : undefined}
@@ -82,13 +108,21 @@ const CustomProductForm = ({
         variant="input"
       />
 
-      <ProductAmountModal
+      <CustomProductModal
         isVisible={modalVisible}
         productName={name.trim()}
         amount={gramsInput}
         selectedUnit={selectedUnit}
+        calories={caloriesInput}
+        proteins={proteinsInput}
+        fats={fatsInput}
+        carbs={carbsInput}
         onChangeAmount={setGramsInput}
         onChangeUnit={setSelectedUnit}
+        onChangeCalories={setCaloriesInput}
+        onChangeProteins={setProteinsInput}
+        onChangeFats={setFatsInput}
+        onChangeCarbs={setCarbsInput}
         onSave={handleSave}
         onClose={closeModal}
       />

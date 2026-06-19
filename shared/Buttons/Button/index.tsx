@@ -12,6 +12,7 @@ interface ButtonProps {
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
+  compact?: boolean;
   buttonColor?: string;
   textColor?: string;
   style?: StyleProp<ViewStyle>;
@@ -23,6 +24,7 @@ const Button = ({
   onPress,
   loading,
   disabled,
+  compact = false,
   buttonColor,
   textColor,
   style,
@@ -35,7 +37,7 @@ const Button = ({
     <TouchableOpacity
       disabled={isDisabled}
       style={[
-        styles.container,
+        compact ? styles.containerCompact : styles.container,
         { backgroundColor: buttonColor ?? colors.primary },
         isDisabled && { backgroundColor: colors.secondary },
         style,
@@ -48,6 +50,7 @@ const Button = ({
         <Text
           style={[
             styles.buttonText,
+            compact && styles.buttonTextCompact,
             { color: textColor ?? colors.text },
             isDisabled && { color: colors.inactive },
             textStyle,

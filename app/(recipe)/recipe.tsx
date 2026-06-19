@@ -12,7 +12,6 @@ import { searchStorage } from "@/storage/search/searchStorage";
 import DetailHero from "@/widgets/Recipe/RecipeInfo/components/DetailHero";
 import DetailScreenState from "@/widgets/Recipe/RecipeInfo/components/DetailScreenState";
 import IngredientsSection from "@/widgets/Recipe/RecipeInfo/components/IngredientsSection";
-import NutritionSection from "@/widgets/Recipe/RecipeInfo/components/NutritionSection";
 import RecipeCard from "@/widgets/Recipe/RecipeInfo/components/RecipeCard";
 import { createDetailScreenStyles } from "@/widgets/Recipe/RecipeInfo/utils/detailScreenStyles";
 import { formatCookTime } from "@/widgets/Recipe/RecipeInfo/utils/formatCookTime";
@@ -102,18 +101,14 @@ export default function RecipeScreen() {
           rating={recipe.average || 0}
           time={formatCookTime(recipe.cookAt)}
           calories={recipe.calories}
+          proteins={recipe.proteins}
+          fats={recipe.fats}
+          carbs={recipe.carbs}
           description={recipe.description || ""}
           onLike={handleLike}
           isLiked={recipe.favorite ?? false}
           onMenu={() => {}}
           onPress={navigateToSteps}
-        />
-
-        <NutritionSection
-          proteins={recipe.proteins}
-          fats={recipe.fats}
-          carbs={recipe.carbs}
-          calories={recipe.calories}
         />
 
         <IngredientsSection

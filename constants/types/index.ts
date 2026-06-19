@@ -33,6 +33,14 @@ export interface CustomProduct {
   name: string;
   grams?: number;
   unit?: ProductUnit;
+  /** Total calories for the specified amount */
+  calories?: number;
+  /** Total proteins (g) for the specified amount */
+  proteins?: number;
+  /** Total fats (g) for the specified amount */
+  fats?: number;
+  /** Total carbs (g) for the specified amount */
+  carbs?: number;
 }
 
 export interface Recipe {

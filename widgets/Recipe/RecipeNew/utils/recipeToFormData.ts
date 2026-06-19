@@ -23,7 +23,15 @@ export function recipeResponseToFormData(recipe: RecipeResponse): Partial<Recipe
   const customProducts: CustomProduct[] = (recipe.customProducts ?? []).map((cp) =>
     typeof cp === "string"
       ? { name: cp }
-      : { name: cp.name, grams: cp.grams, unit: (cp.unit as any) ?? undefined }
+      : {
+          name: cp.name,
+          grams: cp.grams,
+          unit: (cp.unit as any) ?? undefined,
+          calories: cp.calories,
+          proteins: cp.proteins,
+          fats: cp.fats,
+          carbs: cp.carbs,
+        }
   );
 
   return {

@@ -1,5 +1,4 @@
 
-import { useColors } from "@/contexts/ThemeContext";
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -36,10 +35,10 @@ export default function OnboardingScreen() {
 
         {/* Title */}
         <View style={styles.titleBlock}>
-          <ThemedText type="title" highlightLastWord>
+          <ThemedText type="display" highlightLastWord>
             {t("onboarding.soundMind")}
           </ThemedText>
-          <ThemedText type="title" highlightLastWord>
+          <ThemedText type="display" highlightLastWord>
             {t("onboarding.soundBody")}
           </ThemedText>
         </View>

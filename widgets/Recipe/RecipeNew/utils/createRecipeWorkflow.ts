@@ -244,6 +244,10 @@ export async function createRecipeWorkflow(
       name: cp.name,
       grams: cp.grams,
       unit: cp.unit,
+      calories: cp.calories,
+      proteins: cp.proteins,
+      fats: cp.fats,
+      carbs: cp.carbs,
     }));
     const calories = calcCaloriesFromProducts(selectedProducts);
 

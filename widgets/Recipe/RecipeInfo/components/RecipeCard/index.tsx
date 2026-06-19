@@ -2,9 +2,10 @@
 import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import Circle from "@/shared/ui/Circle";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { ReactNode } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface RecipeCardProps {
@@ -14,6 +15,9 @@ interface RecipeCardProps {
   rating: number;
   time: string;
   calories: number;
+  proteins?: number | null;
+  fats?: number | null;
+  carbs?: number | null;
   description: string;
   onLike?: () => void;
   onMenu?: () => void;
@@ -28,6 +32,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   rating,
   time,
   calories,
+  proteins,
+  fats,
+  carbs,
   description,
   onLike,
   onMenu,
@@ -36,6 +43,38 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
 }) => {
   const colors = useColors();
   const styles = useThemedStyles(createstyles);
+  const { t } = useTranslation();
+
+  const macroItems: ReactNode[] = [];
+
+  if (proteins != null) {
+    macroItems.push(
+      <View key="proteins" style={styles.macroItem}>
+        <Text style={[styles.macroText, { color: colors.secondary }]}>
+          {t("nutrition.proteinsShort")} {proteins.toFixed(1)}{t("nutrition.gUnit")}
+        </Text>
+      </View>,
+    );
+  }
+  if (fats != null) {
+    macroItems.push(
+      <View key="fats" style={styles.macroItem}>
+        <Text style={[styles.macroText, { color: colors.secondary }]}>
+          {t("nutrition.fatsShort")} {fats.toFixed(1)}{t("nutrition.gUnit")}
+        </Text>
+      </View>,
+    );
+  }
+  if (carbs != null) {
+    macroItems.push(
+      <View key="carbs" style={styles.macroItem}>
+        <Text style={[styles.macroText, { color: colors.secondary }]}>
+          {t("nutrition.carbsShort")} {carbs.toFixed(1)}{t("nutrition.gUnit")}
+        </Text>
+      </View>,
+    );
+  }
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.header}>
@@ -84,9 +123,20 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         <View style={styles.divider} />
         <View style={styles.infoItem}>
           <Ionicons name="fast-food-outline" size={16} color={colors.purple} />
-          <Text style={styles.infoText}>{calories} Ccal</Text>
+          <Text style={styles.infoText}>{calories} {t("health.caloriesUnit")}</Text>
         </View>
       </View>
+
+      {macroItems.length > 0 && (
+        <View style={styles.macroRow}>
+          {macroItems.map((item, index) => (
+            <View key={index} style={styles.macroGroup}>
+              {index > 0 ? <View style={styles.macroDivider} /> : null}
+              {item}
+            </View>
+          ))}
+        </View>
+      )}
 
       <Text style={styles.description}>{description}</Text>
     </TouchableOpacity>
@@ -122,7 +172,7 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
   infoRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 8,
   },
   infoItem: {
     flexDirection: "row",
@@ -138,6 +188,30 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
     height: 16,
     backgroundColor: "#555",
     marginHorizontal: 12,
+  },
+  macroRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    rowGap: 6,
+    marginBottom: 10,
+  },
+  macroGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  macroItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  macroText: {
+    fontSize: 13,
+  },
+  macroDivider: {
+    width: 1,
+    height: 14,
+    backgroundColor: colors.border,
+    marginHorizontal: 8,
   },
   description: {
     color: colors.secondary,

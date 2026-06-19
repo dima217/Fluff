@@ -6,6 +6,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import MealCardItem from "@/shared/CardCarousel/Cards";
 import { createMealCardStyles } from "@/shared/CardCarousel/Cards/MealCard/styles";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import { formatTrackingCaloriesLabel } from "@/widgets/Health/utils";
 import { getRecipesAsMealData } from "@/widgets/Home/utils/data";
 import React from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -74,8 +75,13 @@ const TrackingItem: React.FC<TrackingItemProps> = ({
     }
   };
 
+  const caloriesLabel = formatTrackingCaloriesLabel(record, t);
+
   if (record.recipe) {
-    const item = getRecipesAsMealData([record.recipe])[0];
+    const item = {
+      ...getRecipesAsMealData([record.recipe])[0],
+      calories: caloriesLabel,
+    };
 
     return (
       <MealCardItem
@@ -113,7 +119,7 @@ const TrackingItem: React.FC<TrackingItemProps> = ({
         <ThemedText type="xs" style={styles.title}>
           {record.name}
         </ThemedText>
-        <ThemedText type="xs">{`${record.calories} ${t("health.caloriesUnit")}`}</ThemedText>
+        <ThemedText type="xs">{caloriesLabel}</ThemedText>
       </View>
 
       {isEditMode && (

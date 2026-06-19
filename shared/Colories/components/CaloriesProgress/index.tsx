@@ -1,14 +1,15 @@
 import Edit from "@/assets/images/Edit_fill.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
+import GlassButton from "@/shared/Buttons/GlassButton";
 import Circle from "@/shared/ui/Circle";
 import GradientView from "@/shared/ui/GradientView";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View } from "react-native";
 import ProgressBar from "../../../ui/Animated/ProgressBar";
-import { useThemedStyles } from "@/hooks/useThemedStyles";
-import { useTranslation } from "@/hooks/useTranslation";
 import { createCaloriesProgressStyles } from "./styles";
 
 interface CalorieProgressProps {
@@ -32,7 +33,7 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
   return (
     <GradientView style={styles.container}>
       <View style={styles.header}>
-        <ThemedText type="xs" style={styles.progressLabel}>
+        <ThemedText type="caption" style={styles.progressLabel}>
           {t("health.dailyCalorieIntake")}
         </ThemedText>
 
@@ -40,7 +41,7 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
       </View>
 
       <View style={styles.progressContainer}>
-        <ThemedText type="xs">{t("health.progress")}</ThemedText>
+        <ThemedText type="caption">{t("health.progress")}</ThemedText>
 
         <Text style={styles.progressText}>
           {Math.round(progress)}% {t("health.complete")}
@@ -49,27 +50,29 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
 
       <ProgressBar progress={progress} />
 
-      <View style={styles.calorieCountContainer}>
-        <Text style={styles.calorieCountText}>{currentCalories}</Text>
-
-        <Text style={styles.calorieGoalText}>
-          {" / "}
-          {dailyGoal}
-        </Text>
-      </View>
-
-      {onNutrientDetailsPress && (
-        <TouchableOpacity
-          style={styles.nutrientButton}
-          onPress={onNutrientDetailsPress}
-          activeOpacity={0.75}
-        >
-          <Text style={[styles.nutrientButtonText, { color: colors.onPrimary }]}>
-            {t("nutrition.nutrientDetails")}
+      <View style={styles.calorieCountContainerWrapper}>
+        <View style={styles.calorieCountContainer}>
+          <Text style={styles.calorieCountText}>{currentCalories}</Text>
+          <Text style={styles.calorieGoalText}>
+            {" / "}
+            {dailyGoal}
           </Text>
-        </TouchableOpacity>
-      )}
+        </View>
+
+        {onNutrientDetailsPress ? (
+          <GlassButton
+            style={styles.nutrientButton}
+            textStyle={styles.nutrientButtonText}
+            compact
+            title={t("nutrition.nutrientDetails")}
+            onPress={onNutrientDetailsPress}
+            textColor={colors.onPrimary}
+            tintColor={colors.primary}
+          />
+        ) : null}
+      </View>
     </GradientView>
   );
 };
+
 export default CalorieProgress;

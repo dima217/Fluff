@@ -1,5 +1,20 @@
 import type { RecipeResponse, TrackingResponse } from "@/api/types";
 
+type TranslateFn = (key: string) => string;
+
+export const formatTrackingCaloriesLabel = (
+  record: TrackingResponse,
+  t: TranslateFn,
+) => {
+  const caloriesLabel = `${Math.round(record.calories)} ${t("health.caloriesUnit")}`;
+
+  if (record.grams != null && record.grams > 0) {
+    return `${caloriesLabel} · ${record.grams} ${t("recipe.gramsUnit")}`;
+  }
+
+  return caloriesLabel;
+};
+
 export const formatTrackingTime = (dateString: string) => {
   const date = new Date(dateString);
 

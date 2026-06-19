@@ -224,6 +224,10 @@ export async function updateRecipeWorkflow(
       name: (cp as any).name,
       grams: (cp as any).grams,
       unit: (cp as any).unit,
+      calories: (cp as any).calories,
+      proteins: (cp as any).proteins,
+      fats: (cp as any).fats,
+      carbs: (cp as any).carbs,
     }));
 
     const calories =

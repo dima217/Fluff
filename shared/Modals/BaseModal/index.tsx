@@ -155,11 +155,11 @@ const createBaseModalStyles = (colors: AppColors) =>
     },
     title: {
       marginBottom: 8,
-      textAlign: "center",
+      textAlign: "left",
     },
     message: {
       marginBottom: 12,
-      textAlign: "center",
+      textAlign: "left",
     },
     children: {
       width: "100%",

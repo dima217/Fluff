@@ -125,6 +125,10 @@ export interface RecipeCustomProductResponse {
   name: string;
   grams?: number;
   unit?: string;
+  calories?: number;
+  proteins?: number;
+  fats?: number;
+  carbs?: number;
 }
 
 export interface RecipeResponse {
@@ -177,7 +181,7 @@ export interface UpdateRecipeRequest {
   promotionalVideo?: string | null;
   description?: string | null;
   products?: { id: number; grams?: number; unit?: string }[];
-  customProducts?: { name: string; grams?: number; unit?: string }[];
+  customProducts?: { name: string; grams?: number; unit?: string; calories?: number; proteins?: number; fats?: number; carbs?: number }[];
   calories?: number;
   cookAt?: number;
   stepsConfig?: RecipeStepsConfig;
@@ -258,7 +262,7 @@ export interface CreateRecipeWithMediaIdsRequest {
   promotionalVideoMediaId?: string;
   description?: string;
   products?: { id: number; grams?: number; unit?: string }[];
-  customProducts?: { name: string; grams?: number; unit?: string }[];
+  customProducts?: { name: string; grams?: number; unit?: string; calories?: number; proteins?: number; fats?: number; carbs?: number }[];
   fluffAt?: string; // ISO 8601
   calories: number;
   cookAt: number;
@@ -362,6 +366,11 @@ export interface TrackingResponse {
   id: number;
   name: string;
   calories: number;
+  proteins?: number | null;
+  fats?: number | null;
+  carbs?: number | null;
+  /** Portion size in grams when tracked from a recipe */
+  grams?: number | null;
   recipeId: number | null; // Recipe ID if tracking was created from a recipe
   created: string; // ISO 8601
 }
@@ -370,12 +379,20 @@ export interface CreateTrackingRequest {
   name?: string; // Required if recipeId is not provided
   calories?: number; // Required if recipeId is not provided
   recipeId?: number; // Optional. If provided, name and calories will be taken from the recipe
+  /** Portion size in grams. When set with recipeId, server scales nutrition proportionally. */
+  grams?: number;
+  proteins?: number;
+  fats?: number;
+  carbs?: number;
   created?: string; // ISO 8601. If not provided, server uses current time
 }
 
 export interface UpdateTrackingRequest {
   name?: string;
   calories?: number;
+  proteins?: number;
+  fats?: number;
+  carbs?: number;
 }
 
 export interface TrackingStatistics {
