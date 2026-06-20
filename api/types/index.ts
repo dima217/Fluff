@@ -154,6 +154,7 @@ export interface RecipeResponse {
   cookAt: number; // seconds
   stepsConfig: RecipeStepsConfig;
   createdAt: string;
+  fluffAt?: string | null;
   customProducts?: RecipeCustomProductResponse[];
   updatedAt: string;
   userRating?: number | null;
@@ -184,6 +185,7 @@ export interface UpdateRecipeRequest {
   customProducts?: { name: string; grams?: number; unit?: string; calories?: number; proteins?: number; fats?: number; carbs?: number }[];
   calories?: number;
   cookAt?: number;
+  fluffAt?: string | null;
   stepsConfig?: RecipeStepsConfig;
   submitToSystem: false | null;
 }

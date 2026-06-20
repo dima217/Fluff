@@ -31,7 +31,7 @@ const RegisterScreenContent: React.FC = () => {
   const { googleOnboarding } = useLocalSearchParams<{
     googleOnboarding?: string;
   }>();
-  const { signInWithGoogle } = useGoogleAuth();
+  const { signInWithGoogle, alert, clearAlert } = useGoogleAuth();
   const dispatch = useAppDispatch();
   const {
     handleFinalSubmit,
@@ -141,6 +141,12 @@ const RegisterScreenContent: React.FC = () => {
         onClose={() => {
           setShowErrorModal(false);
         }}
+      />
+      <ErrorModal
+        isVisible={!!alert}
+        title={alert?.title}
+        message={alert?.message ?? ""}
+        onClose={clearAlert}
       />
     </RNView>
   );

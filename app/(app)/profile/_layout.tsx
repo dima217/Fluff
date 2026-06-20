@@ -9,6 +9,7 @@ export default function ProfileLayout() {
     >
       <Stack.Screen name="index" />
       <Stack.Screen name="biometry" />
+      <Stack.Screen name="biometry-form" />
       <Stack.Screen name="achievements" options={{ presentation: "modal" }} />
       <Stack.Screen name="edit" options={{ presentation: "modal" }} />
       <Stack.Screen name="settings" options={{ presentation: "modal" }} />

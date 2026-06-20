@@ -3,6 +3,7 @@ import { useThemedStyles } from "@/hooks/useThemedStyles";
 import React from "react";
 import { Control, useWatch } from "react-hook-form";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import ErrorModal from "@/shared/Modals/ErrorModal";
 import { useMediaPicker } from "../../hooks/useMediaPicker";
 import MediaPlaceholder from "../MediaPlaceholderPreview";
 import MediaPreview from "../MediaPreview";
@@ -25,7 +26,7 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
   errorMessage,
 }) => {
   const styles = useThemedStyles(createMediaUploaderStyles);
-  const { pickMedia, clearMedia } = useMediaPicker();
+  const { pickMedia, clearMedia, pickerAlert, clearPickerAlert } = useMediaPicker();
   const hasError = Boolean(errorMessage);
 
   const handleRemove = () => {
@@ -69,6 +70,12 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
           <Text style={styles.error}>{errorMessage}</Text>
         </View>
       ) : null}
+      <ErrorModal
+        isVisible={!!pickerAlert}
+        title={pickerAlert?.title}
+        message={pickerAlert?.message ?? ""}
+        onClose={clearPickerAlert}
+      />
     </View>
   );
 };

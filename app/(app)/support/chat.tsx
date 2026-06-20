@@ -6,6 +6,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
 import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import { ThemedText } from "@/shared/ui/ThemedText";
+import ErrorModal from "@/shared/Modals/ErrorModal";
 import View from "@/shared/View";
 import ChatInput from "@/widgets/Support/components/ChatInput";
 import ChatMessageList, {
@@ -13,8 +14,8 @@ import ChatMessageList, {
 } from "@/widgets/Support/components/ChatMessageList";
 import { useSupportChat } from "@/widgets/Support/hooks/useSupportChat";
 import { useLocalSearchParams } from "expo-router";
-import { useCallback, useRef } from "react";
-import { Alert, StyleSheet } from "react-native";
+import { useCallback, useRef, useState } from "react";
+import { StyleSheet } from "react-native";
 
 export default function SupportChatScreen() {
   const { t } = useTranslation();
@@ -26,6 +27,7 @@ export default function SupportChatScreen() {
 
   const styles = useThemedStyles(createStyles);
   const messageListRef = useRef<ChatMessageListRef>(null);
+  const [uploadErrorVisible, setUploadErrorVisible] = useState(false);
 
   const profile = useAppSelector((s) => s.user.profile);
   const currentUserId = profile?.user?.id ? Number(profile.user.id) : 0;
@@ -37,7 +39,7 @@ export default function SupportChatScreen() {
     async (text: string, imageUris?: string[]) => {
       const sent = await sendMessage(text, currentUserId, imageUris);
       if (sent === false) {
-        Alert.alert("Error", "Failed to upload photos. Please try again.");
+        setUploadErrorVisible(true);
         return false;
       }
       setTimeout(() => messageListRef.current?.scrollToEnd(false), 100);
@@ -70,6 +72,11 @@ export default function SupportChatScreen() {
           />
         )}
       </KeyboardAwareView>
+      <ErrorModal
+        isVisible={uploadErrorVisible}
+        message={t("support.uploadError")}
+        onClose={() => setUploadErrorVisible(false)}
+      />
     </View>
   );
 }

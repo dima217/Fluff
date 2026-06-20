@@ -13,6 +13,7 @@ import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import Header from "@/shared/Header";
 import KeyboardAwareView from "@/shared/KeyboardAwareView";
+import ErrorModal from "@/shared/Modals/ErrorModal";
 import View from "@/shared/View";
 import BaseInfo from "@/widgets/Recipe/RecipeNew/components/forms/BaseInfo";
 import CookingProcess from "@/widgets/Recipe/RecipeNew/components/forms/CookingProcess";
@@ -32,7 +33,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   BackHandler,
   View as RNView,
   ScrollView,
@@ -73,6 +73,10 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
   );
   const { step, setStep, setTotalSteps } = useRecipeFormContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [resultModal, setResultModal] = useState<{
+    title: string;
+    message: string;
+  } | null>(null);
   const router = useRouter();
   const validationSchemas = useMemo(() => createRecipeStepsConfig(t), [t]);
 
@@ -116,12 +120,18 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
       updateRecipe,
     });
 
-    router.replace('/(app)/home');
+    router.replace("/(app)/home");
 
     if (result.success) {
-      Alert.alert("Готово", "Рецепт обновлён");
+      setResultModal({
+        title: t("common.success"),
+        message: t("recipe.updateSuccess"),
+      });
     } else {
-      Alert.alert("Ошибка", result.error ?? "Не удалось обновить рецепт");
+      setResultModal({
+        title: t("auth.error"),
+        message: result.error ?? t("recipe.updateError"),
+      });
     }
     setIsSubmitting(false);
   };
@@ -171,6 +181,13 @@ function EditRecipeForm({ recipe }: { recipe: RecipeResponse }) {
           {renderStep()}
         </RecipeFormWrapper>
       </ScrollView>
+
+      <ErrorModal
+        isVisible={!!resultModal}
+        title={resultModal?.title}
+        message={resultModal?.message ?? ""}
+        onClose={() => setResultModal(null)}
+      />
     </>
   );
 }

@@ -1,5 +1,6 @@
 import { useGetProfileQuery, useMediaUrl } from "@/api";
 import { useAppSelector } from "@/api/hooks";
+import { RootState } from "@/api/store";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
@@ -16,7 +17,7 @@ const ProfileCard = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const { data: profile, isLoading } = useGetProfileQuery();
-  const user = useAppSelector((state) => state.user.profile);
+  const user = useAppSelector((state: RootState) => state.user.profile);
 
   const displayProfile = profile || user;
 

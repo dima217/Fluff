@@ -23,7 +23,7 @@ const Login = () => {
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { signInWithGoogle } = useGoogleAuth();
+  const { signInWithGoogle, alert, clearAlert } = useGoogleAuth();
 
   const handleGoogleLogin = async () => {
     try {
@@ -82,6 +82,12 @@ const Login = () => {
         isVisible={showErrorModal}
         message={errorMessage}
         onClose={() => setShowErrorModal(false)}
+      />
+      <ErrorModal
+        isVisible={!!alert}
+        title={alert?.title}
+        message={alert?.message ?? ""}
+        onClose={clearAlert}
       />
     </View>
   );

@@ -5,6 +5,7 @@ import { CircleSizes } from "@/constants/components/CIrcle";
 import { useColors } from "@/contexts/ThemeContext";
 import { useAvatarPicker } from "@/hooks/useAvatarPicker";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import ErrorModal from "@/shared/Modals/ErrorModal";
 import Avatar from "@/shared/ui/Avatar";
 import Circle from "@/shared/ui/Circle";
 import React from "react";
@@ -52,7 +53,7 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({ value, onChange }) => {
     return "?";
   };
 
-  const { pickMedia } = useAvatarPicker();
+  const { pickMedia, pickerAlert, clearPickerAlert } = useAvatarPicker();
 
   const handlePick = async () => {
     const picked = await pickMedia("image");
@@ -80,6 +81,12 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({ value, onChange }) => {
           svg={<Edit fill={colors.onPrimary} />}
         />
       </TouchableOpacity>
+      <ErrorModal
+        isVisible={!!pickerAlert}
+        title={pickerAlert?.title}
+        message={pickerAlert?.message ?? ""}
+        onClose={clearPickerAlert}
+      />
     </View>
   );
 };

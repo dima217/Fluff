@@ -5,7 +5,8 @@ import { useColors } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import CheckBox from "@/shared/CheckBox";
 import { ThemedText } from "@/shared/ui/ThemedText";
-import { Feather } from "@expo/vector-icons";
+import { formatCookTime } from "@/widgets/Recipe/RecipeInfo/utils/formatCookTime";
+import { cookAtFromForm } from "@/widgets/Recipe/RecipeNew/utils/cookAtForm";
 import { Controller, useFormContext } from "react-hook-form";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
@@ -26,6 +27,7 @@ const Preview = ({ onBack }: { onBack: () => void }) => {
   const description = allValues.description?.trim();
   const selectedProducts: SelectedProduct[] = allValues.selectedProducts || [];
   const customProducts: CustomProduct[] = allValues.customProducts || [];
+  const cookAtSeconds = cookAtFromForm(allValues.cookHours, allValues.cookMinutes);
 
   return (
     <View style={styles.container}>
@@ -56,6 +58,14 @@ const Preview = ({ onBack }: { onBack: () => void }) => {
         {description ? (
           <ThemedText style={styles.description}>{description}</ThemedText>
         ) : null}
+
+        {cookAtSeconds > 0 && (
+          <View style={styles.metaBlock}>
+            <ThemedText type="xs">
+              {t("recipe.cookTime")}: {formatCookTime(cookAtSeconds)}
+            </ThemedText>
+          </View>
+        )}
 
         {(selectedProducts.length > 0 || customProducts.length > 0) && (
           <View style={styles.ingredientsBlock}>
@@ -141,6 +151,10 @@ const styles = StyleSheet.create({
   },
   description: {
     marginTop: 8,
+  },
+  metaBlock: {
+    marginTop: 8,
+    gap: 4,
   },
   ingredientsBlock: {
     marginTop: 12,

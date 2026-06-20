@@ -1,8 +1,7 @@
 import { useTranslation } from "@/hooks/useTranslation";
 import * as ImagePicker from "expo-image-picker";
 import * as VideoThumbnails from "expo-video-thumbnails";
-import { useState } from "react";
-import { Alert } from "react-native";
+import { useCallback, useState } from "react";
 
 export type MediaType = "image" | "video";
 
@@ -12,23 +11,30 @@ export interface MediaFile {
   thumbnail?: string | null;
 }
 
+export interface PickerAlert {
+  title: string;
+  message: string;
+}
+
 const MAX_FILE_MB = 100;
 
 export const useMediaPicker = () => {
   const { t } = useTranslation();
   const [media, setMedia] = useState<MediaFile | null>(null);
+  const [pickerAlert, setPickerAlert] = useState<PickerAlert | null>(null);
+
+  const clearPickerAlert = useCallback(() => setPickerAlert(null), []);
 
   const showError = (title: string, message: string) => {
-    Alert.alert(title, message);
+    setPickerAlert({ title, message });
   };
 
   const validateFile = (asset: ImagePicker.ImagePickerAsset) => {
     const sizeMB = (asset.fileSize ?? 0) / (1024 * 1024);
-    console.log("[validateFile] sizeMB:", sizeMB);
     if (sizeMB > MAX_FILE_MB) {
       showError(
         t("mediaUploader.fileTooLargeTitle"),
-        t("mediaUploader.fileTooLargeMessage")
+        t("mediaUploader.fileTooLargeMessage"),
       );
       return false;
     }
@@ -37,20 +43,17 @@ export const useMediaPicker = () => {
 
   const requestPermissions = async () => {
     try {
-      console.log("[requestPermissions] Requesting permissions...");
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
-      console.log("[requestPermissions] Permissions status:", status);
       if (status !== "granted") {
         showError(
           t("mediaUploader.noPermissionTitle"),
-          t("mediaUploader.noPermissionMessage")
+          t("mediaUploader.noPermissionMessage"),
         );
         return false;
       }
       return true;
-    } catch (e) {
-      console.error("[requestPermissions] Failed to request permissions:", e);
+    } catch {
       showError(t("auth.error"), t("mediaUploader.requestPermissionsError"));
       return false;
     }
@@ -58,29 +61,20 @@ export const useMediaPicker = () => {
 
   const getVideoThumbnail = async (uri: string): Promise<string | null> => {
     try {
-      console.log("[getVideoThumbnail] Creating thumbnail for video:", uri);
       const { uri: thumbnail } = await VideoThumbnails.getThumbnailAsync(uri, {
         time: 1000,
       });
-      console.log("[getVideoThumbnail] Thumbnail created:", thumbnail);
       return thumbnail;
-    } catch (e) {
-      console.warn("[getVideoThumbnail] Failed to create video thumbnail:", e);
+    } catch {
       return null;
     }
   };
 
   const pickMedia = async (allowedType?: MediaType) => {
-    console.log("[pickMedia] Start picking media...");
     const granted = await requestPermissions();
-    if (!granted) {
-      console.log("[pickMedia] Permissions not granted, aborting");
-      return;
-    }
+    if (!granted) return;
 
     try {
-      console.log("[pickMedia] Opening media library...");
-
       const mediaTypes =
         allowedType === "image"
           ? ["images"]
@@ -93,44 +87,26 @@ export const useMediaPicker = () => {
         quality: 1,
       });
 
-      console.log("[pickMedia] Media picker result:", result);
-
-      if (result.canceled) {
-        console.log("[pickMedia] User canceled media picking");
-        return;
-      }
+      if (result.canceled) return;
 
       const asset = result.assets[0];
-      console.log("[pickMedia] Picked asset:", asset);
 
       if (allowedType && asset.type !== allowedType) {
-        console.log(
-          "[pickMedia] Picked media type does not match expected type"
-        );
         showError(
           t("mediaUploader.invalidMediaTypeTitle"),
           allowedType === "image"
             ? t("mediaUploader.expectedImage")
-            : t("mediaUploader.expectedVideo")
+            : t("mediaUploader.expectedVideo"),
         );
         return;
       }
 
-      if (!validateFile(asset)) {
-        console.log("[pickMedia] File did not pass validation");
-        return;
-      }
+      if (!validateFile(asset)) return;
 
       let thumbnail: string | null = null;
       if (asset.type === "video") {
         thumbnail = await getVideoThumbnail(asset.uri);
       }
-
-      console.log("[pickMedia] Saving media to state:", {
-        uri: asset.uri,
-        type: asset.type,
-        thumbnail,
-      });
 
       const picked = {
         uri: asset.uri,
@@ -140,14 +116,12 @@ export const useMediaPicker = () => {
 
       setMedia(picked);
       return picked;
-    } catch (e) {
-      console.error("[pickMedia] Error while picking media:", e);
+    } catch {
       showError(t("auth.error"), t("mediaUploader.openLibraryError"));
     }
   };
 
   const clearMedia = () => {
-    console.log("[clearMedia] Clearing media");
     setMedia(null);
   };
 
@@ -162,5 +136,7 @@ export const useMediaPicker = () => {
     pickMedia,
     clearMedia,
     labelByType,
+    pickerAlert,
+    clearPickerAlert,
   };
 };

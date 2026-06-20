@@ -52,6 +52,10 @@ export interface Recipe {
   steps: CreationStep[];
   videoUrl: string;
   mediaUrl: string;
+  /** Hours portion of cooking time */
+  cookHours?: string;
+  /** Minutes portion of cooking time */
+  cookMinutes?: string;
   makePublic?: boolean;
   submitToSystem?: false | null;
 }

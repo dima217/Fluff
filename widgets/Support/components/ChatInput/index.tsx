@@ -1,14 +1,15 @@
 import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
 import TextInput from "@/shared/Inputs/TextInput";
+import ErrorModal from "@/shared/Modals/ErrorModal";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import React, { useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -39,9 +40,17 @@ const ChatInput: React.FC<ChatInputProps> = ({
 }) => {
   const colors = useColors();
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const [text, setText] = useState("");
   const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
+  const [alert, setAlert] = useState<{ title: string; message: string } | null>(
+    null,
+  );
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showAlert = (title: string, message: string) => {
+    setAlert({ title, message });
+  };
 
   const handleChangeText = (val: string) => {
     setText(val);
@@ -76,18 +85,18 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
   const handlePickImages = async () => {
     if (pendingImages.length >= MAX_IMAGES) {
-      Alert.alert(
-        "Limit reached",
-        `You can attach up to ${MAX_IMAGES} photos per message.`
+      showAlert(
+        t("support.imageLimitTitle"),
+        t("support.imageLimitMessage").replace("{count}", String(MAX_IMAGES)),
       );
       return;
     }
 
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert(
-        "No permission",
-        "Please allow access to your media library."
+      showAlert(
+        t("mediaUploader.noPermissionTitle"),
+        t("mediaUploader.noPermissionMessage"),
       );
       return;
     }
@@ -110,9 +119,9 @@ const ChatInput: React.FC<ChatInputProps> = ({
       });
 
       if (validAssets.length < result.assets.length) {
-        Alert.alert(
-          "File too large",
-          `Maximum file size is ${MAX_FILE_MB}MB.`
+        showAlert(
+          t("mediaUploader.fileTooLargeTitle"),
+          t("mediaUploader.fileTooLargeMessage"),
         );
       }
 
@@ -126,7 +135,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         })),
       ]);
     } catch {
-      Alert.alert("Error", "Failed to open media library.");
+      showAlert(t("auth.error"), t("mediaUploader.openLibraryError"));
     }
   };
 
@@ -209,6 +218,13 @@ const ChatInput: React.FC<ChatInputProps> = ({
             )}
           </TouchableOpacity>
         }
+      />
+
+      <ErrorModal
+        isVisible={!!alert}
+        title={alert?.title}
+        message={alert?.message ?? ""}
+        onClose={() => setAlert(null)}
       />
     </View>
   );

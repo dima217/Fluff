@@ -4,8 +4,10 @@ import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import Circle from "@/shared/ui/Circle";
+import ContextMenu, { ContextMenuItem } from "@/shared/ui/ContextMenu";
+import ExpandableText from "@/shared/ui/ExpandableText";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useRef, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface RecipeCardProps {
@@ -20,9 +22,11 @@ interface RecipeCardProps {
   carbs?: number | null;
   description: string;
   onLike?: () => void;
-  onMenu?: () => void;
+  menuItems?: ContextMenuItem[];
   onPress?: () => void;
   isLiked?: boolean;
+  titleLines?: number;
+  descriptionLines?: number;
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({
@@ -37,13 +41,17 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   carbs,
   description,
   onLike,
-  onMenu,
+  menuItems,
   onPress,
   isLiked = false,
+  titleLines = 2,
+  descriptionLines = 2,
 }) => {
   const colors = useColors();
   const styles = useThemedStyles(createstyles);
   const { t } = useTranslation();
+  const menuAnchorRef = useRef<View>(null);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   const macroItems: ReactNode[] = [];
 
@@ -75,14 +83,16 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
     );
   }
 
+  const hasMenu = (menuItems?.length ?? 0) > 0;
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.header}>
-        <View>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>
-            {restaurant}
-          </Text>
+        <View style={styles.headerLeft}>
+          <ExpandableText numberOfLines={titleLines} style={styles.title}>
+            {title}
+          </ExpandableText>
+          <Text style={styles.subtitle}>{restaurant}</Text>
         </View>
         <View style={styles.headerIcons}>
           <Circle
@@ -96,17 +106,21 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
             }
             color={colors.inactive}
           />
-          <Circle
-            onPress={onMenu}
-            svg={
-              <MaterialIcons
-                name="more-vert"
-                size={24}
-                color={colors.iconMuted}
+          {hasMenu ? (
+            <View ref={menuAnchorRef} collapsable={false}>
+              <Circle
+                onPress={() => setMenuVisible(true)}
+                svg={
+                  <MaterialIcons
+                    name="more-vert"
+                    size={24}
+                    color={colors.iconMuted}
+                  />
+                }
+                color={colors.inactive}
               />
-            }
-            color={colors.inactive}
-          />
+            </View>
+          ) : null}
         </View>
       </View>
 
@@ -138,7 +152,23 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         </View>
       )}
 
-      <Text style={styles.description}>{description}</Text>
+      {!!description && (
+        <ExpandableText
+          numberOfLines={descriptionLines}
+          style={styles.description}
+        >
+          {description}
+        </ExpandableText>
+      )}
+
+      {hasMenu ? (
+        <ContextMenu
+          visible={menuVisible}
+          onClose={() => setMenuVisible(false)}
+          anchorRef={menuAnchorRef}
+          items={menuItems!}
+        />
+      ) : null}
     </TouchableOpacity>
   );
 };
@@ -151,13 +181,19 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
     marginBottom: 12,
+    gap: 8,
+  },
+  headerLeft: {
+    flex: 1,
+    minWidth: 0,
   },
   title: {
     color: colors.text,
     fontSize: 20,
     fontWeight: "bold",
+    lineHeight: 26,
   },
   subtitle: {
     color: colors.secondary,
@@ -168,6 +204,7 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
     flexDirection: "row",
     gap: 8,
     alignItems: "center",
+    flexShrink: 0,
   },
   infoRow: {
     flexDirection: "row",

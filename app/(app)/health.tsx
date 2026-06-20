@@ -22,7 +22,9 @@ import EditDailyCalorieGoalModal from "@/shared/Modals/EditDailyCalorieGoalModal
 import NutrientDetailsModal from "@/shared/Modals/NutrientDetailsModal";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { calorieGoalStorage } from "@/storage/calorieGoal/calorieGoalStorage";
+import { appSettingsStorage } from "@/storage/appSettings/appSettingsStorage";
 import { getAppLocale } from "@/utils/locale";
+import { useFocusEffect } from "@react-navigation/native";
 import MarkerContainer from "@/widgets/Health/components/MarkerContainer";
 import TrackingHistory from "@/widgets/Health/components/TrackingHistory";
 import { useRouter } from "expo-router";
@@ -36,7 +38,16 @@ const Health = () => {
   const { data: calendar, refetch: refetchCalendar } = useGetCalendarQuery();
   const [isEditDailyCalorieGoalModalVisible, setIsEditDailyCalorieGoalModalVisible] = useState(false);
   const [isNutrientDetailsVisible, setIsNutrientDetailsVisible] = useState(false);
+  const [nutrientTrackingEnabled, setNutrientTrackingEnabled] = useState(
+    () => appSettingsStorage.isNutrientTrackingEnabled(),
+  );
   const router = useRouter();
+
+  useFocusEffect(
+    useCallback(() => {
+      setNutrientTrackingEnabled(appSettingsStorage.isNutrientTrackingEnabled());
+    }, []),
+  );
 
   const handleTrackingCardPress = useCallback(
     (recipeId?: number) => {
@@ -217,7 +228,11 @@ const Health = () => {
             currentCalories={currentCalories}
             dailyGoal={dailyGoal ?? 1000}
             onEditPress={() => setIsEditDailyCalorieGoalModalVisible(true)}
-            onNutrientDetailsPress={() => setIsNutrientDetailsVisible(true)}
+            onNutrientDetailsPress={
+              nutrientTrackingEnabled
+                ? () => setIsNutrientDetailsVisible(true)
+                : undefined
+            }
           />
           <CalorieInput onAdd={handleAddFood} />
           {dayData?.records && dayData.records.length > 0 && (

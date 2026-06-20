@@ -1,5 +1,6 @@
 import type { RecipeResponse } from "@/api/types";
 import type { CustomProduct, Recipe, SelectedProduct } from "@/constants/types";
+import { cookAtToForm } from "./cookAtForm";
 
 /**
  * Преобразует ответ API рецепта в данные формы создания/редактирования.
@@ -43,5 +44,6 @@ export function recipeResponseToFormData(recipe: RecipeResponse): Partial<Recipe
     mediaUrl: recipe.image?.cover ?? recipe.image?.preview ?? "",
     videoUrl: recipe.promotionalVideo ?? "",
     steps: steps.length > 0 ? steps : [{ title: "", description: "", stepMediaUrl: "" }],
+    ...cookAtToForm(recipe.cookAt),
   };
 }

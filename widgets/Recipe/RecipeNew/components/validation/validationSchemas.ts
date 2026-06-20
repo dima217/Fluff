@@ -14,12 +14,16 @@ export const createRecipeStepsConfig = (t: TranslateFn) => [
       ccal: yup.number().optional(),
       description: yup.string().optional(),
       mediaUrl: yup.string().required(t("recipe.validation.photoRequired")),
+      cookHours: yup.string().optional(),
+      cookMinutes: yup.string().optional(),
     }),
     defaultValues: {
       name: "",
       ccal: 0,
       description: "",
       mediaUrl: "",
+      cookHours: "",
+      cookMinutes: "",
     },
   },
   // Step 1: Ingredients

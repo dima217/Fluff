@@ -1,5 +1,5 @@
 import { useTranslation } from "@/hooks/useTranslation";
-import BaseModal from "@/shared/Modals/BaseModal";
+import ConfirmModal from "@/shared/Modals/ConfirmModal";
 import React from "react";
 
 interface LogoutConfirmationModalProps {
@@ -16,26 +16,14 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
   const { t } = useTranslation();
 
   return (
-    <BaseModal
+    <ConfirmModal
       isVisible={isVisible}
-      title={t("profile.logoutConfirmTitle") || "Выход из аккаунта"}
-      message={
-        t("profile.logoutConfirmMessage") ||
-        "Вы уверены, что хотите выйти из аккаунта?"
-      }
-      onClose={onCancel}
-      buttons={[
-        {
-          title: t("profile.logOut") || "Выйти",
-          onPress: onConfirm,
-          variant: "primary",
-        },
-        {
-          title: t("common.cancel") || "Отмена",
-          onPress: onCancel,
-          variant: "secondary",
-        },
-      ]}
+      title={t("profile.logoutConfirmTitle")}
+      message={t("profile.logoutConfirmMessage")}
+      confirmLabel={t("profile.logOut")}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      destructive
     />
   );
 };

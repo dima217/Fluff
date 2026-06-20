@@ -18,6 +18,7 @@ import {
 } from "@/api/utils/fileUpload";
 import { Recipe } from "@/constants/types";
 import { calcCaloriesFromProducts } from "./calcCaloriesFromProducts";
+import { cookAtFromForm } from "./cookAtForm";
 
 function isNewLocalMedia(uri: string | undefined): boolean {
   if (uri?.startsWith("http") || uri?.startsWith("/")) return false;
@@ -235,6 +236,8 @@ export async function updateRecipeWorkflow(
         ? calcCaloriesFromProducts(recipeData.selectedProducts)
         : existingRecipe.calories;
 
+    const cookAt = cookAtFromForm(recipeData.cookHours, recipeData.cookMinutes);
+
     const updatePayload: UpdateRecipeRequest = {
       name: recipeData.name ?? existingRecipe.name,
       recipeTypeId: existingRecipe.type.id,
@@ -244,7 +247,7 @@ export async function updateRecipeWorkflow(
       products: products.length > 0 ? products : undefined,
       customProducts: customProducts.length > 0 ? customProducts : undefined,
       calories,
-      cookAt: existingRecipe.cookAt,
+      cookAt,
       stepsConfig,
       submitToSystem: recipeData.submitToSystem ?? null,
     };

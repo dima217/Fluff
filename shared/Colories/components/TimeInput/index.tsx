@@ -3,19 +3,35 @@ import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import TextInput from "@/shared/Inputs/TextInput";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface TimeInputProps {
   onChange: (time24h: string | undefined) => void;
+  /** HH:mm in 24h format for controlled usage */
+  value24h?: string;
+  label?: string;
 }
 
-const TimeInput: React.FC<TimeInputProps> = ({ onChange }) => {
+function to12hDisplay(time24h: string): { value: string; period: "AM" | "PM" } {
+  const [hStr, mStr = "00"] = time24h.split(":");
+  let h = parseInt(hStr, 10);
+  const m = mStr.padStart(2, "0");
+  const period: "AM" | "PM" = h >= 12 ? "PM" : "AM";
+
+  if (h === 0) h = 12;
+  else if (h > 12) h -= 12;
+
+  return { value: `${h}:${m}`, period };
+}
+
+const TimeInput: React.FC<TimeInputProps> = ({ onChange, value24h, label }) => {
   const colors = useColors();
   const styles = useThemedStyles(createStyles);
   const { t } = useTranslation();
-  const [value, setValue] = useState("");
-  const [period, setPeriod] = useState<"AM" | "PM">("AM");
+  const initial = value24h ? to12hDisplay(value24h) : { value: "", period: "AM" as const };
+  const [value, setValue] = useState(initial.value);
+  const [period, setPeriod] = useState<"AM" | "PM">(initial.period);
   const prevLenRef = useRef(0);
 
   const notify = (raw: string, p: "AM" | "PM") => {
@@ -66,11 +82,18 @@ const TimeInput: React.FC<TimeInputProps> = ({ onChange }) => {
     notify(value, p);
   };
 
+  useEffect(() => {
+    if (!value24h) return;
+    const next = to12hDisplay(value24h);
+    setValue(next.value);
+    setPeriod(next.period);
+  }, [value24h]);
+
   return (
     <View style={styles.wrapper}>
       <View style={styles.row}>
         <TextInput
-          label={t("health.time")}
+          label={label ?? t("health.time")}
           style={styles.inputWrapper}
           value={value}
           onChangeText={handleChange}

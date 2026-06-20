@@ -10,6 +10,15 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     height: 56,
   },
+  containerFlexible: {
+    width: "100%",
+    minHeight: 40,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   containerCompact: {
     width: "auto",
     paddingVertical: 6,
@@ -26,6 +35,9 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600",
     lineHeight: 14,
+  },
+  buttonTextMultiline: {
+    textAlign: "center",
   },
   content: {
     flexDirection: "row",

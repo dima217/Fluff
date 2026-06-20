@@ -82,7 +82,6 @@ export default function ProductScreen() {
           carbs={product.carbs}
           onLike={handleLike}
           isLiked={product.favorite ?? false}
-          onMenu={() => {}}
         />
 
         <PopularRecipesSection productId={product.id} />

@@ -4,7 +4,8 @@ import { useColors } from "@/contexts/ThemeContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useTranslation } from "@/hooks/useTranslation";
 import Circle from "@/shared/ui/Circle";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import ExpandableText from "@/shared/ui/ExpandableText";
+import { Ionicons } from "@expo/vector-icons";
 import { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -18,22 +19,23 @@ interface ProductCardProps {
   fats?: number | null;
   carbs?: number | null;
   onLike?: () => void;
-  onMenu?: () => void;
   isLiked?: boolean;
+  titleLines?: number;
+  descriptionLines?: number;
 }
 
 const ProductCard = ({
   title,
   calories,
   massa,
-  favoritesCount,
   description,
   proteins,
   fats,
   carbs,
   onLike,
-  onMenu,
   isLiked = false,
+  titleLines = 2,
+  descriptionLines = 2,
 }: ProductCardProps) => {
   const colors = useColors();
   const styles = useThemedStyles(createStyles);
@@ -91,7 +93,9 @@ const ProductCard = ({
     <View style={styles.card}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Text style={styles.title}>{title}</Text>
+          <ExpandableText numberOfLines={titleLines} style={styles.title}>
+            {title}
+          </ExpandableText>
           <Text style={styles.subtitle}>{t("product.per100g")}</Text>
         </View>
         <View style={styles.headerIcons}>
@@ -106,16 +110,16 @@ const ProductCard = ({
             }
             color={colors.inactive}
           />
-          <Circle
-            onPress={onMenu}
-            svg={<MaterialIcons name="more-vert" size={24} color={colors.iconMuted} />}
-            color={colors.inactive}
-          />
         </View>
       </View>
 
       {!!description && (
-        <Text style={styles.description}>{description}</Text>
+        <ExpandableText
+          numberOfLines={descriptionLines}
+          style={styles.description}
+        >
+          {description}
+        </ExpandableText>
       )}
 
       <View style={styles.infoRow}>
@@ -141,15 +145,17 @@ const createStyles = (colors: AppColors) =>
       justifyContent: "space-between",
       alignItems: "flex-start",
       marginBottom: 8,
+      gap: 8,
     },
     headerLeft: {
       flex: 1,
-      marginRight: 8,
+      minWidth: 0,
     },
     title: {
       color: colors.text,
       fontSize: 20,
       fontWeight: "bold",
+      lineHeight: 26,
     },
     subtitle: {
       color: colors.secondary,
@@ -166,6 +172,7 @@ const createStyles = (colors: AppColors) =>
       flexDirection: "row",
       gap: 8,
       alignItems: "center",
+      flexShrink: 0,
     },
     infoRow: {
       flexDirection: "row",

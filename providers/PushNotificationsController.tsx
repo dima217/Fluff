@@ -4,6 +4,7 @@ import {
   ANDROID_NOTIFICATION_CHANNEL_ID,
   PushNotificationType,
 } from "@/constants/pushNotifications";
+import { appSettingsStorage } from "@/storage/appSettings/appSettingsStorage";
 import { getNativeFcmToken } from "@/services/push/getNativeFcmToken";
 import { invalidateNotifications } from "@/services/push/invalidateNotifications";
 import { syncFcmTokenToBackend } from "@/services/push/syncFcmTokenToBackend";
@@ -86,6 +87,10 @@ export function PushNotificationsController() {
     let cancelled = false;
 
     const register = async () => {
+      if (!appSettingsStorage.isNotificationsEnabled()) {
+        return;
+      }
+
       try {
         const token = await getNativeFcmToken();
         if (cancelled || token == null) return;
@@ -102,6 +107,7 @@ export function PushNotificationsController() {
 
     const sub = Notifications.addPushTokenListener((device) => {
       if (device.type !== "android" || typeof device.data !== "string") return;
+      if (!appSettingsStorage.isNotificationsEnabled()) return;
       void (async () => {
         try {
           const { user } = store.getState();

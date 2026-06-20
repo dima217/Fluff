@@ -15,6 +15,7 @@ interface ButtonProps {
   compact?: boolean;
   buttonColor?: string;
   textColor?: string;
+  numberOfLines?: number;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
 }
@@ -27,6 +28,7 @@ const Button = ({
   compact = false,
   buttonColor,
   textColor,
+  numberOfLines,
   style,
   textStyle,
 }: ButtonProps) => {
@@ -37,7 +39,11 @@ const Button = ({
     <TouchableOpacity
       disabled={isDisabled}
       style={[
-        compact ? styles.containerCompact : styles.container,
+        numberOfLines != null
+          ? styles.containerFlexible
+          : compact
+            ? styles.containerCompact
+            : styles.container,
         { backgroundColor: buttonColor ?? colors.primary },
         isDisabled && { backgroundColor: colors.secondary },
         style,
@@ -48,9 +54,11 @@ const Button = ({
         <ActivityIndicator size="small" color={colors.inactive} />
       ) : (
         <Text
+          numberOfLines={numberOfLines}
           style={[
             styles.buttonText,
             compact && styles.buttonTextCompact,
+            numberOfLines != null && styles.buttonTextMultiline,
             { color: textColor ?? colors.text },
             isDisabled && { color: colors.inactive },
             textStyle,

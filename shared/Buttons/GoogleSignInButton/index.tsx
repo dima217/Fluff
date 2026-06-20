@@ -1,7 +1,10 @@
 import { GOOGLE_WEB_CLIENT_ID } from "@/constants/googleAuth";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import { useTranslation } from "@/hooks/useTranslation";
 import Button from "@/shared/Buttons/Button";
-import { Alert, Platform, StyleProp, ViewStyle } from "react-native";
+import ErrorModal from "@/shared/Modals/ErrorModal";
+import { useState } from "react";
+import { Platform, StyleProp, ViewStyle } from "react-native";
 
 type Props = {
   title?: string;
@@ -14,30 +17,50 @@ export default function GoogleSignInButton({
   style,
   disabled = false,
 }: Props) {
-  const { signInWithGoogle, loading } = useGoogleAuth();
+  const { t } = useTranslation();
+  const { signInWithGoogle, loading, alert, clearAlert } = useGoogleAuth();
+  const [localAlert, setLocalAlert] = useState<{ title: string; message: string } | null>(
+    null,
+  );
 
   const onPress = () => {
     if (Platform.OS === "web") {
-      Alert.alert("Google Sign-In", "Доступно в мобильной сборке (Android / iOS).");
+      setLocalAlert({
+        title: t("auth.googleSignInTitle"),
+        message: t("auth.googleSignInWebOnly"),
+      });
       return;
     }
     if (!GOOGLE_WEB_CLIENT_ID) {
-      Alert.alert(
-        "Google Sign-In",
-        "Задайте expo.extra.googleWebClientId в app.json (Web client ID из Google Cloud Console)."
-      );
+      setLocalAlert({
+        title: t("auth.googleSignInTitle"),
+        message: t("auth.googleSignInConfigError"),
+      });
       return;
     }
     void signInWithGoogle();
   };
 
+  const activeAlert = localAlert ?? alert;
+
   return (
-    <Button
-      title={title}
-      onPress={onPress}
-      loading={loading}
-      disabled={disabled}
-      style={style}
-    />
+    <>
+      <Button
+        title={title}
+        onPress={onPress}
+        loading={loading}
+        disabled={disabled}
+        style={style}
+      />
+      <ErrorModal
+        isVisible={!!activeAlert}
+        title={activeAlert?.title}
+        message={activeAlert?.message ?? ""}
+        onClose={() => {
+          setLocalAlert(null);
+          clearAlert();
+        }}
+      />
+    </>
   );
 }
