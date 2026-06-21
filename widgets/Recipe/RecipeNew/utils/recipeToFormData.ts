@@ -45,5 +45,7 @@ export function recipeResponseToFormData(recipe: RecipeResponse): Partial<Recipe
     videoUrl: recipe.promotionalVideo ?? "",
     steps: steps.length > 0 ? steps : [{ title: "", description: "", stepMediaUrl: "" }],
     ...cookAtToForm(recipe.cookAt),
+    makePublic: recipe.makePublic ?? false,
+    submitToSystem: recipe.submitToSystem ?? false,
   };
 }

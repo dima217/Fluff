@@ -84,6 +84,27 @@ export function getLocalizedPushContent(
       };
     }
 
+    case PushNotificationType.ACHIEVEMENT_UNLOCKED: {
+      const code = payload.achievementCode?.trim() ?? "";
+      const bodyKey = code
+        ? `pushNotifications.achievementUnlocked.body.${code}`
+        : "";
+
+      return {
+        title: translate(
+          language,
+          "pushNotifications.achievementUnlocked.title"
+        ),
+        body: bodyKey
+          ? translate(language, bodyKey)
+          : (fallback?.body ?? ""),
+        actionText: translate(
+          language,
+          "pushNotifications.actions.viewAchievements"
+        ),
+      };
+    }
+
     default:
       return {
         title: fallback?.title ?? "",

@@ -52,6 +52,18 @@ export const translations = {
       nutrientTrackingFooter:
         "Показывать детали питания и отслеживать БЖУ на экране «Здоровье»",
     },
+    achievements: {
+      loadError: "Не удалось загрузить достижения",
+      items: {
+        created_account: "Создание аккаунта",
+        first_recipe: "Первый рецепт",
+        perfect_month_tracking: "Идеальный месяц отслеживания",
+        public_recipe: "Публичный рецепт",
+        ten_recipes: "10 рецептов",
+        first_rate: "Ваша первая оценка",
+        all_achievements: "Все достижения",
+      },
+    },
     // Home
     home: {
       all: "Все",
@@ -153,6 +165,19 @@ export const translations = {
       actions: {
         addMeal: "Добавить приём пищи",
         openTicket: "Открыть обращение",
+        viewAchievements: "Открыть достижения",
+      },
+      achievementUnlocked: {
+        title: "Достижение получено",
+        body: {
+          created_account: "Вы создали аккаунт. Добро пожаловать в Fluff!",
+          first_recipe: "Вы создали свой первый рецепт.",
+          perfect_month_tracking: "Вы отслеживали питание каждый день этого месяца.",
+          public_recipe: "Вы опубликовали свой первый публичный рецепт.",
+          ten_recipes: "Вы создали 10 рецептов.",
+          first_rate: "Вы впервые оценили рецепт.",
+          all_achievements: "Вы получили все достижения. Легенда!",
+        },
       },
     },
     notificationsScreen: {
@@ -515,6 +540,18 @@ export const translations = {
       nutrientTrackingFooter:
         "Паказваць дэталі харчавання і адсочваць БЖУ на экране «Здароўе»",
     },
+    achievements: {
+      loadError: "Не атрымалася загрузіць дасягненні",
+      items: {
+        created_account: "Стварэнне акаўнта",
+        first_recipe: "Першы рэцэпт",
+        perfect_month_tracking: "Ідэальны месяц адсочвання",
+        public_recipe: "Публічны рэцэпт",
+        ten_recipes: "10 рэцэптаў",
+        first_rate: "Ваша першая ацэнка",
+        all_achievements: "Усе дасягненні",
+      },
+    },
     // Home
     home: {
       all: "Усё",
@@ -616,6 +653,19 @@ export const translations = {
       actions: {
         addMeal: "Дадаць прыём ежы",
         openTicket: "Адкрыць зварот",
+        viewAchievements: "Адкрыць дасягненні",
+      },
+      achievementUnlocked: {
+        title: "Дасягненне атрымана",
+        body: {
+          created_account: "Вы стварылі акаўнт. Сардэчна запрашаем у Fluff!",
+          first_recipe: "Вы стварылі свой першы рэцэпт.",
+          perfect_month_tracking: "Вы адсочвалі харчаванне кожны дзень гэтага месяца.",
+          public_recipe: "Вы апублікавалі свой першы публічны рэцэпт.",
+          ten_recipes: "Вы стварылі 10 рэцэптаў.",
+          first_rate: "Вы ўпершыню ацанілі рэцэпт.",
+          all_achievements: "Вы атрымалі ўсе дасягненні. Легенда!",
+        },
       },
     },
     notificationsScreen: {
@@ -977,6 +1027,18 @@ export const translations = {
       nutrientTrackingFooter:
         "Show nutrition details and track macros on the Health screen",
     },
+    achievements: {
+      loadError: "Failed to load achievements",
+      items: {
+        created_account: "Created Account",
+        first_recipe: "First Recipe",
+        perfect_month_tracking: "Perfect Month Tracking",
+        public_recipe: "Public Recipe",
+        ten_recipes: "10 Recipes",
+        first_rate: "Your First Rate",
+        all_achievements: "All Achievements",
+      },
+    },
     // Home
     home: {
       all: "All",
@@ -1076,6 +1138,19 @@ export const translations = {
       actions: {
         addMeal: "Add a meal",
         openTicket: "Open ticket",
+        viewAchievements: "View achievements",
+      },
+      achievementUnlocked: {
+        title: "Achievement unlocked",
+        body: {
+          created_account: "You created your account. Welcome to Fluff!",
+          first_recipe: "You created your first recipe.",
+          perfect_month_tracking: "You tracked your meals every day this month.",
+          public_recipe: "You published your first public recipe.",
+          ten_recipes: "You created 10 recipes.",
+          first_rate: "You rated a recipe for the first time.",
+          all_achievements: "You unlocked all achievements. Legend!",
+        },
       },
     },
     notificationsScreen: {

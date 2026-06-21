@@ -153,6 +153,8 @@ export interface RecipeResponse {
   carbs?: number | null;
   cookAt: number; // seconds
   stepsConfig: RecipeStepsConfig;
+  makePublic?: boolean;
+  submitToSystem?: boolean | null;
   createdAt: string;
   fluffAt?: string | null;
   customProducts?: RecipeCustomProductResponse[];
@@ -187,7 +189,8 @@ export interface UpdateRecipeRequest {
   cookAt?: number;
   fluffAt?: string | null;
   stepsConfig?: RecipeStepsConfig;
-  submitToSystem: false | null;
+  makePublic?: boolean;
+  submitToSystem?: false | null;
 }
 
 // Recipe upload types
@@ -483,6 +486,22 @@ export interface NotificationResponse {
   data: NotificationData;
   isRead: boolean;
   createdAt: string;
+}
+
+export type AchievementCode =
+  | "created_account"
+  | "first_recipe"
+  | "perfect_month_tracking"
+  | "public_recipe"
+  | "ten_recipes"
+  | "first_rate"
+  | "all_achievements";
+
+export interface AchievementResponse {
+  id: number;
+  code: AchievementCode;
+  icon: string;
+  unlockedAt: string | null;
 }
 
 export interface Media {

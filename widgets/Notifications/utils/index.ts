@@ -84,5 +84,9 @@ export function getNotificationActionRoute(notification: NotificationResponse) {
     };
   }
 
+  if (notification.type === PushNotificationType.ACHIEVEMENT_UNLOCKED) {
+    return "/(app)/profile/achievements" as const;
+  }
+
   return "/(app)/health" as const;
 }

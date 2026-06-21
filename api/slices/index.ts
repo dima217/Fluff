@@ -1,4 +1,5 @@
 // Export all API slices
+export * from "./achievementsApi";
 export * from "./authApi";
 export * from "./favoritesApi";
 export * from "./mediaApi";

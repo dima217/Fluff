@@ -50,7 +50,8 @@ const NotificationCard = ({ notification }: NotificationCardProps) => {
 
   const showAction =
     notification.type === PushNotificationType.TRACKING_REMINDER ||
-    notification.type === PushNotificationType.SUPPORT_TICKET_REPLY;
+    notification.type === PushNotificationType.SUPPORT_TICKET_REPLY ||
+    notification.type === PushNotificationType.ACHIEVEMENT_UNLOCKED;
 
   return (
     <View style={styles.container}>

@@ -4,6 +4,7 @@ export const PushNotificationType = {
   GENERIC: "generic",
   TRACKING_REMINDER: "tracking_reminder",
   SUPPORT_TICKET_REPLY: "support_ticket_reply",
+  ACHIEVEMENT_UNLOCKED: "achievement_unlocked",
 } as const;
 
 export type PushNotificationTypeValue =
@@ -28,6 +29,11 @@ export interface TrackingReminderNotificationData {
   consumedCalories: string;
   caloriesLeft: string;
   date: string;
+}
+
+export interface AchievementUnlockedNotificationData {
+  type: typeof PushNotificationType.ACHIEVEMENT_UNLOCKED;
+  achievementCode: string;
 }
 
 export interface LocalizedPushContent {

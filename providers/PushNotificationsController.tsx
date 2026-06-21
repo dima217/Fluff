@@ -49,6 +49,11 @@ function navigateFromPushData(
         subject: typeof data.subject === "string" ? data.subject : "",
       },
     });
+    return;
+  }
+
+  if (type === PushNotificationType.ACHIEVEMENT_UNLOCKED) {
+    router.push("/(app)/profile/achievements");
   }
 }
 

@@ -249,6 +249,7 @@ export async function updateRecipeWorkflow(
       calories,
       cookAt,
       stepsConfig,
+      makePublic: recipeData.makePublic ?? existingRecipe.makePublic ?? false,
       submitToSystem: recipeData.submitToSystem ?? null,
     };
 
