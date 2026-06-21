@@ -20,7 +20,7 @@ export const createMealCardStyles = (colors: AppColors) =>
       resizeMode: "cover",
     },
     contentContainer: {
-      padding: 8,
+      padding: 4,
       paddingLeft: 12,
       flexDirection: "row",
       alignItems: "center",
@@ -31,7 +31,7 @@ export const createMealCardStyles = (colors: AppColors) =>
     },
     title: {
       color: colors.text,
-      marginBottom: 5,
+      marginBottom: 2,
     },
     calories: {
       fontSize: 16,

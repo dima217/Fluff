@@ -61,8 +61,7 @@ const FormWrapper = <T extends Record<string, any>>({
 
   useEffect(() => {
     formMethods.reset(initialValues, { keepErrors: false });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step]);
+  }, [step, initialValues, formMethods]);
 
   const handleSubmit = formMethods.handleSubmit((data: FormData) => {
     updateFormData(data as Partial<T>);

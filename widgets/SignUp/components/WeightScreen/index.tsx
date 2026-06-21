@@ -1,3 +1,6 @@
+import { useAppSelector } from "@/api/hooks";
+import { RootState } from "@/api/store";
+import { useFormContext as useMultiStepFormContext } from "@/contexts/FormContext/FormContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import {
@@ -23,7 +26,7 @@ const weightsData: WheelItemData<string>[] = Array.from(
 );
 
 const Weight = () => {
-  const styles = useThemedStyles((c) =>
+  const styles = useThemedStyles(() =>
     StyleSheet.create({
       stepContainer: {
         flex: 1,
@@ -35,11 +38,15 @@ const Weight = () => {
       animatedWheelPicker: { width: "60%" },
       selectorContainer: { height: 56 },
       title: { marginBottom: 20 },
-      currentValueText: { fontSize: 16, color: c.secondary },
     })
   );
   const { control } = useFormContext();
   const { t } = useTranslation();
+  const { formData } = useMultiStepFormContext<{ weight?: string }>();
+  const profile = useAppSelector((state: RootState) => state.user.profile);
+  const defaultWeight =
+    formData.weight ||
+    (profile?.weight != null ? String(Math.round(profile.weight)) : "70");
 
   return (
     <View style={styles.stepContainer}>
@@ -50,29 +57,25 @@ const Weight = () => {
         control={control}
         name="weight"
         render={({ field: { value, onChange } }) => {
-          const selectedWeight = value || "70";
+          const selectedWeight = value || defaultWeight;
           const handleWeightChange = (val: WheelItemValue<string>) => {
             onChange(String(val));
           };
-          const initialIndex = parseInt(selectedWeight, 10) - 30;
+          const initialIndex = Math.max(0, parseInt(selectedWeight, 10) - 30);
 
           return (
-            <>
-              <ThemedText style={styles.currentValueText}>
-                {t("signUp.selected")}: {selectedWeight} kg
-              </ThemedText>
-              <AnimatedWheelPicker
-                data={weightsData}
-                itemSize={56}
-                visibleCount={3}
-                orientation="vertical"
-                initialIndex={initialIndex}
-                onValueChange={handleWeightChange}
-                containerStyle={styles.animatedWheelPicker}
-                animationType="lens"
-                selectStyle={styles.selectorContainer}
-              />
-            </>
+            <AnimatedWheelPicker
+              key={`weight-${selectedWeight}`}
+              data={weightsData}
+              itemSize={56}
+              visibleCount={3}
+              orientation="vertical"
+              initialIndex={initialIndex}
+              onValueChange={handleWeightChange}
+              containerStyle={styles.animatedWheelPicker}
+              animationType="lens"
+              selectStyle={styles.selectorContainer}
+            />
           );
         }}
       />

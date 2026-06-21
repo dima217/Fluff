@@ -1,5 +1,9 @@
-import { useTranslation } from "@/hooks/useTranslation";
+import { useAppSelector } from "@/api/hooks";
+import { RootState } from "@/api/store";
+import { useFormContext as useMultiStepFormContext } from "@/contexts/FormContext/FormContext";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
+import { useTranslation } from "@/hooks/useTranslation";
+import { getAge } from "@/services/equation/age";
 import {
   AnimatedWheelPicker,
   WheelItemData,
@@ -23,7 +27,7 @@ const agesData: WheelItemData<string>[] = Array.from(
 );
 
 const Age = () => {
-  const styles = useThemedStyles((c) =>
+  const styles = useThemedStyles(() =>
     StyleSheet.create({
       stepContainer: {
         flex: 1,
@@ -35,11 +39,15 @@ const Age = () => {
       animatedWheelPicker: { width: "60%" },
       selectorContainer: { height: 56 },
       title: { marginBottom: 20 },
-      currentAgeText: { fontSize: 16, color: c.secondary },
     })
   );
   const { control } = useFormContext();
   const { t } = useTranslation();
+  const { formData } = useMultiStepFormContext<{ age?: string }>();
+  const profile = useAppSelector((state: RootState) => state.user.profile);
+  const profileAge = getAge(profile?.birthDate);
+  const defaultAge =
+    formData.age || (profileAge > 0 ? String(profileAge) : "18");
 
   return (
     <View style={styles.stepContainer}>
@@ -50,29 +58,25 @@ const Age = () => {
         control={control}
         name="age"
         render={({ field: { value, onChange } }) => {
-          const selectedAge = value || "18";
+          const selectedAge = value || defaultAge;
           const handleAgeChange = (val: WheelItemValue<string>) => {
             onChange(String(val));
           };
-          const initialIndex = parseInt(selectedAge, 10) - 1;
+          const initialIndex = Math.max(0, parseInt(selectedAge, 10) - 1);
 
           return (
-            <>
-              <ThemedText style={styles.currentAgeText}>
-                {t("signUp.selected")}: {selectedAge}
-              </ThemedText>
-              <AnimatedWheelPicker
-                data={agesData}
-                itemSize={56}
-                visibleCount={3}
-                orientation="vertical"
-                initialIndex={initialIndex}
-                onValueChange={handleAgeChange}
-                containerStyle={styles.animatedWheelPicker}
-                animationType="lens"
-                selectStyle={styles.selectorContainer}
-              />
-            </>
+            <AnimatedWheelPicker
+              key={`age-${selectedAge}`}
+              data={agesData}
+              itemSize={56}
+              visibleCount={3}
+              orientation="vertical"
+              initialIndex={initialIndex}
+              onValueChange={handleAgeChange}
+              containerStyle={styles.animatedWheelPicker}
+              animationType="lens"
+              selectStyle={styles.selectorContainer}
+            />
           );
         }}
       />

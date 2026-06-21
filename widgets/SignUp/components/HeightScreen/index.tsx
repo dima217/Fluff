@@ -1,3 +1,6 @@
+import { useAppSelector } from "@/api/hooks";
+import { RootState } from "@/api/store";
+import { useFormContext as useMultiStepFormContext } from "@/contexts/FormContext/FormContext";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import {
@@ -23,7 +26,7 @@ const heightsData: WheelItemData<string>[] = Array.from(
 );
 
 const Height = () => {
-  const styles = useThemedStyles((c) =>
+  const styles = useThemedStyles(() =>
     StyleSheet.create({
       stepContainer: {
         flex: 1,
@@ -35,11 +38,15 @@ const Height = () => {
       animatedWheelPicker: { width: "60%" },
       selectorContainer: { height: 56 },
       title: { marginBottom: 20 },
-      currentValueText: { fontSize: 16, color: c.secondary },
     })
   );
   const { control } = useFormContext();
   const { t } = useTranslation();
+  const { formData } = useMultiStepFormContext<{ height?: string }>();
+  const profile = useAppSelector((state: RootState) => state.user.profile);
+  const defaultHeight =
+    formData.height ||
+    (profile?.height != null ? String(Math.round(profile.height)) : "170");
 
   return (
     <View style={styles.stepContainer}>
@@ -50,29 +57,25 @@ const Height = () => {
         control={control}
         name="height"
         render={({ field: { value, onChange } }) => {
-          const selectedHeight = value || "170";
+          const selectedHeight = value || defaultHeight;
           const handleHeightChange = (val: WheelItemValue<string>) => {
             onChange(String(val));
           };
-          const initialIndex = parseInt(selectedHeight, 10) - 100;
+          const initialIndex = Math.max(0, parseInt(selectedHeight, 10) - 100);
 
           return (
-            <>
-              <ThemedText style={styles.currentValueText}>
-                {t("signUp.selected")}: {selectedHeight} cm
-              </ThemedText>
-              <AnimatedWheelPicker
-                data={heightsData}
-                itemSize={56}
-                visibleCount={3}
-                orientation="vertical"
-                initialIndex={initialIndex}
-                onValueChange={handleHeightChange}
-                containerStyle={styles.animatedWheelPicker}
-                animationType="lens"
-                selectStyle={styles.selectorContainer}
-              />
-            </>
+            <AnimatedWheelPicker
+              key={`height-${selectedHeight}`}
+              data={heightsData}
+              itemSize={56}
+              visibleCount={3}
+              orientation="vertical"
+              initialIndex={initialIndex}
+              onValueChange={handleHeightChange}
+              containerStyle={styles.animatedWheelPicker}
+              animationType="lens"
+              selectStyle={styles.selectorContainer}
+            />
           );
         }}
       />

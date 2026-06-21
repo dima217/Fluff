@@ -101,7 +101,7 @@ const MealCard = ({
         ]}
       >
         <View style={styles.textDetails}>
-          <ThemedText type="xs" style={styles.title}>
+          <ThemedText numberOfLines={1} type="xs" style={styles.title}>
             {title}
           </ThemedText>
           <View style={styles.recipeStatusTextContainer}>
