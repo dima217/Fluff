@@ -71,3 +71,14 @@ export const isMediaServerOrigin = (url: string | null | undefined): boolean => 
   const base = trimTrailingSlash(getMediaBaseUrl());
   return url === base || url.startsWith(`${base}/`);
 };
+
+export const isApiServerOrigin = (url: string | null | undefined): boolean => {
+  if (!url) return false;
+  const base = trimTrailingSlash(getBaseUrl());
+  return url === base || url.startsWith(`${base}/`);
+};
+
+/** Наши хосты (REST API или media service) — presigned query нужно убирать для видео/плеера. */
+export const isOurMediaHostOrigin = (url: string | null | undefined): boolean => {
+  return isMediaServerOrigin(url) || isApiServerOrigin(url);
+};

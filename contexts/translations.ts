@@ -336,6 +336,7 @@ export const translations = {
     // Health
     health: {
       title: "Здоровье",
+      tracking: "Трекинг",
       dailyCalorieIntake: "Дневное потребление калорий",
       progress: "Прогресс",
       complete: "выполнено",
@@ -352,8 +353,8 @@ export const translations = {
       caloriesPlaceholder: "Например: 95",
       caloriesUnit: "ккал",
       add: "Добавить",
-      recipeFromFluff: "Рецепт из Fluff",
-      yourOwnRecipe: "Свой рецепт",
+      recipeFromFluff: "Свой рецепт",
+      yourOwnRecipe: "Рецепт из Fluff",
       time: "Время",
       timePlaceholder: "11:30",
       portionGrams: "Количество грамм",
@@ -686,6 +687,7 @@ export const translations = {
     // Health
     health: {
       title: "Здароўе",
+      tracking: "Трэкінг",
       dailyCalorieIntake: "Суточнае спажыванне калорый",
       progress: "Прагрэс",
       complete: "выканана",
@@ -702,8 +704,8 @@ export const translations = {
       caloriesPlaceholder: "Напрыклад: 95",
       caloriesUnit: "ккал",
       add: "Дадаць",
-      recipeFromFluff: "Рэцэпт з Fluff",
-      yourOwnRecipe: "Уласны рэцэпт",
+      recipeFromFluff: "Уласны рэцэпт",
+      yourOwnRecipe: "Рэцэпт з Fluff",
       time: "Час",
       timePlaceholder: "11:30",
       portionGrams: "Колькасць грамаў",
@@ -1308,6 +1310,7 @@ export const translations = {
     // Health
     health: {
       title: "Health",
+      tracking: "Tracking",
       dailyCalorieIntake: "Daily calorie intake",
       progress: "Progress",
       complete: "Complete",
@@ -1324,8 +1327,8 @@ export const translations = {
       caloriesPlaceholder: "Example: 95",
       caloriesUnit: "kcal",
       add: "Add",
-      recipeFromFluff: "Recipe from Fluff",
-      yourOwnRecipe: "Your own recipe",
+      recipeFromFluff: "Your own recipe",
+      yourOwnRecipe: "Recipe from Fluff",
       time: "Time",
       timePlaceholder: "11:30",
       portionGrams: "Portion weight",

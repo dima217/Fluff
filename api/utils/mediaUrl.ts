@@ -1,7 +1,7 @@
 import {
   buildMediaApiUrl,
   buildMediaDownloadUrl,
-  isMediaServerOrigin,
+  isOurMediaHostOrigin,
 } from "../config";
 
 export type MediaUrlType = "direct" | "path" | "invalid";
@@ -15,9 +15,21 @@ export function isDirectHttpUrl(url: string | null | undefined): boolean {
 }
 
 /**
- * Убирает query/hash (всё с «?») — presigned-параметры MinIO/S3 ломают плеер,
- * файл доступен по origin + pathname.
+ * Presigned MinIO/S3 URL (X-Amz-* в query) — подпись ломает видеоплеер,
+ * файл доступен по origin + pathname без query.
  */
+export function hasPresignedS3Query(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return [...parsed.searchParams.keys()].some((key) =>
+      key.startsWith("X-Amz")
+    );
+  } catch {
+    return /[?&]X-Amz-/i.test(url);
+  }
+}
+
+/** Убирает query/hash — presigned-параметры MinIO/S3 ломают плеер. */
 export function stripUrlQuery(url: string): string {
   try {
     const parsed = new URL(url);
@@ -26,6 +38,10 @@ export function stripUrlQuery(url: string): string {
     const qIndex = url.indexOf("?");
     return qIndex === -1 ? url : url.slice(0, qIndex);
   }
+}
+
+function shouldStripMediaQuery(url: string): boolean {
+  return isOurMediaHostOrigin(url) || hasPresignedS3Query(url);
 }
 
 /**
@@ -55,8 +71,10 @@ export function getMediaUrlType(url: string | null | undefined): MediaUrlType {
 
 /**
  * Нормализует URL для использования в Image/Video:
- * - http(s) — без query (?X-Amz-...), localhost подменяем на mediaBaseUrl.
- * - путь (/3/xxx.mp4 и т.д.) — собираем URL стрима через media service.
+ * - наш API/media host или presigned MinIO (X-Amz-*) — без query;
+ * - внешние URL (gstatic и т.п.) — query сохраняем;
+ * - localhost подменяем на mediaBaseUrl;
+ * - путь (/3/xxx.mp4) — через /media/download.
  */
 export function normalizeMediaUrl(
   url: string | null | undefined
@@ -66,7 +84,11 @@ export function normalizeMediaUrl(
   const urlType = getMediaUrlType(url);
 
   if (urlType === "direct") {
-    return stripUrlQuery(rewriteLocalhostToMediaHost(url));
+    const rewritten = rewriteLocalhostToMediaHost(url);
+    if (shouldStripMediaQuery(rewritten)) {
+      return stripUrlQuery(rewritten);
+    }
+    return rewritten;
   }
 
   if (urlType === "path") {
@@ -94,9 +116,9 @@ export function getFullMediaUrl(proxyUrl: string): string {
   return normalizeMediaUrl(proxyUrl) ?? proxyUrl;
 }
 
-/** URL ведёт на наш медиа-сервер — для таких запросов нужен Authorization. */
+/** URL ведёт на наш API или media service — для таких запросов нужен Authorization. */
 export function isMediaServerUrl(
   resolvedUrl: string | null | undefined
 ): boolean {
-  return isMediaServerOrigin(resolvedUrl);
+  return isOurMediaHostOrigin(resolvedUrl);
 }

@@ -2,6 +2,7 @@ import {
   useGetProductsQuery,
   useLazySearchProductsQuery,
   useLazySearchRecipesQuery,
+  useAppSelector,
 } from "@/api";
 
 import View from "@/shared/View";
@@ -10,6 +11,8 @@ import SearchOverlayContent from "@/widgets/Search";
 import SearchInput from "@/widgets/Search/components/SearchInput";
 
 import { normalizeApiArray } from "@/utils/normalizeApiArray";
+import { useIsCheatMealDay } from "@/hooks/useCheatMealDay";
+import { filterCheatMealRecipes } from "@/widgets/Home/utils/data";
 
 import { tryAddMatchedProduct } from "@/widgets/Search/utils/tryAddMatchedProduct";
 import { searchStorage } from "@/storage/search/searchStorage";
@@ -19,6 +22,9 @@ const SearchScreen = () => {
   const [searchText, setSearchText] = useState("");
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>([]);
   const [isSearchTriggered, setIsSearchTriggered] = useState(false);
+  const isCheatMealDay = useIsCheatMealDay();
+  const cheatMealIds = useAppSelector((state) => state.user.profile?.cheatMeal);
+  const cheatMealSet = useMemo(() => new Set(cheatMealIds ?? []), [cheatMealIds]);
 
   const { data: productsResponse } = useGetProductsQuery({
     page: 1,
@@ -36,10 +42,10 @@ const SearchScreen = () => {
     [productsResponse]
   );
 
-  const recipesArray = useMemo(
-    () => normalizeApiArray<any>(recipes),
-    [recipes]
-  );
+  const recipesArray = useMemo(() => {
+    const normalized = normalizeApiArray<any>(recipes);
+    return filterCheatMealRecipes(normalized, cheatMealSet, isCheatMealDay);
+  }, [recipes, cheatMealSet, isCheatMealDay]);
 
   const isLoading = isLoadingRecipes || isLoadingProducts;
 

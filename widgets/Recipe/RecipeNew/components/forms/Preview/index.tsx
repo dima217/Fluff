@@ -3,6 +3,7 @@ import ArrowLeft from "@/assets/images/ArrowLeft.svg";
 import type { CustomProduct, SelectedProduct } from "@/constants/types";
 import { useColors } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/hooks/useTranslation";
+import { appSettingsStorage } from "@/storage/appSettings/appSettingsStorage";
 import CheckBox from "@/shared/CheckBox";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { formatCookTime } from "@/widgets/Recipe/RecipeInfo/utils/formatCookTime";
@@ -28,6 +29,7 @@ const Preview = ({ onBack }: { onBack: () => void }) => {
   const selectedProducts: SelectedProduct[] = allValues.selectedProducts || [];
   const customProducts: CustomProduct[] = allValues.customProducts || [];
   const cookAtSeconds = cookAtFromForm(allValues.cookHours, allValues.cookMinutes);
+  const publishRecipesEnabled = appSettingsStorage.isPublishRecipesEnabled();
 
   return (
     <View style={styles.container}>
@@ -93,32 +95,34 @@ const Preview = ({ onBack }: { onBack: () => void }) => {
           </View>
         )}
 
-        <View style={styles.checkboxes}>
-          <Controller
-            control={control}
-            name="makePublic"
-            render={({ field: { value, onChange } }) => (
-              <CheckBox
-                title={t("recipe.makePublic")}
-                checked={value}
-                setChecked={onChange}
-              />
-            )}
-          />
+        {publishRecipesEnabled ? (
+          <View style={styles.checkboxes}>
+            <Controller
+              control={control}
+              name="makePublic"
+              render={({ field: { value, onChange } }) => (
+                <CheckBox
+                  title={t("recipe.makePublic")}
+                  checked={value}
+                  setChecked={onChange}
+                />
+              )}
+            />
 
-          <Controller
-            control={control}
-            name="submitToSystem"
-            render={({ field: { value, onChange } }) => (
-              <CheckBox
-                title={t("recipe.submitToSystem")}
-                checked={value}
-                allowNull
-                setChecked={onChange}
-              />
-            )}
-          />
-        </View>
+            <Controller
+              control={control}
+              name="submitToSystem"
+              render={({ field: { value, onChange } }) => (
+                <CheckBox
+                  title={t("recipe.submitToSystem")}
+                  checked={value}
+                  allowNull
+                  setChecked={onChange}
+                />
+              )}
+            />
+          </View>
+        ) : null}
       </View>
     </View>
   );

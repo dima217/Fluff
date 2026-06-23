@@ -9,6 +9,7 @@ import type {
   RecipeStepResource,
   UpdateRecipeRequest,
 } from "@/api/types";
+import { appSettingsStorage } from "@/storage/appSettings/appSettingsStorage";
 import {
   getFilenameFromUri,
   getFileSizeFromUri,
@@ -238,6 +239,8 @@ export async function updateRecipeWorkflow(
 
     const cookAt = cookAtFromForm(recipeData.cookHours, recipeData.cookMinutes);
 
+    const publishRecipesEnabled = appSettingsStorage.isPublishRecipesEnabled();
+
     const updatePayload: UpdateRecipeRequest = {
       name: recipeData.name ?? existingRecipe.name,
       recipeTypeId: existingRecipe.type.id,
@@ -249,8 +252,12 @@ export async function updateRecipeWorkflow(
       calories,
       cookAt,
       stepsConfig,
-      makePublic: recipeData.makePublic ?? existingRecipe.makePublic ?? false,
-      submitToSystem: recipeData.submitToSystem ?? null,
+      makePublic: publishRecipesEnabled
+        ? (recipeData.makePublic ?? existingRecipe.makePublic ?? false)
+        : false,
+      submitToSystem: publishRecipesEnabled
+        ? (recipeData.submitToSystem ?? null)
+        : false,
     };
 
     const updated = await updateRecipe({ id: recipeId, data: updatePayload }).unwrap();

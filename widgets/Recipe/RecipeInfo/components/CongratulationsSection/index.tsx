@@ -1,12 +1,11 @@
 import { useColors } from "@/contexts/ThemeContext";
 import { AppColors } from "@/constants/design-tokens";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
-import Fluffy from "@/assets/images/Fluffy.svg";
-
 import { useTranslation } from "@/hooks/useTranslation";
 import { ThemedText } from "@/shared/ui/ThemedText";
-import { Feather } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import {
+  Image,
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
@@ -39,7 +38,11 @@ const CongratulationsSection = ({
         style={styles.background}
         resizeMode="cover"
       >
-        <Fluffy width={250} height={250} />
+        <Image
+          source={require("@/assets/images/Fluffy2.png")}
+          style={styles.fluffyImage}
+          resizeMode="contain"
+        />
         <View style={styles.content}>
           <ThemedText type="subtitle">{t("recipe.congratulations")}</ThemedText>
 
@@ -54,8 +57,8 @@ const CongratulationsSection = ({
                   onPress={() => handleRate(starValue)}
                   activeOpacity={0.7}
                 >
-                  <Feather
-                    name={filled ? "star" : "star"}
+                  <Ionicons
+                    name={filled ? "star" : "star-outline"}
                     size={28}
                     color={filled ? colors.primary : colors.secondary}
                   />
@@ -84,6 +87,10 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
     width: "100%",
     height: 450,
     paddingBottom: 120,
+  },
+  fluffyImage: {
+    width: 250,
+    height: 250,
   },
   content: {
     marginTop: 20,

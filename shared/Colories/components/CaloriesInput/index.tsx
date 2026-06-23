@@ -17,6 +17,7 @@ import {
   getRecipesAsMealData,
   normalizeRecipes,
 } from "@/widgets/Home/utils/data";
+import { appSettingsStorage } from "@/storage/appSettings/appSettingsStorage";
 import SearchInput from "@/widgets/Search/components/SearchInput";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useMemo, useRef, useState } from "react";
@@ -81,6 +82,8 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
 
   const recipesAsMealData = getRecipesAsMealData(recipesArray);
 
+  const nutrientTrackingEnabled = appSettingsStorage.isNutrientTrackingEnabled();
+
   const handleAdd = () => {
     const time = timeRef.current;
     if (mode === "manual" && foodName && calories) {
@@ -88,9 +91,21 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
         foodName,
         calories: parseInt(calories),
         time24h: time,
-        proteins: proteins ? parseFloat(proteins) : undefined,
-        fats: fats ? parseFloat(fats) : undefined,
-        carbs: carbs ? parseFloat(carbs) : undefined,
+        proteins: nutrientTrackingEnabled
+          ? proteins
+            ? parseFloat(proteins)
+            : undefined
+          : 0,
+        fats: nutrientTrackingEnabled
+          ? fats
+            ? parseFloat(fats)
+            : undefined
+          : 0,
+        carbs: nutrientTrackingEnabled
+          ? carbs
+            ? parseFloat(carbs)
+            : undefined
+          : 0,
       });
       setFoodName("");
       setCalories("");
@@ -161,7 +176,7 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
     <>
       <GradientView style={styles.container}>
         <View style={styles.header}>
-          <ThemedText type="xs" color="text">{t("health.dailyCalorieIntake")}</ThemedText>
+          <ThemedText type="body" color="text">{t("health.tracking")}</ThemedText>
           <TouchableOpacity
             onPress={handleToggleMode}
             style={styles.toggleButton}
@@ -193,42 +208,45 @@ const CalorieInput: React.FC<CalorieInputProps> = ({ onAdd }) => {
                 value={calories}
                 onChangeText={setCalories}
               />
-              {/* Optional nutrition fields */}
-              <ThemedText type="xs" color="text" style={[nutritionStyles.sectionLabel]}>
-                {t("health.macros")}
-              </ThemedText>
-              <View style={nutritionStyles.nutritionGrid}>
-                <View style={nutritionStyles.nutritionCell}>
-                  <TextInput
-                    label={t("health.proteins")}
-                    placeholder={t("health.proteinsPlaceholder")}
-                    placeholderTextColor={colors.secondary}
-                    keyboardType="decimal-pad"
-                    value={proteins}
-                    onChangeText={(v) => setProteins(sanitizeDecimal(v))}
-                  />
-                </View>
-                <View style={nutritionStyles.nutritionCell}>
-                  <TextInput
-                    label={t("health.fats")}
-                    placeholder={t("health.fatsPlaceholder")}
-                    placeholderTextColor={colors.secondary}
-                    keyboardType="decimal-pad"
-                    value={fats}
-                    onChangeText={(v) => setFats(sanitizeDecimal(v))}
-                  />
-                </View>
-                <View style={nutritionStyles.nutritionCell}>
-                  <TextInput
-                    label={t("health.carbs")}
-                    placeholder={t("health.carbsPlaceholder")}
-                    placeholderTextColor={colors.secondary}
-                    keyboardType="decimal-pad"
-                    value={carbs}
-                    onChangeText={(v) => setCarbs(sanitizeDecimal(v))}
-                  />
-                </View>
-              </View>
+              {nutrientTrackingEnabled ? (
+                <>
+                  <ThemedText type="xs" color="text" style={[nutritionStyles.sectionLabel]}>
+                    {t("health.macros")}
+                  </ThemedText>
+                  <View style={nutritionStyles.nutritionGrid}>
+                    <View style={nutritionStyles.nutritionCell}>
+                      <TextInput
+                        label={t("health.proteins")}
+                        placeholder={t("health.proteinsPlaceholder")}
+                        placeholderTextColor={colors.secondary}
+                        keyboardType="decimal-pad"
+                        value={proteins}
+                        onChangeText={(v) => setProteins(sanitizeDecimal(v))}
+                      />
+                    </View>
+                    <View style={nutritionStyles.nutritionCell}>
+                      <TextInput
+                        label={t("health.fats")}
+                        placeholder={t("health.fatsPlaceholder")}
+                        placeholderTextColor={colors.secondary}
+                        keyboardType="decimal-pad"
+                        value={fats}
+                        onChangeText={(v) => setFats(sanitizeDecimal(v))}
+                      />
+                    </View>
+                    <View style={nutritionStyles.nutritionCell}>
+                      <TextInput
+                        label={t("health.carbs")}
+                        placeholder={t("health.carbsPlaceholder")}
+                        placeholderTextColor={colors.secondary}
+                        keyboardType="decimal-pad"
+                        value={carbs}
+                        onChangeText={(v) => setCarbs(sanitizeDecimal(v))}
+                      />
+                    </View>
+                  </View>
+                </>
+              ) : null}
             </>
           ) : (
             <>

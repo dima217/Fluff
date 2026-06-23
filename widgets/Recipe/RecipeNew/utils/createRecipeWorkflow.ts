@@ -17,6 +17,7 @@ import {
   uploadFile,
 } from "@/api/utils/fileUpload";
 import { Recipe } from "@/constants/types";
+import { appSettingsStorage } from "@/storage/appSettings/appSettingsStorage";
 import { calcCaloriesFromProducts } from "./calcCaloriesFromProducts";
 import { cookAtFromForm } from "./cookAtForm";
 
@@ -253,6 +254,8 @@ export async function createRecipeWorkflow(
     const calories = calcCaloriesFromProducts(selectedProducts);
     const cookAt = cookAtFromForm(recipeData.cookHours, recipeData.cookMinutes);
 
+    const publishRecipesEnabled = appSettingsStorage.isPublishRecipesEnabled();
+
     const createRecipeResult = await createRecipeWithMediaIds({
       name: recipeData.name!,
       recipeTypeId: 1,
@@ -267,8 +270,10 @@ export async function createRecipeWorkflow(
       calories,
       cookAt,
       stepsConfig,
-      makePublic: recipeData.makePublic ?? false,
-      submitToSystem: recipeData.submitToSystem ?? null,
+      makePublic: publishRecipesEnabled ? (recipeData.makePublic ?? false) : false,
+      submitToSystem: publishRecipesEnabled
+        ? (recipeData.submitToSystem ?? null)
+        : false,
     }).unwrap();
 
     console.log("[createRecipeWorkflow] Recipe created:", createRecipeResult);

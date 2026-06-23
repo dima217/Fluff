@@ -33,7 +33,7 @@ const CalorieProgress: React.FC<CalorieProgressProps> = ({
   return (
     <GradientView style={styles.container}>
       <View style={styles.header}>
-        <ThemedText type="caption" style={styles.progressLabel}>
+        <ThemedText type="body" style={styles.progressLabel}>
           {t("health.dailyCalorieIntake")}
         </ThemedText>
 

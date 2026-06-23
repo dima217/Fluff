@@ -61,9 +61,11 @@ export const normalizeRecipes = (
 export const filterCheatMealRecipes = (
   recipes: RecipeResponse[],
   cheatMealSet: Set<number>,
-  isCheatMealDay: boolean
-) => {
-  if (!isCheatMealDay || cheatMealSet.size === 0) return recipes;
+  isCheatMealDay: boolean,
+): RecipeResponse[] => {
+  if (isCheatMealDay || cheatMealSet.size === 0) {
+    return recipes;
+  }
 
   return recipes.filter((r) => !cheatMealSet.has(r.id));
 };

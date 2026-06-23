@@ -7,6 +7,10 @@ import BookTab from "@/assets/images/BookTab.svg";
 import HomeTab from "@/assets/images/HomeTab.svg";
 import HealthTab from "@/assets/images/PillTab.svg";
 import UserTab from "@/assets/images/UserTab.svg";
+import BookTabActive from "@/assets/images/tabs/BookTabActive.svg";
+import HomeTabActive from "@/assets/images/tabs/HomeTabActive.svg";
+import HealthTabActive from "@/assets/images/tabs/PillTabActive.svg";
+import UserTabActive from "@/assets/images/tabs/UserTabActive.svg";
 import { CircleSizes } from "@/constants/components/CIrcle";
 import { useAppColorScheme, useColors } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -64,18 +68,24 @@ export default function TabLayout() {
         name="home"
         options={{
           title: t("tabs.home"),
-          tabBarIcon: ({ color }) => (
-            <HomeTab width={28} height={28} fill={color} />
-          ),
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <HomeTabActive width={28} height={28} />
+            ) : (
+              <HomeTab width={28} height={28} />
+            ),
         }}
       />
       <Tabs.Screen
         name="health"
         options={{
           title: t("tabs.health"),
-          tabBarIcon: ({ color }) => (
-            <HealthTab width={28} height={28} fill={color} />
-          ),
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <HealthTabActive width={28} height={28} />
+            ) : (
+              <HealthTab width={28} height={28} />
+            ),
         }}
       />
       <Tabs.Screen
@@ -100,16 +110,24 @@ export default function TabLayout() {
         name="library"
         options={{
           title: t("tabs.library"),
-          tabBarIcon: ({ color }) => (
-            <BookTab width={28} height={28} fill={color} />
-          ),
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <BookTabActive width={28} height={28} />
+            ) : (
+              <BookTab width={28} height={28} />
+            ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: t("tabs.profile"),
-          tabBarIcon: ({ color }) => <UserTab width={28} height={28} />,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <UserTabActive width={28} height={28} />
+            ) : (
+              <UserTab width={28} height={28} />
+            ),
         }}
       />
       <Tabs.Screen

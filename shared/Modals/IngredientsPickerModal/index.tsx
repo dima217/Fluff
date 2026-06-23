@@ -9,7 +9,6 @@ import { AddProductCardAction } from "@/shared/CardCarousel/cardActions";
 import { ThemedText } from "@/shared/ui/ThemedText";
 import { getProductsAsMealData } from "@/widgets/Home/utils/data";
 import SearchInput from "@/widgets/Search/components/SearchInput";
-import { handleProductCardPress } from "@/utils/navigation/productNavigation";
 import { Feather } from "@expo/vector-icons";
 import { useCallback, useMemo } from "react";
 import {
@@ -86,7 +85,7 @@ const IngredientsPickerModal = ({
                 <CardsCarousel
                   products={productsAsMealData}
                   variant="featured"
-                  onCardPress={handleProductCardPress}
+                  onCardPress={() => {}}
                   renderCardRightAction={(item) => (
                     <AddProductCardAction
                       label={t("recipe.addProduct")}

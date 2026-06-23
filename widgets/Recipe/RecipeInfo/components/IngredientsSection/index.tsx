@@ -58,7 +58,7 @@ const IngredientsSection: React.FC<IngredientsSectionProps> = ({
 
   return (
     <View style={{ gap: dense ? 6 : 10, marginTop: dense ? 6 : 0 }}>
-      <ThemedText>{t("recipe.ingredients")}</ThemedText>
+      <ThemedText type="body">{t("recipe.ingredients")}</ThemedText>
       <FilterTags
         filters={ingredients.map((item) => item.label)}
         onTagPress={(label) => {
