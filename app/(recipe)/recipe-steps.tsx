@@ -121,7 +121,7 @@ const RecipeSteps = () => {
 
   return (
     <View>
-      <Header title={recipe.title} />
+      <Header title={t("recipe.letsCook")} />
       <RNView style={styles.progressWrapper}>
         <AnimatedProgressBar progress={(stepIndex + 1) / recipe.steps.length} />
       </RNView>

@@ -46,6 +46,7 @@ const AllSection = () => {
           <MediaCarousel
             recipeIds={lastVisitedIds}
             variant="short"
+            titleNumberOfLines={1}
             onCardPress={(id) => {}}
           />
         ) : (

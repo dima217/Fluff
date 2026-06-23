@@ -89,9 +89,13 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <ExpandableText numberOfLines={titleLines} style={styles.title}>
+          <Text
+            style={styles.title}
+            numberOfLines={titleLines}
+            ellipsizeMode="tail"
+          >
             {title}
-          </ExpandableText>
+          </Text>
           <Text style={styles.subtitle}>{restaurant}</Text>
         </View>
         <View style={styles.headerIcons}>
@@ -177,13 +181,14 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
   card: {
     borderRadius: 16,
     width: "100%",
+    overflow: "hidden",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
     marginBottom: 12,
-    gap: 8,
+    gap: 12,
   },
   headerLeft: {
     flex: 1,
@@ -202,7 +207,7 @@ const createstyles = (colors: AppColors) => StyleSheet.create({
   },
   headerIcons: {
     flexDirection: "row",
-    gap: 8,
+    gap: 12,
     alignItems: "center",
     flexShrink: 0,
   },

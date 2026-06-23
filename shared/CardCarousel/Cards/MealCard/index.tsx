@@ -116,7 +116,7 @@ const MealCard = ({
             )}
           </View>
         </View>
-        {renderActionIcon()}
+        <View style={styles.actionIconWrapper}>{renderActionIcon()}</View>
       </View>
     </TouchableOpacity>
   );

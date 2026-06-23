@@ -201,6 +201,7 @@ export const translations = {
       recipe: "Рецепт",
       recipeSteps: "Шаги рецепта",
       cookIt: "Готовить",
+      letsCook: "Готовим!",
       step: "Шаг",
       congratulations: "Поздравляем!",
       congratulationsMessage:
@@ -812,6 +813,7 @@ export const translations = {
       recipe: "Рэцэпт",
       recipeSteps: "Крокі рэцэпта",
       cookIt: "Гатаваць",
+      letsCook: "Гатуем!",
       step: "Крок",
       congratulations: "Віншуем!",
       congratulationsMessage:
@@ -1176,6 +1178,7 @@ export const translations = {
       recipe: "Recipe",
       recipeSteps: "Recipe Steps",
       cookIt: "Cook it",
+      letsCook: "Let's Cook!",
       step: "Step",
       congratulations: "Congratulations!",
       congratulationsMessage:

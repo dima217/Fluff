@@ -93,9 +93,13 @@ const ProductCard = ({
     <View style={styles.card}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <ExpandableText numberOfLines={titleLines} style={styles.title}>
+          <Text
+            style={styles.title}
+            numberOfLines={titleLines}
+            ellipsizeMode="tail"
+          >
             {title}
-          </ExpandableText>
+          </Text>
           <Text style={styles.subtitle}>{t("product.per100g")}</Text>
         </View>
         <View style={styles.headerIcons}>
@@ -139,13 +143,14 @@ const createStyles = (colors: AppColors) =>
     card: {
       borderRadius: 16,
       width: "100%",
+      overflow: "hidden",
     },
     header: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "flex-start",
       marginBottom: 8,
-      gap: 8,
+      gap: 12,
     },
     headerLeft: {
       flex: 1,
@@ -170,7 +175,7 @@ const createStyles = (colors: AppColors) =>
     },
     headerIcons: {
       flexDirection: "row",
-      gap: 8,
+      gap: 12,
       alignItems: "center",
       flexShrink: 0,
     },

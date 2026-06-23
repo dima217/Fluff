@@ -42,6 +42,8 @@ interface DateItemData {
   isMarked?: boolean;
   isToday: boolean;
   isSelected?: boolean;
+  isPast?: boolean;
+  isFuture?: boolean;
   dayStatus?:
     | "cheatMeal"
     | "notTracked"
@@ -64,17 +66,16 @@ export function DateWheelItem({ date, data, size }: DateWheelItemContentProps) {
 
   if (!date || !data) return null;
 
-  const { isToday, isSelected, dayStatus } = data;
+  const { isToday, isSelected, isPast, isFuture, dayStatus } = data;
   const dayOfWeekLetter = getDayOfWeekLetter(date, getAppLocale(language));
-  const shouldShowCircle = isSelected || isToday;
-  const circleColor = shouldShowCircle
-    ? getStatusColor(colors, dayStatus || null)
-    : colors.green;
+  const statusColor = getStatusColor(colors, dayStatus ?? null);
+  const shouldShowCircle = Boolean((isPast || isToday) && dayStatus != null);
+  const isActivePill = (isToday || isSelected) && !isFuture;
 
   const toggleStyle = [
     styles.toggleBase,
-    (isSelected || isToday) && styles.toggleActive,
-    !isSelected && !isToday && styles.toggleInactive,
+    isActivePill && styles.toggleActive,
+    !isActivePill && styles.toggleInactive,
   ];
 
   return (
@@ -86,7 +87,7 @@ export function DateWheelItem({ date, data, size }: DateWheelItemContentProps) {
       <View style={styles.toggleContainer}>
         <View style={toggleStyle}>
           {shouldShowCircle && (
-            <Circle size={CircleSizes.XS} color={circleColor} />
+            <Circle size={CircleSizes.XS} color={statusColor} />
           )}
         </View>
       </View>

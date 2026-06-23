@@ -19,6 +19,45 @@ export function useCheatMealSettings() {
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
+/** Whether `date` falls on a scheduled cheat meal day (profile settings). */
+export function isCheatMealDate(
+  date: Date,
+  cheatMealDay?: string | null,
+  periodOfDays?: string | null
+): boolean {
+  if (!cheatMealDay || !periodOfDays) return false;
+
+  const cheatDay = parseInt(cheatMealDay, 10) || 1;
+  const period = parseInt(periodOfDays, 10) || 7;
+
+  const target = new Date(date);
+  target.setHours(0, 0, 0, 0);
+
+  let firstCheatDate = new Date(
+    target.getFullYear(),
+    target.getMonth(),
+    cheatDay
+  );
+
+  if (firstCheatDate > target) {
+    firstCheatDate = new Date(
+      target.getFullYear(),
+      target.getMonth() - 1,
+      cheatDay
+    );
+  }
+
+  firstCheatDate.setHours(0, 0, 0, 0);
+
+  const diffInDays = Math.floor(
+    (target.getTime() - firstCheatDate.getTime()) / MS_PER_DAY
+  );
+
+  if (diffInDays < 0) return false;
+
+  return diffInDays % period === 0;
+}
+
 /**
  * Returns true if today is a cheat meal day based on user settings.
  */
@@ -26,35 +65,13 @@ export function useIsCheatMealDay(): boolean {
   const profile = useAppSelector((state) => state.user.profile);
 
   return useMemo(() => {
-    const cheatDay = parseInt(profile?.cheatMealDay ?? "1", 10) || 1;
-    const period = parseInt(profile?.periodOfDays ?? "7", 10) || 7;
-
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
-    let firstCheatDate = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      cheatDay
+    return isCheatMealDate(
+      today,
+      profile?.cheatMealDay,
+      profile?.periodOfDays
     );
-
-    if (firstCheatDate > today) {
-      firstCheatDate = new Date(
-        today.getFullYear(),
-        today.getMonth() - 1,
-        cheatDay
-      );
-    }
-
-    firstCheatDate.setHours(0, 0, 0, 0);
-
-    const diffInDays = Math.floor(
-      (today.getTime() - firstCheatDate.getTime()) / MS_PER_DAY
-    );
-
-    if (diffInDays < 0) return false;
-
-    return diffInDays % period === 0;
   }, [profile?.cheatMealDay, profile?.periodOfDays]);
 }
 

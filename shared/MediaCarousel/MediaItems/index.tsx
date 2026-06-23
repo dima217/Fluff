@@ -35,6 +35,7 @@ type MediaCarouselItemProps = {
   onPress: () => void;
   style?: ViewStyle;
   variant?: "short" | "long";
+  titleNumberOfLines?: number;
 };
 
 const MediaCarouselItem = ({
@@ -44,6 +45,7 @@ const MediaCarouselItem = ({
   onPress,
   style,
   variant = "short",
+  titleNumberOfLines,
 }: MediaCarouselItemProps) => {
   const colors = useColors();
   const styles = useThemedStyles(createMediaCarouselItemStyles);
@@ -59,6 +61,17 @@ const MediaCarouselItem = ({
 
   const cardWidth = isLongVariant ? LONG_CARD_WIDTH : SHORT_CARD_WIDTH;
   const cardHeight = isLongVariant ? LONG_CARD_HEIGHT : SHORT_CARD_HEIGHT;
+
+  const titleNode = (
+    <ThemedText
+      type={isLongVariant ? "mini" : "s"}
+      style={isLongVariant ? styles.longTitle : styles.overlayTitle}
+      numberOfLines={titleNumberOfLines}
+      ellipsizeMode="tail"
+    >
+      {title}
+    </ThemedText>
+  );
 
   return (
     <TouchableOpacity
@@ -97,9 +110,7 @@ const MediaCarouselItem = ({
             </View>
             {!isLongVariant && (
               <View style={styles.textContainerShort}>
-                <ThemedText type="s" style={styles.overlayTitle}>
-                  {title}
-                </ThemedText>
+                {titleNode}
                 <ThemedText type="xs" style={styles.overlayAuthor}>
                   {author}
                 </ThemedText>
@@ -113,9 +124,7 @@ const MediaCarouselItem = ({
         <View style={styles.longContainer}>
           <Avatar size={CircleSizes.MINI} title="K" />
           <View style={styles.textContainerLong}>
-            <ThemedText type="mini" style={styles.longTitle}>
-              {title}
-            </ThemedText>
+            {titleNode}
             <ThemedText type="xs" style={styles.longAuthor}>
               {author}
             </ThemedText>
@@ -164,11 +173,13 @@ const createMediaCarouselItemStyles = (colors: AppColors) =>
     },
     textContainerShort: {
       flexDirection: "column",
-      alignSelf: "flex-start",
+      alignSelf: "stretch",
+      width: "100%",
       gap: 4,
     },
     overlayTitle: {
       color: colors.onPrimary,
+      fontSize: 16,
     },
     overlayAuthor: {
       color: colors.onPrimary,
@@ -180,8 +191,10 @@ const createMediaCarouselItemStyles = (colors: AppColors) =>
       alignItems: "center",
     },
     textContainerLong: {
+      flex: 1,
       flexDirection: "column",
-      alignSelf: "flex-start",
+      alignSelf: "stretch",
+      minWidth: 0,
       gap: 4,
       paddingHorizontal: 10,
       paddingVertical: 10,
@@ -190,6 +203,7 @@ const createMediaCarouselItemStyles = (colors: AppColors) =>
     },
     longTitle: {
       color: colors.text,
+      fontSize: 14,
     },
     longAuthor: {
       color: colors.secondary,

@@ -17,6 +17,7 @@ import { AnimatedWheelPicker } from "@/shared/AnimatedWheelPicker";
 import CalorieInput, { TrackingAddParams } from "@/shared/Colories/components/CaloriesInput";
 import CalorieProgress from "@/shared/Colories/components/CaloriesProgress";
 import { useDayPickerData } from "@/shared/DateWheelItem/utils";
+import { isCheatMealDate } from "@/hooks/useCheatMealDay";
 import KeyboardAwareView from "@/shared/KeyboardAwareView";
 import EditDailyCalorieGoalModal from "@/shared/Modals/EditDailyCalorieGoalModal";
 import NutrientDetailsModal from "@/shared/Modals/NutrientDetailsModal";
@@ -92,7 +93,9 @@ const Health = () => {
     60,
     calendar,
     dailyGoal ?? undefined,
-    selectedDateIndex
+    selectedDateIndex,
+    profile?.cheatMealDay,
+    profile?.periodOfDays
   );
 
   const [createTracking] = useCreateTrackingMutation();
@@ -135,7 +138,19 @@ const Health = () => {
     skip: recipeIds.length === 0,
   });
 
-  const currentCalories = dayData?.totalCalories || 0;
+  const isSelectedCheatMealDay = useMemo(
+    () =>
+      isCheatMealDate(
+        selectedDate,
+        profile?.cheatMealDay,
+        profile?.periodOfDays
+      ),
+    [selectedDate, profile?.cheatMealDay, profile?.periodOfDays]
+  );
+
+  const currentCalories = isSelectedCheatMealDay
+    ? 0
+    : dayData?.totalCalories || 0;
 
   const handleValueChange = (_value: any, index: number) => {
     setSelectedDateIndex(index);

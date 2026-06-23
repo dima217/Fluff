@@ -10,7 +10,7 @@ import { ThemedText } from "@/shared/ui/ThemedText";
 import { createFormStepStyles } from "@/widgets/Recipe/RecipeNew/styles/formStepStyles";
 import { getFormError } from "@/widgets/Recipe/RecipeNew/utils/getFormError";
 import { Feather } from "@expo/vector-icons";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { TouchableOpacity, View } from "react-native";
 
@@ -19,6 +19,11 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
   const styles = useThemedStyles(createFormStepStyles);
   const { control, formState: { errors }, watch } = useFormContext();
   const { t } = useTranslation();
+
+  const getDefaultStepTitle = useCallback(
+    (stepNumber: number) => `${t("recipe.step")} ${stepNumber}`,
+    [t]
+  );
 
   const getErrorMessage = (field: string) => getFormError(errors, field);
 
@@ -29,9 +34,9 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
 
   useEffect(() => {
     if (fields.length === 0) {
-      append({ title: "Step 1", description: "" });
+      append({ title: getDefaultStepTitle(1), description: "" });
     }
-  }, []);
+  }, [append, fields.length, getDefaultStepTitle]);
 
   const watchFieldArray = watch("steps");
   const controlledFields = fields.map((field, index) => {
@@ -73,7 +78,7 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
                             .filter((_, i) => i !== index)
                             .map((step, idx) => ({
                               ...step,
-                              title: `Step ${idx + 1}`,
+                              title: getDefaultStepTitle(idx + 1),
                             }));
 
                           replace(updated);
@@ -128,7 +133,10 @@ const CookingProcess = ({ onBack }: { onBack: () => void }) => {
       <GradientButton
         title={t("recipe.addStep")}
         onPress={() => {
-          append({ title: `Step ${controlledFields.length + 1}`, description: "" });
+          append({
+            title: getDefaultStepTitle(controlledFields.length + 1),
+            description: "",
+          });
         }}
       />
     </View>

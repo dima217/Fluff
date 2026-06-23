@@ -6,6 +6,7 @@ import MediaItem from "./MediaItems";
 type RecipeFetchCardProps = {
   recipeId: number;
   variant: "short" | "long";
+  titleNumberOfLines?: number;
   onPress: (recipeId: number, title: string, videoUrl: string | undefined) => void;
 };
 
@@ -16,6 +17,7 @@ type RecipeFetchCardProps = {
 export default function RecipeFetchCard({
   recipeId,
   variant,
+  titleNumberOfLines,
   onPress,
 }: RecipeFetchCardProps) {
   const { data: recipe, isLoading } = useGetRecipeByIdQuery(recipeId, {
@@ -48,6 +50,7 @@ export default function RecipeFetchCard({
       videoUrl={videoUrl}
       onPress={() => onPress(recipeId, recipe.name, videoUrl)}
       variant={variant}
+      titleNumberOfLines={titleNumberOfLines}
     />
   );
 }

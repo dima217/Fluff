@@ -26,6 +26,8 @@ export const createMealCardStyles = (colors: AppColors) =>
       alignItems: "center",
     },
     textDetails: {
+      flex: 1,
+      minWidth: 0,
       flexDirection: "column",
       gap: 4,
     },
@@ -57,6 +59,8 @@ export const createMealCardStyles = (colors: AppColors) =>
       marginRight: 5,
     },
     actionIconWrapper: {
+      flexShrink: 0,
+      marginLeft: 12,
       justifyContent: "center",
       alignItems: "center",
     },
@@ -75,6 +79,7 @@ export const createMealCardStyles = (colors: AppColors) =>
       height: 80,
       gap: 10,
       marginRight: 15,
+      overflow: "hidden",
     },
     carouselImageWrapper: {
       width: 70,
@@ -85,7 +90,9 @@ export const createMealCardStyles = (colors: AppColors) =>
     carouselContentContainer: {
       flexDirection: "row",
       flex: 1,
+      minWidth: 0,
       justifyContent: "space-between",
+      alignItems: "center",
       paddingHorizontal: 0,
       paddingVertical: 0,
     },

@@ -86,14 +86,18 @@ const ExpandableText = ({
 const createStyles = (_colors: AppColors) =>
   StyleSheet.create({
     container: {
-      width: "100%",
+      flexShrink: 1,
+      minWidth: 0,
+      alignSelf: "stretch",
+      overflow: "hidden",
     },
     measureText: {
       position: "absolute",
       opacity: 0,
       zIndex: -1,
       pointerEvents: "none",
-      width: "100%",
+      left: 0,
+      right: 0,
     },
     toggle: {
       marginTop: 4,

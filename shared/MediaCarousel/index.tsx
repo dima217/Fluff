@@ -26,6 +26,7 @@ type VideoCarouselProps = {
   onCardPress: (id: string, title: string) => void;
   style?: ViewStyle;
   variant?: "short" | "long";
+  titleNumberOfLines?: number;
 };
 
 const VideoCarousel = ({
@@ -34,6 +35,7 @@ const VideoCarousel = ({
   onCardPress,
   style,
   variant = "short",
+  titleNumberOfLines,
 }: VideoCarouselProps) => {
   const isLongVariant = variant === "long";
   const useRecipeIds = recipeIds && recipeIds.length > 0;
@@ -62,6 +64,7 @@ const VideoCarousel = ({
         onCardPress(item.id, item.title);
       }}
       variant="short"
+      titleNumberOfLines={titleNumberOfLines}
     />
   );
 
@@ -78,6 +81,7 @@ const VideoCarousel = ({
         onCardPress(item.id, item.title);
       }}
       variant="long"
+      titleNumberOfLines={titleNumberOfLines}
     />
   );
 
@@ -85,6 +89,7 @@ const VideoCarousel = ({
     <RecipeFetchCard
       recipeId={recipeId}
       variant={variant}
+      titleNumberOfLines={titleNumberOfLines}
       onPress={(id, title, videoUrl) => {
         handleRecipeCardPress(String(id), title, videoUrl);
       }}
@@ -101,6 +106,7 @@ const VideoCarousel = ({
                 key={recipeId}
                 recipeId={recipeId}
                 variant="long"
+                titleNumberOfLines={titleNumberOfLines}
                 onPress={(id, title, videoUrl) => {
                   handleRecipeCardPress(String(id), title, videoUrl);
                 }}
