@@ -11,6 +11,7 @@ interface PersonalCalculatedIntakeCardProps {
   onRecalculate: () => void;
   onUseAsDailyIntake: () => void;
   isApplying?: boolean;
+  useAsDailyIntakeDisabled?: boolean;
 }
 
 const PersonalCalculatedIntakeCard = ({
@@ -18,6 +19,7 @@ const PersonalCalculatedIntakeCard = ({
   onRecalculate,
   onUseAsDailyIntake,
   isApplying = false,
+  useAsDailyIntakeDisabled = false,
 }: PersonalCalculatedIntakeCardProps) => {
   const { t } = useTranslation();
   const canUse = calories != null && calories > 0;
@@ -51,7 +53,7 @@ const PersonalCalculatedIntakeCard = ({
         <Button
           title={t("profile.useAsDailyIntake")}
           onPress={onUseAsDailyIntake}
-          disabled={!canUse || isApplying}
+          disabled={!canUse || isApplying || useAsDailyIntakeDisabled}
           loading={isApplying}
           numberOfLines={2}
           buttonColor="transparent"

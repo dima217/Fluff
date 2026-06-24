@@ -142,7 +142,7 @@ export const translations = {
       save: "Сохранить",
       success: "Готово",
       delete: "Удалить",
-      edit: "Редактировать",
+      edit: "Изменить",
       close: "Закрыть",
       enter: "Введите",
       loading: "Загрузка...",
@@ -412,6 +412,8 @@ export const translations = {
       imageLimitTitle: "Лимит фото",
       imageLimitMessage: "Можно прикрепить не более {count} фото к одному сообщению.",
       uploadError: "Не удалось загрузить фото. Попробуйте ещё раз.",
+      createSuccessTitle: "Готово",
+      createSuccessMessage: "Ваше обращение успешно отправлено!",
     },
     // SignUp
     signUp: {
@@ -763,6 +765,8 @@ export const translations = {
       imageLimitTitle: "Ліміт фота",
       imageLimitMessage: "Можна далучыць не больш за {count} фота да аднаго паведамлення.",
       uploadError: "Не ўдалося загрузіць фота. Паспрабуйце яшчэ раз.",
+      createSuccessTitle: "Гатова",
+      createSuccessMessage: "Ваш зварот паспяхова адправлены!",
     },
     // SignUp
     signUp: {
@@ -1388,6 +1392,8 @@ export const translations = {
       imageLimitTitle: "Photo limit",
       imageLimitMessage: "You can attach up to {count} photos per message.",
       uploadError: "Failed to upload photos. Please try again.",
+      createSuccessTitle: "Done",
+      createSuccessMessage: "Your request has been submitted successfully!",
     },
     // SignUp
     signUp: {

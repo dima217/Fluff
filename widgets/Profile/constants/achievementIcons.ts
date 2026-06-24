@@ -4,22 +4,19 @@ import type { SvgProps } from "react-native-svg";
 
 import AllAchievementsIcon from "@/assets/images/achievements/all-achievements.svg";
 import CreatedAccountIcon from "@/assets/images/achievements/created-account.svg";
-import FirstRateIcon from "@/assets/images/achievements/first-rate.svg";
-import FirstRecipeIcon from "@/assets/images/achievements/first-recipe.svg";
 import PerfectMonthIcon from "@/assets/images/achievements/perfect-month.svg";
-import PublicRecipeIcon from "@/assets/images/achievements/public-recipe.svg";
 import TenRecipesIcon from "@/assets/images/achievements/ten-recipes.svg";
 
 export const ACHIEVEMENT_ICON_MAP: Record<
   AchievementCode,
   ComponentType<SvgProps>
 > = {
-  created_account: CreatedAccountIcon,
-  first_recipe: FirstRecipeIcon,
+  created_account: AllAchievementsIcon,
+  first_recipe: CreatedAccountIcon,
   perfect_month_tracking: PerfectMonthIcon,
-  public_recipe: PublicRecipeIcon,
+  public_recipe: PerfectMonthIcon,
   ten_recipes: TenRecipesIcon,
-  first_rate: FirstRateIcon,
+  first_rate: TenRecipesIcon,
   all_achievements: AllAchievementsIcon,
 };
 

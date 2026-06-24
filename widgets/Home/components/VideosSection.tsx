@@ -1,7 +1,7 @@
-import { useColors } from "@/contexts/ThemeContext";
-import { AppColors } from "@/constants/design-tokens";
-import { useThemedStyles } from "@/hooks/useThemedStyles";
 import { useGetRecipesQuery } from "@/api";
+import { AppColors } from "@/constants/design-tokens";
+import { useColors } from "@/contexts/ThemeContext";
+import { useThemedStyles } from "@/hooks/useThemedStyles";
 
 import { useTranslation } from "@/hooks/useTranslation";
 import MediaCarousel from "@/shared/MediaCarousel";
@@ -57,6 +57,7 @@ const VideosSection = () => {
           <MediaCarousel
             recipeIds={lastVisitedIds}
             variant="short"
+            titleNumberOfLines={1}
             onCardPress={handleCardPress}
           />
         ) : (

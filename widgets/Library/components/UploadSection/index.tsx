@@ -32,6 +32,7 @@ const FoodUploadCard = ({
         ...cardSurface(c),
         borderRadius: 16,
         padding: 16,
+        paddingBottom: 0,
         overflow: "hidden",
         flex: 1,
         justifyContent: "flex-start",
@@ -44,10 +45,10 @@ const FoodUploadCard = ({
         zIndex: 10,
       },
       imageContainer: {
+        flex: 1,
         width: 126,
         height: 146,
-        paddingTop: 60,
-        zIndex: 5,
+        justifyContent: "flex-end",
       },
       backgroundImage: {
         height: 133,

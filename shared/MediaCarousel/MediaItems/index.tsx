@@ -1,7 +1,7 @@
 import { useMediaUrl } from "@/api";
+import { CircleSizes } from "@/constants/components/CIrcle";
 import { AppColors } from "@/constants/design-tokens";
 import { useColors } from "@/contexts/ThemeContext";
-import { CircleSizes } from "@/constants/components/CIrcle";
 import { useThemedStyles } from "@/hooks/useThemedStyles";
 import Avatar from "@/shared/ui/Avatar";
 import Circle from "@/shared/ui/Circle";
@@ -122,7 +122,7 @@ const MediaCarouselItem = ({
 
       {isLongVariant && (
         <View style={styles.longContainer}>
-          <Avatar size={CircleSizes.MINI} title="K" />
+          <Avatar size={CircleSizes.MINI} title="F" />
           <View style={styles.textContainerLong}>
             {titleNode}
             <ThemedText type="xs" style={styles.longAuthor}>

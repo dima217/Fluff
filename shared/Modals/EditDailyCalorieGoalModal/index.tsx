@@ -65,15 +65,15 @@ const EditDailyCalorieGoalForm = ({
         message={t("editDailyCalorieGoalModal.message")}
         buttons={[
           {
-            title: t("common.cancel"),
-            onPress: () => onClose(dailyGoal),
-            variant: "secondary",
-          },
-          {
             title: t("common.save"),
             onPress: handleSubmit(submit),
             variant: "primary",
           },
+          {
+            title: t("common.cancel"),
+            onPress: () => onClose(dailyGoal),
+            variant: "secondary",
+          }
         ]}
       >
         <EditDailyCalorieGoalForm control={control} />

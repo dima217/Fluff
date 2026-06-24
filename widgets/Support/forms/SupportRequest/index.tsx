@@ -173,9 +173,9 @@ const SupportRequest = () => {
           onClose={() => setShowErrorModal(false)}
         />
         <BaseModal
-          title="Success"
+          title={t("support.createSuccessTitle")}
           isVisible={showSuccessModal}
-          message="You Request Has Been Approved!"
+          message={t("support.createSuccessMessage")}
           onClose={handleSuccessClose}
         />
       </View>

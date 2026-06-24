@@ -179,7 +179,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
 
 const createstyles = (colors: AppColors) => StyleSheet.create({
   card: {
-    borderRadius: 16,
     width: "100%",
     overflow: "hidden",
   },

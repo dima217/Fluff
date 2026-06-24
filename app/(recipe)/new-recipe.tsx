@@ -132,6 +132,7 @@ const CreateRecipeScreen = () => {
     }
 
     setIsSubmitting(false);
+    router.push("/(app)/home");
   };
 
   const renderStep = () => {

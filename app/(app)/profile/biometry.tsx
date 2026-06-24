@@ -24,12 +24,18 @@ const BiometryScreen = () => {
   const profile = useAppSelector((state) => state.user.profile);
   const [updateProfile, { isLoading: isApplying }] = useUpdateProfileMutation();
   const [pending, setPending] = useState<PendingBiometry | null>(null);
+  const [storedCalorieGoal, setStoredCalorieGoal] = useState<number | null>(() => {
+    const stored = calorieGoalStorage.get();
+    return stored ? Number(stored) : null;
+  });
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   useFocusEffect(
     useCallback(() => {
       setPending(pendingBiometryStorage.getPending());
+      const stored = calorieGoalStorage.get();
+      setStoredCalorieGoal(stored ? Number(stored) : null);
     }, []),
   );
 
@@ -39,6 +45,13 @@ const BiometryScreen = () => {
   );
 
   const displayCalories = pending?.calculatedCalories ?? profileCalories;
+
+  const healthDailyGoal = storedCalorieGoal ?? profileCalories;
+
+  const isAlreadyDailyNorm =
+    displayCalories != null &&
+    healthDailyGoal != null &&
+    displayCalories === healthDailyGoal;
 
   const handleRecalculate = useCallback(() => {
     router.push("/(app)/profile/biometry-form");
@@ -63,6 +76,7 @@ const BiometryScreen = () => {
       }
 
       calorieGoalStorage.set(displayCalories);
+      setStoredCalorieGoal(displayCalories);
     } catch (error: any) {
       setErrorMessage(
         error?.data?.message ?? error?.message ?? t("auth.error"),
@@ -86,6 +100,7 @@ const BiometryScreen = () => {
           onRecalculate={handleRecalculate}
           onUseAsDailyIntake={handleUseAsDailyIntake}
           isApplying={isApplying}
+          useAsDailyIntakeDisabled={isAlreadyDailyNorm}
         />
 
         <PersonalInfoCard profile={profile} pending={pending} />
